@@ -1,0 +1,29 @@
+import { Button } from '@/components/ui/button';
+import { Montserrat } from 'next/font/google';
+import React from 'react';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+const SignSocials = () => {
+  return (
+    <div
+      className={`${montserrat.className} flex flex-col w-4/5 gap-5 sm:mt-6 `}
+    >
+      <Button className="bg-white text-gray-500 flex items-center justify-center gap-2 text-[13px] sm:text-[16px] rounded-sm h-[41px] sm:h-[50px] hover:opacity-95 hover:bg-white cursor-pointer">
+        <img src="Google Logo.svg" alt="google image" />
+        continue with Google
+      </Button>
+      <Button className="bg-black text-white flex items-center justify-center gap-2 text-[13px] sm:text-[16px] rounded-sm h-[41px] sm:h-[50px]  hover:opacity-95 hover:bg-black cursor-pointer">
+        <img src="/Apple Logo.svg" className="w-5" />
+        continue with 42
+      </Button>
+      <Button className="bg-red-500 text-white text-[13px] sm:text-[16px] rounded-sm sm:h-[50px] h-[41px] hover:opacity-95 hover:bg-red-500 cursor-pointer">
+        continue as a Guest
+      </Button>
+    </div>
+  );
+};
+
+export default SignSocials;

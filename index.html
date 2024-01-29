@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <header class="flex flex-col items-stretch justify-center bg-white">
+      <main
+        class="flex-col overflow-hidden relative flex min-h-[1080px] w-full items-center justify-between gap-5 pl-20 pr-11 pb-12 max-md:max-w-full max-md:flex-wrap max-md:px-5"
+      >
+        <img
+          loading="lazy"
+          srcset="
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=100   100w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=200   200w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=400   400w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=800   800w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=1200 1200w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=1600 1600w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&width=2000 2000w,
+            https://cdn.builder.io/api/v1/image/assets/TEMP/9a5ca76bee28cc16901b5d437f9c12d574250ac663ae8b3ed7a3fe7ae530a6b0?apiKey=08fe27529c5143a1bb22eeb95fedfc03&
+          "
+          class="absolute inset-0 object-cover object-center w-full h-full"
+          alt="Background Image"
+        />
+        <section
+          class="relative flex flex-col py-12 my-auto bg-neutral-900 px-14 max-md:max-w-full max-md:px-5"
+        >
+          <div
+            class="text-white text-3xl font-bold items-stretch border-b-[color:var(--FG,#FFF)] self-stretch justify-center mt-14 py-3.5 rounded-[30px] border-b-2 border-solid max-md:max-w-full max-md:mt-10"
+          >
+            USERNAME
+          </div>
+          <div
+            class="text-white text-3xl font-bold items-stretch border-b-[color:var(--FG,#FFF)] self-stretch justify-center mt-5 py-3.5 rounded-[30px] border-b-2 border-solid max-md:max-w-full"
+          >
+            EMAIL
+          </div>
+          <div
+            class="text-white text-3xl font-bold items-stretch border-b-[color:var(--FG,#FFF)] self-stretch justify-center mt-5 py-3.5 rounded-[30px] border-b-2 border-solid max-md:max-w-full"
+          >
+            PASSWORD
+          </div>
+          <button
+            type="submit"
+            class="text-white text-center text-lg font-medium leading-6 tracking-normal whitespace-nowrap items-center border w-[198px] max-w-full justify-center mt-5 px-16 py-4 rounded-lg border-solid border-white self-start max-md:px-5"
+          >
+            Submit
+          </button>
+          <div
+            class="self-stretch h-px bg-white shrink-0 mt-9 max-md:max-w-full"
+          ></div>
+          <div
+            class="items-stretch self-stretch flex justify-between gap-5 mt-3.5 pr-5 max-md:max-w-full max-md:flex-wrap"
+          >
+            <div
+              class="text-lg font-medium leading-6 tracking-normal text-center text-white"
+            >
+              ALREADY HAVE AN ACCOUNT?
+            </div>
+            <a
+              href="#"
+              class="text-white text-center text-lg font-medium leading-6 tracking-normal whitespace-nowrap items-stretch aspect-[2.2916666666666665] justify-center"
+            >
+              SIGN-IN
+            </a>
+          </div>
+          <form
+            class="justify-center items-stretch shadow bg-white self-center flex w-[345px] max-w-full flex-col mt-20 px-11 rounded-xl max-md:mt-10 max-md:px-5"
+          >
+            <div
+              class="flex items-stretch justify-between gap-4 p-4 bg-white rounded-xl"
+            >
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/85e80cfaa2e1a300b4b0b8f23411782f94811c783b9306908433842a891a44a1?apiKey=08fe27529c5143a1bb22eeb95fedfc03&"
+                class="object-contain object-center w-6 max-w-full overflow-hidden aspect-square fill-white shrink-0"
+                alt="Google Logo"
+              />
+              <div
+                class="self-start text-xl font-medium text-black text-opacity-50 grow whitespace-nowrap"
+              >
+                Continue with Google
+              </div>
+            </div>
+          </form>
+          <form
+            class="justify-center items-stretch shadow bg-black self-center flex w-[345px] max-w-full flex-col mt-6 px-16 rounded-xl max-md:px-5"
+          >
+            <div
+              class="items-stretch bg-black flex justify-between gap-4 p-4 rounded-xl max-md:ml-1 max-md:mr-0.5"
+            >
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/717f794416ab797845e7c7b42f8644f08940fb570244f0dc1b4358a8c3b470eb?apiKey=08fe27529c5143a1bb22eeb95fedfc03&"
+                class="items-center justify-center object-contain object-center w-6 max-w-full overflow-hidden aspect-square shrink-0"
+                alt="42 Logo"
+              />
+              <div class="self-start text-xl text-white grow whitespace-nowrap">
+                Continue with 42
+              </div>
+            </div>
+          </form>
+          <div
+            class="justify-center items-stretch shadow bg-zinc-500 self-center flex w-[345px] max-w-full flex-col mt-6 px-16 py-px rounded-xl max-md:px-5"
+          >
+            <div
+              class="items-stretch justify-center p-4 text-xl text-white whitespace-nowrap bg-zinc-500 rounded-xl max-md:ml-2 max-md:mr-2"
+            >
+              Continue with Guest
+            </div>
+          </div>
+        </section>
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/edee2429b0cc75ecf952c522a1339626b6e18d3ad02c9dbe6e6da93cf64e1b4f?apiKey=08fe27529c5143a1bb22eeb95fedfc03&"
+          class="aspect-[0.1] object-contain object-center w-8 justify-center items-center overflow-hidden shrink-0 max-w-full self-start"
+          alt="Logo"
+        />
+      </main>
+    </header>
+  </body>
+</html>
