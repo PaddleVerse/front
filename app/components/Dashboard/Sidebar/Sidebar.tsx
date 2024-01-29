@@ -7,6 +7,7 @@ import ProfileUser from "./ProfileUser";
 import { useSwipeable } from "react-swipeable";
 import { isMobile } from "react-device-detect";
 import { set } from "react-hook-form";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
@@ -28,6 +29,16 @@ const image2 =
 //   },
 // };
 
+interface User{
+  username    : string,
+  name      : string,
+  picture   :string,
+  banner_picture :string 
+  status    :string,
+  level    : Number
+  createdAt : Date,
+}
+
 const ProfileInfoVariants = {
   opened: { opacity: 1 },
   closed: { opacity: 0 },
@@ -46,6 +57,9 @@ function useWindowSize() {
   return size;
 }
 const Sidebar = () => {
+
+  const { state, dispatch } = useGlobalState();
+  const user : any = state.exampleProperty;
   const [expanded, setExpanded] = useState(true);
   const sidebarRef = useRef(null);
   const handlers = useSwipeable({
@@ -92,12 +106,12 @@ const Sidebar = () => {
           }}
           className="relative z-20"
         >
-          {/* <div className={`${!expanded ? "hidden" : ""}`}> */}
+          {/* <div className={`${!expanded ? "hidden" : ""}`}> rounded-full w-20 h-20 object-cover mt-10 */}
           <motion.div className=" flex gap-4 mt-[65px] items-center">
             <motion.img
-              src={image}
+              src={user.picture}
               alt="image"
-              className=" min-w-[50px] max-w-[50px] w-full h-auto rounded-full"
+              className="object-cover min-w-[50px] max-w-[50px] w-20 h-20 rounded-full"
             />
             <AnimatePresence initial={false}>
               {expanded && (
@@ -116,7 +130,7 @@ const Sidebar = () => {
                   key="modal"
                 >
                   <span className="text-[12px] text-buttonGray">NOOB</span>
-                  <span className="text-[14px] w-22">John tersties</span>
+                  <span className="text-[14px] w-22">{user.name}</span>
                 </motion.div>
               )}
             </AnimatePresence>
