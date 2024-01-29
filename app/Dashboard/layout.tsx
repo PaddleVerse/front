@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 import Navbar from "../components/Dashboard/Navbar/Navbar";
+import ContentWrapper from "./ContentWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,13 +20,9 @@ export default function RootLayout({
       <section
         className={`${inter.className} w-screen h-screen bg-Dark bg-fixed bg-center bg-no-repeat bg-cover`}
       >
-        <div className="w-full h-full flex">
-          <Sidebar />
-          <div className="w-full flex flex-col ">
-            <Navbar />
-            {children}
-          </div>
-        </div>
+        <ContentWrapper>
+          {children}
+        </ContentWrapper>
       </section>
   );
 }
