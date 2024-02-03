@@ -111,7 +111,7 @@ const Sidebar = () => {
             <motion.img
               src={user.picture}
               alt="image"
-              className="object-cover min-w-[50px] max-w-[50px] w-20 h-20 rounded-full"
+              className="object-cover h-[50px] w-[50px] rounded-full"
             />
             <AnimatePresence initial={false}>
               {expanded && (
