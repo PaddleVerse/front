@@ -31,7 +31,7 @@ function ContentWrapper({ children }: Props) {
       
       // get the access token from the cookie
       const accessToken = getCookie("access_token");
-  
+
       if (accessToken)
       {
           fetch("http://localhost:8080/auth/protected", {

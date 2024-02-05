@@ -33,9 +33,6 @@ const SignSocials = () => {
         <img src="/Apple Logo.svg" className="w-5" />
         continue with 42
       </Button>
-      <Button className="bg-red-500 text-white text-[13px] sm:text-[16px] rounded-sm sm:h-[50px] h-[41px] hover:opacity-95 hover:bg-red-500 cursor-pointer">
-        continue as a Guest
-      </Button>
     </div>
   );
 };

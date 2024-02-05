@@ -122,7 +122,7 @@ export default function InputForm() {
         </Form>
         <FormLinesSignUp />
         <SignSocials />
-        <FormLinesAlready des="Don't have an account?" n="REGISTER" url="/regester"/>
+        <FormLinesAlready des="Don't have an account?" n="REGISTER" url="/register"/>
       </div>
     </div>
   );

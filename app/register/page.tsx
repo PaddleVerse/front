@@ -4,6 +4,10 @@ import { motion } from "framer-motion";
 import { Rajdhani } from "next/font/google";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import axios from "axios";
+import { useRouter } from 'next/navigation';
+
+
 const rajdhani = Rajdhani({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -44,9 +48,33 @@ export default function InputForm() {
     },
   });
 
+  const router = useRouter();
+
   function onSubmit(values: z.infer<typeof FormSchema>) {
- 
+    
+    axios.post("http://localhost:8080/auth/signup", {
+      name: values.name,
+      username: values.username,
+      password: values.password
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      form.reset({
+        name: "",
+        username: "",
+        password: ""
+      });
+      router.push("/");
+    })
+    .catch(error => {
+      //   console.log("Username already taken");
+    });
+
   }
+  
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="md:w-[480px] pb-[40px] sm:pb-[50px] bg-dashBack flex flex-col items-center rounded-2xl md:rounded-lg w-[310px] xm:w-[370px] select-none ring-[0.2px] ring-red-500">

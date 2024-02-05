@@ -5,7 +5,6 @@ import {GlobalStateProvider, useGlobalState} from "../components/Sign/GlobalStat
 import React,{useState, useEffect} from "react";
 
 const page = () => {
-
   const {state , dispatch} = useGlobalState();
   
   const getCookie = (name: string) => {
@@ -27,7 +26,6 @@ const page = () => {
     
     // get the access token from the cookie
     const accessToken = getCookie("access_token");
-
     if (accessToken)
     {
         fetch("http://localhost:8080/auth/protected", {
@@ -42,7 +40,7 @@ const page = () => {
             dispatch({type: 'UPDATE_PROPERTY', payload: data});
         })
         .catch(error => {
-          console.error("Error during protected endpoint request", error);
+          console.log("Error during protected endpoint request", error);
         });
     }
   }, []);
