@@ -109,7 +109,7 @@ const Sidebar = () => {
           {/* <div className={`${!expanded ? "hidden" : ""}`}> rounded-full w-20 h-20 object-cover mt-10 */}
           <motion.div className=" flex gap-4 mt-[65px] items-center">
             <motion.img
-              src={user.picture}
+              src={user.picture ? user.picture : "/b.png"}
               alt="image"
               className="object-cover h-[50px] w-[50px] rounded-full"
             />

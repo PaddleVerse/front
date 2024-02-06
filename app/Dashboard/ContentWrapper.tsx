@@ -31,7 +31,7 @@ function ContentWrapper({ children }: Props) {
       
       // get the access token from the cookie
       const accessToken = getCookie("access_token");
-
+      // alert(accessToken);
       if (accessToken)
       {
           fetch("http://localhost:8080/auth/protected", {
@@ -42,7 +42,7 @@ function ContentWrapper({ children }: Props) {
           })
           .then(response => { return response.json();})
           .then(data => {
-            if (!data || data.message === "Unauthorized")
+            if (!data || data.error === "Unauthorized")
               router.push('/');
             else
               setIsAuth(true);

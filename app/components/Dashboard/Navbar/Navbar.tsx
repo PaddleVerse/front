@@ -8,8 +8,16 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const cleanCookie = () => {
-      document.cookie = "access_token=;";
-  }
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
+
 
   const getCookie = (name: string) => {
     const value = `; ${document.cookie}`;
@@ -26,23 +34,21 @@ const Navbar = () => {
   const accessToken = getCookie("access_token");
 
   const handleLogout = async () => {
-    // cleanCookie();
-    // router.push('/');
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/auth/logout',
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      console.log(response.data.message);
-    } catch (error: any) {
-      console.error('Logout failed:', error.message);
+    axios.post(
+      'http://localhost:8080/auth/logout',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    ).then((res) => {
+      cleanCookie();
+      router.push('/');
     }
+    ).catch((err) => {
+      console.log(err);
+    });
   }
 
   return (

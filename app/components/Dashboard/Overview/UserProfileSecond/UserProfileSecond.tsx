@@ -9,7 +9,7 @@ const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
 
 const UserProfileSecond = () => {
   const { state, dispatch } = useGlobalState();
-
+  const user : any= state.exampleProperty;
   return (
     <div
       className=" p-4 bg-transparent rounded-md "
@@ -21,7 +21,7 @@ const UserProfileSecond = () => {
       <div className=" w-full h-full relative flex flex-col gap-5  rounded-md">
         <div className="w-full  h-[290px] relative">
           <Image
-            src={"/car1.jpg"}
+            src={user.banner_picture ? user.banner_picture : "/car1.jpg"}
             fill
             priority
             style={{objectFit:"cover"}}
@@ -45,7 +45,7 @@ const UserProfileSecond = () => {
             >
               <div className="w-full h-[60%]   relative">
                 <Image
-                  src={state.exampleProperty.picture ? state.exampleProperty.picture : "/b.png"}
+                  src={user.picture ? user.picture : "/b.png"}
                   alt="profile"
                   fill
                   style={{objectFit:"cover"}}
@@ -56,9 +56,9 @@ const UserProfileSecond = () => {
               </div>
               <div className="flex flex-col items-center">
                 <h2 className="mt-2 xl:text-[15px] text-[10px]">
-                  {state.exampleProperty.name}
+                  {user.name}
                 </h2>
-                <span className="xl:text-[10px] text-[7px]">@{state.exampleProperty.username}</span>
+                <span className="xl:text-[10px] text-[7px]">@{user.username}</span>
                 <span className="xl:text-[10px] text-[7px]">400,000</span>
               </div>
             </div>
