@@ -3,6 +3,7 @@ import React,{useState,useEffect, use} from "react";
 import { Inter } from "next/font/google";
 import StandingRow from "./LeaderRow";
 import axios from "axios";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,12 +11,16 @@ const inter = Inter({
 });
 const LeaderTable = () => {
   const [users, setUsers] = useState([]);
-
+  const {state , dispatch} = useGlobalState();
+  const user : any= state.exampleProperty;
   useEffect(() => {
-    axios.get("http://localhost:8080/user").then((res) => {
-      setUsers(res.data);
-    });
-  } , []);
+    if (user !== 'Initial Value') {
+      axios.get(`http://localhost:8080/user/range/${user.id}`).then((res) => {
+        setUsers(res.data);
+      })
+    }
+  } , [user]);
+
   return (
     <div className="">
       <div className="relative  space-y-4">
@@ -48,9 +53,11 @@ const LeaderTable = () => {
             </tr>
           </thead>
           <tbody className="">
-              {users.map((user, index) => (
-                <StandingRow index={index} user={user} key={index} />
-              ))}
+              { users && users.map((user : any , index : number) =>
+                {
+                  return <StandingRow key={index} user={user} />
+                }
+              )}
           </tbody>
         </table>
       </div>
