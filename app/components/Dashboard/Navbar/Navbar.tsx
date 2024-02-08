@@ -55,7 +55,7 @@ const Navbar = () => {
     <div className="w-full flex justify-center"
     >
       <div
-        className="w-[95%] h-14  bg-transparent rounded-b-sm md:flex hidden justify-between items-center"
+        className="w-[95%] h-14 bg-transparent rounded-b-sm md:flex hidden justify-between items-center"
         style={{
           backdropFilter: "blur(20px)",
           backgroundColor: "rgba(13, 9, 10, 0.7)",
@@ -64,7 +64,7 @@ const Navbar = () => {
         <span className="text-gray-400 ml-10 text-[14px]">{pathname}</span>
         <button
         onClick={handleLogout}
-        className="text-gray-400 ml-10 text-[14px] flex gap-1 justify-center items-center">
+        className="text-gray-400 ml-10 text-[14px] flex gap-1 justify-center items-center mr-10">
           <span>Logout</span>
           <img
             loading="lazy"

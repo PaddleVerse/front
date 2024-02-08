@@ -5,7 +5,7 @@ import MainOptions from "./MainOptions";
 import { RxDashboard } from "react-icons/rx";
 import { PiChatCircleTextLight } from "react-icons/pi";
 import { LiaShoppingCartSolid } from "react-icons/lia";
-import { IoIosNotificationsOutline } from "react-icons/io";
+import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -27,8 +27,8 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
     if (label === "Shop") {
       router.push("/Dashboard/Shop");
     }
-    if (label === "Notifications") {
-      router.push("/Dashboard/Notifications");
+    if (label === "Search") {
+      router.push("/Dashboard/Search");
     }
   };
   return (
@@ -45,8 +45,8 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
             <PiChatCircleTextLight className="hover:bg-blurredRed" />
           ) : label === "Shop" ? (
             <LiaShoppingCartSolid className="hover:bg-blurredRed" />
-          ) : label === "Notifications" ? (
-            <IoIosNotificationsOutline className=" hover:bg-blurredRed" />
+          ) : label === "Search" ? (
+            <IoIosSearch className=" hover:bg-blurredRed" />
           ) : (
             <RxDashboard />
           )}

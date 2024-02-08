@@ -188,7 +188,7 @@ const Sidebar = () => {
               <Option label={"Dashboard"} expanded={expanded}/>
               <Option label={"Chat"} expanded={expanded}/>
               <Option label={"Shop"} expanded={expanded} />
-              <Option label={"Notifications"} expanded={expanded} />
+              <Option label={"Search"} expanded={expanded} />
             </motion.div>
             {/* <div className="overflow-y-scroll no-scrollbar bg-red-500 w-full z-50"> */}
             <div className="text-buttonGray mt-10 flex justify-between pl-4">

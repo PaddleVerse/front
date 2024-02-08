@@ -11,7 +11,7 @@ const inter = Inter({
 });
 const LeaderTable = () => {
   const [users, setUsers] = useState([]);
-  const {state , dispatch} = useGlobalState();
+  const {state} = useGlobalState();
   const user : any= state.exampleProperty;
   useEffect(() => {
     if (user !== 'Initial Value') {
