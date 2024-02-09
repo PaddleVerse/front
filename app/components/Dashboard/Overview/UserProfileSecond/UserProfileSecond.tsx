@@ -2,14 +2,12 @@ import React from "react";
 import { Rajdhani } from "next/font/google";
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import { useGlobalState } from "@/app/components/Sign/GlobalState";
 
 const inter = Inter({ subsets: ["latin"] });
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
 
-const UserProfileSecond = () => {
-  const { state, dispatch } = useGlobalState();
-  const user : any= state.exampleProperty;
+const UserProfileSecond = ({user} : any) => {
+  
   return (
     <div
       className=" p-4 bg-transparent rounded-md "

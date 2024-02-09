@@ -7,16 +7,18 @@ import Graph from "./Graph/Graph";
 import UserProfileSecond from "./UserProfileSecond/UserProfileSecond";
 import Achievements from "./Achievements/Achievements";
 import Items from "./Items/Items";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 
 const ContentCenter = () => {
-  
+  const { state } = useGlobalState();
+  const user : any= state.exampleProperty;
 
   return (
     <div className="w-[100%] mt-[50px] flex flex-col gap-10 items-center">
       <div className="xl:flex-row w-[94%] flex flex-col gap-7">
         <div className="flex flex-col w-full gap-8">
-          <UserProfileSecond />
+          <UserProfileSecond user={user}/>
           <div className="flex gap-4">
             <MatchHistory />
             <div className=" flex-col h-700px  flex-1 xl:flex hidden gap-4">
