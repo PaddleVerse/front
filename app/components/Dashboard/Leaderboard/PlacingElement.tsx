@@ -28,6 +28,7 @@ const PlacingElement = () => {
               alt="image"
               style={{objectFit:"cover"}}
               className="rounded-full"
+              property="image"
             />
           <div className={`absolute bottom-[62px] left-[38px] flex items-center justify-center bg-progressIndicator w-6 h-6 rounded-full text-[12px] ${plusjakarta.className}`}>
             2
@@ -41,12 +42,13 @@ const PlacingElement = () => {
       <div className="flex flex-col items-center text-white gap-4">
         <div className="w-[120px] h-[120px] rounded-full overflow-hidden  border-[3px] border-progressIndicator ">
             <Image
-              src={users && users[0] && users[0].picture ? users[0].picture : "/leaderboard/1st.jpeg"}
+              src={users && users[0] && users[0].picture ? users[0].picture : "/leaderboard/2.jpeg"}
               width={120}
               height={120}
               alt="image"
               style={{objectFit:"cover"}}
               className="rounded-full"
+              property="image"
             />
           <div className={`absolute bottom-[92px] left-[157px] flex items-center justify-center bg-progressIndicator w-6 h-6 text-white rounded-full text-[12px] ${plusjakarta.className}`}>
             1
@@ -60,12 +62,13 @@ const PlacingElement = () => {
       <div className="flex flex-col items-center text-white gap-4">
         <div className="w-[100px] h-[100px] rounded-full overflow-hidden mt-20 border-[3px] border-progressIndicator">
             <Image
-              src={users && users[2] && users[2].picture ? users[2].picture : "/leaderboard/3rd.jpeg"}
+              src={users && users[2] && users[2].picture ? users[2].picture : "/leaderboard/2.jpeg"}
               width={100}
               height={100}
               alt="image"
               style={{objectFit:"cover"}}
               className="rounded-full"
+              property="image"
             />
           <div className={`absolute bottom-[57px] left-[272px] flex items-center justify-center bg-progressIndicator w-6 h-6 text-white rounded-full text-[12px] ${plusjakarta.className}`}>
             3
