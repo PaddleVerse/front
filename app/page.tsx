@@ -14,7 +14,7 @@ import FormElement from "./components/Sign/FormElement";
 import SignButton from "./components/Sign/SignButton";
 import SignSocials from "./components/Sign/SignSocials";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 
 import axios from 'axios';
@@ -37,7 +37,6 @@ const FormSchema = z.object({
 export default function InputForm() {
 
   const router = useRouter();
-  const [res, setRes] = useState({} as any);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -46,6 +45,7 @@ export default function InputForm() {
       password: "",
     },
   });
+
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     axios.post("http://localhost:8080/auth/login", {
@@ -58,15 +58,10 @@ export default function InputForm() {
     })
     .then(response => {
       const data = response.data;
-      setRes(data);
 
-      // Assuming the response structure has an access_token field
       const accessToken = data.access_token;
 
-      // Assuming 'token' is the name of the cookie
       document.cookie = `access_token=${data.access_token}; path=/;`;
-      // Store access_token to local storage
-      localStorage.setItem("access_token", accessToken);
 
       // Check if access_token is present
       if (accessToken) {
@@ -77,23 +72,17 @@ export default function InputForm() {
           }
         })
         .then(response => {
-          // Check if the response status is OK (200)
-          if (response.status === 200) {
-            // Redirect the user to "/Dashboard"
+          if (response.status === 200)
             router.push('/Dashboard');
-          } else {
-            // Handle the case where the protected endpoint request fails
+          else
             console.log("Failed to authenticate with protected endpoint");
-          }
         })
         .catch(error => {
-          // Handle any errors that occur during the protected endpoint request
           console.log("Error during protected endpoint request", error);
         });
       }
     })
     .catch(error => {
-      // Handle any errors that occur during the login request
       console.log("Error during login request", error);
     });
   }

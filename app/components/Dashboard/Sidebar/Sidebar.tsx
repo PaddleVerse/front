@@ -5,9 +5,8 @@ import { FaChevronRight, FaPlus } from "react-icons/fa6";
 import Option from "./Option";
 import ProfileUser from "./ProfileUser";
 import { useSwipeable } from "react-swipeable";
-import { isMobile } from "react-device-detect";
-import { set } from "react-hook-form";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { io } from "socket.io-client";
 
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
@@ -28,6 +27,8 @@ const image2 =
 //     },
 //   },
 // };
+
+const socket = io('http://localhost:8080');
 
 interface User{
   username    : string,
@@ -59,7 +60,7 @@ function useWindowSize() {
 const Sidebar = () => {
 
   const { state, dispatch } = useGlobalState();
-  const user : any = state.exampleProperty;
+  const user : any = state.user;
   const [expanded, setExpanded] = useState(true);
   const sidebarRef = useRef(null);
   const handlers = useSwipeable({
@@ -105,7 +106,10 @@ const Sidebar = () => {
         .then(response => { return response.json();})
         .then(data => {
           if (data || data.message !== "Unauthorized")
-            dispatch({type: 'UPDATE_PROPERTY', payload: data});
+          {
+            dispatch({type: 'UPDATE_SOCKET', payload: socket});
+            dispatch({type: 'UPDATE_USER', payload: data});
+          }
         })
         .catch(error => {
           console.log("Error during protected endpoint request", error);
@@ -148,7 +152,7 @@ const Sidebar = () => {
           {/* <div className={`${!expanded ? "hidden" : ""}`}> rounded-full w-20 h-20 object-cover mt-10 */}
           <motion.div className=" flex gap-4 mt-[65px] items-center">
             <motion.img
-              src={user.picture ? user.picture : "/b.png"}
+              src={user && user.picture ? user.picture : "/b.png"}
               alt="image"
               className="object-cover h-[50px] w-[50px] rounded-full"
             />
@@ -169,7 +173,7 @@ const Sidebar = () => {
                   key="modal"
                 >
                   <span className="text-[12px] text-buttonGray">NOOB</span>
-                  <span className="text-[14px] w-22">{user.name}</span>
+                  <span className="text-[14px] w-22">{user && user.name}</span>
                 </motion.div>
               )}
             </AnimatePresence>

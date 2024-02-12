@@ -4,16 +4,19 @@ import React, { createContext, useContext, useReducer, ReactNode, Dispatch } fro
 // Define the state type
 interface GlobalState {
   // Your global state properties go here
-  exampleProperty: string;
+  user: any;
+  socket: any;
 }
 
 // Define action types
 type Action =
-  | { type: 'UPDATE_PROPERTY'; payload: string };
+  | { type: 'UPDATE_USER'; payload: any }
+  | { type: 'UPDATE_SOCKET'; payload: any };
 
 // Define initial state
 const initialState: GlobalState = {
-  exampleProperty: 'Initial Value',
+  user: null,
+  socket: null
 };
 
 // Create context
@@ -22,8 +25,10 @@ const GlobalStateContext = createContext<{ state: GlobalState; dispatch: Dispatc
 // Define the reducer function
 const globalReducer = (state: GlobalState, action: Action): GlobalState => {
   switch (action.type) {
-    case 'UPDATE_PROPERTY':
-      return { ...state, exampleProperty: action.payload };
+    case 'UPDATE_USER':
+      return { ...state, user: action.payload };
+    case 'UPDATE_SOCKET':
+      return { ...state, socket: action.payload };
     default:
       return state;
   }

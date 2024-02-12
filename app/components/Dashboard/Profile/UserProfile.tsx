@@ -1,19 +1,50 @@
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Rajdhani } from "next/font/google";
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const inter = Inter({ subsets: ["latin"] });
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
+let i = 0;
+const UserProfile = ({target} : any) => {
+  const {state} = useGlobalState();
+  const user:any = state.user;
+  const socket : any= state.socket;
 
-const UserProfile = ({user} : any) => {
+  useEffect(() => {
+    if (state.user)
+    {
+      if (i)
+      {
+        // Listening for friend requests
+        socket.on('friendRequest', (data: any) => {
+          (data && data.Error ?  alert("User not found") : alert("You have a friend request from " + data.name))
+        });
 
-
-    const addFriend = () => {
-        console.log("Added")
+      } else if (i == 0)
+      {
+        const {id} : any = state.user;
+        if (socket)
+          socket.emit('new', { clientId: id });
+      }
+      
+      return () => {
+        if (i++)
+          socket.disconnect();
+      };
     }
-  
+  }, [socket, user]);
+
+  const addFriend = () => {
+    // Send a friend request message to the server
+    socket.emit('friendRequest', {
+      id : target.id,
+      name: user.name,
+    });
+  }
+
   return (
     <div
       className=" p-4 bg-transparent rounded-md "
@@ -25,7 +56,7 @@ const UserProfile = ({user} : any) => {
       <div className=" w-full h-full relative flex flex-col gap-5  rounded-md">
         <div className="w-full  h-[290px] relative">
           <Image
-            src={user.banner_picture ? user.banner_picture : "/car1.jpg"}
+            src={target.banner_picture ? target.banner_picture : "/car1.jpg"}
             fill
             priority
             style={{objectFit:"cover"}}
@@ -49,7 +80,7 @@ const UserProfile = ({user} : any) => {
             >
               <div className="w-full h-[60%]   relative">
                 <Image
-                  src={user.picture ? user.picture : "/b.png"}
+                  src={target.picture ? target.picture : "/b.png"}
                   alt="profile"
                   fill
                   style={{objectFit:"cover"}}
@@ -60,9 +91,9 @@ const UserProfile = ({user} : any) => {
               </div>
               <div className="flex flex-col items-center">
                 <h2 className="mt-2 xl:text-[15px] text-[10px]">
-                  {user.name}
+                  {target.name}
                 </h2>
-                <span className="xl:text-[10px] text-[7px]">@{user.username}</span>
+                <span className="xl:text-[10px] text-[7px]">@{target.username}</span>
                 <span className="xl:text-[10px] text-[7px]">400,000</span>
               </div>
             </div>

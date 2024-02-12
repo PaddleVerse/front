@@ -38,7 +38,7 @@ const page = () => {
   //       .then(response => { return response.json();})
   //       .then(data => {
   //         if (data || data.message !== "Unauthorized")
-  //           dispatch({type: 'UPDATE_PROPERTY', payload: data});
+  //           dispatch({type: 'UPDATE_USER', payload: data});
   //       })
   //       .catch(error => {
   //         console.log("Error during protected endpoint request", error);

@@ -99,7 +99,7 @@ const UserProfileSecond = ({user} : any) => {
               <div className="  2xl:w-[30%] w-full h-[40%] 2xl:h-auto bg-dashBack rounded-md border"></div>
             </div>
           </div>
-          <div className="2xl:w-[30%] sm:w-[40%]  border-orange-500  py-2 bg-dashBack flex  h-[250px]  px-2 rounded-md">
+          {/* <div className="2xl:w-[30%] sm:w-[40%]  border-orange-500  py-2 bg-dashBack flex  h-[250px]  px-2 rounded-md">
             <div className="flex flex-col w-full h-full relative justify-around gap-2  ">
               <div className="flex  justify-around items-center ">
                 <div
@@ -147,9 +147,8 @@ const UserProfileSecond = ({user} : any) => {
                 {" "}
                 ADD FRIEND
               </button>
-              {/* </div> */}
             </div>
-          </div>
+          </div> */}
           <div className="2xl:w-[30%] sm:w-[100%] border h-[250px]"></div>
         </div>
       </div>

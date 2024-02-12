@@ -12,7 +12,7 @@ const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 const LeaderRow = ({user}: Props) => {
   const {state} = useGlobalState();
-  const User : any= state.exampleProperty;
+  const User : any= state.user;
   return (
     <tr className={`${User.id == user.id ? "bg-gray-500" : "bg-leaderboarddiv"} text-white sm:text-[12px] text-[10px]`}>
       <td scope="row" className=" sm:py-[7px] font-medium text-center">

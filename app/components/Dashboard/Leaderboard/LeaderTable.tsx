@@ -12,9 +12,9 @@ const inter = Inter({
 const LeaderTable = () => {
   const [users, setUsers] = useState([]);
   const {state} = useGlobalState();
-  const user : any= state.exampleProperty;
+  const user : any= state.user;
   useEffect(() => {
-    if (user !== 'Initial Value') {
+    if (user) {
       axios.get(`http://localhost:8080/user/range/${user.id}`).then((res) => {
         setUsers(res.data);
       })
