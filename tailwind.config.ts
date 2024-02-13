@@ -35,6 +35,7 @@ module.exports = {
         buttonGray: '#808080',
         blurredRed:"#24191b",
         rightArrowBg:"#161214",
+        buttonColor:"#4a3832",
         rightArrowColor:"#9f6689",
         optionMenu:"#171010",
         redd: '#a8353f',
