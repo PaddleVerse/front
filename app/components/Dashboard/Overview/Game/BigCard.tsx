@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { Rajdhani } from "next/font/google";
 const rajdhani = Rajdhani({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 const inter = Inter({
   subsets: ["latin"],
@@ -40,7 +40,7 @@ const BigCard = ({ gameMode }: { gameMode: string }) => {
             backgroundColor: "rgba(13, 9, 10, 0.5)",
           }}
       >
-        <h1 className={`${rajdhani.className} font-[500] 2xl:text-2xl text-lg`}>Gamemode</h1>
+        <h1 className={`${rajdhani.className} font-[600] 2xl:text-2xl text-lg`}>Gamemode</h1>
         <p className={`${inter.className} 2xl:text-md text-sm w-[95%] sm:w-auto`}>Information about the game mode, explain what the user can expect when they select this game mode</p>
         <div className="flex items-center gap-4">
           <img src="/queue.svg" alt="queue" className="2xl:w-[20px] 2xl:h-[20px] w-[14px] h-[14px]"/>

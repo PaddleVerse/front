@@ -3,6 +3,7 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import BigCard from "./BigCard";
+import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
@@ -10,7 +11,7 @@ const responsive = {
     slidesToSlide: 1 
   },
     laptop: {
-    breakpoint: { max: 1500, min: 1025 }, // Example values; adjust as needed
+    breakpoint: { max: 1500, min: 1025 },
     items: 2,
     slidesToSlide: 1 
   },
@@ -25,22 +26,24 @@ const responsive = {
     slidesToSlide: 1 
   }
 };
+
 const Caroussel = () => {
   return (
-    <div className="mt-[75px] 2xl:max-w-[1800px] xl:max-w-[800px] mx-auto">
+    <div className="mt-[75px] 2xl:max-w-[1800px] xl:max-w-[800px] mx-auto 2xl:pl-4">
       <Carousel
         responsive={responsive}
         autoPlay={false}
         swipeable={true}
         draggable={true}
         centerMode={false}
-        showDots={false}
+        showDots={true}
         infinite={true}
+
       >
         <BigCard gameMode={'1'}/>
         <BigCard gameMode={'2'}/>
         <BigCard gameMode={'3'}/>
-        <BigCard gameMode={'1'}/>
+        <BigCard gameMode={'2'}/>
       </Carousel>
     </div>
   );
