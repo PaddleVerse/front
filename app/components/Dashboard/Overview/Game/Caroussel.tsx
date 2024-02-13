@@ -6,23 +6,28 @@ import BigCard from "./BigCard";
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 4 // optional, default to 1.
+    items:3,
+    slidesToSlide: 1 
+  },
+    laptop: {
+    breakpoint: { max: 1500, min: 1025 }, // Example values; adjust as needed
+    items: 2,
+    slidesToSlide: 1 
   },
   tablet: {
     breakpoint: { max: 1024, min: 768 },
-    items: 3,
-    slidesToSlide: 3 // optional, default to 1.
+    items: 1,
+    slidesToSlide: 1 
   },
   mobile: {
     breakpoint: { max: 767, min: 464 },
-    items: 2,
-    slidesToSlide: 1 // optional, default to 1.
+    items: 1,
+    slidesToSlide: 1 
   }
 };
 const Caroussel = () => {
   return (
-    <div className="mt-[75px]  border border-red-500 w-full">
+    <div className="mt-[75px] 2xl:max-w-[1800px] xl:max-w-[800px]  mx-auto">
       <Carousel
         responsive={responsive}
         autoPlay={false}
@@ -32,10 +37,10 @@ const Caroussel = () => {
         showDots={false}
         infinite={true}
       >
-        <BigCard />
-        <BigCard />
-        {/* <BigCard /> */}
-        <BigCard />
+        <BigCard gameMode={'1'}/>
+        <BigCard gameMode={'2'}/>
+        <BigCard gameMode={'3'}/>
+        <BigCard gameMode={'1'}/>
       </Carousel>
     </div>
   );
