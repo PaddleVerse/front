@@ -44,8 +44,7 @@ export default function InputForm() {
       username: "",
       password: "",
     },
-  });
-
+  }); 
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     axios.post("http://localhost:8080/auth/login", {

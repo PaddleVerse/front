@@ -28,7 +28,7 @@ const image2 =
 //   },
 // };
 
-const socket = io('http://localhost:8080');
+
 
 interface User{
   username    : string,
@@ -87,6 +87,8 @@ const Sidebar = () => {
     }
   };
 
+  // const getSocket = (id : number) => { return io('http://localhost:8080', {query: { userId: id } });
+  // const socket = ;
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -94,9 +96,10 @@ const Sidebar = () => {
     
     // get the access token from the cookie
     const accessToken = getCookie("access_token");
-
+    let socket : any = null;
     if (accessToken)
     {
+      
         fetch("http://localhost:8080/auth/protected", {
         method: 'GET',
         headers: {
@@ -107,6 +110,7 @@ const Sidebar = () => {
         .then(data => {
           if (data || data.message !== "Unauthorized")
           {
+            socket = io('http://localhost:8080', {query: { userId: data?.id } });
             dispatch({type: 'UPDATE_SOCKET', payload: socket});
             dispatch({type: 'UPDATE_USER', payload: data});
           }
@@ -115,6 +119,9 @@ const Sidebar = () => {
           console.log("Error during protected endpoint request", error);
         });
     }
+    return () => {
+        socket?.disconnect();
+    };
   }, []);
 
   return (

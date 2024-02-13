@@ -4,45 +4,76 @@ import { Rajdhani } from "next/font/google";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useGlobalState } from "../../Sign/GlobalState";
+import axios from "axios";
 
 const inter = Inter({ subsets: ["latin"] });
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
-let i = 0;
+
 const UserProfile = ({target} : any) => {
   const {state} = useGlobalState();
+  const [status, setStatus] = useState<string>("");
+  const [recv, setRecv] = useState<string>("");
+  const [is, setIs] = useState<boolean>(false);
+
   const user:any = state.user;
   const socket : any= state.socket;
 
   useEffect(() => {
-    if (state.user)
-    {
-      if (i)
-      {
-        // Listening for friend requests
-        socket.on('friendRequest', (data: any) => {
-          (data && data.Error ?  alert("User not found") : alert("You have a friend request from " + data.name))
-        });
 
-      } else if (i == 0)
-      {
-        const {id} : any = state.user;
-        if (socket)
-          socket.emit('new', { clientId: id });
-      }
-      
-      return () => {
-        if (i++)
-          socket.disconnect();
-      };
-    }
-  }, [socket, user]);
+    // Listening for friend requests
+    socket?.connect();
+
+    socket?.on('friendRequest', (data: any) => {
+      // console.log(data, is);
+      setIs((prev) => !prev);
+    });
+
+    return () => {
+        socket?.disconnect();
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/friendship/status/${user?.id}/${target?.id}`)
+    .then((res) => {
+      setStatus(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  } , [target?.id, user?.id, status, is]);
+
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/friendship/status/${target?.id}/${user?.id}`)
+    .then((res) => {
+      setRecv(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  } , [user?.id, is]);
 
   const addFriend = () => {
-    // Send a friend request message to the server
-    socket.emit('friendRequest', {
-      id : target.id,
-      name: user.name,
-    });
+    switch(status) {
+      case "PENDING":
+      {
+        setStatus("");
+        socket.emit('cancelFriendRequest', {
+          reciverId : target?.id,
+          senderId: user?.id,
+        });
+        break;
+      }
+      default:
+      {
+        setStatus("PENDING");
+        socket.emit('friendRequest', {
+          reciverId : target?.id,
+          senderId: user?.id,
+        });
+      }
+    }
   }
 
   return (
@@ -178,14 +209,35 @@ const UserProfile = ({target} : any) => {
                   className="2xl:w-[180px] sm:-right-[20px] right-[0px] bottom-[25px] sm:bottom-[45px] xl:w-[120px]  2xl:right-[10px] 2xl:bottom-[100px] xl:-right-[15px] xl:bottom-[95px] lg:w-[95px]"
                 />
               </div>
-              <button
-                onClick={addFriend}
-                className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-greenButton flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
-              >
-                {" "}
-                ADD FRIEND
-              </button>
-              {/* </div> */}
+              {
+                recv === "PENDING" ?
+                  <div className="flex flex-row gap-4">
+                    <button
+                      // onClick={addFriend}
+                      className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-greenButton  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                    >
+                      ACCEPTE
+                    </button>
+                    <button
+                      // onClick={addFriend}
+                      className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-red-900  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                    >
+                      REJECTE
+                    </button>
+                  </div>
+                  :
+                  <button
+                    onClick={addFriend}
+                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : "bg-greenButton"}  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                  >
+                    {
+                      status === "PENDING" ? "PENDING"
+                      : status === "ACCEPTED" ? "REMOVE FRIEND"
+                      : "ADD FRIEND"
+                    }
+                  </button>
+                 
+              }
             </div>
           </div>
           <div className="2xl:w-[30%] sm:w-[100%] border h-[250px]"></div>
