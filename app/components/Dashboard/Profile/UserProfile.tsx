@@ -20,18 +20,27 @@ const UserProfile = ({target} : any) => {
 
   useEffect(() => {
 
-    // Listening for friend requests
-    socket?.connect();
+    
 
-    socket?.on('friendRequest', (data: any) => {
-      // console.log(data, is);
-      setIs((prev) => !prev);
-    });
+    socket?.on('friendRequest', (data: any) => { setIs(prv => !prv); });
+
+    socket?.on('cancelFriendRequest', (data: any) => { setIs(prv => !prv); });
+
+    socket?.on('acceptFriendRequest', (data: any) => { setIs(prv => !prv); });
+
+    socket?.on('removeFriend', (data: any) => { setIs(prv => !prv); });
+
+    socket?.on('rejectFriendRequest', (data: any) => { setIs(prv => !prv); });
 
     return () => {
-        socket?.disconnect();
+        socket?.off('cancelFriendRequest');
+        socket?.off('friendRequest');
+        socket?.off('acceptFriendRequest');
     };
   }, [socket]);
+
+
+
 
   useEffect(() => {
     axios.get(`http://localhost:8080/friendship/status/${user?.id}/${target?.id}`)
@@ -41,7 +50,7 @@ const UserProfile = ({target} : any) => {
     .catch((err) => {
       console.log(err);
     });
-  } , [target?.id, user?.id, status, is]);
+  } , [target?.id, user?.id, is]);
 
 
   useEffect(() => {
@@ -52,28 +61,56 @@ const UserProfile = ({target} : any) => {
     .catch((err) => {
       console.log(err);
     });
-  } , [user?.id, is]);
+  } , [target?.id, user?.id, is]);
+
 
   const addFriend = () => {
     switch(status) {
       case "PENDING":
       {
-        setStatus("");
         socket.emit('cancelFriendRequest', {
-          reciverId : target?.id,
           senderId: user?.id,
+          reciverId : target?.id,
+        });
+        break;
+      }
+      case "ACCEPTED":
+      {
+        socket.emit('removeFriend', {
+          senderId: user?.id,
+          reciverId : target?.id,
         });
         break;
       }
       default:
       {
-        setStatus("PENDING");
         socket.emit('friendRequest', {
-          reciverId : target?.id,
           senderId: user?.id,
+          reciverId : target?.id,
         });
       }
     }
+  }
+
+  const acceptFriend = () => {
+    socket?.emit('acceptFriendRequest', {
+      senderId: target?.id,
+      reciverId : user?.id,
+    });
+  }
+
+  const removeFriend = () => {
+    socket?.emit('removeFriend', {
+      senderId: target?.id,
+      reciverId : user?.id,
+    });
+  }
+
+  const rejectFriend = () => {
+    socket?.emit('rejectFriendRequest', {
+      senderId: target?.id,
+      reciverId : user?.id,
+    });
   }
 
   return (
@@ -208,35 +245,41 @@ const UserProfile = ({target} : any) => {
                   alt="badge"
                   className="2xl:w-[180px] sm:-right-[20px] right-[0px] bottom-[25px] sm:bottom-[45px] xl:w-[120px]  2xl:right-[10px] 2xl:bottom-[100px] xl:-right-[15px] xl:bottom-[95px] lg:w-[95px]"
                 />
-              </div>
+              </div> 
               {
-                recv === "PENDING" ?
+                recv && recv === "PENDING" ?
                   <div className="flex flex-row gap-4">
                     <button
-                      // onClick={addFriend}
+                      onClick={acceptFriend}
                       className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-greenButton  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                     >
                       ACCEPTE
                     </button>
                     <button
-                      // onClick={addFriend}
+                      onClick={rejectFriend}
                       className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-red-900  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                     >
                       REJECTE
                     </button>
                   </div>
+                  : recv && recv === "ACCEPTED" ?
+                  <button
+                    onClick={removeFriend}
+                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-red-900 flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                  >
+                    REMOVE FRIEND
+                  </button>
                   :
                   <button
                     onClick={addFriend}
-                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : "bg-greenButton"}  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"? "bg-red-900" : "bg-greenButton"}  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                   >
                     {
-                      status === "PENDING" ? "PENDING"
-                      : status === "ACCEPTED" ? "REMOVE FRIEND"
+                      status && status === "PENDING" ? "PENDING"
+                      : status && status === "ACCEPTED" ? "REMOVE FRIEND"
                       : "ADD FRIEND"
                     }
                   </button>
-                 
               }
             </div>
           </div>

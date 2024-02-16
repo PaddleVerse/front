@@ -42,7 +42,7 @@ function ContentWrapper({ children }: Props) {
           })
           .then(response => { return response.json();})
           .then(data => {
-            if (!data || data.error === "Unauthorized")
+            if (!data || data?.error === "Unauthorized" || data?.message === "Unauthorized")
               router.push('/');
             else
               setIsAuth(true);
