@@ -145,3 +145,9 @@ tr td:last-child {
 /* body {
   background-image: url('/Dark.svg');
 } */
+* {
+  box-sizing: border-box;
+}
+.max_width {
+  max-width: 94%;
+}
