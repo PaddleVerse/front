@@ -1,6 +1,10 @@
-import React from "react";
+import { useEffect, useRef, useState } from "react";
+import FriendsList from "./FriendsList";
+import GroupList from "./GroupList";
+import MessageCard from "./MessageCard";
+import axios from "axios";
 
-const ChatCard = () => {
+export const ChatCard = () => {
   return (
     <div className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative ">
       <div className="w-16 h-16 relative flex flex-shrink-0">
@@ -23,6 +27,40 @@ const ChatCard = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export const ChatHolder = () => {
+  const [groupOrFriend, setGroupOrFriend] = useState<boolean>(true);
+  const [friends, setFriends] = useState(null);
+  useEffect(() => {
+    axios.get("http://localhost:8080/friendship").then((data) => {
+      setFriends(data);
+    }).catch();
+  }, []);
+  return (
+    <>
+      <div
+        id="friends-groups-list"
+        className="border-white border-2 h-full w-full lg:w-[20%] lg:pt-5 lg:pl-5"
+      >
+        <h1 className="text-3xl font-semibold">messages</h1>
+        <div>
+          <input type="text" placeholder="search" />
+        </div>
+        <div className="h-[5%] lg:w-[]">
+          <button className="bg-black" onClick={()=>setGroupOrFriend(true)}>
+            Friends
+          </button>
+          <button className="bg-black" onClick={()=>setGroupOrFriend(false)}>
+            Groups
+          </button>
+        </div>
+        {/* in here i should write a compomponent that is going to be responsible for rendering the user groups and his friends */}
+        {groupOrFriend ? <FriendsList friendsList={friends} /> : <GroupList />}
+      </div>
+      <MessageCard />
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import ChatCard from "@/app/components/Dashboard/Chat/ChatCard";
 import LastBuble from "@/app/components/Dashboard/Chat/LeftBubbles/LastBuble";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
@@ -7,6 +7,7 @@ import LastBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/LastBu
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import TopBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/TopBubbleRight";
 import React from "react";
+import { ChatHolder } from "@/app/components/Dashboard/Chat/ChatCard";
 
 const page = () => {
   return (
@@ -18,7 +19,7 @@ const page = () => {
     //       backgroundColor: "rgba(13, 9, 10, 0.7)",
     //     }}
     //   > */}
-      <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
+      <div className="lg:h-[95%] lg:w-[95%] w-full h-full">
         <div
           className="h-full w-full flex antialiased text-gray-200 bg-transparent"
           style={{
@@ -26,7 +27,8 @@ const page = () => {
             backgroundColor: "rgba(13, 9, 10, 0.7)",
           }}
         >
-          <div className="flex-1 flex flex-col">
+          <ChatHolder />
+          {/* <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
               <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5" >
                 <div className="header p-4 flex flex-row  items-center flex-none  justify-center">
@@ -243,7 +245,7 @@ const page = () => {
                 </div>
               </section>
             </main>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
