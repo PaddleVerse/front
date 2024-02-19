@@ -4,6 +4,8 @@ import { Rajdhani } from "next/font/google";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { Dropdown } from "./Dropdown";
+
 import axios from "axios";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,22 +22,9 @@ const UserProfile = ({target} : any) => {
 
   useEffect(() => {
 
-    
-
-    socket?.on('friendRequest', (data: any) => { setIs(prv => !prv); });
-
-    socket?.on('cancelFriendRequest', (data: any) => { setIs(prv => !prv); });
-
-    socket?.on('acceptFriendRequest', (data: any) => { setIs(prv => !prv); });
-
-    socket?.on('removeFriend', (data: any) => { setIs(prv => !prv); });
-
-    socket?.on('rejectFriendRequest', (data: any) => { setIs(prv => !prv); });
-
+    socket?.on('refresh', (data: any) => { setIs(prv => !prv); });
     return () => {
-        socket?.off('cancelFriendRequest');
-        socket?.off('friendRequest');
-        socket?.off('acceptFriendRequest');
+        socket?.off('refresh');
     };
   }, [socket]);
 
@@ -79,6 +68,7 @@ const UserProfile = ({target} : any) => {
         socket.emit('removeFriend', {
           senderId: user?.id,
           reciverId : target?.id,
+          is : true
         });
         break;
       }
@@ -103,6 +93,7 @@ const UserProfile = ({target} : any) => {
     socket?.emit('removeFriend', {
       senderId: target?.id,
       reciverId : user?.id,
+      is : false
     });
   }
 
@@ -110,6 +101,20 @@ const UserProfile = ({target} : any) => {
     socket?.emit('rejectFriendRequest', {
       senderId: target?.id,
       reciverId : user?.id,
+    });
+  }
+
+  const blockUser = () => {
+    socket.emit('blockFriend', {
+      senderId: user?.id,
+      reciverId : target?.id,
+    });
+  }
+
+  const unblockUser = () => {
+    socket.emit('unblockFriend', {
+      senderId: user?.id,
+      reciverId : target?.id,
     });
   }
 
@@ -132,6 +137,9 @@ const UserProfile = ({target} : any) => {
             sizes="auto"
             className="z-[-1]"
           />
+          <div className="absolute right-0 p-4"> 
+          <Dropdown handleBlock={blockUser} handleUnblock={unblockUser} status={status} recv={recv} />
+          </div>
           <div
             className="2xl:w-[170px] xl:w-[120px] xl:h-[200px] absolute 2xl:h-[250px]  bg-transparent rounded-md 2xl:-bottom-[120px] 2xl:left-[100px] p-2 text-white sm:bottom-[10px] sm:left-[50px] sm:w-[110px] sm:h-[170px] bottom-[10px] left-[20px] w-[80px] h-[150px]  "
             style={{
@@ -152,7 +160,6 @@ const UserProfile = ({target} : any) => {
                   alt="profile"
                   fill
                   style={{objectFit:"cover"}}
-                  // objectPosition="center"
                   sizes="auto"
                   className="  rounded-md"
                 />
@@ -269,10 +276,11 @@ const UserProfile = ({target} : any) => {
                   >
                     REMOVE FRIEND
                   </button>
+                  : recv && recv === "BLOCKED" ? null
                   :
                   <button
                     onClick={addFriend}
-                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"? "bg-red-900" : "bg-greenButton"}  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"  ? "bg-red-900" : status === "BLOCKED" ? "hidden" : "bg-greenButton"} flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                   >
                     {
                       status && status === "PENDING" ? "PENDING"
