@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Rajdhani } from "next/font/google";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -20,12 +20,22 @@ const UserProfile = ({target} : any) => {
   const user:any = state.user;
   const socket : any= state.socket;
 
+
+  const  getDate = (dateString: string): string  => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
   useEffect(() => {
 
-    socket?.on('refresh', (data: any) => { setIs(prv => !prv); });
-    return () => {
-        socket?.off('refresh');
-    };
+    socket?.on('refresh', () => { setIs((prev) => !prev) });
+
+    return () => { socket?.off('refresh') };
+
   }, [socket]);
 
 
@@ -51,7 +61,6 @@ const UserProfile = ({target} : any) => {
       console.log(err);
     });
   } , [target?.id, user?.id, is]);
-
 
   const addFriend = () => {
     switch(status) {
@@ -218,14 +227,11 @@ const UserProfile = ({target} : any) => {
                   className={` ${inter.className} flex flex-col text-white gap-1 relative`}
                 >
                   <span className="text-buttonGray 2xl:text-xs xl:text-[12px] sm:text-[11px] ml-[8px] 2xl:ml-4 xl:ml-2 text-[13px]">
-                    online
+                    { target?.status === "ONLINE" ? "online" : "offline" }
                   </span>
-                  <div className="absolute 2xl:left-2 xl:top-[6px] top-[9px]  w-[5px] h-[5px] rounded-full bg-green-500"></div>
-                  <h1 className="2xl:text-[17px] xl:text-[15px] text-[15px]">
-                    Andrew
-                  </h1>
+                  <div className={`absolute 2xl:left-2 xl:top-[6px] top-[9px]  w-[5px] h-[5px] rounded-full ${ target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" }`}></div>
                   <span className="text-buttonGray 2xl:text-[15px] xl:text-[8px] sm:text-[8px] text-[13px]">
-                    02-01-2024
+                    {getDate(target?.createdAt)}
                   </span>
                   <span className="text-buttonGray 2xl:text-[13px] xl:text-[12px] sm:text-[10px] text-[13px]">
                     public channels
