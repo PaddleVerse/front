@@ -33,6 +33,8 @@ export const ChatCard = () => {
 export const ChatHolder = () => {
   const [groupOrFriend, setGroupOrFriend] = useState<boolean>(true);
   const [friends, setFriends] = useState(null);
+  const searchBarResult = useRef([]);
+  const searchInput = useRef<HTMLInputElement | null>(null);
   // here i fetch the data to put in the friends list to later display
   // useEffect(() => {
   //   axios.get(`http://localhost:8080/friendship/`).then((data) => {
@@ -52,13 +54,24 @@ export const ChatHolder = () => {
       >
         <h1 className="text-3xl font-semibold">messages</h1>
         <div>
-          <input type="text" placeholder="search" />
+          <input
+            ref={searchInput}
+            type="text"
+            placeholder="search"
+            className="text-black"
+            onChange={() => {
+              
+            }}
+            onSubmit={(e) => {
+              // here  i should take to another page or something
+            }}
+          />
         </div>
         <div className="h-[5%] lg:w-[]">
-          <button className="bg-black" onClick={()=>setGroupOrFriend(true)}>
+          <button className="bg-black" onClick={() => setGroupOrFriend(true)}>
             Friends
           </button>
-          <button className="bg-black" onClick={()=>setGroupOrFriend(false)}>
+          <button className="bg-black" onClick={() => setGroupOrFriend(false)}>
             Groups
           </button>
         </div>
