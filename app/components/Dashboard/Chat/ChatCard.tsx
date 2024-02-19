@@ -33,11 +33,17 @@ export const ChatCard = () => {
 export const ChatHolder = () => {
   const [groupOrFriend, setGroupOrFriend] = useState<boolean>(true);
   const [friends, setFriends] = useState(null);
-  useEffect(() => {
-    axios.get("http://localhost:8080/friendship").then((data) => {
-      setFriends(data);
-    }).catch();
-  }, []);
+  // here i fetch the data to put in the friends list to later display
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8080/friendship/`).then((data) => {
+  //     console.log("got data");
+  //     console.log("the data", data.data);
+  //     setFriends(data.data);
+  //   }).catch((error) => {
+  //     console.error("got error");
+  //     console.log(error);
+  //   });
+  // }, []);
   return (
     <>
       <div
