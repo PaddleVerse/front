@@ -6,25 +6,31 @@ import TopBuble from "@/app/components/Dashboard/Chat/LeftBubbles/TopBuble";
 import LastBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/LastBubbleRight";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import TopBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/TopBubbleRight";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChatHolder } from "@/app/components/Dashboard/Chat/ChatCard";
 import axios from "axios";
 import { error } from "console";
 import { date } from "zod";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import { Socket } from "socket.io-client";
 
 const Page = () => {
-  const friendsList = useRef([]);
+  const [chatList, setChatList] = useState([]);
+  const globalState = useGlobalState();
+  const socket = useRef<Socket | null>(null);
   useEffect(() => {
-    axios.get("http://localhost:8080/friendship/5").then((res) => {
-      res.data.forEach(() => {
-        
-      });
-      console.log(res.data.length);
-    }).catch((error) => {
-      console.log(error);
-    });
-    friendsList.current.values;
-  }, [friendsList]);
+    if (globalState.state.user) {
+      axios
+        .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
+        .then((res) => {
+          setChatList(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [globalState]);
+
 
   return (
     <div className="w-full h-full flex justify-center mt-10">
@@ -84,9 +90,13 @@ const Page = () => {
 
                 <div className="contacts p-2 flex-1 overflow-y-scroll">
                   {/*here i need to replace this array with something else that i going to be fetched from the database and later */}
-                  {Array.from({ length: 15 }, (_, index) => (
+                  {/* {Array.from({ length: 15 }, (_, index) => (
                     <ChatCard key={index} />
-                  ))}
+                  ))} */}
+                  {Array.isArray(chatList) &&
+                    chatList.map((value: any, key) => (
+                      <ChatCard key={key} value={value}></ChatCard>
+                    ))}
                 </div>
               </section>
               <section className="flex flex-col flex-auto border-l border-gray-800">

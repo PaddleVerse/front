@@ -4,7 +4,7 @@ import GroupList from "./GroupList";
 import MessageCard from "./MessageCard";
 import axios from "axios";
 
-export const ChatCard = () => {
+export const ChatCard = (props: any) => {
   return (
     <div className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative ">
       <div className="w-16 h-16 relative flex flex-shrink-0">
@@ -18,7 +18,7 @@ export const ChatCard = () => {
         </div>
       </div>
       <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
-        <p>Sunny Leone</p>
+        <p>{props.value.name}</p>
         <div className="flex items-center text-sm text-gray-600">
           <div className="min-w-0">
             <p className="truncate">Ah, it was an awesome one night stand.</p>
@@ -59,9 +59,7 @@ export const ChatHolder = () => {
             type="text"
             placeholder="search"
             className="text-black"
-            onChange={() => {
-              
-            }}
+            onChange={() => {}}
             onSubmit={(e) => {
               // here  i should take to another page or something
             }}
