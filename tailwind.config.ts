@@ -25,7 +25,7 @@ module.exports = {
         '2xl': '1536px',
       },
       backgroundImage: {
-        Dark: "url('/new.png')",
+        Dark: "url('/bg6.png')",
       },
       colors: {
         colorr: '#181818',
