@@ -15,14 +15,12 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoCameraOutline } from "react-icons/io5";
 import { PiMicrophoneLight } from "react-icons/pi";
 import { IoSendOutline } from "react-icons/io5";
-import { TbSend } from "react-icons/tb";
-const inter = Inter({ subsets: ["latin"] });
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { error } from "console";
-import { date } from "zod";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Socket } from "socket.io-client";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const Page = () => {
   const [chatList, setChatList] = useState([]);
@@ -30,6 +28,7 @@ const Page = () => {
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
     if (globalState.state.user) {
+      socket.current = globalState.state.socket;
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
@@ -40,6 +39,10 @@ const Page = () => {
         });
     }
   }, [globalState]);
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
