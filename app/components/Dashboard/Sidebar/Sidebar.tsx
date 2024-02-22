@@ -87,8 +87,7 @@ const Sidebar = () => {
     }
   };
 
-  // const getSocket = (id : number) => { return io('http://localhost:8080', {query: { userId: id } });
-  // const socket = ;
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -123,6 +122,7 @@ const Sidebar = () => {
         socket?.disconnect();
     };
   }, []);
+  
 
   return (
     <div className="flex relative lg:h-[fit-content] h-auto" {...handlers}>
