@@ -6,7 +6,13 @@ import axios from "axios";
 
 export const ChatCard = (props: any) => {
   return (
-    <div className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative ">
+    <div
+      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
+      onClick={(e,) => {
+        console.log(props.index);
+        e.preventDefault();
+      }}
+    >
       <div className="w-16 h-16 relative flex flex-shrink-0">
         <img
           className="shadow-md rounded-full w-full h-full object-cover"
@@ -34,6 +40,15 @@ export const ChatCard = (props: any) => {
 };
 
 export const ChatHolder = (props: any) => {
+  const [target, setTarget] = useState<string>("");
+  const [targetInfo, setTargetInfo] = useState(null);
+
+  // useEffect(() => {
+  //   if (target !== "") {
+
+  //   }
+  // },[target]);
+
   return (
     <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 border-white border-2">
       <div className="header p-4 flex flex-row  items-center flex-none  justify-center">
@@ -73,9 +88,10 @@ export const ChatHolder = (props: any) => {
 
       <div className="contacts p-2 flex-1 overflow-y-scroll">
         {Array.isArray(props.chatList) &&
-          props.chatList.map((value: any, key: any) => (
-            <ChatCard key={key} value={value}></ChatCard>
-          ))}
+          props.chatList.map((value: any, key: any) => {
+            console.log(value.name);
+            return <ChatCard key={value.name} value={value} index={ value.name}></ChatCard>;
+          })}
       </div>
     </section>
   );
