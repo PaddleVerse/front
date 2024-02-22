@@ -10,7 +10,10 @@ export const ChatCard = (props: any) => {
       <div className="w-16 h-16 relative flex flex-shrink-0">
         <img
           className="shadow-md rounded-full w-full h-full object-cover"
-          src={props.value.picture || "https://randomuser.me/api/portraits/women/87.jpg"}
+          src={
+            props.value.picture ||
+            "https://randomuser.me/api/portraits/women/87.jpg"
+          }
           alt="User2"
         />
         <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
@@ -30,54 +33,51 @@ export const ChatCard = (props: any) => {
   );
 };
 
-export const ChatHolder = () => {
-  const [groupOrFriend, setGroupOrFriend] = useState<boolean>(true);
-  const [friends, setFriends] = useState(null);
-  const searchBarResult = useRef([]);
-  const searchInput = useRef<HTMLInputElement | null>(null);
-  // here i fetch the data to put in the friends list to later display
-  // useEffect(() => {
-  //   axios.get(`http://localhost:8080/friendship/`).then((data) => {
-  //     console.log("got data");
-  //     console.log("the data", data.data);
-  //     setFriends(data.data);
-  //   }).catch((error) => {
-  //     console.error("got error");
-  //     console.log(error);
-  //   });
-  // }, []);
+export const ChatHolder = (props: any) => {
   return (
-    <>
-      <div
-        id="friends-groups-list"
-        className="border-white border-2 h-full w-full lg:w-[20%] lg:pt-5 lg:pl-5"
-      >
-        <h1 className="text-3xl font-semibold">messages</h1>
-        <div>
-          <input
-            ref={searchInput}
-            type="text"
-            placeholder="search"
-            className="text-black"
-            onChange={() => {}}
-            onSubmit={(e) => {
-              // here  i should take to another page or something
-            }}
-          />
-        </div>
-        <div className="h-[5%] lg:w-[]">
-          <button className="bg-black" onClick={() => setGroupOrFriend(true)}>
-            Friends
-          </button>
-          <button className="bg-black" onClick={() => setGroupOrFriend(false)}>
-            Groups
-          </button>
-        </div>
-        {/* in here i should write a compomponent that is going to be responsible for rendering the user groups and his friends */}
-        {groupOrFriend ? <FriendsList friendsList={friends} /> : <GroupList />}
+    <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 border-white border-2">
+      <div className="header p-4 flex flex-row  items-center flex-none  justify-center">
+        <div
+          className="w-16 h-16 relative flex flex-shrink-0"
+          style={{ filter: "invert(100%)" }}
+        ></div>
+        <p className="text-md font-bold hidden md:block group-hover:block">
+          Messenger
+        </p>
       </div>
-      <MessageCard />
-    </>
+      <div className=" p-4 flex-none">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <div className="relative">
+            <label>
+              <input
+                className="rounded-full py-2 pr-6 pl-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
+                type="text"
+                placeholder="Search Messenger"
+              />
+              <span className="absolute top-0 left-0 mt-2 ml-3 inline-block">
+                <svg viewBox="0 0 24 24" className="w-6 h-6">
+                  <path
+                    fill="#bbb"
+                    d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
+                  />
+                </svg>
+              </span>
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div className="contacts p-2 flex-1 overflow-y-scroll">
+        {Array.isArray(props.chatList) &&
+          props.chatList.map((value: any, key: any) => (
+            <ChatCard key={key} value={value}></ChatCard>
+          ))}
+      </div>
+    </section>
   );
 };
 
