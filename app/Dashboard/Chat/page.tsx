@@ -1,11 +1,6 @@
 "use client";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
-import LastBuble from "@/app/components/Dashboard/Chat/LeftBubbles/LastBuble";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
-import TopBuble from "@/app/components/Dashboard/Chat/LeftBubbles/TopBuble";
-import LastBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/LastBubbleRight";
-import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
-import TopBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/TopBubbleRight";
 import { Inter } from "next/font/google";
 import { LuPhone } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
@@ -22,12 +17,42 @@ import { Socket } from "socket.io-client";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export type user = {
+  id: number;
+  username: string;
+  name: string;
+  picture: string;
+  level: number;
+  createdAt: Date;
+};
+
+export type channel = {
+  id: number;
+  key?: string;
+  state?: "protected" | "private" | "public";
+  name: string;
+  createdAt: Date;
+};
+
+export type message = {
+  id?: number;
+  channel_id?: number;
+  conversation_id?: number;
+  content: string;
+  content_type: string;
+  createdAt: Date;
+};
+
 const Page = () => {
   const [chatList, setChatList] = useState([]);
+  const [message, setMessage] = useState([]);
+  const [online, setOnline] = useState(false);
+  const [target, setTarget] = useState<user | channel | null>();
   const globalState = useGlobalState();
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
     if (globalState.state.user) {
+      console.log("in first use effect", globalState.state.user.id);
       socket.current = globalState.state.socket;
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
@@ -41,8 +66,18 @@ const Page = () => {
   }, [globalState]);
 
   useEffect(() => {
-    
-  }, []);
+    if (globalState.state.user && globalState.state.user.id) {
+      console.log("in second use effect", globalState.state.user.id);
+      axios
+        .get(`http://localhost:8080/chat/message?user=${globalState.state.user.id}&other=1`)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log("error");
+        });
+    }
+  }, [target, globalState.state.user]);
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
@@ -90,146 +125,126 @@ const Page = () => {
                   </form>
                 </div>
 
-                <div className="contacts p-2 flex-1 overflow-y-scroll">
+                <div
+                  className="contacts p-2 flex-1 overflow-y-scroll"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                >
                   {Array.isArray(chatList) &&
                     chatList.map((value: any, key: any) => {
-                      console.log(value.name);
                       return (
                         <ChatCard
                           key={value.name}
                           value={value}
                           index={value.name}
+                          setTarget={setTarget}
+                          message={message}
                         ></ChatCard>
                       );
                     })}
                 </div>
               </section>
-              <section className="flex flex-col flex-auto border-l border-gray-800 border-2 border-white">
-                <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
-                  <div className="flex">
-                    <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                      <img
-                        className="shadow-md rounded-full w-full h-full object-cover"
-                        src="https://randomuser.me/api/portraits/women/33.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="text-sm">
-                      <p className="font-bold">Scarlett Johansson</p>
-                      <p className="text-green-500">Online</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center">
-                    <div className="block rounded-full  w-5 h-5">
-                      <LuPhone className="w-full h-full text-green-500" />
-                    </div>
-                    <div className="block rounded-full  w-6 h-6 ml-4">
-                      <IoVideocamOutline className="w-full h-full text-green-500" />
-                    </div>
-                    <div className="block rounded-full  w-6 h-6 ml-4">
-                      <IoIosInformationCircleOutline className="w-full h-full text-green-500" />
-                    </div>
-                  </div>
-                </div>
-                <div className="chat-body p-4 flex-1 overflow-y-scroll">
-                  <div className="flex flex-row justify-start">
-                    <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
-                      <img
-                        className="shadow-md rounded-full w-full h-full object-cover"
-                        src="https://randomuser.me/api/portraits/women/33.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                    </div>
-                  </div>
-                  <p className="p-4 text-center text-sm text-gray-500">
-                    FRI 3:04 PM
-                  </p>
-                  <div className="flex flex-row justify-end">
-                    <div className="messages text-sm text-white grid grid-flow-row gap-2">
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                    </div>
-                  </div>
-                  <p className="p-4 text-center text-sm text-gray-500">
-                    SAT 2:10 PM
-                  </p>
-                  <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
-                    <MiddleBuble />
-                  </div>
-                  <p className="p-4 text-center text-sm text-gray-500">
-                    12:40 PM
-                  </p>
-                  <div className="flex flex-row justify-end">
-                    <div className="messages text-sm text-white grid grid-flow-row gap-2">
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                    </div>
-                  </div>
-                </div>
-                <div className="chat-footer flex-none">
-                  <div className="flex flex-row items-center p-4">
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6 "
-                    >
-                      <CiCirclePlus className="w-full h-full" />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6"
-                    >
-                      <MdOutlineAddPhotoAlternate className="w-full h-full" />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6"
-                    >
-                      <IoCameraOutline className="w-full h-full" />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6"
-                    >
-                      <PiMicrophoneLight className="w-full h-full" />
-                    </button>
-                    <div className="relative flex-grow">
-                      <label>
-                        <input
-                          className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
-                          type="text"
-                          placeholder="Aa"
+              {target ? (
+                <section className="flex flex-col flex-auto border-l border-gray-800 border-2 border-white">
+                  <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
+                    <div className="flex">
+                      <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
+                        {/* this image needs to be filled with the target user */}
+                        <img
+                          className="shadow-md rounded-full w-full h-full object-cover border-2 border-white"
+                          src="https://randomuser.me/api/portraits/women/33.jpg"
+                          alt=""
                         />
-                        <button
-                          type="button"
-                          className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none block text-green-600 hover:text-green-700 w-6 h-6"
-                        >
-                          <IoSendOutline className="w-full h-full" />
-                        </button>
-                      </label>
+                      </div>
+                      <div className="text-sm">
+                        <p className="font-bold">{target?.name}</p>
+                        {online ? (
+                          <p className="text-green-500">Online</p>
+                        ) : (
+                          <p className="text-red-500">Offline</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center">
+                      <div className="block rounded-full  w-5 h-5">
+                        <LuPhone className="w-full h-full text-green-500" />
+                      </div>
+                      <div className="block rounded-full  w-6 h-6 ml-4">
+                        <IoVideocamOutline className="w-full h-full text-green-500" />
+                      </div>
+                      <div className="block rounded-full  w-6 h-6 ml-4">
+                        <IoIosInformationCircleOutline className="w-full h-full text-green-500" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </section>
+                  <div className="chat-body p-4 flex-1 overflow-y-scroll">
+                    <div className="flex flex-row justify-start">
+                      <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
+                        <img
+                          className="shadow-md rounded-full w-full h-full object-cover"
+                          src="https://randomuser.me/api/portraits/women/33.jpg"
+                          alt=""
+                        />
+                      </div>
+                      <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
+                        <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble />
+                      </div>
+                    </div>
+                    <p className="p-4 text-center text-sm text-gray-500">
+                      FRI 3:04 PM
+                    </p>
+                  </div>
+                  <div className="chat-footer flex-none">
+                    <div className="flex flex-row items-center p-4">
+                      <button
+                        type="button"
+                        className="flex flex-shrink-0 focus:outline-none mx-2  text-green-600 hover:text-green-700 w-6 h-6 "
+                      >
+                        <CiCirclePlus className="w-full h-full" />
+                      </button>
+                      <button
+                        type="button"
+                        className="flex flex-shrink-0 focus:outline-none mx-2  text-green-600 hover:text-green-700 w-6 h-6"
+                      >
+                        <MdOutlineAddPhotoAlternate className="w-full h-full" />
+                      </button>
+                      <button
+                        type="button"
+                        className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
+                      >
+                        <IoCameraOutline className="w-full h-full" />
+                      </button>
+                      <button
+                        type="button"
+                        className="flex flex-shrink-0 focus:outline-none mx-2  text-green-600 hover:text-green-700 w-6 h-6"
+                      >
+                        <PiMicrophoneLight className="w-full h-full" />
+                      </button>
+                      <div className="relative flex-grow">
+                        <label>
+                          <input
+                            className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
+                            type="text"
+                            placeholder="Aa"
+                          />
+                          <button
+                            type="button"
+                            className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none  text-green-600 hover:text-green-700 w-6 h-6"
+                          >
+                            <IoSendOutline className="w-full h-full" />
+                          </button>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              ) : (
+                <div>is empty</div>
+              )}
             </main>
           </div>
         </div>
