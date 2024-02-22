@@ -31,16 +31,8 @@ const Page = () => {
     }
   }, [globalState]);
 
-
   return (
     <div className="w-full h-full flex justify-center mt-10">
-      {/* //   <div
-    //     className="w-[89%]  mt-[50px] flex flex-col bg-transparent "
-    //     style={{
-    //       backdropFilter: "blur(20px)",
-    //       backgroundColor: "rgba(13, 9, 10, 0.7)",
-    //     }}
-    //   > */}
       <div className="sm:h-[91%] sm:w-[95%] w-full h-full">
         <div
           className="h-full w-full flex antialiased text-gray-200 bg-transparent"
@@ -49,7 +41,6 @@ const Page = () => {
             backgroundColor: "rgba(13, 9, 10, 0.7)",
           }}
         >
-          {/* <ChatHolder /> */}
           <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
               <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5">
@@ -89,10 +80,6 @@ const Page = () => {
                 </div>
 
                 <div className="contacts p-2 flex-1 overflow-y-scroll">
-                  {/*here i need to replace this array with something else that i going to be fetched from the database and later */}
-                  {/* {Array.from({ length: 15 }, (_, index) => (
-                    <ChatCard key={index} />
-                  ))} */}
                   {Array.isArray(chatList) &&
                     chatList.map((value: any, key) => (
                       <ChatCard key={key} value={value}></ChatCard>

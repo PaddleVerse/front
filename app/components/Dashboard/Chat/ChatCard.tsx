@@ -10,7 +10,7 @@ export const ChatCard = (props: any) => {
       <div className="w-16 h-16 relative flex flex-shrink-0">
         <img
           className="shadow-md rounded-full w-full h-full object-cover"
-          src="https://randomuser.me/api/portraits/women/87.jpg"
+          src={props.value.picture || "https://randomuser.me/api/portraits/women/87.jpg"}
           alt="User2"
         />
         <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
