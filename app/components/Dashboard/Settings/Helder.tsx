@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Sidebar from './Sidebar'
 import EditProfile from './EditProfile'
+import Security from './Security'
 
 const Helder = () => {
   const [current, setCurrent] = useState('My profile');
@@ -15,7 +16,7 @@ const Helder = () => {
       <Sidebar current={current} setCurrent={setCurrent} />
       <div className='flex mt-[40px] w-full'>
         {current === 'My profile' && <EditProfile />}
-        {current === 'Security' && <h1 className='text-white'>Security</h1>}
+        {current === 'Security' && <Security />}
         {current === 'Preferences' && <h1 className='text-white'>Preferences</h1>}
       </div>
     </div>

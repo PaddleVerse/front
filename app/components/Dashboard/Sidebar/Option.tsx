@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-const gameNames = ["Overview", "Game", "Leaderboard"];
+const gameNames = ["Overview", "Game", "Leaderboard", "Settings"];
 const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
   const [showElements, setShowElements] = useState(false);
   const pathname = usePathname();

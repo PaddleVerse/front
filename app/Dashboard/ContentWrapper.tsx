@@ -69,9 +69,7 @@ function ContentWrapper({ children }: Props) {
                 </>
                 :
                 <div className='w-full h-full flex justify-center items-center'>
-                    <h1 className="text-white text-2xl">
-                        Loading...
-                    </h1>
+                    <div className="loader animate-loader"></div>
                 </div>
             }
         </div>
