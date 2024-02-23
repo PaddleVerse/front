@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { message } from "@/app/Dashboard/Chat/page";
 
 export const ChatCard = (props: any) => {
+  const m: message = props.message[0];
   return (
     <div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
       onClick={(e) => {
-        props.setTarget({name: props.index});
+        props.setTarget(props.value);
+        console.log("the constent is ",props.value, props.message);
         e.preventDefault();
       }}
     >
@@ -31,12 +34,12 @@ export const ChatCard = (props: any) => {
         <p>{props.value.name}</p>
         <div className="flex items-center text-sm text-gray-600">
           <div className="min-w-0">
-            <p className="truncate">{props.message[0]}</p>
+            <p className="truncate">{props.message.content}</p>
           </div>
         </div>
       </div>
       <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative hidden">
-        1 Feb
+        {(m && m.createdAt) ? (m.createdAt.toString().substring(0.,4)) : "not set"}
       </p>
     </div>
   );

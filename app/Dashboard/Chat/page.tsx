@@ -17,20 +17,15 @@ import { Socket } from "socket.io-client";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export type user = {
+export type target = {
+  user: boolean;
   id: number;
   username: string;
   name: string;
   picture: string;
-  level: number;
-  createdAt: Date;
-};
-
-export type channel = {
-  id: number;
   key?: string;
+  level: number;
   state?: "protected" | "private" | "public";
-  name: string;
   createdAt: Date;
 };
 
@@ -47,7 +42,7 @@ const Page = () => {
   const [chatList, setChatList] = useState([]);
   const [message, setMessage] = useState([]);
   const [online, setOnline] = useState(false);
-  const [target, setTarget] = useState<user | channel | null>();
+  const [target, setTarget] = useState<target | null>();
   const globalState = useGlobalState();
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
@@ -66,12 +61,18 @@ const Page = () => {
   }, [globalState]);
 
   useEffect(() => {
+    if (target) {
+      
+    }
+  }, [target])
+
+  useEffect(() => {
     if (globalState.state.user && globalState.state.user.id) {
-      console.log("in second use effect", globalState.state.user.id);
+      console.log("in second use effect", target? target.id : "notdefined");
       axios
-        .get(`http://localhost:8080/chat/message?user=${globalState.state.user.id}&other=1`)
+        .get(`http://localhost:8080/message?other=${target?.id}&user=${globalState.state.user.id}`)
         .then((res) => {
-          console.log(res.data);
+          setMessage(res.data);
         })
         .catch((error) => {
           console.log("error");
@@ -91,7 +92,7 @@ const Page = () => {
         >
           <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
-              <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 ">
+              <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 no-scrollbar">
                 <div className="py-4 sm:flex flex-row hidden  items-center flex-none  justify-start">
                   <div
                     className="w-16 h-16 relative flex flex-shrink-0"
@@ -153,7 +154,10 @@ const Page = () => {
                         {/* this image needs to be filled with the target user */}
                         <img
                           className="shadow-md rounded-full w-full h-full object-cover border-2 border-white"
-                          src="https://randomuser.me/api/portraits/women/33.jpg"
+                          src={
+                            target?.picture ||
+                            "https://randomuser.me/api/portraits/women/33.jpg"
+                          }
                           alt=""
                         />
                       </div>
@@ -179,17 +183,33 @@ const Page = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="chat-body p-4 flex-1 overflow-y-scroll">
+                  <div className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar">
                     <div className="flex flex-row justify-start">
                       <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
                         <img
                           className="shadow-md rounded-full w-full h-full object-cover"
-                          src="https://randomuser.me/api/portraits/women/33.jpg"
+                          src={"https://randomuser.me/api/portraits/women/33.jpg"}
                           alt=""
                         />
                       </div>
                       <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
                         <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
+                        <MiddleBuble />
+                        <MiddleBuble /> <MiddleBuble />
                         <MiddleBuble />
                         <MiddleBuble />
                       </div>
