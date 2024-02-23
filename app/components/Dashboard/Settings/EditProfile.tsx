@@ -3,37 +3,80 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form';
 import { useGlobalState } from '../../Sign/GlobalState';
+import axios from 'axios';
 
 const EditProfile = () => {
-  const { state } = useGlobalState();
+  const { state, dispatch } = useGlobalState();
   const { user } = state;
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   
-  const onSubmit = (data : any) => { };
+  const onSubmit = (data : any) => { 
+    axios.put(`http://localhost:8080/user/${user?.id}`, data)
+    .then((res) => {
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
-    if (file) {
-      if (file.size > 15 * 1024 * 1024) {
-        alert('File size exceeds 15MB.');
-      } else {
-        setSelectedFile(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
+      if (res.data !== '')
+      {
+        refreshUser();
+        reset();
       }
-    }
+      else
+      {
+        alert('Username already taken');
+      }
+    })
+    .catch((error) => {
+      console.error('Error updating user', error);
+    });
   };
 
-  const handleSave = () => {
-    console.log(selectedFile);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return; // Handle empty selection
+
+    // Validate file type and size
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
+
+    if (file.size > 15 * 1024 * 1024) { // 15MB
+      alert('Image size must be less than 15MB.');
+      return;
+    }
+
+    setSelectedFile(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const refreshUser = async () => {
+    try {
+      const response : any = await axios.get(`http://localhost:8080/user/${user?.id}`);
+      const usr = response.data;
+      dispatch({type: 'UPDATE_USER', payload: usr});
+    } catch (error) {
+      console.error('Error fetching user', error);
+    }
   }
+
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+      
+      await axios.put(`http://localhost:8080/user/img/${user?.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      refreshUser();
+      setSelectedFile(null);
+    } catch (error) {}
+  };
 
 
   return (
@@ -45,7 +88,7 @@ const EditProfile = () => {
 
       <div className='mt-20 flex items-center justify-between w-full border-b-[0.5px] border-white pb-10'>
         <div className='flex items-center'>
-          {user && <Image src={user?.picture} alt='profile' width={200} height={200} className="object-cover h-[120px] w-[120px] rounded-full" />}
+          {user && <Image priority src={user?.picture} alt='profile' width={200} height={200} className="object-cover h-[120px] w-[120px] rounded-full" />}
           <div className='flex flex-col gap-1 ml-10'>
             <h1 className='text-md text-white font-light'>Profile Picture</h1>
             <p className='text-[#c2c2c2] text-sm font-light'>PNG, JPEG under 15MB</p>
@@ -63,9 +106,9 @@ const EditProfile = () => {
                 data-original="#000000" />
             </svg>
               Upload an image
-            <input type="file" accept="image/*" id='uploadFile1' className="hidden" />
+            <input type="file" accept="image/*" id='uploadFile1' className="hidden" onChange={handleFileChange}/>
           </label>
-          <button className='text-[#000000] font-light bg-[#c0c0c0a8] p-2 rounded-lg' onClick={handleSave}>Save</button>
+          <button className='text-[#000000] font-light bg-[#c0c0c0a8] p-2 rounded-lg' onClick={handleUpload}>Save</button>
         </div>
       </div>
       <div className='w-full'>
@@ -89,9 +132,9 @@ const EditProfile = () => {
                 {...register('username')}
               />
             </div>
-            <div className='flex flex-col w-1/6'>
-              <button type='submit' className='text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl'>Save</button>
-            </div>
+          </div>
+          <div className='flex flex-col mt-10 w-1/6'>
+            <button type='submit' className='text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl'>Submit</button>
           </div>
         </form>
       </div>
