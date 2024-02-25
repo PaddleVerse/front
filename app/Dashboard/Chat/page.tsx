@@ -48,10 +48,12 @@ const Page = () => {
   useEffect(() => {
     if (globalState.state.user) {
       console.log("in first use effect", globalState.state.user.id);
+      console.log(globalState.state.user.id);
       socket.current = globalState.state.socket;
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
+          console.log("the data",res.data);
           setChatList(res.data);
         })
         .catch((error) => {
@@ -61,9 +63,7 @@ const Page = () => {
   }, [globalState]);
 
   useEffect(() => {
-    if (target) {
-      
-    }
+
   }, [target])
 
   useEffect(() => {
