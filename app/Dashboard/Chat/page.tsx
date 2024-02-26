@@ -14,20 +14,9 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Socket } from "socket.io-client";
+import { channel, target, user } from "./type";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export type target = {
-  user: boolean;
-  id: number;
-  username: string;
-  name: string;
-  picture: string;
-  key?: string;
-  level: number;
-  state?: "protected" | "private" | "public";
-  createdAt: Date;
-};
 
 export type message = {
   id?: number;
@@ -40,20 +29,17 @@ export type message = {
 
 const Page = () => {
   const [chatList, setChatList] = useState([]);
-  const [message, setMessage] = useState([]);
-  const [online, setOnline] = useState(false);
-  const [target, setTarget] = useState<target | null>();
+  // const [online, setOnline] = useState(false);
+  const [targetUser, setTargetUser] = useState<user | null>();
+  const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
     if (globalState.state.user) {
-      console.log("in first use effect", globalState.state.user.id);
-      console.log(globalState.state.user.id);
       socket.current = globalState.state.socket;
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
-          console.log("the data",res.data);
           setChatList(res.data);
         })
         .catch((error) => {
@@ -61,24 +47,6 @@ const Page = () => {
         });
     }
   }, [globalState]);
-
-  useEffect(() => {
-
-  }, [target])
-
-  useEffect(() => {
-    if (globalState.state.user && globalState.state.user.id) {
-      console.log("in second use effect", target? target.id : "notdefined");
-      axios
-        .get(`http://localhost:8080/message?other=${target?.id}&user=${globalState.state.user.id}`)
-        .then((res) => {
-          setMessage(res.data);
-        })
-        .catch((error) => {
-          console.log("error");
-        });
-    }
-  }, [target, globalState.state.user]);
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
@@ -136,17 +104,17 @@ const Page = () => {
                     chatList.map((value: any, key: any) => {
                       return (
                         <ChatCard
-                          key={value.name}
+                          key={key}
+                          setTargetChannel={setTargetChannel}
+                          setTargetUser={setTargetUser}
                           value={value}
-                          index={value.name}
-                          setTarget={setTarget}
-                          message={message}
                         ></ChatCard>
                       );
                     })}
                 </div>
               </section>
-              {target ? (
+              {/** here we display the messages and stuff, gonna do it after properly fetching data */}
+              {null ? (
                 <section className="flex flex-col flex-auto border-l border-gray-800 border-2 border-white">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
@@ -155,15 +123,17 @@ const Page = () => {
                         <img
                           className="shadow-md rounded-full w-full h-full object-cover border-2 border-white"
                           src={
-                            target?.picture ||
                             "https://randomuser.me/api/portraits/women/33.jpg"
                           }
                           alt=""
                         />
                       </div>
                       <div className="text-sm">
-                        <p className="font-bold">{target?.name}</p>
-                        {online ? (
+                        <p className="font-bold">
+                          need ti add the name of the user here
+                        </p>
+                        {/**here goes the online status */}
+                        {false ? (
                           <p className="text-green-500">Online</p>
                         ) : (
                           <p className="text-red-500">Offline</p>
@@ -188,7 +158,9 @@ const Page = () => {
                       <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
                         <img
                           className="shadow-md rounded-full w-full h-full object-cover"
-                          src={"https://randomuser.me/api/portraits/women/33.jpg"}
+                          src={
+                            "https://randomuser.me/api/portraits/women/33.jpg"
+                          }
                           alt=""
                         />
                       </div>
