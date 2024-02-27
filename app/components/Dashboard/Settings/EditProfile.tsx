@@ -24,9 +24,7 @@ const EditProfile = () => {
         reset();
       }
       else
-      {
         alert('Username already taken');
-      }
     })
     .catch((error) => {
       console.error('Error updating user', error);
