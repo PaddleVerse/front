@@ -15,12 +15,14 @@ import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Socket } from "socket.io-client";
 import { channel, target, user } from "./type";
+import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export type message = {
   id?: number;
   channel_id?: number;
+  sender_id?: number;
   conversation_id?: number;
   content: string;
   content_type: string;
@@ -32,7 +34,7 @@ const Page = () => {
   const [targetUser, setTargetUser] = useState<user | null>();
   const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
-  const [messages, setMessages] = useState<message[] | null>(null) 
+  const [messages, setMessages] = useState<message[] | null>(null);
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
     if (globalState.state.user) {
@@ -40,7 +42,6 @@ const Page = () => {
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
-          // console.log(res.data);
           setChatList(res.data);
         })
         .catch((error) => {
@@ -48,8 +49,7 @@ const Page = () => {
         });
     }
   }, [globalState]);
-
-
+  console.log(messages);
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
@@ -110,6 +110,8 @@ const Page = () => {
                           setTargetChannel={setTargetChannel}
                           setTargetUser={setTargetUser}
                           value={value}
+                          self={globalState.state.user}
+                          setMessages={setMessages}
                         ></ChatCard>
                       );
                     })}
@@ -117,14 +119,15 @@ const Page = () => {
               </section>
               {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
-                <section className="flex flex-col flex-auto border-l border-gray-800 border-2 border-white">
+                <section className="flex flex-col flex-auto border-l border-gray-800">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
                         {/* this image needs to be filled with the target user */}
                         <img
-                          className="shadow-md rounded-full w-full h-full object-cover border-2 border-white"
+                          className="shadow-md rounded-full w-full h-full object-cover border-2"
                           src={
+                            (targetUser && targetUser.picture) ||
                             "https://randomuser.me/api/portraits/women/33.jpg"
                           }
                           alt=""
@@ -135,11 +138,12 @@ const Page = () => {
                           {targetUser ? targetUser.name : targetChannel!.name}
                         </p>
                         {/**here goes the online status */}
-                        {false ? (
-                          <p className="text-green-500">Online</p>
-                        ) : (
-                          <p className="text-red-500">Offline</p>
-                        )}
+                        {targetUser &&
+                          (false ? (
+                            <p className="text-green-500">Online</p>
+                          ) : (
+                            <p className="text-red-500">Offline</p>
+                          ))}
                       </div>
                     </div>
 
@@ -157,35 +161,32 @@ const Page = () => {
                   </div>
                   <div className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar">
                     <div className="flex flex-row justify-start">
-                      <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
-                        <img
-                          className="shadow-md rounded-full w-full h-full object-cover"
-                          src={
-                            "https://randomuser.me/api/portraits/women/33.jpg"
-                          }
-                          alt=""
-                        />
-                      </div>
-                      <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
-                        <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble /> <MiddleBuble />
-                        <MiddleBuble />
-                        <MiddleBuble />
+
+                      <div className="text-sm text-gray-700 grid grid-flow-row gap-2 border-white border-2 w-full">
+                        {messages &&
+                          messages.map((value, key: any) => {
+                            if (value.sender_id === globalState.state.user.id) {
+                              return (
+                                <div className="flex" key={key}>
+                                  <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
+                                    <img
+                                      className="shadow-md rounded-full w-full h-full object-cover"
+                                      src={
+                                        (targetUser && targetUser.picture) || "https://randomuser.me/api/portraits/women/33.jpg"
+                                      }
+                                      alt=""
+                                    />
+                                  </div>
+                                  <MiddleBuble message={value.content} />
+                                </div>
+                              );
+                            }
+                            return (
+                              <>
+                                <MiddleBubbleRight message={value.content} />
+                              </>
+                            );
+                          })}
                       </div>
                     </div>
                     <p className="p-4 text-center text-sm text-gray-500">

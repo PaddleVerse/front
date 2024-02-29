@@ -1,10 +1,10 @@
 import React from "react";
 
-const MiddleBuble = () => {
+const MiddleBuble = (props: any) => {
   return (
-    <div className="flex items-center group">
+    <div className="flex items-center group justify-start">
       <p className="px-6 py-3 rounded-lg bg-gray-800 max-w-xs lg:max-w-md text-gray-200">
-        Shall we go for Hiking this weekend?
+        {props.message}
       </p>
     </div>
   );

@@ -3,6 +3,30 @@ import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
 
 export const ChatCard = (props: any) => {
+  const [msg, setMessage] = useState<message[] | null>();
+  useEffect(() => {
+    if (props.value.user) {
+      axios
+        .get(
+          `http://localhost:8080/conversations?uid1=${props.value.id}&uid2=${props.self.id}`
+        )
+        .then((res) => {
+          console.log("here at user meessages", res.data.messages);
+          props.setMessages(res.data.messages);
+          setMessage(res.data.messages);
+        });
+    } else {
+      axios
+        .get(
+          `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
+        )
+        .then((res) => {
+          props.setMessages(res.data);
+          setMessage(res.data);
+          console.log("here at channel meessages", res.data);
+        });
+    }
+  }, [props.value.id, props.self.id, props.value.user]);
   return (
     <div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
@@ -12,31 +36,38 @@ export const ChatCard = (props: any) => {
           props.setTargetUser(null);
         } else {
           props.setTargetUser(props.value);
-          props.setTargetChannel(null)
+          props.setTargetChannel(null);
         }
+        props.setMessages(msg);
         e.preventDefault();
       }}
     >
       <div className="sm:w-12 sm:h-12 h-16 w-16 relative flex flex-shrink-0">
         <img
           className="shadow-md rounded-full w-full h-full object-cover"
-          src={props.value.picture || "https://randomuser.me/api/portraits/women/87.jpg"}
+          src={
+            props.value.picture ||
+            "https://randomuser.me/api/portraits/women/87.jpg"
+          }
           alt="User2"
         />
         <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
           {/*here we check the status of the user if he is online or not */}
-          {false ? (
-            <div className="bg-green-500 rounded-full w-2 h-2"></div>
-          ) : (
-            <div className="bg-red-500 rounded-full w-2 h-2"></div>
-          )}
+          {props.value.user &&
+            (false ? (
+              <div className="bg-green-500 rounded-full w-2 h-2"></div>
+            ) : (
+              <div className="bg-red-500 rounded-full w-2 h-2"></div>
+            ))}
         </div>
       </div>
       <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
         <p>name goes here</p>
         <div className="flex items-center text-sm text-gray-600">
           <div className="min-w-0">
-            <p className="truncate">wach asat</p>
+            <p className="truncate">
+              {msg && msg.length > 0 && msg[msg.length - 1]?.content}
+            </p>
           </div>
         </div>
       </div>
