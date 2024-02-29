@@ -29,10 +29,10 @@ export type message = {
 
 const Page = () => {
   const [chatList, setChatList] = useState([]);
-  // const [online, setOnline] = useState(false);
   const [targetUser, setTargetUser] = useState<user | null>();
   const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
+  const [messages, setMessages] = useState<message[] | null>(null) 
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
     if (globalState.state.user) {
@@ -40,6 +40,7 @@ const Page = () => {
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
+          // console.log(res.data);
           setChatList(res.data);
         })
         .catch((error) => {
@@ -47,6 +48,7 @@ const Page = () => {
         });
     }
   }, [globalState]);
+
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
@@ -114,7 +116,7 @@ const Page = () => {
                 </div>
               </section>
               {/** here we display the messages and stuff, gonna do it after properly fetching data */}
-              {null ? (
+              {targetChannel || targetUser ? (
                 <section className="flex flex-col flex-auto border-l border-gray-800 border-2 border-white">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
@@ -130,7 +132,7 @@ const Page = () => {
                       </div>
                       <div className="text-sm">
                         <p className="font-bold">
-                          need ti add the name of the user here
+                          {targetUser ? targetUser.name : targetChannel!.name}
                         </p>
                         {/**here goes the online status */}
                         {false ? (

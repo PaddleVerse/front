@@ -8,11 +8,11 @@ export const ChatCard = (props: any) => {
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
       onClick={(e) => {
         if (props.value.user === false) {
-          console.log("in set channel");
           props.setTargetChannel(props.value);
+          props.setTargetUser(null);
         } else {
-          console.log("in set user");
           props.setTargetUser(props.value);
+          props.setTargetChannel(null)
         }
         e.preventDefault();
       }}
