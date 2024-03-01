@@ -11,7 +11,6 @@ export const ChatCard = (props: any) => {
           `http://localhost:8080/conversations?uid1=${props.value.id}&uid2=${props.self.id}`
         )
         .then((res) => {
-          console.log("here at user meessages", res.data.messages);
           props.setMessages(res.data.messages);
           setMessage(res.data.messages);
         });
@@ -23,7 +22,6 @@ export const ChatCard = (props: any) => {
         .then((res) => {
           props.setMessages(res.data);
           setMessage(res.data);
-          console.log("here at channel meessages", res.data);
         });
     }
   }, [props.value.id, props.self.id, props.value.user]);
@@ -62,7 +60,7 @@ export const ChatCard = (props: any) => {
         </div>
       </div>
       <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
-        <p>name goes here</p>
+        <p>{props.value.name}</p>
         <div className="flex items-center text-sm text-gray-600">
           <div className="min-w-0">
             <p className="truncate">

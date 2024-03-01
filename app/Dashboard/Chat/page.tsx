@@ -16,6 +16,7 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Socket } from "socket.io-client";
 import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
+import { useForm } from "react-hook-form";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export type message = {
   id?: number;
   channel_id?: number;
   sender_id?: number;
+  sender_picture?: string;
   conversation_id?: number;
   content: string;
   content_type: string;
@@ -30,6 +32,7 @@ export type message = {
 };
 
 const Page = () => {
+  const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
   const [targetUser, setTargetUser] = useState<user | null>();
   const [targetChannel, setTargetChannel] = useState<channel | null>();
@@ -49,7 +52,6 @@ const Page = () => {
         });
     }
   }, [globalState]);
-  console.log(messages);
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
@@ -161,36 +163,40 @@ const Page = () => {
                   </div>
                   <div className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar">
                     <div className="flex flex-row justify-start">
-
-                      <div className="text-sm text-gray-700 grid grid-flow-row gap-2 border-white border-2 w-full">
+                      <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
                         {messages &&
                           messages.map((value, key: any) => {
                             if (value.sender_id === globalState.state.user.id) {
                               return (
-                                <div className="flex" key={key}>
-                                  <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
-                                    <img
-                                      className="shadow-md rounded-full w-full h-full object-cover"
-                                      src={
-                                        (targetUser && targetUser.picture) || "https://randomuser.me/api/portraits/women/33.jpg"
-                                      }
-                                      alt=""
-                                    />
-                                  </div>
-                                  <MiddleBuble message={value.content} />
+                                <div className="" key={key}>
+                                  <MiddleBubbleRight message={value.content} />
                                 </div>
                               );
+                            } else {
+                              return (
+                                <MiddleBuble
+                                  message={value.content}
+                                  key={key}
+                                  showProfilePic={
+                                    (!messages[key + 1] ||
+                                      messages[key + 1].sender_id !==
+                                        value.sender_id) &&
+                                    value &&
+                                    value.sender_picture
+                                      ? true
+                                      : false
+                                  }
+                                  picture={value.sender_picture}
+                                />
+                              );
                             }
-                            return (
-                              <>
-                                <MiddleBubbleRight message={value.content} />
-                              </>
-                            );
                           })}
                       </div>
                     </div>
                     <p className="p-4 text-center text-sm text-gray-500">
-                      FRI 3:04 PM
+                      {messages && messages.length > 0
+                        ? messages[messages.length - 1].createdAt.toString().substring(0, 10) + " at " + messages[messages.length - 1].createdAt.toString().substring(11, 16)
+                        : "No messages yet"}
                     </p>
                   </div>
                   <div className="chat-footer flex-none">
