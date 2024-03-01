@@ -32,6 +32,9 @@ export type message = {
 };
 
 const Page = () => {
+    // const emailField = useRef<HTMLInputElement | null>(null);
+    const inputMessage = useRef<HTMLInputElement | null>(null);
+  const { register, handleSubmit } = useForm();
   const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
   const [targetUser, setTargetUser] = useState<user | null>();
@@ -51,7 +54,7 @@ const Page = () => {
           console.log(error);
         });
     }
-  }, [globalState]);
+  }, [globalState, update]);
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
@@ -195,7 +198,13 @@ const Page = () => {
                     </div>
                     <p className="p-4 text-center text-sm text-gray-500">
                       {messages && messages.length > 0
-                        ? messages[messages.length - 1].createdAt.toString().substring(0, 10) + " at " + messages[messages.length - 1].createdAt.toString().substring(11, 16)
+                        ? messages[messages.length - 1].createdAt
+                            .toString()
+                            .substring(0, 10) +
+                          " at " +
+                          messages[messages.length - 1].createdAt
+                            .toString()
+                            .substring(11, 16)
                         : "No messages yet"}
                     </p>
                   </div>
@@ -230,13 +239,21 @@ const Page = () => {
                           <input
                             className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
                             type="text"
+                            ref={inputMessage}
                             placeholder="Aa"
+                            {...(register("inputMessage"), { required: true })}
+                            onKeyDown={(e) => console.log(inputMessage.current?.value)}
+                            onSubmit={(e) => {
+                              console.log(inputMessage.current?.value);
+                              setUpdate((update) => !update);
+                              e.preventDefault();
+                            }}
                           />
                           <button
                             type="button"
                             className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none  text-green-600 hover:text-green-700 w-6 h-6"
                           >
-                            <IoSendOutline className="w-full h-full" />
+                            <IoSendOutline className="w-full h-full " />
                           </button>
                         </label>
                       </div>
