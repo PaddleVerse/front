@@ -3,11 +3,13 @@ import React, {  useEffect, useState } from 'react'
 import { useGlobalState } from '../../Sign/GlobalState'
 import Image from 'next/image'
 import axios from 'axios'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
+import { Console } from 'console'
 
 const Security = () => {
   const [qrcode, setQrcode] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const [isCodeCorrect, setIsCodeCorrect] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   const [is , setIs] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false);
@@ -40,12 +42,11 @@ const Security = () => {
         'Authorization': `Bearer ${accessToken}`
       }
     })
-    .then(res => setQrcode(res?.data?.Qr))
+    .then(res => { setQrcode(res?.data?.Qr) ; setIsBlurred(false); })
     .catch(err => console.log(err))
   }
   
   useEffect(() => {
-    console.log(user?.twoFa);
     if (!user?.twoFa)
       enable();
     else
@@ -59,6 +60,7 @@ const Security = () => {
 
   const onSubmit = (data : any) => {
 
+    if (isBlurred) return;
     axios.post("http://localhost:8080/auth/v2fa", {
       token : data?.code,
       userId : user?.id
@@ -68,11 +70,23 @@ const Security = () => {
       }
     })
     .then(res => {
-      console.log(res?.data?.ok);
-      if (res?.data?.ok) setIs(true);
+      if (res?.data?.ok) { setIs(!is); setIsCodeCorrect(false);}
+      else setIsCodeCorrect(true);
     })
     .catch(err => console.log(err))
     reset();
+  }
+
+  const disable = () => {
+    axios.post("http://localhost:8080/auth/disable2fa", {
+      userId : user?.id
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+    .then(() => setIs(!is))
+    .catch(err => console.log(err))
   }
 
   
@@ -87,8 +101,7 @@ const Security = () => {
   }
 
   useEffect(() => {
-    if (is)
-      refreshUser();
+    refreshUser();
   } , [is]);
 
   return (
@@ -98,7 +111,7 @@ const Security = () => {
         <p className='text-[#c2c2c2] text-sm font-light'>Secure your account</p>
       </div>
       <div className='w-full'>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form >
           <div className='flex justify-between items-end gap-20'>
             <div className='flex flex-col gap-2 w-1/3'>
               <label className='text-white font-light'>Old password</label>
@@ -106,7 +119,7 @@ const Security = () => {
                 type='password'
                 placeholder='old password'
                 className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
-                {...register('name')}
+                // {...register('name')}
               />
             </div>
             <div className='flex flex-col gap-2 w-1/3'>
@@ -115,7 +128,7 @@ const Security = () => {
                 type='password'
                 placeholder='new password'
                 className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
-                {...register('username')}
+                // {...register('username')}
               />
             </div>
           </div>
@@ -141,9 +154,21 @@ const Security = () => {
                   className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
                   {...register('code')}
                 />
+                <label className={`text-red-600 font-light ${!isCodeCorrect ? 'hidden' : ''}`}>the code is uncorrect</label>
                 <div className='flex flex-row mt-10 w-1/2'>
-                  <button type='submit' className='text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl'>Submit</button>
-                  <button type='button' className='text-[#000000] font-light bg-red-600 p-2 w-[40%] ml-8 rounded-xl'>Disable</button>
+                  <button type='submit'
+                  className={`text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl ${isBlurred ? 'blur' : ''}`}
+                  disabled={isBlurred}
+                  >
+                    Submit
+                  </button>
+                  <button type='button'
+                  className={`text-[#000000] font-light bg-red-600 p-2 w-[40%] ml-8 rounded-xl ${!isBlurred ? 'blur' : ''}`} 
+                  onClick={isBlurred ? disable : undefined} 
+                  disabled={!isBlurred}
+                  >
+                    Disable
+                  </button>
                 </div>
               </div>
               <div className='flex flex-col gap-2 w-1/3'>
@@ -154,7 +179,6 @@ const Security = () => {
                   width={400}
                   height={400}
                   className={`object-cover h-[240px] w-[240px] mt-10 ${isBlurred ? 'blur' : ''}`}
-                  onClick={toggleBlur}
                 />
                 : <Image
                   src={tmp_qrcode}
