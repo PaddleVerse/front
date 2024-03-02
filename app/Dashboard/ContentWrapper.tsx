@@ -4,12 +4,14 @@ import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 import Navbar from "../components/Dashboard/Navbar/Navbar";
 import { useRouter } from 'next/navigation';
 import {GlobalStateProvider} from "../components/Sign/GlobalState";
+import V2fa from '../components/V2fa/V2fa';
 
 interface Props {children: React.ReactNode;}
 
 function ContentWrapper({ children }: Props) {
 
-    const [isAuth, setIsAuth] = useState(false);
+    const [isAuth, setIsAuth] = useState("false");
+    const [id, setId] = useState(-1);
   
     const getCookie = (name: string) => {
       const value = `; ${document.cookie}`;
@@ -28,10 +30,10 @@ function ContentWrapper({ children }: Props) {
       if (typeof window === "undefined") {
         return;
       }
-      
+
       // get the access token from the cookie
       const accessToken = getCookie("access_token");
-      // alert(accessToken);
+      
       if (accessToken)
       {
           fetch("http://localhost:8080/auth/protected", {
@@ -45,7 +47,13 @@ function ContentWrapper({ children }: Props) {
             if (!data || data?.error === "Unauthorized" || data?.message === "Unauthorized")
               router.push('/');
             else
-              setIsAuth(true);
+            {
+              setId(data?.id);
+              if (data?.twoFa)
+                setIsAuth("2fa");
+              else
+                setIsAuth("true");
+            }
           })
           .catch(error => {
             console.error("Error during protected endpoint request", error);
@@ -57,9 +65,9 @@ function ContentWrapper({ children }: Props) {
 
   return (
     <GlobalStateProvider>
-        <div className="w-full h-full flex">
+        <div className="w-full h-full flex ">
             {
-                isAuth ? 
+                isAuth === "true" ? 
                 <>
                     <Sidebar />
                     <div className="w-full flex flex-col">
@@ -67,6 +75,8 @@ function ContentWrapper({ children }: Props) {
                         {children}
                     </div>
                 </>
+                : isAuth === "2fa" ? 
+                <V2fa setIsAuth={setIsAuth} userId={id}/>
                 :
                 <div className='w-full h-full flex justify-center items-center'>
                     <div className="loader animate-loader"></div>

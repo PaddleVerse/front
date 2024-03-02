@@ -14,6 +14,16 @@ const EditProfile = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   
+  const refreshUser = async () => {
+    try {
+      const response : any = await axios.get(`http://localhost:8080/user/${user?.id}`);
+      const usr = response.data;
+      dispatch({type: 'UPDATE_USER', payload: usr});
+    } catch (error) {
+      console.error('Error fetching user', error);
+    }
+  }
+  
   const onSubmit = (data : any) => { 
     axios.put(`http://localhost:8080/user/${user?.id}`, data)
     .then((res) => {
@@ -51,15 +61,7 @@ const EditProfile = () => {
     setPreview(URL.createObjectURL(file));
   };
 
-  const refreshUser = async () => {
-    try {
-      const response : any = await axios.get(`http://localhost:8080/user/${user?.id}`);
-      const usr = response.data;
-      dispatch({type: 'UPDATE_USER', payload: usr});
-    } catch (error) {
-      console.error('Error fetching user', error);
-    }
-  }
+
 
   const handleUpload = async () => {
     if (!selectedFile) return;
@@ -86,7 +88,7 @@ const EditProfile = () => {
 
       <div className='mt-20 flex items-center justify-between w-full border-b-[0.5px] border-white pb-10'>
         <div className='flex items-center'>
-          {user && <Image priority src={user?.picture} alt='profile' width={200} height={200} className="object-cover h-[120px] w-[120px] rounded-full" />}
+          {user && <Image priority src={preview || user?.picture} alt='profile' width={200} height={200} className="object-cover h-[120px] w-[120px] rounded-full" />}
           <div className='flex flex-col gap-1 ml-10'>
             <h1 className='text-md text-white font-light'>Profile Picture</h1>
             <p className='text-[#c2c2c2] text-sm font-light'>PNG, JPEG under 15MB</p>
@@ -94,8 +96,8 @@ const EditProfile = () => {
         </div>
         <div className=' flex gap-3'>
           <label htmlFor="uploadFile1"
-            className="bg-gray-800 hover:bg-gray-700 text-white text-sm px-4 py-2.5 outline-none rounded w-max cursor-pointer mx-auto block font-[sans-serif]">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 mr-2 fill-white inline" viewBox="0 0 32 32">
+            className="bg-white hover:bg-gray-200 text-[#000000] text-sm px-4 py-2.5 outline-none rounded w-max cursor-pointer mx-auto block font-[sans-serif]">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 mr-2 fill-[#000000] inline" viewBox="0 0 32 32">
               <path
                 d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z"
                 data-original="#000000" />
@@ -106,7 +108,7 @@ const EditProfile = () => {
               Upload an image
             <input type="file" accept="image/*" id='uploadFile1' className="hidden" onChange={handleFileChange}/>
           </label>
-          <button className='text-[#000000] font-light bg-[#c0c0c0a8] p-2 rounded-lg' onClick={handleUpload}>Save</button>
+          <button className='text-[#000000] font-light bg-[#eeeeeecd] p-2 rounded-lg' onClick={handleUpload}>Save</button>
         </div>
       </div>
       <div className='w-full'>

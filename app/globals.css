@@ -187,3 +187,22 @@ tr td:last-child {
   filter: blur(5px); /* Adjust the blur intensity as needed */
   transition: filter 0.5s ease; /* Add a smooth transition effect */
 }
+
+.glitch {
+  animation: glitch 0.3s alternate-reverse;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  25% {
+    transform: translate(-2px);
+  }
+  75% {
+    transform: translate(2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
