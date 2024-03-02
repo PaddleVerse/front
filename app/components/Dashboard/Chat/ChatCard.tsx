@@ -11,7 +11,6 @@ export const ChatCard = (props: any) => {
           `http://localhost:8080/conversations?uid1=${props.value.id}&uid2=${props.self.id}`
         )
         .then((res) => {
-          props.setMessages(res.data.messages);
           setMessage(res.data.messages);
         });
     } else {
@@ -20,7 +19,6 @@ export const ChatCard = (props: any) => {
           `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
         )
         .then((res) => {
-          props.setMessages(res.data);
           setMessage(res.data);
         });
     }
@@ -36,7 +34,6 @@ export const ChatCard = (props: any) => {
           props.setTargetUser(props.value);
           props.setTargetChannel(null);
         }
-        props.setMessages(msg);
         e.preventDefault();
       }}
     >

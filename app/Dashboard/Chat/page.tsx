@@ -10,7 +10,7 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoCameraOutline } from "react-icons/io5";
 import { PiMicrophoneLight } from "react-icons/pi";
 import { IoSendOutline } from "react-icons/io5";
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, FormEventHandler, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Socket } from "socket.io-client";
@@ -32,9 +32,8 @@ export type message = {
 };
 
 const Page = () => {
-    // const emailField = useRef<HTMLInputElement | null>(null);
-    const inputMessage = useRef<HTMLInputElement | null>(null);
-  const { register, handleSubmit } = useForm();
+  const inputMessage = useRef<HTMLInputElement | null>(null);
+  const { register } = useForm();
   const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
   const [targetUser, setTargetUser] = useState<user | null>();
@@ -55,6 +54,96 @@ const Page = () => {
         });
     }
   }, [globalState, update]);
+
+  useEffect(() => {
+    
+    if (targetUser) {
+      axios
+        .get(
+          `http://localhost:8080/conversations?uid1=${targetUser.id}&uid2=${globalState.state.user.id}`
+        )
+        .then((res) => {
+          setMessages(res.data.messages);
+          setUpdate((update: boolean) => {
+            if (update) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [update, targetUser]);
+
+  useEffect(() => {
+    if (targetChannel) {
+      axios
+        .get(
+          `http://localhost:8080/channels/messages/${targetChannel.id}?uid=${globalState.state.user.id}`
+        )
+        .then((res) => {
+          setMessages(res.data);
+          setUpdate((update: boolean) => {
+            if (update) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [targetChannel, update]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    if (targetChannel) {
+      const message = {
+        message: {
+          content: inputMessage.current!.value,
+          content_type: "string",
+          sender_id: globalState.state.user.id,
+          sender_picture: globalState.state.user.picture,
+        },
+        channel: {name: targetChannel.name},
+        user1: globalState.state.user.id,
+      };
+      axios.post(`http://localhost:8080/message`, message).catch((error) => {
+        console.log(error);
+      });
+    } if (targetUser) { 
+      axios.post(`http://localhost:8080/message`, {
+        message: {
+          content: inputMessage.current!.value,
+          content_type: "text",
+          sender_id: globalState.state.user.id,
+          sender_picture: globalState.state.user.picture,
+        },
+        user2: globalState.state.user.id,
+        user1: targetUser.id,
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+    setUpdate((update: boolean) => {
+      if (update) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    inputMessage.current!.value = "";
+    console.log("here");
+    e.preventDefault();
+    return (e: FormEvent<HTMLFormElement>) => {
+    };
+  };
+
+
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
@@ -116,7 +205,6 @@ const Page = () => {
                           setTargetUser={setTargetUser}
                           value={value}
                           self={globalState.state.user}
-                          setMessages={setMessages}
                         ></ChatCard>
                       );
                     })}
@@ -186,10 +274,8 @@ const Page = () => {
                                         value.sender_id) &&
                                     value &&
                                     value.sender_picture
-                                      ? true
-                                      : false
                                   }
-                                  picture={value.sender_picture}
+                                  picture={messages[key].sender_picture}
                                 />
                               );
                             }
@@ -235,19 +321,15 @@ const Page = () => {
                         <PiMicrophoneLight className="w-full h-full" />
                       </button>
                       <div className="relative flex-grow">
-                        <label>
+                        <form
+                          onSubmit={(e)=> handleSubmit(e)}
+                        >
                           <input
                             className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
                             type="text"
                             ref={inputMessage}
                             placeholder="Aa"
                             {...(register("inputMessage"), { required: true })}
-                            onKeyDown={(e) => console.log(inputMessage.current?.value)}
-                            onSubmit={(e) => {
-                              console.log(inputMessage.current?.value);
-                              setUpdate((update) => !update);
-                              e.preventDefault();
-                            }}
                           />
                           <button
                             type="button"
@@ -255,7 +337,7 @@ const Page = () => {
                           >
                             <IoSendOutline className="w-full h-full " />
                           </button>
-                        </label>
+                        </form>
                       </div>
                     </div>
                   </div>
