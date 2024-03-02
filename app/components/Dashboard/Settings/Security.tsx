@@ -21,6 +21,7 @@ const Security = () => {
   const {user} = state;
 
   const getCookie = (name: string) => {
+    if (typeof window === 'undefined') return;
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     
@@ -48,12 +49,11 @@ const Security = () => {
   }
   
   useEffect(() => {
-    console.log(user);
     if (!user?.twoFa)
       enable();
     else
       setIsBlurred(true);
-  } , []);
+  } , [user]);
 
 
   const onSubmit = (data : any) => {
