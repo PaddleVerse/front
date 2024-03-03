@@ -142,9 +142,7 @@ tr td:last-child {
     scrollbar-width: none; /* Firefox */
   }
 }
-/* body {
-  background-image: url('/Dark.svg');
-} */
+
 * {
   box-sizing: border-box;
 }
@@ -184,7 +182,7 @@ tr td:last-child {
 
 
 .blur {
-  filter: blur(5px); /* Adjust the blur intensity as needed */
+  filter: blur(3px); /* Adjust the blur intensity as needed */
   transition: filter 0.5s ease; /* Add a smooth transition effect */
 }
 

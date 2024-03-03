@@ -34,7 +34,7 @@ const EditProfile = () => {
         reset();
       }
       else
-        alert('Username already taken');
+        alert('Error');
     })
     .catch((error) => {
       console.error('Error updating user', error);
@@ -124,12 +124,12 @@ const EditProfile = () => {
               />
             </div>
             <div className='flex flex-col gap-2 w-1/3'>
-              <label className='text-white font-light'>Username</label>
+              <label className='text-white font-light'>Nickname</label>
               <input
                 type='text'
-                placeholder='Username'
+                placeholder='Nickname'
                 className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
-                {...register('username')}
+                {...register('nickname')}
               />
             </div>
           </div>
