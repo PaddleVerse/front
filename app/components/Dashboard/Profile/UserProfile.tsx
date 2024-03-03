@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { Dropdown } from "./Dropdown";
+import { Button } from "../../../../components/ui/moving-border"
 
 import axios from "axios";
 
@@ -262,38 +263,47 @@ const UserProfile = ({target} : any) => {
               {
                 recv && recv === "PENDING" ?
                   <div className="flex flex-row gap-4">
-                    <button
+                    <Button
                       onClick={acceptFriend}
-                      className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-greenButton  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                      borderRadius="1.75rem"
+                      color="--sky-400"
+                      className={`text-white border-slate-800 w-full sm:mt-0 mt-4 bg-green-500/[0.3]`}
                     >
                       ACCEPTE
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={rejectFriend}
-                      className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-red-900  flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                      borderRadius="1.75rem"
+                      color="--sky-400"
+                      className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-red-500/[0.3]`}
                     >
                       REJECTE
-                    </button>
+                    </Button>
                   </div>
                   : recv && recv === "ACCEPTED" ?
-                  <button
+                  <Button
                     onClick={removeFriend}
-                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md bg-red-900 flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                    borderRadius="1.75rem"
+                    color="--sky-400"
+                    className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-red-500/[0.3]`}
                   >
                     REMOVE FRIEND
-                  </button>
+                  </Button>
                   : recv && recv === "BLOCKED" ? null
                   :
-                  <button
+                  <Button
                     onClick={handleSender}
-                    className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"  ? "bg-red-900" : status === "BLOCKED" ? "hidden" : "bg-greenButton"} flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
+                    color="--sky-400"
+                    borderRadius="1.75rem"
+                    className={`text-white border-slate-800 w-full sm:mt-0 mt-4  ${status === "PENDING" ? "bg-slate-800" : status === "ACCEPTED"  ? "bg-red-600/[0.3]" : status === "BLOCKED" ? "hidden" : ""}`}
+                    // className={` w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"  ? "bg-red-900" : status === "BLOCKED" ? "hidden" : "bg-greenButton"} flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                   >
                     {
                       status && status === "PENDING" ? "PENDING"
                       : status && status === "ACCEPTED" ? "REMOVE FRIEND"
                       : "ADD FRIEND"
                     }
-                  </button>
+                  </Button>
               }
             </div>
           </div>

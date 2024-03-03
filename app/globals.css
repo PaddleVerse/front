@@ -107,16 +107,7 @@ select:-webkit-autofill:focus {
   width: 5px;
 }
 
-*::-webkit-scrollbar-track {
-  background: black;
-  border-radius: 5px;
-}
 
-*::-webkit-scrollbar-thumb {
-  background-color: #bd3844;
-  border-radius: 0px;
-  border: 3px solid #bd3844;
-}
 tr td:first-child {
   -moz-border-radius-topleft: 8px;
   -moz-border-radius-bottomleft: 8px;

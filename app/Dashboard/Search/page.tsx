@@ -48,10 +48,10 @@ const Search = () => {
   }
 
   return (
-    <div className='container mx-auto max-w-auto'>
+    <div className='container mx-auto max-w-auto overflow-y-auto'>
       <div className='flex justify-center items-center'>
         <input
-          className='w-[90%] h-14 p-6 text-sm text-white rounded-xl mt-10 bg-[#333132] shadow-xl'
+          className='w-[90%] h-14 p-6 text-sm text-white rounded-xl mt-10 bg-[#434343d9] shadow-xl focus:outline-none focus:ring-[1px] focus:ring-red-400/[0.5] transition duration-300 ease-in-out'
           type='text'
           placeholder='Look for other gamers!'
         />
@@ -59,9 +59,9 @@ const Search = () => {
       <div className='mt-20'>
         <h1 className='text-3xl text-white mt-10 font-mono'>RECOMMENDED</h1>
         <div className="flex flex-col bg-inherit relative">
-        <button className="hidden sm:flex absolute justify-center items-center left-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_1(-100)}>
+        {/* <button className="hidden sm:flex absolute justify-center items-center left-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_1(-100)}>
             <FaCaretLeft className='text-2xl'/>
-          </button>
+          </button> */}
           <div className="flex overflow-x-scroll py-10 no-scrollbar w-full" ref={containerRef_1} style={{ scrollBehavior: 'smooth' }}>
             <div className="flex flex-nowrap gap-3">
               {users?.map((item, index) => (
@@ -71,17 +71,17 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <button className="hidden sm:flex absolute justify-center items-center right-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_1(100)}>
+          {/* <button className="hidden sm:flex absolute justify-center items-center right-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_1(100)}>
             <FaCaretRight className='text-2xl' />
-          </button>
+          </button> */}
         </div>
       </div>
-      <div className='mt-20'>
-        <h1 className='text-3xl text-white mt-10 font-mono'>RECENTLY PLAYED WITH</h1>
+      <div className='mt-10'>
+        <h1 className='text-3xl text-white font-mono'>RECENTLY PLAYED WITH</h1>
         <div className="flex flex-col bg-inherit relative">
-          <button className="hidden sm:flex absolute justify-center items-center left-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_2(-100)}>
+          {/* <button className="hidden sm:flex absolute justify-center items-center left-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_2(-100)}>
             <FaCaretLeft className='text-2xl' />
-          </button>
+          </button> */}
           <div className="flex overflow-x-scroll py-10 no-scrollbar w-full" ref={containerRef_2} style={{ scrollBehavior: 'smooth' }}>
             <div className="flex flex-nowrap gap-3">
               {users?.map((item, index) => (
@@ -91,9 +91,9 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <button className="hidden sm:flex absolute justify-center items-center right-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_2(100)}>
+          {/* <button className="hidden sm:flex absolute justify-center items-center right-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_2(100)}>
             <FaCaretRight className='text-2xl' />
-          </button>
+          </button> */}
         </div>
 
       </div>

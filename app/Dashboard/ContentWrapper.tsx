@@ -70,7 +70,7 @@ function ContentWrapper({ children }: Props) {
                 isAuth === "true" ? 
                 <>
                     <Sidebar />
-                    <div className="w-full flex flex-col">
+                    <div className="w-full flex flex-col overflow-y-auto">
                         <Navbar />
                         {children}
                     </div>
