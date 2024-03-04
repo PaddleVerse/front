@@ -22,7 +22,7 @@ export const ChatCard = (props: any) => {
           setMessage(res.data);
         });
     }
-  }, [props.value.id, props.self.id, props.value.user]);
+  }, [props.value.id, props.self.id, props.value.user, props.update]);
   return (
     <div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
@@ -34,6 +34,7 @@ export const ChatCard = (props: any) => {
           props.setTargetUser(props.value);
           props.setTargetChannel(null);
         }
+        props.setUpdate(true);
         e.preventDefault();
       }}
     >

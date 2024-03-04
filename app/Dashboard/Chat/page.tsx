@@ -10,7 +10,13 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoCameraOutline } from "react-icons/io5";
 import { PiMicrophoneLight } from "react-icons/pi";
 import { IoSendOutline } from "react-icons/io5";
-import { FormEvent, FormEventHandler, useEffect, useRef, useState } from "react";
+import {
+  FormEvent,
+  FormEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Socket } from "socket.io-client";
@@ -33,6 +39,7 @@ export type message = {
 
 const Page = () => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
+  const containerRef = useRef(null);
   const { register } = useForm();
   const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
@@ -41,6 +48,12 @@ const Page = () => {
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const socket = useRef<Socket | null>(null);
+  useEffect(() => {
+    const container: any = containerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
   useEffect(() => {
     if (globalState.state.user) {
       socket.current = globalState.state.socket;
@@ -56,51 +69,64 @@ const Page = () => {
   }, [globalState, update]);
 
   useEffect(() => {
-    
     if (targetUser) {
-      axios
-        .get(
-          `http://localhost:8080/conversations?uid1=${targetUser.id}&uid2=${globalState.state.user.id}`
-        )
-        .then((res) => {
-          setMessages(res.data.messages);
-          setUpdate((update: boolean) => {
-            if (update) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        })
-        .catch((error) => {
-          console.log(error);
+      if (update) {
+        const data = fetchMessagesForUser(targetUser.id);
+        data.then((res) => {
+          setMessages(res);
         });
+      }
     }
-  }, [update, targetUser]);
+    return () => {
+      setUpdate(false);
+    };
+  }, [targetUser, update]);
 
   useEffect(() => {
     if (targetChannel) {
-      axios
-        .get(
-          `http://localhost:8080/channels/messages/${targetChannel.id}?uid=${globalState.state.user.id}`
-        )
-        .then((res) => {
-          setMessages(res.data);
-          setUpdate((update: boolean) => {
-            if (update) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        })
-        .catch((error) => {
-          console.log(error);
+      if (update) {
+        const data = fetchMessagesForChannel(targetChannel.id);
+        data.then((res) => {
+          setMessages(res);
         });
+        setUpdate(false);
+      }
     }
   }, [targetChannel, update]);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const fetchMessagesForUser = async (
+    id: number | undefined
+  ): Promise<message[]> => {
+    const data = await axios
+      .get(
+        `http://localhost:8080/conversations?uid1=${id}&uid2=${globalState.state.user.id}`
+      )
+      .then((res) => {
+        return res.data.messages;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return data;
+  };
+  const fetchMessagesForChannel =  (
+    id: number | undefined
+  ): Promise<message[]> => {
+    const data = axios
+      .get(
+        `http://localhost:8080/channels/messages/${id}?uid=${globalState.state.user.id}`
+      )
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return data;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (targetChannel) {
       const message = {
         message: {
@@ -109,40 +135,35 @@ const Page = () => {
           sender_id: globalState.state.user.id,
           sender_picture: globalState.state.user.picture,
         },
-        channel: {name: targetChannel.name},
+        channel: { name: targetChannel.name },
         user1: globalState.state.user.id,
       };
-      axios.post(`http://localhost:8080/message`, message).catch((error) => {
-        console.log(error);
-      });
-    } if (targetUser) { 
-      axios.post(`http://localhost:8080/message`, {
-        message: {
-          content: inputMessage.current!.value,
-          content_type: "text",
-          sender_id: globalState.state.user.id,
-          sender_picture: globalState.state.user.picture,
-        },
-        user2: globalState.state.user.id,
-        user1: targetUser.id,
-      }).catch((error) => {
-        console.log(error);
-      });
+      await axios
+        .post(`http://localhost:8080/message`, message)
+        .catch((error) => {
+          console.log(error);
+        });
     }
-    setUpdate((update: boolean) => {
-      if (update) {
-        return false;
-      } else {
-        return true;
-      }
-    });
+    if (targetUser) {
+      await axios
+        .post(`http://localhost:8080/message`, {
+          message: {
+            content: inputMessage.current!.value,
+            content_type: "text",
+            sender_id: globalState.state.user.id,
+            sender_picture: globalState.state.user.picture,
+          },
+          user2: globalState.state.user.id,
+          user1: targetUser.id,
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
     inputMessage.current!.value = "";
-    console.log("here");
-    e.preventDefault();
-    return (e: FormEvent<HTMLFormElement>) => {
-    };
+    setUpdate(true);
+    return (e: FormEvent<HTMLFormElement>) => {};
   };
-
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
@@ -205,6 +226,8 @@ const Page = () => {
                           setTargetUser={setTargetUser}
                           value={value}
                           self={globalState.state.user}
+                          setUpdate={setUpdate}
+                          update={update}
                         ></ChatCard>
                       );
                     })}
@@ -252,8 +275,11 @@ const Page = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar">
-                    <div className="flex flex-row justify-start">
+                  <div
+                    className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar border-2"
+                    ref={containerRef}
+                  >
+                    <div className="flex flex-row justify-start ">
                       <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
                         {messages &&
                           messages.map((value, key: any) => {
@@ -321,9 +347,7 @@ const Page = () => {
                         <PiMicrophoneLight className="w-full h-full" />
                       </button>
                       <div className="relative flex-grow">
-                        <form
-                          onSubmit={(e)=> handleSubmit(e)}
-                        >
+                        <form onSubmit={(e) => handleSubmit(e)}>
                           <input
                             className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
                             type="text"
