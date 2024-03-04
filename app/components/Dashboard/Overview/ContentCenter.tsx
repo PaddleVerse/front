@@ -25,7 +25,7 @@ const ContentCenter = () => {
               <div className="w-full h-[49%]  border-red-500">
                 <Items/>
               </div>
-              <div className="w-full h-[49%] border border-green-500"></div>
+              {/* <div className="w-full h-[49%] border border-green-500"></div> */}
 
             </div>
           </div>

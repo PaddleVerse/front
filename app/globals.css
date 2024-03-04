@@ -145,7 +145,7 @@ tr td:last-child {
 .loader {
   width: 40px;
   aspect-ratio: 1;
-  color: #ffff;
+  color:  rgb(239 68 68);
   position: relative;
   background: radial-gradient(10px,currentColor 94%,#0000);
 }

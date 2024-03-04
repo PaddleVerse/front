@@ -1,20 +1,22 @@
 'use client';
-import Image from "next/image";
 import React from "react";
 import FormElement from "./FormElement";
 import { useGlobalState } from "../../Sign/GlobalState";
-
+import { useRouter } from "next/navigation";
 interface Props {
   user : any
 }
 
-const image =
-  "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 const LeaderRow = ({user}: Props) => {
+  const router = useRouter();
   const {state} = useGlobalState();
   const User : any= state.user;
+
+  const handleClick = () => {
+    router.push(`/Dashboard/Profile?id=${user.id}`);
+  }
   return (
-    <tr className={`${User.id == user.id ? "bg-gray-500" : "bg-leaderboarddiv"} text-white sm:text-[12px] text-[10px]`}>
+    <tr className={`${User.id == user.id ? "bg-red-500/[0.18]" : "bg-leaderboarddiv"} text-white sm:text-[12px] text-[10px] cursor-pointer`} onClick={handleClick}>
       <td scope="row" className=" sm:py-[7px] font-medium text-center">
         {user.id}
       </td>

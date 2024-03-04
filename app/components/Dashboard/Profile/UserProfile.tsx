@@ -6,19 +6,66 @@ import Image from "next/image";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { Dropdown } from "./Dropdown";
 import { Button } from "../../../../components/ui/moving-border"
+import { AnimatedTooltip } from "../../../../components/ui/animated-tooltip";
 
 import axios from "axios";
 
+const people = [
+  {
+    id: 1,
+    name: "John Doe",
+    username: "Software Engineer",
+    picture:
+      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
+  },
+  {
+    id: 2,
+    name: "Robert Johnson",
+    username: "Product Manager",
+    picture:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 3,
+    name: "Jane Smith",
+    username: "Data Scientist",
+    picture:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 4,
+    name: "Emily Davis",
+    username: "UX Designer",
+    picture:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 5,
+    name: "Tyler Durden",
+    username: "Soap Developer",
+    picture:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80",
+  },
+  {
+    id: 6,
+    name: "Dora",
+    username: "The Explorer",
+    picture:
+      "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3534&q=80",
+  }
+];
+ 
+
 const inter = Inter({ subsets: ["latin"] });
-const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
 
 const UserProfile = ({target} : any) => {
   const {state} = useGlobalState();
   const [status, setStatus] = useState<string>("");
   const [recv, setRecv] = useState<string>("");
   const [is, setIs] = useState<boolean>(false);
+  const [linkedFriends, setLinkedFriends] = useState<any[]>([]);
 
-  const user:any = state.user;
+  const user : any = state.user;
   const socket : any= state.socket;
 
 
@@ -40,12 +87,26 @@ const UserProfile = ({target} : any) => {
   }, [socket]);
 
 
-
+  useEffect(() => {
+    axios.get(`http://localhost:8080/user/linked/${user?.id}/${target?.id}`)
+    .then((res) => {
+      setLinkedFriends(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }, [user, target]);
 
   useEffect(() => {
     axios.get(`http://localhost:8080/friendship/status/${user?.id}/${target?.id}`)
     .then((res) => {
-      setStatus(res.data);
+      if (res.data?.status === "PENDING" && res.data?.request === "SEND")
+        setStatus(res.data?.status);
+      else if (res.data?.status === "ACCEPTED")
+        setStatus(res.data?.status);
+      else if (res.data?.status === "BLOCKED" && res.data?.request === "SEND")
+        setStatus(res.data?.status);
+      else setStatus("");
     })
     .catch((err) => {
       console.log(err);
@@ -56,7 +117,13 @@ const UserProfile = ({target} : any) => {
   useEffect(() => {
     axios.get(`http://localhost:8080/friendship/status/${target?.id}/${user?.id}`)
     .then((res) => {
-      setRecv(res.data);
+      if (res.data?.status === "PENDING" && res.data?.request !== "RECIVED")
+        setRecv(res.data?.status);
+      else if (res.data?.status === "ACCEPTED")
+        setRecv(res.data?.status);
+      else if (res.data?.status === "BLOCKED" && res.data?.request !== "RECIVED")
+        setRecv(res.data?.status);
+      else setRecv("");
     })
     .catch((err) => {
       console.log(err);
@@ -92,8 +159,8 @@ const UserProfile = ({target} : any) => {
     }
   }
 
-  const acceptFriend = () => {
-    socket?.emit('acceptFriendRequest', {
+  const friendReq = (str : string) => {
+    socket?.emit(str, {
       senderId: target?.id,
       reciverId : user?.id,
     });
@@ -107,22 +174,8 @@ const UserProfile = ({target} : any) => {
     });
   }
 
-  const rejectFriend = () => {
-    socket?.emit('rejectFriendRequest', {
-      senderId: target?.id,
-      reciverId : user?.id,
-    });
-  }
-
-  const blockUser = () => {
-    socket.emit('blockFriend', {
-      senderId: user?.id,
-      reciverId : target?.id,
-    });
-  }
-
-  const unblockUser = () => {
-    socket.emit('unblockFriend', {
+  const blockUser = (str : string) => {
+    socket.emit(str, {
       senderId: user?.id,
       reciverId : target?.id,
     });
@@ -148,7 +201,7 @@ const UserProfile = ({target} : any) => {
             className="z-[-1]"
           />
           <div className="absolute right-0 p-4"> 
-          <Dropdown handleBlock={blockUser} handleUnblock={unblockUser} status={status} recv={recv} />
+          <Dropdown handleBlock={() => blockUser("blockFriend")} handleUnblock={() => blockUser("unblockFriend")} status={status} recv={recv} />
           </div>
           <div
             className="2xl:w-[170px] xl:w-[120px] xl:h-[200px] absolute 2xl:h-[250px]  bg-transparent rounded-md 2xl:-bottom-[120px] 2xl:left-[100px] p-2 text-white sm:bottom-[10px] sm:left-[50px] sm:w-[110px] sm:h-[170px] bottom-[10px] left-[20px] w-[80px] h-[150px]  "
@@ -187,7 +240,7 @@ const UserProfile = ({target} : any) => {
         <div className="w-full  border-red-500  flex sm:flex-row flex-col sm:flex-wrap justify-between sm:gap-0 gap-5">
           <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex h-[250px]">
             <div
-              className="w-full  border-green-500  2xl:self-end 2xl:h-[40%] lg:h-[100%]  py-2 px-4 bg-dashBack flex justify-between rounded-md 2xl:flex-row flex-col"
+              className="w-full border-red-500 2xl:self-end 2xl:h-[40%] lg:h-[100%] py-2 px-4 bg-dashBack flex justify-between rounded-md 2xl:flex-row flex-col"
             >
               <div className="flex  2xl:w-[60%] sm:w-full items-center h-[40%] 2xl:h-auto  bg-dashBack rounded-md">
                 <div className="relative">
@@ -218,19 +271,27 @@ const UserProfile = ({target} : any) => {
                   </div>
                 </div>
               </div>
-              <div className="  2xl:w-[30%] w-full h-[40%] 2xl:h-auto bg-dashBack rounded-md border"></div>
+              <div className="flex flex-row items-center justify-center mb-10 w-full">
+                <AnimatedTooltip items={linkedFriends} />
+              </div>
             </div>
           </div>
           <div className="2xl:w-[30%] sm:w-[40%]  border-orange-500  py-2 bg-dashBack flex  h-[250px]  px-2 rounded-md">
             <div className="flex flex-col w-full h-full relative justify-around gap-2  ">
-              <div className="flex  justify-around items-center ">
+              <div className="flex justify-around items-center">
                 <div
                   className={` ${inter.className} flex flex-col text-white gap-1 relative`}
                 >
-                  <span className="text-buttonGray 2xl:text-xs xl:text-[12px] sm:text-[11px] ml-[8px] 2xl:ml-4 xl:ml-2 text-[13px]">
-                    { target?.status === "ONLINE" ? "online" : "offline" }
-                  </span>
-                  <div className={`absolute 2xl:left-2 xl:top-[6px] top-[9px]  w-[5px] h-[5px] rounded-full ${ target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" }`}></div>
+                  <div className="flex items-center">
+                    <span className="relative flex h-3 w-3 mr-2">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${ target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" } opacity-75`}></span>
+                      <span className={`relative inline-flex rounded-full h-3 w-3 ${ target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" }`}></span>
+                    </span>
+                    <span className={`2xl:text-xs xl:text-[12px] sm:text-[11px] text-[13px] ${ target?.status === "ONLINE" ? "text-green-500" : "text-gray-500" }`}>
+                      { target?.status === "ONLINE" ? "online" : "offline" }
+                    </span>
+                  </div>
+                  {/* <div className={`absolute 2xl:left-2 xl:top-[6px] top-[9px]  w-[5px] h-[5px] rounded-full ${ target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" }`}></div> */}
                   <span className="text-buttonGray 2xl:text-[15px] xl:text-[8px] sm:text-[8px] text-[13px]">
                     {getDate(target?.createdAt)}
                   </span>
@@ -264,17 +325,17 @@ const UserProfile = ({target} : any) => {
                 recv && recv === "PENDING" ?
                   <div className="flex flex-row gap-4">
                     <Button
-                      onClick={acceptFriend}
+                      onClick={() => friendReq("acceptFriendRequest")}
                       borderRadius="1.75rem"
-                      color="--sky-400"
+                      borderClassName=" bg-[radial-gradient(var(--green-500)_40%,transparent_60%)]"
                       className={`text-white border-slate-800 w-full sm:mt-0 mt-4 bg-green-500/[0.3]`}
                     >
                       ACCEPTE
                     </Button>
                     <Button
-                      onClick={rejectFriend}
+                      onClick={() => friendReq("rejectFriendRequest")}
                       borderRadius="1.75rem"
-                      color="--sky-400"
+                      borderClassName=" bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
                       className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-red-500/[0.3]`}
                     >
                       REJECTE
@@ -284,18 +345,18 @@ const UserProfile = ({target} : any) => {
                   <Button
                     onClick={removeFriend}
                     borderRadius="1.75rem"
-                    color="--sky-400"
+                    borderClassName="bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
                     className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-red-500/[0.3]`}
                   >
                     REMOVE FRIEND
                   </Button>
                   : recv && recv === "BLOCKED" ? null
-                  :
-                  <Button
+                  : status && status === "BLOCKED" ? null
+                  : <Button
                     onClick={handleSender}
-                    color="--sky-400"
                     borderRadius="1.75rem"
-                    className={`text-white border-slate-800 w-full sm:mt-0 mt-4  ${status === "PENDING" ? "bg-slate-800" : status === "ACCEPTED"  ? "bg-red-600/[0.3]" : status === "BLOCKED" ? "hidden" : ""}`}
+                    borderClassName={status === "ACCEPTED" ? "bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]" : ""}
+                    className={`text-white border-slate-800 w-full sm:mt-0 mt-4  ${status === "PENDING" ? "bg-slate-800" : status === "ACCEPTED"  ? "bg-red-600/[0.3]"  : ""}`}
                     // className={` w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"  ? "bg-red-900" : status === "BLOCKED" ? "hidden" : "bg-greenButton"} flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                   >
                     {

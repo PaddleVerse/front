@@ -16,7 +16,7 @@ const UserCard = ({user}: Props) => {
   return (
     <div onClick={handleClick} className='cursor-pointer'>
       <CardContainer className="inter-var">
-        <CardBody className="relative group/card  hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-red-400/[0.5] w-auto h-auto rounded-xl p-6 border">
+        <CardBody className="relative group/card  hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-red-500/[0.5] w-auto h-auto rounded-xl p-6 border">
           <CardItem translateZ="100" className="w-full mt-4">
             <Image
               src={user.picture ? user.picture :"/friend.png"}
@@ -37,7 +37,7 @@ const UserCard = ({user}: Props) => {
             <CardItem
               translateZ={20}
               as="div"
-              className="px-4 py-2 rounded-xl bg-[#ffffff6b] text-white text-xs font-bold"
+              className="px-4 py-2 rounded-xl bg-red-500/[0.4] text-white text-xs font-bold"
             >
               @{user?.username}
             </CardItem>
