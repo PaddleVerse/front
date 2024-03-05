@@ -10,7 +10,7 @@ const OneGame = ({status}:{status:string}) => {
       <div className="w-full px-7 h-[50px] mt-[25px] bg-transparent flex justify-between"
 
       >
-        <span className={`${status === "win" ? "text-green-700" : "text-progressIndicator"} text-[10px]`}>23:32, Wed, Dec 6</span>
+        <span className={`${status === "win" ? "text-red-500" : "text-red-500/[0.5]"} text-[10px]`}>23:32, Wed, Dec 6</span>
         <div className="flex gap-2 self-end text-xs mr-10">
           <div className="flex items-center gap-2 text-white">
             <span>me</span>
@@ -19,7 +19,7 @@ const OneGame = ({status}:{status:string}) => {
               <span className="absolute text-[8px] right-[16px] top-[-15px]">
                 13:37
               </span>
-              <div className={`${status === "win" ? "bg-green-700" : "bg-progressIndicator"} text-white  rounded-sm flex items-center px-4 text-sm`}>
+              <div className={`${status === "win" ? "bg-red-500" : "bg-red-500/[0.5]"} text-white  rounded-sm flex items-center px-4 text-sm`}>
                 <span>2</span>
                 <span> - </span>
                 <span>5</span>
@@ -29,12 +29,12 @@ const OneGame = ({status}:{status:string}) => {
             <span>you</span>
           </div>
         </div>
-        <div className={`${status === "win" ? "bg-green-700" : "bg-progressIndicator"} text-white  rounded-sm flex items-center px-4 sm:text-md sm:h-[29px] h-[22px] text-[12px]`}>
+        <div className={`${status === "win" ? "bg-red-500" : "bg-red-500/[0.5]"} text-white  rounded-sm flex items-center px-4 sm:text-md sm:h-[29px] h-[22px] text-[12px]`}>
           <span>{status === 'win' ? 'WIN' : 'LOST'}</span>
         </div>
       </div>
       <div className="flex w-full justify-center mt-1">
-        <hr className={`${status === "win" ? "border-green-700" :  "border-progressIndicator"} w-[95%] `} />
+        <hr className={`${status === "win" ? "border-red-500" :  "border-red-500/[0.5]"} w-[95%] `} />
       </div>
     </div>
   );

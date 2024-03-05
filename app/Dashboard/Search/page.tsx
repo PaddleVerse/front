@@ -1,6 +1,7 @@
 'use client';
 import React, { useRef,useState, useEffect } from 'react';
 import UserCard from '../../components/Dashboard/Search/UserCard';
+import SearchBarPop from '../../components/Dashboard/Search/SearchBarPop';
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import axios from 'axios';
 import { useGlobalState } from '@/app/components/Sign/GlobalState';
@@ -48,14 +49,8 @@ const Search = () => {
   }
 
   return (
-    <div className='container mx-auto max-w-auto overflow-y-auto'>
-      <div className='flex justify-center items-center'>
-        <input
-          className='w-[90%] h-14 p-6 text-sm text-white rounded-xl mt-10 bg-[#434343d9] shadow-xl focus:outline-none focus:ring-[1px] focus:ring-red-400/[0.5] transition duration-300 ease-in-out'
-          type='text'
-          placeholder='Look for other gamers!'
-        />
-      </div>
+    <div className='relative container mx-auto max-w-auto overflow-y-auto'>
+      <SearchBarPop />
       <div className='mt-20'>
         <h1 className='text-3xl text-white mt-10 font-mono'>RECOMMENDED</h1>
         <div className="flex flex-col bg-inherit relative">

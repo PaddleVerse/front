@@ -125,7 +125,7 @@ const Sidebar = () => {
   
 
   return (
-    <div className="flex relative lg:h-[fit-content] h-auto" {...handlers}>
+    <div className="flex relative lg:h-[fit-content] h-auto z-50" {...handlers}>
       <div className="h-screen w-full absolute bg-dashBack"></div>
       <motion.div
         className="absolute border w-5 h-5 cursor-pointer z-40 lg:-right-[10px] -right-[15px] top-[80px] border-rightArrowColor lg:p-[2px] p-[20px]  text-rightArrowColor bg-rightArrowBg rounded-full flex items-center justify-center"
