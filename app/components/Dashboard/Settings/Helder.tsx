@@ -7,7 +7,7 @@ import Security from './Security'
 const Helder = () => {
   const [current, setCurrent] = useState('My profile');
   return (
-    <div className='w-[94%] bg-transparent flex sm:h-[95%] xl:h-[98%] h-[98%] rounded-lg'
+    <div className='w-[94%] bg-transparent flex flex-col lg:flex-row  sm:h-[95%] xl:h-[98%] h-[98%] rounded-lg'
     style={{
       backdropFilter: "blur(20px)",
       backgroundColor: "rgba(13, 9, 10, 0.7)",

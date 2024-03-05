@@ -142,9 +142,7 @@ tr td:last-child {
     scrollbar-width: none; /* Firefox */
   }
 }
-/* body {
-  background-image: url('/Dark.svg');
-} */
+
 * {
   box-sizing: border-box;
 }
@@ -179,4 +177,30 @@ tr td:last-child {
    33%  {inset:-10px;transform: rotate(0deg)}
    66%  {inset:-10px;transform: rotate(90deg)0}
    100% {inset:0    ;transform: rotate(90deg)}
+}
+
+
+
+.blur {
+  filter: blur(3px); /* Adjust the blur intensity as needed */
+  transition: filter 0.5s ease; /* Add a smooth transition effect */
+}
+
+.glitch {
+  animation: glitch 0.3s alternate-reverse;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  25% {
+    transform: translate(-2px);
+  }
+  75% {
+    transform: translate(2px);
+  }
+  100% {
+    transform: translate(0);
+  }
 }

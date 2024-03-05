@@ -62,7 +62,7 @@ const UserProfile = ({target} : any) => {
     });
   } , [target?.id, user?.id, is]);
 
-  const addFriend = () => {
+  const handleSender = () => {
     switch(status) {
       case "PENDING":
       {
@@ -285,7 +285,7 @@ const UserProfile = ({target} : any) => {
                   : recv && recv === "BLOCKED" ? null
                   :
                   <button
-                    onClick={addFriend}
+                    onClick={handleSender}
                     className={`w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"  ? "bg-red-900" : status === "BLOCKED" ? "hidden" : "bg-greenButton"} flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                   >
                     {
