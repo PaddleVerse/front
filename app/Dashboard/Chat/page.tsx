@@ -49,33 +49,35 @@ const Page = () => {
   const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
-  const socket = useRef<Socket | null>(null);
-
 
   useEffect(() => {
-    globalState?.state?.socket?.on("ok", () => {
+    if (globalState.state.user) {
+      axios
+        .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
+        .then((res) => {
+          setChatList(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [globalState, update]);
+
+  useEffect(() => {
+    globalState?.state?.socket?.on("ok", (data: any) => {
+      if (data === null)
+      { return; }
       console.log("recieved ok from server");
       setUpdate(true);
     });
-    globalState?.state?.socket?.emit("refresh",);
+    globalState?.state?.socket?.emit("refresh");
     return () => {
-       globalState?.state?.socket?.off("ok");
+      globalState?.state?.socket?.off("ok");
     };
   }, [globalState?.state?.socket]);
 
-
-
   useEffect(() => {
-    // if (update) {
-    //   if (targetUser?.status === "ONLINE") {
-    //     console.log("online");
-    //     setOnline(true);
-    //   } else {
-    //     setOnline(false);
-    //   }
-    // }
-    globalState?.state?.socket?.on('update', (data:any) => {
-      console.log("recieved refresh from server");
+    globalState?.state?.socket?.on("update", (data: any) => {
       setUpdate(true);
     });
     return () => {
@@ -91,26 +93,9 @@ const Page = () => {
   }, [messages]);
 
   useEffect(() => {
-    if (globalState.state.user) {
-      console.log("refetching chatlist");
-      socket.current = globalState.state.socket;
-      axios
-        .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
-        .then((res) => {
-          setChatList(res.data);
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [globalState, update]);
-
-  useEffect(() => {
     globalState?.state?.socket?.on("message", (data: any) => {
-
-    })
-  },[globalState?.state?.socket])
+    });
+  }, [globalState?.state?.socket]);
 
   // useEffect(() => {
   //   if (socket.current) {
@@ -175,7 +160,7 @@ const Page = () => {
       });
     return data;
   };
-  const fetchMessagesForChannel =  (
+  const fetchMessagesForChannel = (
     id: number | undefined
   ): Promise<message[]> => {
     const data = axios
@@ -209,6 +194,10 @@ const Page = () => {
         .catch((error) => {
           console.log(error);
         });
+      globalState?.state?.socket?.emit("channelmessage", {
+        channel: targetChannel.id,
+        sender: globalState.state.user.id,
+      });
     }
     if (targetUser) {
       await axios
@@ -228,7 +217,7 @@ const Page = () => {
       globalState?.state?.socket?.emit("dmmessage", {
         reciever: targetUser.id,
         sender: globalState.state.user.id,
-      })
+      });
     }
     inputMessage.current!.value = "";
     setUpdate(true);
@@ -313,7 +302,7 @@ const Page = () => {
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
                         {/* this image needs to be filled with the target user */}
                         <img
-                          className="shadow-md rounded-full w-full h-full object-cover border-2"
+                          className="shadow-md rounded-full w-full h-full object-cover"
                           src={
                             (targetUser && targetUser.picture) ||
                             "https://randomuser.me/api/portraits/women/33.jpg"
@@ -357,7 +346,7 @@ const Page = () => {
                     </div>
                   </div>
                   <div
-                    className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar border-2"
+                    className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar"
                     ref={containerRef}
                   >
                     <div className="flex flex-row justify-start ">
