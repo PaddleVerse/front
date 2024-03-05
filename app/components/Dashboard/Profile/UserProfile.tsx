@@ -41,6 +41,7 @@ const UserProfile = ({target} : any) => {
 
 
 
+  
   useEffect(() => {
     axios.get(`http://localhost:8080/friendship/status/${user?.id}/${target?.id}`)
     .then((res) => {
