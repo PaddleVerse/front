@@ -29,7 +29,7 @@ const MatchHistory = () => {
             </span>
           </div>
           <div className="bg-gray-700 px-4 py-2 rounded-md xl:text-sm text-xs">
-            <span className="text-green-700">7W</span>
+          <span className="text-green-700">7W</span>
             <span className="text-white mr-1 ml-1">-</span>
             <span className="text-red-500">3L</span>
             <span className="text-gray-400">(54%)</span>
