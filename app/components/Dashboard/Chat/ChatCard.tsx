@@ -50,7 +50,7 @@ export const ChatCard = (props: any) => {
         <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
           {/*here we check the status of the user if he is online or not */}
           {props.value.user &&
-            (props.online ? (
+            (props.value.status === "ONLINE" ? (
               <div className="bg-green-500 rounded-full w-2 h-2"></div>
             ) : (
               <div className="bg-red-500 rounded-full w-2 h-2"></div>

@@ -23,6 +23,7 @@ import { Socket } from "socket.io-client";
 import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
+import { sendError } from "next/dist/server/api-utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,24 +54,34 @@ const Page = () => {
 
   useEffect(() => {
     globalState?.state?.socket?.on("ok", () => {
+      console.log("recieved ok from server");
       setUpdate(true);
     });
+    globalState?.state?.socket?.emit("refresh",);
     return () => {
        globalState?.state?.socket?.off("ok");
     };
   }, [globalState?.state?.socket]);
 
 
+
   useEffect(() => {
-    if (update) {
-      if (targetUser?.status === "ONLINE") {
-        console.log("online");
-        setOnline(true);
-      } else {
-        setOnline(false);
-      }
-    }
-  }, [update, targetUser]);
+    // if (update) {
+    //   if (targetUser?.status === "ONLINE") {
+    //     console.log("online");
+    //     setOnline(true);
+    //   } else {
+    //     setOnline(false);
+    //   }
+    // }
+    globalState?.state?.socket?.on('update', (data:any) => {
+      console.log("recieved refresh from server");
+      setUpdate(true);
+    });
+    return () => {
+      globalState?.state?.socket?.off("ok");
+    };
+  }, [globalState?.state?.socket]);
 
   useEffect(() => {
     const container: any = containerRef.current;
@@ -78,19 +89,28 @@ const Page = () => {
       container.scrollTop = container.scrollHeight;
     }
   }, [messages]);
+
   useEffect(() => {
     if (globalState.state.user) {
+      console.log("refetching chatlist");
       socket.current = globalState.state.socket;
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
           setChatList(res.data);
+          console.log(res.data);
         })
         .catch((error) => {
           console.log(error);
         });
     }
   }, [globalState, update]);
+
+  useEffect(() => {
+    globalState?.state?.socket?.on("message", (data: any) => {
+
+    })
+  },[globalState?.state?.socket])
 
   // useEffect(() => {
   //   if (socket.current) {
@@ -205,6 +225,10 @@ const Page = () => {
         .catch((error) => {
           console.log(error);
         });
+      globalState?.state?.socket?.emit("dmmessage", {
+        reciever: targetUser.id,
+        sender: globalState.state.user.id,
+      })
     }
     inputMessage.current!.value = "";
     setUpdate(true);
@@ -275,6 +299,7 @@ const Page = () => {
                           setUpdate={setUpdate}
                           update={update}
                           online={online}
+                          setOnline={setOnline}
                         ></ChatCard>
                       );
                     })}
@@ -300,13 +325,22 @@ const Page = () => {
                         <p className="font-bold">
                           {targetUser ? targetUser.name : targetChannel!.name}
                         </p>
-                        {/**here goes the online status */}
+                        {/** needs to be fixed */}
                         {targetUser &&
                           (online ? (
                             <p className="text-green-500">Online</p>
                           ) : (
                             <p className="text-red-500">Offline</p>
                           ))}
+                        {/* {targetUser && (
+                          <p
+                            className={
+                              online ? "text-green-500" : "text-red-500"
+                            }
+                          >
+                            {online ? "Online" : "Offline"}
+                          </p>
+                          )}*/}
                       </div>
                     </div>
 
