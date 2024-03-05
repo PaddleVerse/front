@@ -40,6 +40,7 @@ export type message = {
 const Page = () => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef(null);
+  const [online, setOnline] = useState(false);
   const { register } = useForm();
   const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
@@ -48,6 +49,29 @@ const Page = () => {
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const socket = useRef<Socket | null>(null);
+
+
+  useEffect(() => {
+    globalState?.state?.socket?.on("ok", () => {
+      setUpdate(true);
+    });
+    return () => {
+       globalState?.state?.socket?.off("ok");
+    };
+  }, [globalState?.state?.socket]);
+
+
+  useEffect(() => {
+    if (update) {
+      if (targetUser?.status === "ONLINE") {
+        console.log("online");
+        setOnline(true);
+      } else {
+        setOnline(false);
+      }
+    }
+  }, [update, targetUser]);
+
   useEffect(() => {
     const container: any = containerRef.current;
     if (container) {
@@ -67,6 +91,28 @@ const Page = () => {
         });
     }
   }, [globalState, update]);
+
+  // useEffect(() => {
+  //   if (socket.current) {
+  //     socket.current.on("message", (data: any) => {
+  //       if (targetUser) {
+  //         if (data.sender_id === targetUser.id) {
+  //           setUpdate(true);
+  //         }
+  //       }
+  //       if (targetChannel) {
+  //         if (data.channel_id === targetChannel.id) {
+  //           setUpdate(true);
+  //         }
+  //       }
+  //     });
+  //   }
+  //   return () => {
+  //     if (socket.current) {
+  //       socket.current.off("message");
+  //     }
+  //   };
+  // }, [socket.current]);
 
   useEffect(() => {
     if (targetUser) {
@@ -228,6 +274,7 @@ const Page = () => {
                           self={globalState.state.user}
                           setUpdate={setUpdate}
                           update={update}
+                          online={online}
                         ></ChatCard>
                       );
                     })}
@@ -255,7 +302,7 @@ const Page = () => {
                         </p>
                         {/**here goes the online status */}
                         {targetUser &&
-                          (false ? (
+                          (online ? (
                             <p className="text-green-500">Online</p>
                           ) : (
                             <p className="text-red-500">Offline</p>
