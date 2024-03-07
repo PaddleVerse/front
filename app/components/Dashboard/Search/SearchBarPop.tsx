@@ -8,6 +8,7 @@ import { useGlobalState } from '../../Sign/GlobalState';
 const SearchBarPop = () => {
     const router = useRouter();
     const {state} = useGlobalState();
+    const { user } = state;
 
     const [isfocus , setIsFocus] = useState(false);
     const [users , setUsers] = useState<any>([]);
@@ -15,28 +16,22 @@ const SearchBarPop = () => {
     const [filteredUsers, setFilteredUsers] = useState<any>([]);
     const [searchedUsers, setSearchedUsers] = useState<any>([]);
     const [is , setIs] = useState(false);
-    const [status , setStatus] = useState(false);
     const [title , setTitle] = useState('Recent Searches');
 
-    const { socket } = state;
-    useEffect(() => {
-      socket?.on('ok', () => setStatus(!status));
-
-      return () => {
-        socket?.off('ok');
-      }
-    }, [])
 
     const handleInputChange = (event : React.ChangeEvent<HTMLInputElement>) => {
       setInputValue(event.target.value.trim());
       setTitle('Search Results');
     };
 
-    const filterUsers = async (inputValue : string) => {
-        const filteredUsers = await users.filter((user : any) => {
-          return user?.name.toLowerCase().includes(inputValue.toLowerCase());
-        });
-        setFilteredUsers(filteredUsers);
+    const filterUsers = (inputValue : string) => {
+      setTimeout(() => {
+        if (user?.id === undefined) return;
+        axios.get(`http://localhost:8080/search/${inputValue}/${user?.id}`)
+        .then(res => {
+          setFilteredUsers(res.data);
+        })
+      }, 100);
     }
 
     useEffect(() => {
@@ -51,27 +46,25 @@ const SearchBarPop = () => {
     } , [inputValue])
 
     useEffect(() => {
-      if (users.length === 0) return;
-      axios.get('http://localhost:8080/search')
+      axios.get('http://localhost:8080/search/searchedUsers')
       .then(res => {
-        const usersID = res.data.map((user : any) => user?.userId);
-        setSearchedUsers(usersID.map((id : any) => users.find((u : any) => u?.id === id)));
-        setFilteredUsers(usersID.map((id : any) => users.find((u : any) => u?.id === id)));
+        setSearchedUsers(res.data);
+        setFilteredUsers(res.data);
       })
     }, [users, is])
 
     useEffect(() => {
         axios.get('http://localhost:8080/user')
           .then(res => {
-            setUsers(res.data);
+            setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
           })
-    } , [status])
+    } , [])
 
     const handleclick = (id : any) => {
       axios.post('http://localhost:8080/search', {
         userId: id
       }).catch();
-      router.push(`/Dashboard/Profile?id=${id}`); 
+      router.push(`/Dashboard/Profile?id=${id}`);
     }
 
   return (
@@ -89,7 +82,7 @@ const SearchBarPop = () => {
                 <div>
                     <h1 className='text-white text-xl my-4 ml-2'>{title}</h1>
                     <div className='flex justify-start items-start flex-wrap'>
-                        { filteredUsers.map((user : any) => (
+                        { filteredUsers && filteredUsers?.map((user : any) => (
                             <UserSearchCard user={user} key={user.id} handleClick={handleclick}/>
                         ))
                         }

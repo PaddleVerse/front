@@ -16,16 +16,12 @@ const UserSearchCard = ({user, handleClick} : any) => {
         <div className='ml-2'>
             <h1 className='text-md'>{user?.name}</h1>
             <div className='flex'>
-                <p className='text-[10px] w-[30%] overflow-hidden'>@{user?.username}</p>
+                <p className='text-[10px] w-[35%] overflow-hidden'>@{user?.username}</p>
                 <div className="flex items-center ml-2">
-                    <span className="relative flex h-2 w-2 mr-2">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${ user?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" } opacity-75`}></span>
-                      <span className={`relative inline-flex rounded-full h-2 w-2 ${ user?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500" }`}></span>
-                    </span>
                     <span className="2xl:text-xs xl:text-[10px] sm:text-[8px] text-[10px] text-gray-400">
                       1k friends
                     </span>
-                  </div>
+                </div>
             </div>
         </div>
     </div>

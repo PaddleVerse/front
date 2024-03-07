@@ -102,7 +102,7 @@ const Security = () => {
 
 
   return (
-    <div className='flex mx-20 my-20 flex-col gap-10 w-full'>
+    <div className='flex flex-col gap-10 w-full'>
       <div className='flex flex-col gap-2 justify-start border-b-[0.1px] border-white pb-6'>
         <h1 className='text-xl text-white font-light'> Security </h1>
         <p className='text-[#c2c2c2] text-sm font-light'>Secure your account</p>
@@ -115,7 +115,7 @@ const Security = () => {
               <input
                 type='password'
                 placeholder='old password'
-                className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
+                className='bg-[#7d7d7d4f] px-4 py-2 rounded-2xl focus:outline-none focus:ring-red-400/[0.5] text-white font-light w-full'
                 // {...register('name')}
               />
             </div>
@@ -124,7 +124,7 @@ const Security = () => {
               <input
                 type='password'
                 placeholder='new password'
-                className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
+                className='bg-[#7d7d7d4f] px-4 py-2 rounded-2xl focus:outline-none focus:ring-red-400/[0.5] text-white font-light w-full'
                 // {...register('username')}
               />
             </div>
@@ -171,14 +171,14 @@ const Security = () => {
                   alt='qrcode'
                   width={400}
                   height={400}
-                  className={`object-cover h-[240px] w-[240px] mt-10 ${isBlurred ? 'blur' : ''}`}
+                  className={`object-cover rounded-lg h-[240px] w-[240px] mt-10 ${isBlurred ? 'blur' : ''}`}
                 />
                 : <Image
                   src={tmp_qrcode}
                   alt='qrcode'
                   width={400}
                   height={400}
-                  className='object-cover h-[240px] w-[240px] mt-10 blur'/>
+                  className='object-cover rounded-lg h-[240px] w-[240px] mt-10 blur'/>
               }
               </div>
             </div>
