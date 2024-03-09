@@ -199,6 +199,7 @@ const Sidebar = () => {
             <motion.div>
               <Option label={"Dashboard"} expanded={expanded}/>
               <Option label={"Chat"} expanded={expanded}/>
+              <Option label={"Game"} expanded={expanded}/>
               <Option label={"Shop"} expanded={expanded} />
               <Option label={"Search"} expanded={expanded} />
             </motion.div>

@@ -11,6 +11,7 @@ const nextConfig = {
         'cdn.builder.io',
         'preview.redd.it',
         'img.pikbest.com',
+        'randomuser.me',
         ],
       },
       compiler: {

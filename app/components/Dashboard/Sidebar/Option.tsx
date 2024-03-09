@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import MainOptions from "./MainOptions";
 import { RxDashboard } from "react-icons/rx";
-import { PiChatCircleTextLight } from "react-icons/pi";
+import { PiChatCircleTextLight, PiGameController } from "react-icons/pi";
 import { LiaShoppingCartSolid } from "react-icons/lia";
 import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-const gameNames = ["Overview", "Game", "Leaderboard", "Settings"];
+const gameNames = ["Overview", "Leaderboard", "Settings"];
 const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
   const [showElements, setShowElements] = useState(false);
   const pathname = usePathname();
@@ -30,6 +30,9 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
     if (label === "Search") {
       router.push("/Dashboard/Search");
     }
+    if (label === "Game") {
+      router.push("/Dashboard/Game");
+    }
   };
   return (
     <div className="relative overflow-visible">
@@ -47,8 +50,10 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
             <LiaShoppingCartSolid className="hover:bg-blurredRed" />
           ) : label === "Search" ? (
             <IoIosSearch className=" hover:bg-blurredRed" />
+          ) : label === "Game" ? (
+            <PiGameController className="hover:bg-blurredRed" />
           ) : (
-            <RxDashboard />
+          <RxDashboard />
           )}
         </MainOptions>
       </motion.div>
