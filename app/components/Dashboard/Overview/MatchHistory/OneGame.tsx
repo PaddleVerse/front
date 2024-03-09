@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
@@ -14,7 +15,7 @@ const OneGame = ({status}:{status:string}) => {
         <div className="flex gap-2 self-end text-xs mr-10">
           <div className="flex items-center gap-2 text-white">
             <span>me</span>
-            <img src={image} alt="player1" className="w-5 h-5 rounded-full" />
+            <Image src={image} alt="player1" className="w-5 h-5 rounded-full" width={100} height={100} />
             <div className="flex flex-col relative">
               <span className="absolute text-[8px] right-[16px] top-[-15px]">
                 13:37
@@ -25,7 +26,7 @@ const OneGame = ({status}:{status:string}) => {
                 <span>5</span>
               </div>
             </div>
-            <img src={image2} alt="player2" className="w-5 h-5 rounded-full" />
+            <Image src={image2} alt="player2" className="w-5 h-5 rounded-full"  width={100} height={100}/>
             <span>you</span>
           </div>
         </div>

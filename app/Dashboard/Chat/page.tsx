@@ -17,7 +17,10 @@ import { IoCameraOutline } from "react-icons/io5";
 import { PiMicrophoneLight } from "react-icons/pi";
 import { IoSendOutline } from "react-icons/io5";
 import { TbSend } from "react-icons/tb";
+import Image from "next/image";
+
 const inter = Inter({ subsets: ["latin"] });
+
 const page = () => {
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
@@ -80,7 +83,9 @@ const page = () => {
                 <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                   <div className="flex">
                     <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                      <img
+                      <Image
+                        width={100}
+                        height={100}
                         className="shadow-md rounded-full w-full h-full object-cover"
                         src="https://randomuser.me/api/portraits/women/33.jpg"
                         alt=""
@@ -113,7 +118,9 @@ const page = () => {
                 <div className="chat-body p-4 flex-1 overflow-y-scroll">
                   <div className="flex flex-row justify-start">
                     <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
-                      <img
+                      <Image
+                        width={100}
+                        height={100}
                         className="shadow-md rounded-full w-full h-full object-cover"
                         src="https://randomuser.me/api/portraits/women/33.jpg"
                         alt=""
@@ -168,25 +175,25 @@ const page = () => {
                   <div className="flex flex-row items-center p-4">
                     <button
                       type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6 "
+                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6 "
                     >
                       <CiCirclePlus className="w-full h-full" />
                     </button>
                     <button
                       type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6"
+                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
                     >
                       <MdOutlineAddPhotoAlternate className="w-full h-full" />
                     </button>
                     <button
                       type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6"
+                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
                     >
                       <IoCameraOutline className="w-full h-full" />
                     </button>
                     <button
                       type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 block text-green-600 hover:text-green-700 w-6 h-6"
+                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
                     >
                       <PiMicrophoneLight className="w-full h-full" />
                     </button>
@@ -199,7 +206,7 @@ const page = () => {
                         />
                         <button
                           type="button"
-                          className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none block text-green-600 hover:text-green-700 w-6 h-6"
+                          className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none text-green-600 hover:text-green-700 w-6 h-6"
                         >
                         <IoSendOutline className="w-full h-full" />
                         </button>

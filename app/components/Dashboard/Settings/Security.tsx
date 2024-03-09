@@ -53,6 +53,7 @@ const Security = () => {
       enable();
     else
       setIsBlurred(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   } , [user]);
 
 
@@ -98,7 +99,10 @@ const Security = () => {
     }
   }
 
-  useEffect(() => { refreshUser(); } , [is]);
+  useEffect(() => {
+    refreshUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [is]);
 
 
   return (

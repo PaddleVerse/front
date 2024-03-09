@@ -1,6 +1,7 @@
 import React from "react";
 import { Rajdhani } from "next/font/google";
 import OneGame from "./OneGame";
+import Image from "next/image";
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
@@ -17,10 +18,12 @@ const MatchHistory = () => {
       <div className="flex flex-col  sticky top-0 bg-dashBack z-10">
         <div className="flex justify-between h-20 items-center px-7 xl:mt-4 mt-2">
           <div className="flex gap-2 items-center">
-            <img
+            <Image
               src="Frame.svg"
               alt="img"
               className="xl:w-8 h-auto md:w-6 w-5"
+              width={100}
+              height={100}
             />
             <span
               className={`${rajdhani.className} text-white xl:text-2xl lg:text-lg md:text-md`}

@@ -38,11 +38,12 @@ const SearchBarPop = () => {
         if (inputValue === '') 
         {
           setFilteredUsers(searchedUsers);
-          setIs(!is);
+          setIs((prev) => !prev)
           setTitle('Recent Searches');
           return;
         }
         filterUsers(inputValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     } , [inputValue])
 
     useEffect(() => {
@@ -58,7 +59,7 @@ const SearchBarPop = () => {
           .then(res => {
             setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
           })
-    } , [])
+    } , [user?.id])
 
     const handleclick = (id : any) => {
       axios.post('http://localhost:8080/search', {

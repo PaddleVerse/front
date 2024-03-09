@@ -14,6 +14,7 @@ import {
   IconBrandGoogle,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import Image from "next/image";
 
 
 export default function SignupFormDemo() {
@@ -92,7 +93,7 @@ export default function SignupFormDemo() {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black ring-[0.2px] ring-red-500">
+      <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black ring-[0.2px] ring-red-500 z-10">
           <motion.h1
             className='text-red-500 lg:text-4xl md:text-3xl text-2xl font-semibold mb-2 sm:mb-0 text-center'
           >
@@ -126,7 +127,7 @@ export default function SignupFormDemo() {
               type="button"
               onClick={handle42}
             >
-              <img src="/Apple Logo.svg" className="w-5" />
+              <Image src="/Apple Logo.svg" className="w-5" alt="42" width={100} height={100} />
               <span className="text-neutral-300 text-sm">
                 Intra 42
               </span>
@@ -147,8 +148,8 @@ export default function SignupFormDemo() {
         </form>
         <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
         <div className="w-full flex justify-between">
-          <Label className="text-gray-300 text-sm" >Don't have an account?</Label>
-          <Link href='/register' className="text-gray-300 text-sm" >Sign Up &rarr;</Link>
+          <Label className="text-gray-300 text-sm" >Don&apos;t have an account?</Label>
+          <Link href="/register" className="text-gray-300 text-sm" >Sign Up &rarr;</Link>
         </div>
       </div>
     </div>

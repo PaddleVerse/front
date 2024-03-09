@@ -22,11 +22,13 @@ export default function EnterCode({ register, isError , reset}: any) {
         });
         inputRefs[0].current.focus();
         setCode('');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     } , [reset]);
 
     useEffect(() => {
         if (code?.length === 6)
             register('code', { value: code });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [code]);
     
 

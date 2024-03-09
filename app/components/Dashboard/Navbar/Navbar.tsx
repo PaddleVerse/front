@@ -3,6 +3,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Image from "next/image";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -66,7 +67,10 @@ const Navbar = () => {
         onClick={handleLogout}
         className="text-gray-400 ml-10 text-[14px] flex gap-1 justify-center items-center mr-10">
           <span>Logout</span>
-          <img
+          <Image
+            width={100}
+            height={100}
+            alt="logout"
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/8f732370a24ab06585f4eb2085de2a8322c4a75d2ded72839c1d57c7f44bddfa?"
             className="w-full aspect-square fill-white fill-opacity-50 max-w-[18px]"

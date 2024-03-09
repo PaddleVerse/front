@@ -13,7 +13,7 @@ const Achievements = () => {
       }}
     >
         <div className='w-full text-white flex gap-2  items-center'>
-            <Image src='/achievements.svg' width={20} height={20} alt={'image'}/>
+            <Image src='/achievements.svg' width={20} height={20} alt={'image'} />
             <h1 className={`${rajdhani.className} font-[500] xl:text-[20px] lg:text-[17px]`}>ACHIEVEMENTS</h1>
         </div>
         {Array.from({ length: 10 }, (_, index) => (

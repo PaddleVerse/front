@@ -1,10 +1,13 @@
+import Image from "next/image";
 import React from "react";
 
 const ChatCard = () => {
   return (
     <div className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative ">
       <div className="sm:w-12 sm:h-12 h-16 w-16 relative flex flex-shrink-0">
-        <img
+        <Image
+          width={100}
+          height={100}
           className="shadow-md rounded-full w-full h-full object-cover"
           src="https://randomuser.me/api/portraits/women/87.jpg"
           alt="User2"
