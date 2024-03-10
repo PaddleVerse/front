@@ -1,11 +1,17 @@
 import React from "react";
+import { getTime } from "@/app/utils";
 
 const MiddleBubbleRight = (props: any) => {
   return (
     <div className="flex items-center group justify-end">
-      <p className="px-6 py-3 rounded-lg bg-green-800 max-w-xs lg:max-w-md text-white">
-        {props.message}
-      </p>
+      <div className="px-4 rounded-2xl bg-white max-w-xs lg:max-w-md text-black">
+        <p className="text-[14px] mt-2">
+          {props.message.content}
+        </p>
+        <p className="text-[10px] text-gray-500 text-end mb-[2px]">
+          {getTime(props.message.createdAt)}
+        </p>
+      </div>
     </div>
   );
 };

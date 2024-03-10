@@ -3,21 +3,13 @@ import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/moving-border"
 import Image from 'next/image'
 import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
-
+import { getDate } from '@/app/utils'
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender, linkedFriends} : any) => {
 
-
-    const  getDate = (dateString: string): string  => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-    
   return (
     <div className="w-full  border-red-500  flex sm:flex-row flex-col sm:flex-wrap justify-between sm:gap-0 gap-5">
           <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex h-[250px]">
