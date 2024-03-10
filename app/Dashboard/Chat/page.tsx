@@ -302,9 +302,7 @@ const Page = () => {
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
                         {/* this image needs to be filled with the target user */}
-                        <Image
-                        width={100}
-                        height={100}
+                        <img
                           className="shadow-md rounded-full w-full h-full object-cover"
                           src={
                             (targetUser && targetUser.picture) ||

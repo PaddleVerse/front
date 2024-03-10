@@ -1,3 +1,5 @@
+import Image from "next/image";
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
