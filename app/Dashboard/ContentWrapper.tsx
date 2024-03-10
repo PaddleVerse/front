@@ -61,7 +61,7 @@ function ContentWrapper({ children }: Props) {
       }
       else
         router.push('/');
-    }, []);
+    }, [router]);
 
   return (
     <GlobalStateProvider>

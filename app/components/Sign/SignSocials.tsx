@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Montserrat } from 'next/font/google';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -24,13 +25,13 @@ const SignSocials = () => {
       <Button
         onClick={handleGoogle}
         className="bg-white text-gray-500 flex items-center justify-center gap-2 text-[13px] sm:text-[16px] rounded-sm h-[41px] sm:h-[50px] hover:opacity-95 hover:bg-white cursor-pointer">
-        <img src="Google Logo.svg" alt="google image" />
+        <Image src="Google Logo.svg" alt="google image" width={100} height={100} />
         continue with Google
       </Button>
       <Button 
         onClick={handle42}
         className="bg-black text-white flex items-center justify-center gap-2 text-[13px] sm:text-[16px] rounded-sm h-[41px] sm:h-[50px]  hover:opacity-95 hover:bg-black cursor-pointer">
-        <img src="/Apple Logo.svg" className="w-5" />
+        <Image alt='42' src="/Apple Logo.svg" className="w-5"  width={100} height={100}/>
         continue with 42
       </Button>
     </div>

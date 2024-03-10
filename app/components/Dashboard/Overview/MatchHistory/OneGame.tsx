@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
@@ -10,31 +11,31 @@ const OneGame = ({status}:{status:string}) => {
       <div className="w-full px-7 h-[50px] mt-[25px] bg-transparent flex justify-between"
 
       >
-        <span className={`${status === "win" ? "text-green-700" : "text-progressIndicator"} text-[10px]`}>23:32, Wed, Dec 6</span>
+        <span className={`${status === "win" ? "text-red-500" : "text-red-500/[0.5]"} text-[10px]`}>23:32, Wed, Dec 6</span>
         <div className="flex gap-2 self-end text-xs mr-10">
           <div className="flex items-center gap-2 text-white">
             <span>me</span>
-            <img src={image} alt="player1" className="w-5 h-5 rounded-full" />
+            <Image src={image} alt="player1" className="w-5 h-5 rounded-full" width={100} height={100} />
             <div className="flex flex-col relative">
               <span className="absolute text-[8px] right-[16px] top-[-15px]">
                 13:37
               </span>
-              <div className={`${status === "win" ? "bg-green-700" : "bg-progressIndicator"} text-white  rounded-sm flex items-center px-4 text-sm`}>
+              <div className={`${status === "win" ? "bg-red-500" : "bg-red-500/[0.5]"} text-white  rounded-sm flex items-center px-4 text-sm`}>
                 <span>2</span>
                 <span> - </span>
                 <span>5</span>
               </div>
             </div>
-            <img src={image2} alt="player2" className="w-5 h-5 rounded-full" />
+            <Image src={image2} alt="player2" className="w-5 h-5 rounded-full"  width={100} height={100}/>
             <span>you</span>
           </div>
         </div>
-        <div className={`${status === "win" ? "bg-green-700" : "bg-progressIndicator"} text-white  rounded-sm flex items-center px-4 sm:text-md sm:h-[29px] h-[22px] text-[12px]`}>
+        <div className={`${status === "win" ? "bg-red-500" : "bg-red-500/[0.5]"} text-white  rounded-sm flex items-center px-4 sm:text-md sm:h-[29px] h-[22px] text-[12px]`}>
           <span>{status === 'win' ? 'WIN' : 'LOST'}</span>
         </div>
       </div>
       <div className="flex w-full justify-center mt-1">
-        <hr className={`${status === "win" ? "border-green-700" :  "border-progressIndicator"} w-[95%] `} />
+        <hr className={`${status === "win" ? "border-red-500" :  "border-red-500/[0.5]"} w-[95%] `} />
       </div>
     </div>
   );

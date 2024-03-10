@@ -21,14 +21,6 @@ const Sidebar = ({current, setCurrent} : any) => {
                 Security
               </button>
           </li>
-          <li>
-              <button 
-                onClick={() => setCurrent('Preferences')}
-                className={`hover:bg-[#5b565453] lg:px-10 lg:text-lg px-5 text-sm py-2 rounded-3xl transition duration-200 ${current === 'Preferences' ? 'bg-[#5b565453]' : ''}`}
-              >
-                Preferences
-              </button>
-          </li>
         </ul>
       </nav>
     </div>

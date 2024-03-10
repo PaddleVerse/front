@@ -3,6 +3,7 @@ import React from "react";
 import FormElement from "./FormElement";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 interface Props {
   user : any
 }
@@ -21,7 +22,9 @@ const LeaderRow = ({user}: Props) => {
         {user.id}
       </td>
       <td className="sm:py-[7px] text-[13px] flex items-center gap-2 font-[500] text-center">
-        <img
+        <Image
+          width={100}
+          height={100}
           src={user.picture}
           alt="image"
           className="w-6 h-7 rounded-full object-cover md:w-7 sm:mt-0 mt-[8px]"

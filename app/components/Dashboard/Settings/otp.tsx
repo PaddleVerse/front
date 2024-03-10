@@ -22,11 +22,13 @@ export default function EnterCode({ register, isError , reset}: any) {
         });
         inputRefs[0].current.focus();
         setCode('');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     } , [reset]);
 
     useEffect(() => {
         if (code?.length === 6)
             register('code', { value: code });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [code]);
     
 
@@ -94,7 +96,7 @@ export default function EnterCode({ register, isError , reset}: any) {
         <div className="flex gap-2 relative" onKeyDown={handleBackspace}>
             {[0, 1, 2, 3, 4, 5].map((index) => (
                 <input
-                    className={`text-2xl bg-gray-800 w-10 flex p-2 text-center text-white rounded-lg focus:outline-none ${isError ? errorClass : ''}`}
+                    className={`text-2xl bg-red-500/[0.2] w-10 flex p-2 text-center text-white rounded-lg focus:outline-none ${isError ? errorClass : ''}`}
                     key={index}
                     type="text"
                     maxLength={1}

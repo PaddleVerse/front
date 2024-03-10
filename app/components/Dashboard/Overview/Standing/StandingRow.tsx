@@ -10,7 +10,7 @@ const StandingRow = () => {
         1
       </th>
       <td className="py-2 text-[10px] flex items-center gap-2">
-        <img src={image} alt="image" className="w-4 rounded-full md:w-5" />
+        <Image src={image} alt="image" className="w-4 rounded-full md:w-5" width={100} height={100} />
         <span className="inline lg:hidden xl:inline ">Leo abdelmottalib</span>
       </td>
       <td className=" py-2 xl:pl-[4px] 2xl:pl-0">6</td>

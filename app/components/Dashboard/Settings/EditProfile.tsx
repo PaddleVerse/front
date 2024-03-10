@@ -80,7 +80,7 @@ const EditProfile = () => {
 
 
   return (
-    <div className='flex mx-20 my-20 flex-col w-full'>
+    <div className='flex flex-col w-full'>
       <div className='flex flex-col gap-2 justify-start'>
         <h1 className='text-xl text-white font-light'> Account </h1>
         <p className='text-[#c2c2c2] text-sm font-light'>Information necessary for your account</p>
@@ -119,7 +119,7 @@ const EditProfile = () => {
               <input
                 type='text'
                 placeholder='Name'
-                className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
+                className='bg-[#7d7d7d9b] px-4 py-2 rounded-2xl text-white font-light w-full focus:outline-none focus:ring-red-400/[0.5]'
                 {...register('name')}
               />
             </div>
@@ -128,7 +128,7 @@ const EditProfile = () => {
               <input
                 type='text'
                 placeholder='Nickname'
-                className='bg-gray-800 px-4 py-2 rounded-2xl text-white font-light w-full'
+                className='bg-[#7d7d7d9b] px-4 py-2 rounded-2xl text-white font-light w-full focus:outline-none focus:ring-red-400/[0.5]'
                 {...register('nickname')}
               />
             </div>
