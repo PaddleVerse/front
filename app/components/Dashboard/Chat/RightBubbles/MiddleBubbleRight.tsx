@@ -1,12 +1,10 @@
 import React from "react";
 
-
-
-const MiddleBubbleRight = () => {
+const MiddleBubbleRight = (props: any) => {
   return (
-    <div className="flex items-center flex-row-reverse group">
-      <p className="px-6 py-3 rounded-lg bg-green-800 max-w-xs lg:max-w-md">
-        Shall we go for Hiking this weekend?
+    <div className="flex items-center group justify-end">
+      <p className="px-6 py-3 rounded-lg bg-green-800 max-w-xs lg:max-w-md text-white">
+        {props.message}
       </p>
     </div>
   );
