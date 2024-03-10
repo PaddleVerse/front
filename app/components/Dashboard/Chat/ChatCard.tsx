@@ -41,9 +41,7 @@ export const ChatCard = (props: any) => {
       }}
     >
       <div className="sm:w-12 sm:h-12 h-16 w-16 relative flex flex-shrink-0">
-        <Image
-          width={100}
-          height={100}
+        <img
           className="shadow-md rounded-full w-full h-full object-cover"
           src={
             props.value.picture ||
