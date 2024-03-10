@@ -24,6 +24,7 @@ import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
 import { sendError } from "next/dist/server/api-utils";
+import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,7 +51,7 @@ const Page = () => {
   const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
-
+  const [modlar, setModlar] = useState(false);
   useEffect(() => {
     if (globalState.state.user) {
       axios
@@ -224,9 +225,14 @@ const Page = () => {
     setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
+  const handleClick = (e: any) => {
+    setModlar(false);
+  }
+
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
+        {modlar && <JoinChannel handleClick={handleClick}/>}
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
@@ -245,6 +251,7 @@ const Page = () => {
                   ></div>
                   <p
                     className={`text-2xl font-bold hidden md:block group-hover:block`}
+                    onClick={() => setModlar(true)}
                   >
                     Messenger
                   </p>
