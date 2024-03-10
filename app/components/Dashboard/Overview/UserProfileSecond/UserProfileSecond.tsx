@@ -18,12 +18,12 @@ const UserProfileSecond = ({user} : any) => {
       }}
     >
       <div className=" w-full h-full relative flex flex-col gap-5  rounded-md">
-        <PinContainer
-          title="Overview"
-          href="https://twitter.com/mannupaaji"
-        >
           <div className="w-full  h-[290px] relative">
-            <div className="overflow-hidden h-full w-full">
+          <PinContainer
+            title="Overview"
+            href="https://twitter.com/mannupaaji"
+          >
+            <div className="overflow-hidden h-[290px] w-full">
               <Image
                 src={user.banner_picture ? user.banner_picture : "/car1.jpg"}
                 fill
@@ -34,6 +34,7 @@ const UserProfileSecond = ({user} : any) => {
                 className="z-[-1]"
               />
             </div>
+          </PinContainer>
           <div
             className="2xl:w-[170px] xl:w-[120px] xl:h-[200px] absolute 2xl:h-[250px]  bg-transparent rounded-md 2xl:-bottom-[120px] 2xl:left-[100px] p-2 text-white sm:bottom-[10px] sm:left-[50px] sm:w-[110px] sm:h-[170px] bottom-[10px] left-[20px] w-[80px] h-[150px]"
             style={{
@@ -68,7 +69,6 @@ const UserProfileSecond = ({user} : any) => {
             </div>
           </div>
           </div>
-        </PinContainer>
               
           <div className="w-full  border-red-500  flex sm:flex-row flex-col sm:flex-wrap justify-between sm:gap-0 gap-5">
           <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex h-[250px]">

@@ -7,7 +7,7 @@ import { useGlobalState } from '../../Sign/GlobalState';
 
 const SearchBarPop = () => {
     const router = useRouter();
-    const {state} = useGlobalState();
+    const { state } = useGlobalState();
     const { user } = state;
 
     const [isfocus , setIsFocus] = useState(false);
@@ -84,7 +84,7 @@ const SearchBarPop = () => {
                     <h1 className='text-white text-xl my-4 ml-2'>{title}</h1>
                     <div className='flex justify-start items-start flex-wrap'>
                         { filteredUsers && filteredUsers?.map((user : any) => (
-                            <UserSearchCard user={user} key={user.id} handleClick={handleclick}/>
+                            <UserSearchCard user={user} key={user?.id} handleClick={handleclick}/>
                         ))
                         }
                     </div>

@@ -138,7 +138,6 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                     borderRadius="1.75rem"
                     borderClassName={status === "ACCEPTED" ? "bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]" : ""}
                     className={`text-white border-slate-800 w-full sm:mt-0 mt-4  ${status === "PENDING" ? "bg-slate-800" : status === "ACCEPTED"  ? "bg-red-600/[0.3]"  : ""}`}
-                    // className={` w-full h-auto sm:mt-0 mt-4 rounded-md ${status === "PENDING" ? "bg-gray-700" : status === "ACCEPTED"  ? "bg-red-900" : status === "BLOCKED" ? "hidden" : "bg-greenButton"} flex items-center justify-center 2xl:text-[24px] xl:text[22px] text-white font-[500] ${rajdhani.className} `}
                   >
                     {
                       status && status === "PENDING" ? "PENDING"
@@ -149,7 +148,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
               }
             </div>
           </div>
-          <div className="2xl:w-[30%] sm:w-[100%] border h-[250px]"></div>
+          <div className="2xl:w-[30%] sm:w-[100%] border h-[200px]"></div>
         </div>
   )
 }

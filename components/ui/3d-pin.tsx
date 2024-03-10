@@ -30,7 +30,7 @@ export const PinContainer = ({
     return (
         <div
             className={cn(
-                "relative min-w-full group/pin z-50  cursor-pointer",
+                "relative min-w-full group/pin z-0  cursor-pointer",
                 containerClassName
             )}
             onMouseEnter={onMouseEnter}
@@ -77,7 +77,7 @@ export const PinPerspective = ({
               {title}
             </span>
 
-                        <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-emerald-400/0 via-emerald-400/90 to-emerald-400/0 transition-opacity duration-500 group-hover/btn:opacity-40"></span>
+                        <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-red-400/0 via-red-400/90 to-red-400/0 transition-opacity duration-500 group-hover/btn:opacity-40"></span>
                     </a>
                 </div>
 
@@ -153,10 +153,10 @@ export const PinPerspective = ({
                 </div>
 
                 <>
-                    <motion.div className="absolute right-1/2 bottom-1/2 bg-gradient-to-b from-transparent to-cyan-500 translate-y-[14px] w-px h-20 group-hover/pin:h-40 blur-[2px]" />
-                    <motion.div className="absolute right-1/2 bottom-1/2 bg-gradient-to-b from-transparent to-cyan-500 translate-y-[14px] w-px h-20 group-hover/pin:h-40  " />
-                    <motion.div className="absolute right-1/2 translate-x-[1.5px] bottom-1/2 bg-cyan-600 translate-y-[14px] w-[4px] h-[4px] rounded-full z-40 blur-[3px]" />
-                    <motion.div className="absolute right-1/2 translate-x-[0.5px] bottom-1/2 bg-cyan-300 translate-y-[14px] w-[2px] h-[2px] rounded-full z-40 " />
+                    <motion.div className="absolute right-1/2 bottom-1/2 bg-gradient-to-b from-transparent to-red-500 translate-y-[14px] w-px h-20 group-hover/pin:h-40 blur-[2px]" />
+                    <motion.div className="absolute right-1/2 bottom-1/2 bg-gradient-to-b from-transparent to-red-500 translate-y-[14px] w-px h-20 group-hover/pin:h-40  " />
+                    <motion.div className="absolute right-1/2 translate-x-[1.5px] bottom-1/2 bg-red-600 translate-y-[14px] w-[4px] h-[4px] rounded-full z-40 blur-[3px]" />
+                    <motion.div className="absolute right-1/2 translate-x-[0.5px] bottom-1/2 bg-red-300 translate-y-[14px] w-[2px] h-[2px] rounded-full z-40 " />
                 </>
             </div>
         </motion.div>
