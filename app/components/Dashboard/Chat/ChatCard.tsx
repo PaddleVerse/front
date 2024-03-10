@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 import Image from "next/image";
 import React from "react";
-=======
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
->>>>>>> d80a596a4f0a4f250ad295e55bccb37e2d845e4b
 
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message[] | null>();

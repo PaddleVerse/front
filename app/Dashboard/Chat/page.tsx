@@ -10,14 +10,6 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoCameraOutline } from "react-icons/io5";
 import { PiMicrophoneLight } from "react-icons/pi";
 import { IoSendOutline } from "react-icons/io5";
-<<<<<<< HEAD
-import { TbSend } from "react-icons/tb";
-import Image from "next/image";
-
-const inter = Inter({ subsets: ["latin"] });
-
-const page = () => {
-=======
 import {
   FormEvent,
   FormEventHandler,
@@ -233,7 +225,6 @@ const Page = () => {
     return (e: FormEvent<HTMLFormElement>) => {};
   };
 
->>>>>>> d80a596a4f0a4f250ad295e55bccb37e2d845e4b
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
@@ -304,23 +295,6 @@ const Page = () => {
                     })}
                 </div>
               </section>
-<<<<<<< HEAD
-              <section className="flex flex-col flex-auto border-l border-gray-800">
-                <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
-                  <div className="flex">
-                    <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                      <Image
-                        width={100}
-                        height={100}
-                        className="shadow-md rounded-full w-full h-full object-cover"
-                        src="https://randomuser.me/api/portraits/women/33.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="text-sm">
-                      <p className="font-bold">Scarlett Johansson</p>
-                      <p className="text-green-500">Online</p>
-=======
               {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
                 <section className="flex flex-col flex-auto border-l border-gray-800">
@@ -358,7 +332,6 @@ const Page = () => {
                           </p>
                           )}*/}
                       </div>
->>>>>>> d80a596a4f0a4f250ad295e55bccb37e2d845e4b
                     </div>
 
                     <div className="flex items-center">
@@ -372,62 +345,6 @@ const Page = () => {
                         <IoIosInformationCircleOutline className="w-full h-full text-green-500" />
                       </div>
                     </div>
-<<<<<<< HEAD
-                    <div
-                      className="block rounded-full  w-6 h-6 ml-4"
-                    >
-                      <IoVideocamOutline className="w-full h-full text-green-500" />
-                    </div>
-                    <div
-                      className="block rounded-full  w-6 h-6 ml-4"
-                    >
-                     <IoIosInformationCircleOutline className="w-full h-full text-green-500" />
-                    </div>
-                  </div>
-                </div>
-                <div className="chat-body p-4 flex-1 overflow-y-scroll">
-                  <div className="flex flex-row justify-start">
-                    <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
-                      <Image
-                        width={100}
-                        height={100}
-                        className="shadow-md rounded-full w-full h-full object-cover"
-                        src="https://randomuser.me/api/portraits/women/33.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                      <MiddleBuble />
-                    </div>
-                  </div>
-                  <p className="p-4 text-center text-sm text-gray-500">
-                    FRI 3:04 PM
-                  </p>
-                  <div className="flex flex-row justify-end">
-                    <div className="messages text-sm text-white grid grid-flow-row gap-2">
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                      <MiddleBubbleRight />
-                    </div>
-                  </div>
-                  <p className="p-4 text-center text-sm text-gray-500">
-                    SAT 2:10 PM
-                  </p>
-                  <div className=" text-sm text-gray-700 grid grid-flow-row gap-2">
-                    <MiddleBuble />
-=======
->>>>>>> d80a596a4f0a4f250ad295e55bccb37e2d845e4b
                   </div>
                   <div
                     className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar"
@@ -474,49 +391,6 @@ const Page = () => {
                         : "No messages yet"}
                     </p>
                   </div>
-<<<<<<< HEAD
-                </div>
-                <div className="chat-footer flex-none">
-                  <div className="flex flex-row items-center p-4">
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6 "
-                    >
-                      <CiCirclePlus className="w-full h-full" />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
-                    >
-                      <MdOutlineAddPhotoAlternate className="w-full h-full" />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
-                    >
-                      <IoCameraOutline className="w-full h-full" />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
-                    >
-                      <PiMicrophoneLight className="w-full h-full" />
-                    </button>
-                    <div className="relative flex-grow">
-                      <label>
-                        <input
-                          className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
-                          type="text"
-                          placeholder="Aa"
-                        />
-                        <button
-                          type="button"
-                          className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none text-green-600 hover:text-green-700 w-6 h-6"
-                        >
-                        <IoSendOutline className="w-full h-full" />
-                        </button>
-                      </label>
-=======
                   <div className="chat-footer flex-none">
                     <div className="flex flex-row items-center p-4">
                       <button
@@ -560,7 +434,6 @@ const Page = () => {
                           </button>
                         </form>
                       </div>
->>>>>>> d80a596a4f0a4f250ad295e55bccb37e2d845e4b
                     </div>
                   </div>
                 </section>
