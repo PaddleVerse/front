@@ -394,7 +394,7 @@ const Page = () => {
                             {...(register("inputMessage"), { required: true })}
                           />
                           <button
-                            type="button"
+                            type="submit"
                             className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none  text-white hover:text-gray-300 w-6 h-6 "
                           >
                             <IoSendOutline className="w-full h-full " />

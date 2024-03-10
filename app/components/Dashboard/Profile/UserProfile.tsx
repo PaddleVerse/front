@@ -165,7 +165,7 @@ const UserProfile = ({target} : any) => {
 
   return (
     <div
-      className=" p-4 bg-transparent rounded-md "
+      className="p-4 bg-transparent rounded-md "
       style={{
         backdropFilter: "blur(10px)",
         backgroundColor: "rgba(13, 9, 10, 0.3)",
@@ -189,7 +189,7 @@ const UserProfile = ({target} : any) => {
                 />
             </div>
           </PinContainer>
-          <div className="absolute top-0 right-0 p-4 z-10 mt-6 mr-2"> 
+          <div className="absolute top-0 right-0 p-4 z-10 mt-9 mr-2"> 
             <Dropdown handleBlock={() => blockUser("blockFriend")} handleUnblock={() => blockUser("unblockFriend")} status={status} recv={recv} />
           </div>
           <div

@@ -40,7 +40,7 @@ export const Tabs = ({
     <>
       <div
         className={cn(
-          "flex flex-row items-center justify-start [perspective:1000px] mx-4 mt-10 relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
+          "flex flex-row items-center justify-start [perspective:1000px] ml-8 mt-4 relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
           containerClassName
         )}
       >
@@ -79,7 +79,7 @@ export const Tabs = ({
         active={active}
         key={active.value}
         hovering={hovering}
-        className={cn("mt-8", contentClassName)}
+        className={cn("mt-4", contentClassName)}
       />
     </>
   );
@@ -100,7 +100,7 @@ export const FadeInDiv = ({
     return tab.value === tabs[0].value;
   };
   return (
-    <div className="relative w-full h-full mx-4">
+    <div className="relative w-[98%] h-[90%]">
       {tabs.map((tab, idx) => (
         <motion.div
           key={tab.value}
