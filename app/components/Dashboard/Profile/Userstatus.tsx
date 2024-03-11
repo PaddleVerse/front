@@ -45,7 +45,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center justify-center mb-10 w-full">
+              <div className="flex flex-row items-center justify-center w-full">
                 <AnimatedTooltip items={linkedFriends} />
               </div>
             </div>

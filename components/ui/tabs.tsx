@@ -52,7 +52,7 @@ export const Tabs = ({
             }}
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
-            className={cn("relative px-4 py-2 rounded-full", tabClassName)}
+            className={cn("relative px-4 py-2 mt-4 rounded-full", tabClassName)}
             style={{
               transformStyle: "preserve-3d",
             }}
@@ -62,7 +62,7 @@ export const Tabs = ({
                 layoutId="clickedbutton"
                 transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
                 className={cn(
-                  "absolute inset-0 bg-blurredRed rounded-full ",
+                  "absolute inset-0 bg-black rounded-full ",
                   activeTabClassName
                 )}
               />

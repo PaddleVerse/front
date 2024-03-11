@@ -71,7 +71,7 @@ const SearchBarPop = () => {
   return (
     <div className=' flex justify-center items-center flex-col'>
         <input
-            className='w-[90%] h-14 p-6 text-sm text-white rounded-xl mt-10 bg-[#434343d9] shadow-xl focus:outline-none focus:ring-[1px] focus:ring-red-400/[0.5] transition duration-300 ease-in-out'
+            className='w-[90%] z-40 h-14 p-6 text-sm text-white rounded-xl mt-10 bg-[#434343d9] shadow-xl focus:outline-none focus:ring-[1px] focus:ring-red-400/[0.5] transition duration-300 ease-in-out'
             type='text'
             placeholder='Look for other gamers!'
             onFocus={() => setIsFocus(true)}

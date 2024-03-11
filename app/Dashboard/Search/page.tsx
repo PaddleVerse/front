@@ -49,7 +49,7 @@ const Search = () => {
   }
 
   return (
-    <div className='relative container mx-auto max-w-auto overflow-y-auto'>
+    <div className='relative container mx-auto max-w-auto overflow-y-auto z-40'>
       <SearchBarPop />
       <div className='mt-20'>
         <h1 className='text-3xl text-white mt-10 font-mono'>RECOMMENDED</h1>
