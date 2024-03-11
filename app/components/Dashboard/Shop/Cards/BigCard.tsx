@@ -14,15 +14,15 @@ const inter = Inter({
 
 interface Infos {
   title: string;
+  image: string;
   description: string;
 }
 interface BigCardProps {
   infos: Infos;
   selected: string;
-  element: string;
   handleClick: (infos: Infos) => void;
 }
-const BigCard = ({ infos, handleClick, selected, element }: BigCardProps) => {
+const BigCard = ({ infos, handleClick, selected}: BigCardProps) => {
   const handleCardClick = () => {
     setHover(true);
     handleClick(infos);
@@ -44,17 +44,17 @@ const BigCard = ({ infos, handleClick, selected, element }: BigCardProps) => {
     >
       <Image
         src={`${
-          element === "first"
+          infos.image === "first"
             ? imageUrls.first
-            : element === "second"
+            : infos.image === "second"
             ? imageUrls.second
             : imageUrls.third
         }`}
         alt="shop"
         fill
+        sizes="width:auto height:auto"
         priority
         className="object-cover object-center"
-        // sizes="(max-width: 100px) 100vw, 33vw"
         onClick={handleCardClick}
       />
       <motion.div

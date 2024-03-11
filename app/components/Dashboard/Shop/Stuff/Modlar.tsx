@@ -12,23 +12,30 @@ const rajdhani = Rajdhani({
   weight: ["400", "500", "600", "700"],
 });
 
-
 interface Infos {
   title: string;
+  image: string;
   description: string;
 }
 
 const Modlar = ({
   infos,
+  selected,
   handleClick,
 }: {
   infos: Infos;
   handleClick: (infos: null) => void;
+  selected: string;
 }) => {
+  const imageUrls = {
+    first: `/${selected}/first.png`,
+    second: `/${selected}/second.png`,
+    third: `/${selected}/third.png`,
+  };
   return (
     <motion.div
       className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-10"
-      initial={{ opacity: 0, scale: 0.75  }}
+      initial={{ opacity: 0, scale: 0.75 }}
       animate={{
         opacity: 1,
         scale: 1,
@@ -51,21 +58,24 @@ const Modlar = ({
         // style={{ minWidth: 0, maxWidth: "80vw", maxHeight: "80vh" }}
       >
         <div className="relative">
-          <img
+          <Image
             src={`${
-              infos.title === "Galactic Spinner"
-                ? "/shop1Crop.png"
-                : infos.title === "Ocean whisper"
-                ? "/shop3Crop.png"
-                : "/shop2Crop.png"
+              infos.image === "first"
+                ? imageUrls.first
+                : infos.image === "second"
+                ? imageUrls.second
+                : imageUrls.third
             }`}
-            className="xl:w-[350px] md:w-[200px] w-[150px]  "
             alt="shop"
+            sizes="width:auto height:auto"
+            width={700}
+            height={400}
+            priority
+            className="object-cover object-center"
+            // sizes="(max-width: 100px) 100vw, 33vw"
           />
         </div>
-        <div
-          className={`flex flex-col ${rajdhani.className}  justify-between`}
-        >
+        <div className={`flex flex-col ${rajdhani.className}  justify-between`}>
           <div>
             <h1 className="xl:text-[31px] text-[18px] font-[600]">
               {infos.title}

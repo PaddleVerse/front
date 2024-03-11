@@ -14,7 +14,7 @@ const Header = ({onSelect}:{onSelect:(e:string)=>void}) => {
 
   return (
     <div
-      className="h-[61px] pl-2 rounded-lg w-full grid place-items-start items-center border text-white bg-transparent"
+      className="h-[61px] pl-2 rounded-lg w-full grid place-items-start items-center  text-white bg-transparent"
       style={{
         backdropFilter: "blur(7px)",
         backgroundColor: "rgba(13, 9, 10, 0.7)",
