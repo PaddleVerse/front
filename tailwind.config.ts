@@ -41,6 +41,7 @@ module.exports = {
       },
       colors: {
         colorr: '#181818',
+        shopButton:"#393434",
         greenButton:'#124607',
 
         leaderboarddiv:"#252728",
