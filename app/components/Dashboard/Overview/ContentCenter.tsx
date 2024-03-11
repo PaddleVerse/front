@@ -27,7 +27,7 @@ const ContentCenter = () => {
               </div>
               {/* <div className="w-full h-[49%] border border-green-500"></div> */}
 
-            </div>
+            </div>``
           </div>
         </div>
         <div className="flex flex-col xl:w-[20%] gap-7">

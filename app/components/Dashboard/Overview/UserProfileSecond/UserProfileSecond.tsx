@@ -69,7 +69,7 @@ const UserProfileSecond = ({ user }: any) => {
           </div>
         </div>
 
-        <div className="w-full  border-red-500   flex sm:flex-row flex-col sm:flex-wrap justify-between sm:gap-0 gap-5">
+        <div className="w-full   border-red-500   flex sm:flex-row flex-col sm:flex-wrap 2xl:mt-0 mt-2 justify-between sm:gap-2 gap-5">
           <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex h-[250px]">
             <div
               className="w-full  border-green-500  2xl:self-end 2xl:h-[55%] lg:h-[100%] items-center py-2 px-4 bg-transparent  flex justify-between rounded-md 2xl:flex-row"
@@ -112,6 +112,10 @@ const UserProfileSecond = ({ user }: any) => {
           </div>
           <div
             className={`2xl:w-[30%] p-5 text-white ${rajdhani.className} bg-dashBack sm:w-[100%]  rounded-lg h-[250px] flex flex-col gap-4`}
+            style={{
+              backdropFilter: "blur(10px)",
+              backgroundColor: "rgba(13, 9, 10, 0.3)",
+            }} 
           >
             <h1 className="2xl:text-3xl xl:text-2xl text-xl font-[600]">TOP 3 FRIENDS</h1>
             <div className="flex flex-col gap-1">
