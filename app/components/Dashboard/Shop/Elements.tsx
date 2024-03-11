@@ -59,7 +59,7 @@ const Elements = () => {
       <div className=" flex flex-col gap-5 w-[89%] mt-[50px]">
         <Header onSelect={handleHeaderSelect} />
         <div
-          className="w-full rounded-md bg-transparent 2xl:h-[1000px] sm:h-[950px] flex flex-col overflow-y-auto no-scrollbar"
+          className="w-full rounded-xl bg-transparent pb-10  flex flex-col overflow-y-auto no-scrollbar"
           style={{
             backdropFilter: "blur(20px)",
             backgroundColor: "rgba(13, 9, 10, 0.7)",
