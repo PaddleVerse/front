@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+'use client'
+import React, { useEffect } from "react";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import Coin from "../Stuff/Coin";
@@ -17,30 +18,41 @@ interface Infos {
 }
 interface BigCardProps {
   infos: Infos;
+  selected: string;
+  element: string;
   handleClick: (infos: Infos) => void;
 }
-const BigCard = ({ infos, handleClick }: BigCardProps) => {
+const BigCard = ({ infos, handleClick, selected, element }: BigCardProps) => {
   const handleCardClick = () => {
     setHover(true);
     handleClick(infos);
   };
   const [hover, setHover] = React.useState(false);
+  useEffect(() => {
+    console.log(selected);
+  },[]);
+  const imageUrls = {
+    first: `/${selected}/first.png`,
+    second: `/${selected}/second.png`,
+    third: `/${selected}/third.png`,
+  };
   return (
     <div
       className={`w-[100%] h-[375px] bg-white relative text-white ${inter.className} cursor-pointer `}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      <img
+      <Image
         src={`${
-          infos.title === "Galactic Spinner"
-            ? "/shop1.png"
-            : infos.title === "Ocean whisper"
-            ? "/shop3.png"
-            : "/shop2.png"
+          element === "first"
+            ? imageUrls.first
+            : element === "second"
+            ? imageUrls.second
+            : imageUrls.third
         }`}
-        className="w-full h-[100%] object-cover"
         alt="shop"
+        layout="fill"
+        objectFit="cover"
         onClick={handleCardClick}
       />
       <motion.div

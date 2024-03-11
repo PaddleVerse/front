@@ -36,6 +36,7 @@ const Elements = () => {
     setModelarOpen(!modelarOpen);
   };
   const [BigCardinfos, setBigCardInfos] = useState<Infos[]>(infos);
+  const [selected, setSelected] = useState<string>('Paddle');
   const [modelarOpen, setModelarOpen] = React.useState(false);
   const [modelarInfos, setModelarInfos] = React.useState({
     title: "",
@@ -43,6 +44,7 @@ const Elements = () => {
   });
   const handleHeaderSelect = (element:string) => {
     console.log(element);
+    setSelected(element);
     const selectedElement = cardsData[element as keyof typeof cardsData];
     const bigCardInfos = Object.values(selectedElement.bigCard);
     setBigCardInfos(bigCardInfos);
@@ -59,9 +61,9 @@ const Elements = () => {
       >
         <div className="flex flex-col w-full h-full relative 2xl:px-[65px] xl:px-[35px] sm:px-[20px] px-[10px]">
           <div className="w-full grid grid-flow-col-1 gap-7 sm:grid-cols-3 place-items-center mt-6">
-            <BigCard infos={BigCardinfos[0]} handleClick={handleClick} />
-            <BigCard infos={BigCardinfos[1]} handleClick={handleClick} />
-            <BigCard infos={BigCardinfos[2]} handleClick={handleClick} />
+            <BigCard infos={BigCardinfos[0]} handleClick={handleClick} selected={selected} element={'first'}/>
+            <BigCard infos={BigCardinfos[1]} handleClick={handleClick} selected={selected} element={'second'} />
+            <BigCard infos={BigCardinfos[2]} handleClick={handleClick} selected={selected} element={'third'} />
           </div>
           <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-5 place-items-center mt-6">
             {Array.from({ length: 8 }, (_, index) => (
