@@ -19,21 +19,15 @@ const ContentCenter = () => {
       <div className="xl:flex-row w-[94%] flex flex-col gap-7">
         <div className="flex flex-col w-full gap-8 pb-[150px]">
           {user &&  <UserProfileSecond user={user}/>}
-          {/* <div className="flex gap-4"> */}
             <MatchHistory />
-            {/* <div className="w-full h-[49%] flex  border-red-500">
+            <div className="w-full h-[450px] flex  border-red-500">
               <Items/>
-            </div> */}
-            {/* <div className=" flex-col h-700px  flex-1 xl:flex hidden gap-4">
-            </div> */}
-              {/* <div className="w-full h-[49%] border border-green-500"></div> */}
-
+              <div className="w-[50%] border flex text-white text-4xl"> GRAPH</div>
+            </div>
           </div>
-        {/* </div> */}
         <div className="flex flex-col xl:w-[20%] gap-7">
           <Achievements />
           <Standing />
-          {/* <Graph /> */}
         </div>
       </div>
     </div>

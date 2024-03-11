@@ -36,7 +36,7 @@ const BigCard = ({ infos, handleClick, selected}: BigCardProps) => {
   };
   return (
     <div
-      className={`w-[100%] h-[375px] bg-white relative text-white ${inter.className} cursor-pointer `}
+      className={`w-[100%] h-[375px]  relative text-white ${inter.className} cursor-pointer rounded-lg `}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
@@ -52,7 +52,7 @@ const BigCard = ({ infos, handleClick, selected}: BigCardProps) => {
         fill
         sizes="width:auto height:auto"
         priority
-        className="object-cover object-center"
+        className="object-cover object-center rounded-lg "
         onClick={handleCardClick}
       />
       <motion.div
