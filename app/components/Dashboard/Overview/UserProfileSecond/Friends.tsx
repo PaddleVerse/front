@@ -22,7 +22,7 @@ const Friends = () => {
                 <p className='text-[11px]'>@konami</p>
             </div>
         </div>
-        <div className={`w-[25px] h-[25px] flex items-center justify-center text-white text-[15px] ${rubik.className} font-[400] rounded-full bg-[#BD3944]`}>#1</div>
+        <div className={`w-[25px] h-[25px] flex items-center justify-center text-white text-[11px] ${rubik.className} font-[400] rounded-full bg-[#BD3944]`}>#1</div>
     </div>
   )
 }
