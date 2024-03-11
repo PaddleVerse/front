@@ -1,6 +1,7 @@
 "use client";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
+import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { LuPhone } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
@@ -13,6 +14,7 @@ import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
   FormEventHandler,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -64,7 +66,22 @@ const Page = () => {
         });
     }
   }, [globalState, update]);
+  ///////////////////////////////////////////////////////////
+  //press escape to close the modal
+  const handleEscapeKeyPress = useCallback((e:any) => {
+    if (e.key === 'Escape') {
+      setModlar(false);
+    }
+  }, []);
 
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscapeKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKeyPress);
+    };
+  }, [handleEscapeKeyPress]);
+  ///////////////////////////////////////////////////////////
   useEffect(() => {
     globalState?.state?.socket?.on("ok", (data: any) => {
       if (data === null)
@@ -225,14 +242,16 @@ const Page = () => {
     setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
-  const handleClick = (e: any) => {
+  const handleClick = () => {
     setModlar(false);
   }
 
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
+      <AnimatePresence>
         {modlar && <JoinChannel handleClick={handleClick}/>}
+      </AnimatePresence>
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
