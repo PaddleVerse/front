@@ -7,11 +7,11 @@ const image2 =
   "https://img.pikbest.com/origin/09/26/71/799pIkbEsTSty.png!w700wp";
 const OneGame = ({status}:{status:string}) => {
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       <div className="w-full px-7 h-[50px] mt-[25px] bg-transparent flex justify-between"
 
       >
-        <span className={`${status === "win" ? "text-red-500" : "text-red-500/[0.5]"} text-[10px]`}>23:32, Wed, Dec 6</span>
+        <span className={`${status === "win" ? "text-green-500" : "text-red-500"} text-[10px]`}>23:32, Wed, Dec 6</span>
         <div className="flex gap-2 self-end text-xs mr-10">
           <div className="flex items-center gap-2 text-white">
             <span>me</span>
