@@ -17,7 +17,7 @@ const ContentCenter = () => {
   return (
     <div className="w-[100%] mt-[50px] flex flex-col gap-10 items-center">
       <div className="xl:flex-row w-[94%] flex flex-col gap-7">
-        <div className="flex flex-col w-full gap-8">
+        <div className="flex flex-col w-full gap-8 pb-[150px]">
           {user &&  <UserProfileSecond user={user}/>}
           {/* <div className="flex gap-4"> */}
             <MatchHistory />
