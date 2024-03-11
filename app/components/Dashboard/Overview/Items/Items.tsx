@@ -9,7 +9,7 @@ const rajdhani = Rajdhani({
 const Items = () => {
   return (
     <div
-      className="w-[50%] h-full bg-transparent rounded-md overflow-y-auto"
+      className="lg:w-[50%] w-full h-full bg-transparent rounded-md overflow-y-auto"
       style={{
         backdropFilter: "blur(20px)",
         backgroundColor: "rgba(13, 9, 10, 0.7)",
@@ -21,7 +21,7 @@ const Items = () => {
           <h1 className={`${rajdhani.className} text-[20px]`}>Items</h1>
         </div>
       </div>
-      <div className="grid p-4 2xl:grid-cols-10 xl:grid-cols-5 mt-2">
+      <div className="grid p-4 2xl:grid-cols-10  md:grid-cols-6 lg:grid-cols-5 grid-cols-4 mt-2">
         {Array.from({ length: 40 }, (_, index) => (
           <Image
             src="/badge2_c.png"
