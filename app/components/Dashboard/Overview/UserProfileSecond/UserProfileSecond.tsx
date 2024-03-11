@@ -4,7 +4,8 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import { PinContainer } from "@/components/ui/3d-pin";
 import Friends from "./Friends";
-
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 const inter = Inter({ subsets: ["latin"] });
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
 
@@ -110,18 +111,78 @@ const UserProfileSecond = ({ user }: any) => {
               {/* <div className="  2xl:w-[30%] w-full h-[40%] 2xl:h-auto bg-dashBack rounded-md border"></div> */}
             </div>
           </div>
+ 
           <div
-            className={`2xl:w-[30%] p-5 text-white ${rajdhani.className} bg-dashBack sm:w-[100%]  rounded-lg h-[250px] flex flex-col gap-4`}
+            className={`2xl:w-[30%] p-5 text-white ${rajdhani.className} bg-dashBack sm:w-[42%]  rounded-lg h-[250px] flex flex-col gap-4`}
             style={{
               backdropFilter: "blur(10px)",
               backgroundColor: "rgba(13, 9, 10, 0.3)",
-            }} 
+            }}
           >
-            <h1 className="2xl:text-3xl xl:text-2xl text-xl font-[600]">TOP 3 FRIENDS</h1>
+            <h1 className="2xl:text-3xl xl:text-2xl text-xl font-[600]">
+              TOP 3 FRIENDS
+            </h1>
             <div className="flex flex-col gap-1">
               <Friends />
               <Friends />
               <Friends />
+            </div>
+          </div>
+          <div
+            className={` 2xl:w-[30%] w-full flex flex-col rounded-lg text-3xl font-[600] text-white ${rajdhani.className} p-4`}
+            style={{
+              backdropFilter: "blur(10px)",
+              backgroundColor: "rgba(13, 9, 10, 0.3)",
+            }}
+          >
+            <h1 className="text-center">Lifetime Overview</h1>
+            <div className="w-full  flex mt-4 gap-6 justify-evenly items-center">
+              <div className="flex gap-4 items-center">
+                <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
+                  <CircularProgressbar
+                    value={66}
+                    text={`${66}%`}
+                    strokeWidth={16}
+                    styles={{
+                      path: {
+                        stroke: `#FF4654`,
+                      },
+                      text: {
+                        fill: '#FF4654',
+                        fontSize: '16px',
+                      },
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col text-[17px]">
+                  <span className="text-sm">1.65</span>
+                  <span className="text-sm">KDE/Ratio</span>
+                  <span className="text-sm">Top 2.5%</span>
+                </div>
+              </div>
+              <div className="flex gap-4 items-center">
+              <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
+                  <CircularProgressbar
+                    value={66}
+                    text={`${66}%`}
+                    strokeWidth={16}
+                    styles={{
+                      path: {
+                        stroke: `#FF4654`,
+                      },
+                      text: {
+                        fill: '#FF4654',
+                        fontSize: '16px',
+                      },
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col text-[17px]">
+                  <span className="text-sm">1.65</span>
+                  <span className="text-sm">KDE/Ratio</span>
+                  <span className="text-sm">Top 2.5%</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
