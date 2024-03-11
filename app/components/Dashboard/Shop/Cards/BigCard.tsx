@@ -5,8 +5,6 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import Coin from "../Stuff/Coin";
 import { motion } from "framer-motion";
-import { info } from "console";
-
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
