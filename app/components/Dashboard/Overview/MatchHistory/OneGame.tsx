@@ -20,7 +20,7 @@ const OneGame = ({status}:{status:string}) => {
               <span className="absolute text-[8px] right-[16px] top-[-15px]">
                 13:37
               </span>
-              <div className={`${status === "win" ? "bg-red-500" : "bg-red-500/[0.5]"} text-white  rounded-sm flex items-center px-4 text-sm`}>
+              <div className={`${status === "win" ? "bg-green-500" : "bg-red-500"} text-white  rounded-sm flex items-center px-4 text-sm`}>
                 <span>2</span>
                 <span> - </span>
                 <span>5</span>
@@ -30,12 +30,12 @@ const OneGame = ({status}:{status:string}) => {
             <span>you</span>
           </div>
         </div>
-        <div className={`${status === "win" ? "bg-red-500" : "bg-red-500/[0.5]"} text-white  rounded-sm flex items-center px-4 sm:text-md sm:h-[29px] h-[22px] text-[12px]`}>
+        <div className={`${status === "win" ? "bg-green-500" : "bg-red-500"} text-white  rounded-sm flex items-center px-4 sm:text-md sm:h-[29px] h-[22px] text-[12px]`}>
           <span>{status === 'win' ? 'WIN' : 'LOST'}</span>
         </div>
       </div>
       <div className="flex w-full justify-center mt-1">
-        <hr className={`${status === "win" ? "border-red-500" :  "border-red-500/[0.5]"} w-[95%] `} />
+        <hr className={`${status === "win" ? "border-green-500" :  "border-red-500"} w-[95%] `} />
       </div>
     </div>
   );
