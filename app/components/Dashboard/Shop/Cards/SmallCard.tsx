@@ -7,10 +7,9 @@ const SmallCard = () => {
     <div className="w-full h-[365px]  relative text-white cursor-pointer ">
       <Image
         src="/smallShop.png"
-        layout="fill"
-        objectFit="cover"
-        objectPosition="center"
+        fill
         alt="image"
+        className='object-cover'
       />
       <div className='absolute bottom-2 right-2'>
         <Coin size={'small'} />

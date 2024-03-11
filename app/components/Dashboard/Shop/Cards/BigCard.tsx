@@ -51,8 +51,10 @@ const BigCard = ({ infos, handleClick, selected, element }: BigCardProps) => {
             : imageUrls.third
         }`}
         alt="shop"
-        layout="fill"
-        objectFit="cover"
+        fill
+        priority
+        className="object-cover object-center"
+        // sizes="(max-width: 100px) 100vw, 33vw"
         onClick={handleCardClick}
       />
       <motion.div
