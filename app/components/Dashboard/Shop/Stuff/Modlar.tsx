@@ -35,26 +35,26 @@ const Modlar = ({
   return (
     <motion.div
       className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-10"
-      initial={{ opacity: 0, scale: 0.75 }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        transition: {
-          ease: "easeIn",
-          duration: 0.15,
-        },
-      }}
-      exit={{
-        opacity: 0,
-        scale: 0.75,
-        transition: {
-          ease: "easeIn",
-          duration: 0.15,
-        },
-      }}
-    >
+      >
       <motion.div
         className="bg-black rounded-lg flex justify-center p-[50px] text-white gap-8  relative"
+        initial={{ opacity: 0, scale: 0.75 }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          transition: {
+            ease: "easeIn",
+            duration: 0.15,
+          },
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.75,
+          transition: {
+            ease: "easeIn",
+            duration: 0.15,
+          },
+        }}
         // style={{ minWidth: 0, maxWidth: "80vw", maxHeight: "80vh" }}
       >
         <div className="relative">
