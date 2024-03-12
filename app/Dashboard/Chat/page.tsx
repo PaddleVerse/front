@@ -1,6 +1,7 @@
 "use client";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
+import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { LuPhone } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
@@ -13,6 +14,7 @@ import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
   FormEventHandler,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -23,6 +25,7 @@ import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
 import { sendError } from "next/dist/server/api-utils";
+import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,7 +52,7 @@ const Page = () => {
   const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
-
+  const [modlar, setModlar] = useState(false);
   useEffect(() => {
     if (globalState.state.user) {
       axios
@@ -68,7 +71,22 @@ const Page = () => {
       }
     }
   }, [globalState, update]);
+  ///////////////////////////////////////////////////////////
+  //press escape to close the modal
+  const handleEscapeKeyPress = useCallback((e:any) => {
+    if (e.key === 'Escape') {
+      setModlar(false);
+    }
+  }, []);
 
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscapeKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKeyPress);
+    };
+  }, [handleEscapeKeyPress]);
+  ///////////////////////////////////////////////////////////
   useEffect(() => {
     globalState?.state?.socket?.on("ok", (data: any) => {
       if (data === null) return;
@@ -228,9 +246,16 @@ const Page = () => {
     setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
+  const handleClick = () => {
+    setModlar(false);
+  }
+
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
+      <AnimatePresence>
+        {modlar && <JoinChannel handleClick={handleClick}/>}
+      </AnimatePresence>
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
@@ -242,9 +267,8 @@ const Page = () => {
           <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
               <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 no-scrollbar">
-          
-                <div className=" p-4 flex-none mt-4">
-                  <p className={`text-2xl font-bold hidden md:block group-hover:block mb-4`} >
+              <div className=" p-4 flex-none mt-4">
+                  <p className={`text-2xl font-bold hidden md:block group-hover:block mb-4`}>
                     Messages
                   </p>
                   <form onSubmit={(e) => e.preventDefault()}>
@@ -268,7 +292,7 @@ const Page = () => {
                   </form> 
                 </div>
                 <p className="ml-8">
-                    Join a <span className="text-sky-500">Public</span> Group Chat
+                    Join a <span onClick={() => setModlar(true)} className="text-sky-500 cursor-pointer">Public</span> Group Chat
                 </p>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"

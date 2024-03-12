@@ -12,6 +12,7 @@ const NotificationCard = (props : any) => {
     props.setOpen(false);
   }
 
+  
   const notificationTime = new Date(props.not?.createdAt);
 
   const now = new Date();

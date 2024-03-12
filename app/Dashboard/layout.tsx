@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
       <section
-        className={`${inter.className} w-screen h-screen bg-Dark bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
+        className={`${inter.className} w-screen h-screen  bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
       >
         <ContentWrapper>
           {children}
