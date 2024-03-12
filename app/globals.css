@@ -107,7 +107,6 @@ select:-webkit-autofill:focus {
   width: 5px;
 }
 
-
 /* tr td:first-child {
   -moz-border-radius-topleft: 8px;
   -moz-border-radius-bottomleft: 8px;
@@ -138,6 +137,7 @@ table tbody tr:last-child td:first-child {
 table tbody tr:last-child td:last-child {
   border-bottom-right-radius: 5px;
 }
+
 tbody:before {
   content:"@";
   display:block;
