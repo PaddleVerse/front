@@ -9,7 +9,7 @@ const rajdhani = Rajdhani({
 });
 const MatchHistory = () => {
   return (
-    <div className=" xl:w-[50%] w-full rounded-md bg-transparent overflow-y-auto h-[700px]"
+    <div className="   w-full rounded-md bg-transparent overflow-y-auto h-[700px]"
     style={{
       backdropFilter: "blur(20px)",
       backgroundColor: "rgba(13, 9, 10, 0.7)",

@@ -23,33 +23,34 @@ const LeaderTable = () => {
 
   return (
     <div className="">
-      <div className="relative  space-y-4">
+      <div className="relative ">
         <table
-          className={`${inter.className}  w-full  text-left text-white font-light border-separate border-spacing-y-2`}
+          className={`${inter.className}  w-full rounded-lg  text-left text-white font-light`}
+          // rules="none" 
         >
-          <thead className="text-xs sm:text-sm text-gray-400  bg-dashBack ">
+          <thead className="bg-[#202B43] text-xs sm:text-sm text-white">
             <tr>
-              <th scope="col" className="font-[300] sm:w-[3%] w-[7%] text-center">
-                #
+              <th scope="col" className="p-[5px] rounded-l-[8px]  sm:w-[7%] w-[7%] text-center">
+                Rank
               </th>
-              <th scope="col" className=" font-[300]">
-                User
+              <th scope="col" className="p-[5px] w-auto  ">
+                Player
               </th>
-              <th scope="col" className="font-[300] sm:w-[12%] sm:pl-[17px] pl-4">
+              <th scope="col" className="p-[5px]  sm:w-[5%] sm:pl-[17px] pl-4">
                 PL
               </th>
-              <th scope="col" className="font-[300] sm:w-[7%] sm:pl-[7px] pl-[5px] ">
+              <th scope="col" className="p-[5px]  text-[#15E5B4] sm:w-[5%] sm:pl-[7px] pl-[5px] ">
                 W
               </th>
-              <th scope="col" className="font-[300] sm:w-[7%] sm:pl-[7px] pl-[7px]">
+              <th scope="col" className="p-[5px]  sm:w-[5%] sm:pl-[7px] pl-[7px]">
                 L
               </th>
-              <th scope="col" className="font-[300] sm:w-[7%] sm:pl-[17px] pl-[14px]">
+              <th scope="col" className="p-[5px]  sm:w-[5%] sm:pl-[17px] pl-[14px] rounded-r-[8px]">
                 W/L
               </th>
-              <th scope="col" className="font-[300] xl:w-[31%] lg:w-[50%] md:w-[30%] w-[40%]">
+              {/* <th scope="col" className="p-[5px] font-[300] xl:w-[31%] rounded-r-lg lg:w-[50%] md:w-[30%] w-[40%]">
                 Form
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody className="">
