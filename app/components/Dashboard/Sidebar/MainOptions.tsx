@@ -44,7 +44,7 @@ const MainOptions = ({
           </motion.div>
 
           <motion.span
-            className="2xl:text-[15px] text-[13px]"
+            className="2xl:text-[18px] text-[13px]"
             initial={{ opacity: 1 }}
             animate={{ opacity: expanded ? 1 : 0 }}
             transition={{ duration: expanded ? 1.5 : 0.1 }}
