@@ -13,9 +13,16 @@ const MatchHistory_2 = () => {
     }}>
        <h1 className={`text-4xl font-semibold ${rajdhani.className}`}>All Matches</h1>
        <div className='w-full h-full flex flex-col gap-2'>
-        {Array(10).fill(10).map((_, i) => (
-            <OneGame_2 key={i} />
-        ))}
+            <OneGame_2 status={'win'}/>
+            <OneGame_2 status={'lose'}/>
+            <OneGame_2 status={'win'}/>
+            <OneGame_2 status={'lose'}/>
+            <OneGame_2 status={'win'}/>
+            <OneGame_2 status={'lose'}/>
+            <OneGame_2 status={'win'}/>
+            <OneGame_2 status={'lose'}/>
+            <OneGame_2 status={'win'}/>
+            <OneGame_2 status={'lose'}/>
        </div>
     </div>
   )
