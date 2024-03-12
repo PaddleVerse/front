@@ -28,7 +28,7 @@ const JoinChannel = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <div className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}>
       <motion.div
-        className="overflow-y-auto border border-rightArrowColor h-[70%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] px-10 py-16 flex flex-col bg-transparent rounded-xl"
+        className="overflow-y-auto border border-red-500/[0.3] h-[70%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] px-10 py-16 flex flex-col bg-transparent rounded-xl"
         initial="closed"
         animate="open"
         exit="closed"
@@ -42,7 +42,7 @@ const JoinChannel = ({ handleClick }: { handleClick: () => void }) => {
         <div className="w-full relative mt-5">
           <input
             type="text"
-            className="rounded-md text-black pl-8 w-full h-[45px] outline-none"
+            className="rounded-md text-black pl-8 w-full h-[45px] focus:outline-none border-none focus:ring-[2px] focus:ring-red-500/[0.5] transition duration-300 ease-in-out"
             placeholder="Search"
           />
           <IoIosSearch className="absolute top-[15px] left-[10px] text-gray-400" size={17} />

@@ -38,7 +38,7 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !user) return;
     socket?.on('refresh', (data: any) =>{
       if (data?.ok === 0) return;
       axios.get(`http://localhost:8080/user/${user?.id}`).then((res) => {
@@ -98,7 +98,7 @@ const Navbar = () => {
             </button>
               {open && (
                 <ul className="absolute w-[200%] #9c9c9c66 bg-gray-200 left-[-100%] rounded-xl mt-2" onBlur={() => setOpen(false)}>
-                  {user?.notifications.length !== 0 ? user?.notifications.map((not:any, index:any) => (
+                  {user && user?.notifications.length !== 0 ? user?.notifications.map((not:any, index:any) => (
                     <li key={index}>
                       <NotificationCard not={not} setOpen={setOpen}/>
                     </li>

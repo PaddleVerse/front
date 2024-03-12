@@ -267,16 +267,9 @@ const Page = () => {
           <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
               <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 no-scrollbar">
-                <div className="py-4 sm:flex flex-row hidden  items-center flex-none  justify-start">
-                  <div
-                    className="w-16 h-16 relative flex flex-shrink-0"
-                    style={{ filter: "invert(100%)" }}
-                  ></div>
-                  <p
-                    className={`text-2xl font-bold hidden md:block group-hover:block`}
-                    onClick={() => setModlar(true)}
-                  >
-                    Messenger
+              <div className=" p-4 flex-none mt-4">
+                  <p className={`text-2xl font-bold hidden md:block group-hover:block mb-4`}>
+                    Messages
                   </p>
                   <form onSubmit={(e) => e.preventDefault()}>
                     <div className="relative sm:block hidden">
@@ -299,7 +292,7 @@ const Page = () => {
                   </form> 
                 </div>
                 <p className="ml-8">
-                    Join a <span className="text-sky-500">Public</span> Group Chat
+                    Join a <span onClick={() => setModlar(true)} className="text-sky-500 cursor-pointer">Public</span> Group Chat
                 </p>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"

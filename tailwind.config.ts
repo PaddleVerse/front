@@ -37,7 +37,7 @@ module.exports = {
         },
       },
       backgroundImage: {
-        Dark: "url('/new.png')",
+        Dark: "url('/Background.png')",
       },
       colors: {
         colorr: '#181818',

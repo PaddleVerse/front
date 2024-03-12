@@ -7,7 +7,11 @@ const LeaderBoard = () => {
 
 
   return (
-    <div className='sm:w-[61%] w-[95%] h-[88%]  mt-[50px] flex flex-col bg-[#0E141D] bg-gradient-to-b rounded-xl'>
+    <div className='sm:w-[90%] w-[95%] h-[88%]  mt-[50px] flex flex-col rounded-xl'
+    style={{
+      backdropFilter: "blur(20px)",
+      backgroundColor: "rgba(13, 9, 10, 0.7)",
+    }}>
         {/* <div className='w-full h-[250px] flex items-center justify-center '>
             <PlacingElement />
         </div> */}

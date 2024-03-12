@@ -28,7 +28,7 @@ const LeaderTable = () => {
           className={`${inter.className}  w-full rounded-lg  text-left text-white font-light`}
           // rules="none" 
         >
-          <thead className="bg-[#202B43] text-xs sm:text-sm text-white">
+          <thead className="bg-[#462121] text-xs sm:text-sm text-white">
             <tr>
               <th scope="col" className="p-[5px] rounded-l-[8px]  sm:w-[7%] w-[7%] text-center">
                 Rank
