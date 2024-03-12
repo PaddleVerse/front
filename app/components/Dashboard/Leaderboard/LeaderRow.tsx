@@ -19,7 +19,7 @@ const LeaderRow = ({ user }: Props) => {
   return (
     <tr
       className={`${
-        User.id == user.id ? "bg-[#101823]" : "bg-[#161F2F]"
+        user.id % 2 === 0 ? "bg-[#101823]" : "bg-[#161F2F]"
       } text-white sm:text-[12px] text-[10px] cursor-pointer`}
       onClick={handleClick}
     >
