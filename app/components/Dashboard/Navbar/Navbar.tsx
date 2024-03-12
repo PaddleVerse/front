@@ -12,8 +12,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const {state} = useGlobalState();
-  const {user} = state;
+  const {state, dispatch} = useGlobalState();
+  const {user, socket} = state;
 
   const handleClick = () => {
     // user?.notifications.splice(0, user?.notifications.length);
@@ -38,8 +38,14 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    console.log(user?.notifications);
-  } , [user]);
+    if (!socket) return;
+    socket?.on('refresh', (data: any) =>{
+      if (data?.ok === 0) return;
+      axios.get(`http://localhost:8080/user/${user?.id}`).then((res) => {
+        (dispatch && dispatch({type: "UPDATE_USER", payload: res.data}));
+      }).catch(() => {});
+    });
+  } , [socket]);
 
   const getCookie = (name: string) => {
     const value = `; ${document.cookie}`;
@@ -74,7 +80,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="w-full flex justify-center z-50" >
+    <div className="w-full flex justify-center z-50">
       <div
         className="w-[95%] h-14 bg-transparent rounded-b-sm md:flex hidden justify-between items-center"
         style={{
@@ -84,20 +90,22 @@ const Navbar = () => {
       >
         <span className="text-gray-400 ml-10 text-[14px]">{pathname}</span>
         <div className="flex justify-center items-center relative">
-          <div className="">
+          <div >
             <button
               onClick={handleClick}
               className="h-8 w-8 flex justify-center items-center text-gray-300 select-none rounded-2xl text-center align-middle font-sans text-xs font-medium uppercase transition-all hover:bg-gray-100/10 active:bg-gray-100/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
               <IoNotifications className="h-6 w-6" />
             </button>
-            {open && (
-              <ul className="absolute w-[160%] bg-[#9c9c9c66] left-[-70%] rounded-xl mt-2">
-                {user?.notifications.map((not:any, index:any) => (
-                  <li key={index}>
-                    <NotificationCard not={not} />
-                  </li>
-                ))}
-              </ul>
+              {open && (
+                <ul className="absolute w-[200%] #9c9c9c66 bg-gray-200 left-[-100%] rounded-xl mt-2" onBlur={() => setOpen(false)}>
+                  {user?.notifications.length !== 0 ? user?.notifications.map((not:any, index:any) => (
+                    <li key={index}>
+                      <NotificationCard not={not} setOpen={setOpen}/>
+                    </li>
+                  ))
+                  : ( <li className="py-4 text-center text-gray-500"> There are no notifications </li> )
+                  }
+                </ul>
               )}
           </div>
           <button
