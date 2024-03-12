@@ -45,7 +45,7 @@ const Navbar = () => {
     socket?.on('notification', () => {
       setNotifed(true);
     });
-  }, [user?.notifications.length, socket]);
+  }, [socket]);
 
   useEffect(() => {
     if (!socket || !user) return;
