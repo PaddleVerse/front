@@ -28,9 +28,9 @@ const OneGame_2 = ({ status }: { status: string }) => {
             13:5
           </span>
           <span
-            className={`text-[#647087] text-[10px] truncate w-[50px] xl:text-[14px] sm:text-[11px] font-semibold`}
+            className={`text-[#647087] text-[10px] sm:text-clip truncate w-[50px] xl:text-[14px] sm:text-[11px] font-semibold`}
           >
-            Ascent - 7m
+            Ascent
           </span>
         </div>
         <div className="flex flex-col items-center justify-center sm:leading-5 leading-2">
@@ -116,7 +116,7 @@ const OneGame_2 = ({ status }: { status: string }) => {
           <span
             className={`text-[#647087] xl:text-[14px] sm:text-[11px] font-semibold`}
           >
-            Ascent - 7m
+            Ascent
           </span>
         </div>
         <div className="relative w-[50px] h-[50px]">
