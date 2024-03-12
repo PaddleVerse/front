@@ -9,8 +9,8 @@ const roboto = Roboto({
 });
 const OneGame_2 = ({status}:{status:string}) => {
   return (
-    <motion.div className="rounded-md w-full h-[70px] cursor-pointer  bg-gradient-to-r bg-[#172234] flex items-center justify-between px-4"
-      whileHover={{x:-10}}
+    <motion.div className="rounded-md w-full h-[70px] bg-gradient-to-r bg-[#172234] flex items-center justify-between px-4"
+      whileHover={{x:-5}}
     >
       <div className="flex items-center justify-between 2xl:w-[42%] w-[80%]">
         <div>

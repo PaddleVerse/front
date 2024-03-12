@@ -6,11 +6,11 @@ import Achievement from './Achievement'
 const rajdhani = Rajdhani({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
 const Achievements = () => {
   return (
-    <div className=' w-full  rounded-md p-3 h-auto bg-transparent'
-    style={{
-        backdropFilter: "blur(20px)",
-        backgroundColor: "rgba(13, 9, 10, 0.7)",
-      }}
+    <div className=' w-full  rounded-md p-3 h-auto bg-[#101823]'
+    // style={{
+    //     backdropFilter: "blur(20px)",
+    //     backgroundColor: "rgba(13, 9, 10, 0.7)",
+    //   }}
     >
         <div className='w-full text-white flex gap-2  items-center'>
             <Image src='/achievements.svg' width={20} height={20} alt={'image'} />
