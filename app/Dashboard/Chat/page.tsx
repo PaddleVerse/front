@@ -3,13 +3,8 @@ import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
-import { LuPhone } from "react-icons/lu";
-import { IoVideocamOutline } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
-import { IoCameraOutline } from "react-icons/io5";
-import { PiMicrophoneLight } from "react-icons/pi";
 import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
@@ -24,7 +19,6 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
-import { sendError } from "next/dist/server/api-utils";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -254,7 +248,7 @@ const Page = () => {
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
       <AnimatePresence>
-        {modlar && <JoinChannel handleClick={handleClick}/>}
+        {modlar && <JoinChannel handleClick={handleClick} user={globalState.state.user} />}
       </AnimatePresence>
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
         <div

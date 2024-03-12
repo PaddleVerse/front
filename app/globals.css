@@ -229,3 +229,30 @@ tbody:before {
 .no-visible-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-container::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  z-index: 0;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover::after {
+  visibility: visible;
+  opacity: 1;
+}

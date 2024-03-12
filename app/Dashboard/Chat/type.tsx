@@ -6,8 +6,12 @@ export type message = {
 };
 
 export type channel = {
+  key: string;
+  state: string;
   id?: number;
+  topic: string;
   name: string;
+  picture: string;
   messages: message[];
 };
 

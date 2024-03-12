@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Inter } from "next/font/google";
 import { motion } from "framer-motion";
 import JoinChannelBubble from "./JoinChannelBubble";
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
+import axios from "axios";
+import { user } from "@/app/Dashboard/Chat/type";
+import { useForm } from "react-hook-form";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -24,7 +27,30 @@ const modalVariants = {
     },
   },
 };
-const JoinChannel = ({ handleClick }: { handleClick: () => void }) => {
+
+
+const JoinChannel = ({ handleClick, user }: { handleClick: () => void, user: user }) => {
+  const [channels, setChannels] = useState<any[]>([]);
+  const [filteredChannels, setFilteredChannels] = useState<any[]>([]);
+  const search = useRef<HTMLInputElement>(null);
+  const { register } = useForm();
+  useEffect(() => {
+    const fetchChannels = async () => {
+      const res = await axios.get("http://localhost:8080/channels").then((data) => {
+        setChannels(data.data);
+        setFilteredChannels(data.data);
+      });
+    };
+    fetchChannels();    
+  }, []);
+
+  const filterBySearch = (e: React.ChangeEvent, value: string | null) => {
+      const res = channels.filter((channel) => {
+        return channel.name.toLowerCase().includes(value?.toLowerCase() as string);
+      });
+    setFilteredChannels(res);
+  };
+
   return (
     <div className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}>
       <motion.div
@@ -44,13 +70,18 @@ const JoinChannel = ({ handleClick }: { handleClick: () => void }) => {
             type="text"
             className="rounded-md text-black pl-8 w-full h-[45px] focus:outline-none border-none focus:ring-[2px] focus:ring-red-500/[0.5] transition duration-300 ease-in-out"
             placeholder="Search"
+            {...register("search", { required: true })}
+            ref={search}
+            onChange={(e) => {
+              filterBySearch(e, search.current?.value!);
+            }}
           />
           <IoIosSearch className="absolute top-[15px] left-[10px] text-gray-400" size={17} />
         </div>
         <div className=" grid-cols-2 grid mt-10 overflow-y-auto">
-        {Array.from({ length: 20 }, (_, index) => (
-          <JoinChannelBubble key={index} lock={true}/>
-          ))}
+          {filteredChannels.map((channel, key) => {
+            return <JoinChannelBubble key={key} lock={channel.state === "protected"} channel={channel} user={ user} />;
+          })}
         </div>
         <div className="absolute top-2 right-2 cursor-pointer">
           <AiOutlineClose size={30} onClick={() => handleClick()} />
