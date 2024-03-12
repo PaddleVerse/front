@@ -71,7 +71,7 @@ const UserProfileSecond = ({ user }: any) => {
         </div>
 
         <div className="w-full   border-red-500 pb-5  flex sm:flex-row flex-col sm:flex-wrap 2xl:mt-0 mt-2 justify-between sm:gap-2 gap-5">
-          <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex h-[250px]">
+          <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex sm:h-[250px]">
             <div
               className="w-full  border-green-500  2xl:self-end 2xl:h-[55%] lg:h-[100%] items-center bg-[#101823]  flex justify-between rounded-md 2xl:flex-row"
               // style={{
@@ -79,7 +79,7 @@ const UserProfileSecond = ({ user }: any) => {
               //   backgroundColor: "rgba(13, 9, 10, 0.3)",
               // }}
             >
-              <div className="flex  2xl:w-[100%]  sm:w-full items-center h-[40%] 2xl:h-full w-[331px] bg-[#172234] rounded-md">
+              <div className="flex   sm:w-full items-center  sm:h-[40%] h-full 2xl:h-full w-full bg-[#172234] rounded-md">
                 <div className="relative">
                   <Image
                     src={"/badge1.png"}
