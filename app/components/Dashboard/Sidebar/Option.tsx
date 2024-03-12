@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import MainOptions from "./MainOptions";
 import { RxDashboard } from "react-icons/rx";
@@ -9,19 +9,36 @@ import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useGlobalState } from "../../Sign/GlobalState";
+import { set } from "react-hook-form";
 
 const gameNames = ["Overview", "Leaderboard", "Settings"];
+
 const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
+
   const [showElements, setShowElements] = useState(false);
+  const [notifed, setNotifed] = useState(false);
   const pathname = usePathname();
   const lastSegment = pathname.split("/").pop();
   const router = useRouter();
-  // console.log(expanded);
+  const { state } = useGlobalState();
+  const { socket } = state;
+  useEffect(() => {
+    if (socket) {
+      socket.on("update", () => {
+        setNotifed(true);
+      });
+    }
+  } , [socket]);
+
+
+
   const handleDashboardClick = () => {
     if (label === "Dashboard") {
       setShowElements(!showElements);
     }
     if (label === "Chat") {
+      setNotifed(false);
       router.push("/Dashboard/Chat");
     }
     if (label === "Shop") {
@@ -45,7 +62,14 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
           {label === "Dashboard" ? (
             <RxDashboard className="hover:bg-blurredRed" />
           ) : label === "Chat" ? (
-            <PiChatCircleTextLight className="hover:bg-blurredRed" />
+            <div className="relative"> 
+              <PiChatCircleTextLight className="hover:bg-blurredRed" />
+              {notifed && (
+                <div className="absolute bg-gray-900 p-1 rounded-full top-0 right-0">
+                  <div className="bg-red-500 rounded-full w-[6px] h-[6px]"></div>
+                </div>
+              )}
+            </div>
           ) : label === "Shop" ? (
             <LiaShoppingCartSolid className="hover:bg-blurredRed" />
           ) : label === "Search" ? (

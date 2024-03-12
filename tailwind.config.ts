@@ -37,10 +37,11 @@ module.exports = {
         },
       },
       backgroundImage: {
-        // Dark: "url('/bg6.png')",
+        Dark: "url('/Background.png')",
       },
       colors: {
         colorr: '#181818',
+        shopButton:"#393434",
         greenButton:'#124607',
 
         leaderboarddiv:"#252728",
@@ -137,7 +138,7 @@ module.exports = {
       },
       { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
     );
-  },],
+  }, require("@tailwindcss/forms")],
 };
 
 

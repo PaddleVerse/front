@@ -3,23 +3,15 @@ import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/moving-border"
 import Image from 'next/image'
 import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
-
+import { getDate } from '@/app/utils'
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender, linkedFriends} : any) => {
 
-
-    const  getDate = (dateString: string): string  => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-    
   return (
-    <div className="w-full  border-red-500  flex sm:flex-row flex-col sm:flex-wrap justify-between sm:gap-0 gap-5">
+    <div className="w-full border-red-500  flex sm:flex-row flex-col sm:flex-wrap justify-between sm:gap-0 gap-5 mt-10">
           <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex h-[250px]">
             <div
               className="w-full border-red-500 2xl:self-end 2xl:h-[40%] lg:h-[100%] py-2 px-4 bg-dashBack flex justify-between rounded-md 2xl:flex-row flex-col"
@@ -32,7 +24,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                     height={130}
                     alt="badge"
                     className="w-[80px]"
-                  ></Image>
+                  />
                 </div>
                 <div className="flex flex-col 2xl:w-[250px] w-[420px]">
                   <div className="flex items-center justify-between text-white">
@@ -53,7 +45,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center justify-center mb-10 w-full">
+              <div className="flex flex-row items-center justify-center w-full">
                 <AnimatedTooltip items={linkedFriends} />
               </div>
             </div>
@@ -148,7 +140,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
               }
             </div>
           </div>
-          <div className="2xl:w-[30%] sm:w-[100%] border h-[200px]"></div>
+          <div className="2xl:w-[30%] sm:w-full border h-full"></div>
         </div>
   )
 }

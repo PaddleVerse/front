@@ -1,6 +1,7 @@
 "use client";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
+import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { LuPhone } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
@@ -13,17 +14,18 @@ import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
   FormEventHandler,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { Socket } from "socket.io-client";
 import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
 import { sendError } from "next/dist/server/api-utils";
+import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,7 +52,7 @@ const Page = () => {
   const [targetChannel, setTargetChannel] = useState<channel | null>();
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
-
+  const [modlar, setModlar] = useState(false);
   useEffect(() => {
     if (globalState.state.user) {
       axios
@@ -61,14 +63,33 @@ const Page = () => {
         .catch((error) => {
           console.log(error);
         });
+      if (targetUser) {
+        axios.get(`http://localhost:8080/user/${targetUser.id}`).then((res) => {
+          setTargetUser(res.data);
+        }
+        );
+      }
     }
   }, [globalState, update]);
+  ///////////////////////////////////////////////////////////
+  //press escape to close the modal
+  const handleEscapeKeyPress = useCallback((e:any) => {
+    if (e.key === 'Escape') {
+      setModlar(false);
+    }
+  }, []);
 
   useEffect(() => {
+    document.addEventListener('keydown', handleEscapeKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKeyPress);
+    };
+  }, [handleEscapeKeyPress]);
+  ///////////////////////////////////////////////////////////
+  useEffect(() => {
     globalState?.state?.socket?.on("ok", (data: any) => {
-      if (data === null)
-      { return; }
-      console.log("recieved ok from server");
+      if (data === null) return;
       setUpdate(true);
     });
     globalState?.state?.socket?.emit("refresh");
@@ -161,6 +182,7 @@ const Page = () => {
       });
     return data;
   };
+  
   const fetchMessagesForChannel = (
     id: number | undefined
   ): Promise<message[]> => {
@@ -224,9 +246,16 @@ const Page = () => {
     setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
+  const handleClick = () => {
+    setModlar(false);
+  }
+
 
   return (
     <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
+      <AnimatePresence>
+        {modlar && <JoinChannel handleClick={handleClick}/>}
+      </AnimatePresence>
       <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
@@ -238,23 +267,15 @@ const Page = () => {
           <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
               <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 no-scrollbar">
-                <div className="py-4 sm:flex flex-row hidden  items-center flex-none  justify-start">
-                  <div
-                    className="w-16 h-16 relative flex flex-shrink-0"
-                    style={{ filter: "invert(100%)" }}
-                  ></div>
-                  <p
-                    className={`text-2xl font-bold hidden md:block group-hover:block`}
-                  >
-                    Messenger
+              <div className=" p-4 flex-none mt-4">
+                  <p className={`text-2xl font-bold hidden md:block group-hover:block mb-4`}>
+                    Messages
                   </p>
-                </div>
-                <div className=" p-4 flex-none">
                   <form onSubmit={(e) => e.preventDefault()}>
                     <div className="relative sm:block hidden">
                       <label>
                         <input
-                          className="rounded-lg py-2 pr-6 pl-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
+                          className="rounded-lg py-2 pr-6 pl-10 w-full bg-white focus:outline-none text-black focus:shadow-md transition duration-300 ease-in"
                           type="text"
                           placeholder="Search Messenger"
                         />
@@ -268,9 +289,11 @@ const Page = () => {
                         </span>
                       </label>
                     </div>
-                  </form>
+                  </form> 
                 </div>
-
+                <p className="ml-8">
+                    Join a <span onClick={() => setModlar(true)} className="text-sky-500 cursor-pointer">Public</span> Group Chat
+                </p>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"
                   onClick={(e) => {
@@ -317,32 +340,17 @@ const Page = () => {
                         </p>
                         {/** needs to be fixed */}
                         {targetUser &&
-                          (online ? (
+                          (targetUser.status === "ONLINE" ? (
                             <p className="text-green-500">Online</p>
                           ) : (
-                            <p className="text-red-500">Offline</p>
+                            <p className="text-gray-400">Offline</p>
                           ))}
-                        {/* {targetUser && (
-                          <p
-                            className={
-                              online ? "text-green-500" : "text-red-500"
-                            }
-                          >
-                            {online ? "Online" : "Offline"}
-                          </p>
-                          )}*/}
                       </div>
                     </div>
 
                     <div className="flex items-center">
-                      <div className="block rounded-full  w-5 h-5">
-                        <LuPhone className="w-full h-full text-green-500" />
-                      </div>
                       <div className="block rounded-full  w-6 h-6 ml-4">
-                        <IoVideocamOutline className="w-full h-full text-green-500" />
-                      </div>
-                      <div className="block rounded-full  w-6 h-6 ml-4">
-                        <IoIosInformationCircleOutline className="w-full h-full text-green-500" />
+                        <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
                     </div>
                   </div>
@@ -357,13 +365,13 @@ const Page = () => {
                             if (value.sender_id === globalState.state.user.id) {
                               return (
                                 <div className="" key={key}>
-                                  <MiddleBubbleRight message={value.content} />
+                                  <MiddleBubbleRight message={value} />
                                 </div>
                               );
                             } else {
                               return (
                                 <MiddleBuble
-                                  message={value.content}
+                                  message={value}
                                   key={key}
                                   showProfilePic={
                                     (!messages[key + 1] ||
@@ -395,40 +403,22 @@ const Page = () => {
                     <div className="flex flex-row items-center p-4">
                       <button
                         type="button"
-                        className="flex flex-shrink-0 focus:outline-none mx-2  text-green-600 hover:text-green-700 w-6 h-6 "
+                        className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6 "
                       >
                         <CiCirclePlus className="w-full h-full" />
-                      </button>
-                      <button
-                        type="button"
-                        className="flex flex-shrink-0 focus:outline-none mx-2  text-green-600 hover:text-green-700 w-6 h-6"
-                      >
-                        <MdOutlineAddPhotoAlternate className="w-full h-full" />
-                      </button>
-                      <button
-                        type="button"
-                        className="flex flex-shrink-0 focus:outline-none mx-2 text-green-600 hover:text-green-700 w-6 h-6"
-                      >
-                        <IoCameraOutline className="w-full h-full" />
-                      </button>
-                      <button
-                        type="button"
-                        className="flex flex-shrink-0 focus:outline-none mx-2  text-green-600 hover:text-green-700 w-6 h-6"
-                      >
-                        <PiMicrophoneLight className="w-full h-full" />
                       </button>
                       <div className="relative flex-grow">
                         <form onSubmit={(e) => handleSubmit(e)}>
                           <input
-                            className="rounded-lg py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
+                            className="rounded-3xl py-[10px] pl-3 pr-10 w-full bg-[#1b1b1b] focus:ring-[1px] focus:ring-gray-500 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
                             type="text"
                             ref={inputMessage}
                             placeholder="Aa"
                             {...(register("inputMessage"), { required: true })}
                           />
                           <button
-                            type="button"
-                            className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none  text-green-600 hover:text-green-700 w-6 h-6"
+                            type="submit"
+                            className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none  text-white hover:text-gray-300 w-6 h-6 "
                           >
                             <IoSendOutline className="w-full h-full " />
                           </button>

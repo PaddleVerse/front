@@ -1,4 +1,5 @@
 import React from "react";
+import { getTime } from "@/app/utils";
 
 const MiddleBuble = (props: any) => {
   return (
@@ -12,9 +13,14 @@ const MiddleBuble = (props: any) => {
           />
         )}
       </div>
-      <p className="px-6 py-3 rounded-lg bg-gray-800 max-w-xs lg:max-w-md text-gray-200">
-        {props.message}
-      </p>
+      <div className="px-4 rounded-2xl bg-white max-w-xs lg:max-w-md text-black">
+        <p className="text-[14px] mt-2">
+          {props.message.content}
+        </p>
+        <p className="text-[10px] text-gray-500 mb-[2px]">
+          {getTime(props.message.createdAt)}
+        </p>
+      </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ const UserSearchCard = ({user, handleClick} : any) => {
   return (
     <div className="text-white rounded-md p-2 xl:w-1/4 md:w-1/2 sm:w-full h-1/6 flex justify-start items-center cursor-pointer" onClick={() => handleClick(user?.id)}>
         <Image
-          src="/friend.png"
+          src={user?.picture ? user?.picture : "/friend.png"}
           alt="Picture of the author"
           width={100}
           height={100}

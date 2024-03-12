@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
+import { getTime } from "@/app/utils";
 
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message[] | null>();
@@ -25,9 +26,10 @@ export const ChatCard = (props: any) => {
         });
     }
   }, [props.value.id, props.self.id, props.value.user, props.update]);
+  
   return (
     <div
-      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
+      className="flex justify-between items-center lg:p-3 p-1 hover:bg-[#9494943d] rounded-lg relative cursor-pointer"
       onClick={(e) => {
         if (props.value.user === false) {
           props.setTargetChannel(props.value);
@@ -40,11 +42,11 @@ export const ChatCard = (props: any) => {
         e.preventDefault();
       }}
     >
-      <div className="sm:w-12 sm:h-12 h-16 w-16 relative flex flex-shrink-0">
+      <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">
         <img
-          className="shadow-md rounded-full w-full h-full object-cover"
+          className="shadow-md rounded-full w-10 h-10 object-cover"
           src={
-            props.value.picture ||
+            props.value?.picture ||
             "https://randomuser.me/api/portraits/women/87.jpg"
           }
           alt="User2"
@@ -55,23 +57,25 @@ export const ChatCard = (props: any) => {
             (props.value.status === "ONLINE" ? (
               <div className="bg-green-500 rounded-full w-2 h-2"></div>
             ) : (
-              <div className="bg-red-500 rounded-full w-2 h-2"></div>
+              <div className="bg-gray-400 rounded-full w-2 h-2"></div>
             ))}
         </div>
       </div>
       <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
-        <p>{props.value.name}</p>
-        <div className="flex items-center text-sm text-gray-600">
-          <div className="min-w-0">
-            <p className="truncate">
+        <div className="flex justify-between w-full">
+          <p className="text-white">{props.value.name}</p>
+          <p className="text-gray-400 text-sm">
+          {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
+          </p>
+        </div>
+        <div className="flex items-center text-sm text-gray-400">
+          <div className="min-w-0 flex justify-between w-full">
+            <p className="truncate w-2/3">
               {msg && msg.length > 0 && msg[msg.length - 1]?.content}
             </p>
           </div>
         </div>
       </div>
-      <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative hidden">
-        Feb 1
-      </p>
     </div>
   );
 };

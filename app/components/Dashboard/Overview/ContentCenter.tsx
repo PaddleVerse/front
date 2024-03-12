@@ -8,6 +8,7 @@ import UserProfileSecond from "./UserProfileSecond/UserProfileSecond";
 import Achievements from "./Achievements/Achievements";
 import Items from "./Items/Items";
 import { useGlobalState } from "../../Sign/GlobalState";
+import MatchHistory_2 from "./MatchHistory/MatchHistory_2";
 
 
 const ContentCenter = () => {
@@ -17,23 +18,17 @@ const ContentCenter = () => {
   return (
     <div className="w-[100%] mt-[50px] flex flex-col gap-10 items-center">
       <div className="xl:flex-row w-[94%] flex flex-col gap-7">
-        <div className="flex flex-col w-full gap-8">
+        <div className="flex flex-col w-full gap-8 pb-[150px]">
           {user &&  <UserProfileSecond user={user}/>}
-          <div className="flex gap-4">
-            <MatchHistory />
-            <div className=" flex-col h-700px  flex-1 xl:flex hidden gap-4">
-              <div className="w-full h-[49%]  border-red-500">
-                <Items/>
-              </div>
-              {/* <div className="w-full h-[49%] border border-green-500"></div> */}
-
+            <MatchHistory_2 />
+            <div className="w-full h-[450px] flex lg:flex-row flex-col border-red-500">
+              <Items/>
+              <div className="w-[50%] border flex text-white text-4xl"> GRAPH</div>
             </div>
           </div>
-        </div>
         <div className="flex flex-col xl:w-[20%] gap-7">
           <Achievements />
           <Standing />
-          {/* <Graph /> */}
         </div>
       </div>
     </div>
