@@ -8,7 +8,7 @@ const roboto = Roboto({
 });
 const OneGame_2 = () => {
   return (
-    <div className="rounded-md w-full h-[70px]  bg-gradient-to-r from-[#172234] via-[#172234] to-[#172234] flex items-center justify-between px-4">
+    <div className="rounded-md w-full h-[70px] bg-[#462121] flex items-center justify-between px-4">
       <div className="flex items-center justify-between w-[42%]">
         <div>
           <Image
@@ -54,7 +54,7 @@ const OneGame_2 = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center py-1 px-[11px] text-[15px] tracking-tight font-semibold rounded-md bg-[#202B43]">
+      <div className="flex items-center justify-center py-1 px-[11px] text-[15px] tracking-tight font-semibold rounded-md bg-[#743737]">
         Mar 5, 2024
       </div>
       <div className="flex items-center justify-between w-[42%]">

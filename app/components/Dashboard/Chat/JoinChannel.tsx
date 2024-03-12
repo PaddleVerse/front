@@ -24,6 +24,7 @@ const modalVariants = {
     },
   },
 };
+
 const JoinChannel = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <div className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}>
