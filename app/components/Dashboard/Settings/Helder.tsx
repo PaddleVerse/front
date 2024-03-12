@@ -31,7 +31,7 @@ const Helder = () => {
   ];
   return (
     <div
-    className="h-[90%] w-[94%] [perspective:1000px] relative b flex flex-col items-start justify-start"
+    className="h-[90%] w-[94%] rounded-md [perspective:1000px] relative flex flex-col items-center"
     style={{
         backdropFilter: "blur(20px)",
         backgroundColor: "rgba(13, 9, 10, 0.7)",

@@ -31,7 +31,7 @@ const UserProfileSecond = ({user} : any) => {
                 style={{objectFit:"cover"}}
                 alt="bg"
                 sizes="auto"
-                className="z-[-1]"
+                className="z-[-1] rounded-2xl"
               />
             </div>
           </PinContainer>

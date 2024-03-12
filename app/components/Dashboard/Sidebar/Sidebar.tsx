@@ -1,7 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaChevronRight, FaPlus } from "react-icons/fa6";
+import { FaChevronRight, FaPlus} from "react-icons/fa6";
 import Option from "./Option";
 import ProfileUser from "./ProfileUser";
 import { useSwipeable } from "react-swipeable";
