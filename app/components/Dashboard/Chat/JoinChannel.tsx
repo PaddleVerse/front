@@ -50,7 +50,7 @@ const JoinChannel = ({ handleClick }: { handleClick: () => void }) => {
         </div>
         <div className=" grid-cols-2 grid mt-10 overflow-y-auto">
         {Array.from({ length: 20 }, (_, index) => (
-          <JoinChannelBubble key={index} lock={true}/>
+          <JoinChannelBubble key={index} lock={true} handleClick={handleClick}/>
           ))}
         </div>
         <div className="absolute top-2 right-2 cursor-pointer">

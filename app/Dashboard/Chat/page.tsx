@@ -1,5 +1,6 @@
 "use client";
-import {motion} from "framer-motion";
+import { Image } from "next/image";
+import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
 import { AnimatePresence } from "framer-motion";
@@ -32,7 +33,6 @@ import { useSwipeable } from "react-swipeable";
 
 const inter = Inter({ subsets: ["latin"] });
 
-
 export type message = {
   id?: number;
   channel_id?: number;
@@ -57,6 +57,7 @@ const Page = () => {
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
+  const [channelManagement, setChannelManagement] = useState(false);
   useEffect(() => {
     if (globalState.state.user) {
       axios
@@ -70,24 +71,23 @@ const Page = () => {
       if (targetUser) {
         axios.get(`http://localhost:8080/user/${targetUser.id}`).then((res) => {
           setTargetUser(res.data);
-        }
-        );
+        });
       }
     }
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
   //press escape to close the modal
-  const handleEscapeKeyPress = useCallback((e:any) => {
-    if (e.key === 'Escape') {
+  const handleEscapeKeyPress = useCallback((e: any) => {
+    if (e.key === "Escape") {
       setModlar(false);
     }
   }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleEscapeKeyPress);
+    document.addEventListener("keydown", handleEscapeKeyPress);
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKeyPress);
+      document.removeEventListener("keydown", handleEscapeKeyPress);
     };
   }, [handleEscapeKeyPress]);
   ///////////////////////////////////////////////////////////
@@ -119,8 +119,7 @@ const Page = () => {
   }, [messages]);
 
   useEffect(() => {
-    globalState?.state?.socket?.on("message", (data: any) => {
-    });
+    globalState?.state?.socket?.on("message", (data: any) => {});
   }, [globalState?.state?.socket]);
 
   // useEffect(() => {
@@ -186,7 +185,7 @@ const Page = () => {
       });
     return data;
   };
-  
+
   const fetchMessagesForChannel = (
     id: number | undefined
   ): Promise<message[]> => {
@@ -252,11 +251,11 @@ const Page = () => {
   };
   const handleClick = () => {
     setModlar(false);
-  }
+  };
 
   const handleSwitching = () => {
     setShowMessage(!showMessage);
-  }
+  };
   function useWindowSize() {
     const [size, setSize] = useState(0);
     useLayoutEffect(() => {
@@ -277,9 +276,9 @@ const Page = () => {
   });
   console.log(showMessage);
   return (
-    <div className="w-[91%] mx-auto lg:h-full md:h-[92%] h-[80%] flex justify-center mt-5 overflow-hidden" >
+    <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
-        {modlar && <JoinChannel handleClick={handleClick}/>}
+        {modlar && <JoinChannel handleClick={handleClick} />}
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
@@ -291,12 +290,22 @@ const Page = () => {
         >
           <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">
-              <motion.section className={` flex flex-col flex-none overflow-auto ${showMessage && tablet ? 'invisible' : 'visible'} group lg:max-w-[280px] md:w-2/5 no-scrollbar`}
-              initial={{display:'flex', width: '100%', opacity: 1}}
-              animate={{display: showMessage && tablet ? 'hidden': 'flex', width: showMessage && tablet ? '0' : '100%', opacity: showMessage && tablet ? 0 : 1, transition: {duration: 0.25}}}
+              <motion.section
+                className={` flex flex-col flex-none overflow-auto ${
+                  showMessage && tablet ? "invisible" : "visible"
+                } group lg:max-w-[280px] md:w-2/5 no-scrollbar`}
+                initial={{ display: "flex", width: "100%", opacity: 1 }}
+                animate={{
+                  display: showMessage && tablet ? "hidden" : "flex",
+                  width: showMessage && tablet ? "0" : "100%",
+                  opacity: showMessage && tablet ? 0 : 1,
+                  transition: { duration: 0.25 },
+                }}
               >
-              <div className=" p-4 flex-none mt-4">
-                  <p className={`text-2xl font-bold md:block group-hover:block mb-4`}>
+                <div className=" p-4 flex-none mt-4">
+                  <p
+                    className={`text-2xl font-bold md:block group-hover:block mb-4`}
+                  >
                     Messages
                   </p>
                   <form onSubmit={(e) => e.preventDefault()}>
@@ -317,10 +326,17 @@ const Page = () => {
                         </span>
                       </label>
                     </div>
-                  </form> 
+                  </form>
                 </div>
                 <p className="ml-8">
-                    Join a <span onClick={() => setModlar(true)} className="text-sky-500 cursor-pointer">Public</span> Group Chat
+                  Join a{" "}
+                  <span
+                    onClick={() => setModlar(true)}
+                    className="text-sky-500 cursor-pointer"
+                  >
+                    Public
+                  </span>{" "}
+                  Group Chat
                 </p>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"
@@ -380,63 +396,82 @@ const Page = () => {
                     </div>
 
                     <div className="flex items-center">
-                      <div className="block rounded-full  w-6 h-6 ml-4">
+                      <div
+                        className="block rounded-full  w-6 h-6 ml-4"
+                        onClick={() => setChannelManagement(!channelManagement)}
+                      >
                         <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
                     </div>
                   </div>
                   <div
-                    className=" p-4 flex-1 overflow-y-scroll no-scrollbar"
+                    className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
                     ref={containerRef}
                   >
-                    <div className="w-full h-full"
-                    {...handlers}
-                    >
-                      <div className="flex flex-row justify-start overflow-y-auto"
-                    
-                      >
-                        <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
-                          {messages &&
-                            messages.map((value, key: any) => {
-                              if (value.sender_id === globalState.state.user.id) {
-                                return (
-                                  <div className="" key={key}>
-                                    <MiddleBubbleRight message={value} />
-                                  </div>
-                                );
-                              } else {
-                                return (
-                                  <MiddleBuble
-                                    message={value}
-                                    key={key}
-                                    showProfilePic={
-                                      (!messages[key + 1] ||
-                                        messages[key + 1].sender_id !==
-                                          value.sender_id) &&
-                                      value &&
-                                      value.sender_picture
-                                    }
-                                    picture={messages[key].sender_picture}
-                                  />
-                                );
-                              }
-                            })}
+                    {!channelManagement ? (
+                      <div className="w-full h-full" {...handlers}>
+                        <div className="flex flex-row justify-start overflow-y-auto">
+                          <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
+                            {messages &&
+                              messages.map((value, key: any) => {
+                                if (
+                                  value.sender_id === globalState.state.user.id
+                                ) {
+                                  return (
+                                    <div className="" key={key}>
+                                      <MiddleBubbleRight message={value} />
+                                    </div>
+                                  );
+                                } else {
+                                  return (
+                                    <MiddleBuble
+                                      message={value}
+                                      key={key}
+                                      showProfilePic={
+                                        (!messages[key + 1] ||
+                                          messages[key + 1].sender_id !==
+                                            value.sender_id) &&
+                                        value &&
+                                        value.sender_picture
+                                      }
+                                      picture={messages[key].sender_picture}
+                                    />
+                                  );
+                                }
+                              })}
+                          </div>
                         </div>
+                        <p className="p-4 text-center text-sm text-gray-500">
+                          {messages && messages.length > 0
+                            ? messages[messages.length - 1].createdAt
+                                .toString()
+                                .substring(0, 10) +
+                              " at " +
+                              messages[messages.length - 1].createdAt
+                                .toString()
+                                .substring(11, 16)
+                            : "No messages yet"}
+                        </p>
                       </div>
-                      <p className="p-4 text-center text-sm text-gray-500">
-                        {messages && messages.length > 0
-                          ? messages[messages.length - 1].createdAt
-                              .toString()
-                              .substring(0, 10) +
-                            " at " +
-                            messages[messages.length - 1].createdAt
-                              .toString()
-                              .substring(11, 16)
-                          : "No messages yet"}
-                      </p>
-                    </div>
+                    ) : (
+                      <div className="w-full h-full bg-white flex justify-evenly items-center">
+                        <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
+                          <Image
+                            src="/badge1.png"
+                            alt="image"
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                        <div className="w-[45%] h-full bg-red-500"></div>
+                      </div>
+                    )}
                   </div>
-                  <div className="chat-footer flex-none">
+                  <div
+                    className={`chat-footer flex-none ${
+                      channelManagement ? "hidden" : ""
+                    }`}
+                  >
                     <div className="flex flex-row items-center p-4">
                       <button
                         type="button"
