@@ -308,6 +308,7 @@ const Page = () => {
                       return (
                         <ChatCard
                           key={key}
+                          index={key}
                           setTargetChannel={setTargetChannel}
                           setTargetUser={setTargetUser}
                           value={value}

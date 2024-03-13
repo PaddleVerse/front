@@ -1,4 +1,5 @@
 import React from "react";
+import {motion} from 'framer-motion'
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
@@ -25,8 +26,11 @@ export const ChatCard = (props: any) => {
     }
   }, [props.value.id, props.self.id, props.value.user, props.update]);
   return (
-    <div
-      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
+    <motion.div
+      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.25 * props.index }}
       onClick={(e) => {
         if (props.value.user === false) {
           props.setTargetChannel(props.value);
@@ -71,7 +75,7 @@ export const ChatCard = (props: any) => {
       <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative hidden">
         Feb 1
       </p>
-    </div>
+    </motion.div>
   );
 };
 
