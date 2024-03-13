@@ -21,15 +21,17 @@ const Items = () => {
           <h1 className={`${rajdhani.className} text-[20px]`}>Items</h1>
         </div>
       </div>
-      <div className="grid p-4 2xl:grid-cols-10  md:grid-cols-6 lg:grid-cols-5 grid-cols-4 mt-2">
+      <div className="grid p-4 2xl:grid-cols-10  md:grid-cols-7 lg:grid-cols-5 grid-cols-4 mt-2">
         {Array.from({ length: 40 }, (_, index) => (
-          <Image
-            src="/badge2_c.png"
-            width={70}
-            height={70}
-            alt={"image"}
-            key={index}
-          />
+            <Image
+              src="/badge2_c.png"
+              width={0}
+              height={0}
+              alt={"image"}
+              key={index}
+              sizes="100vh 100vw"
+              className="w-[70px] h-auto"
+            />
         ))}
       </div>
     </div>

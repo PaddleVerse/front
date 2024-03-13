@@ -177,7 +177,7 @@ const UserProfile = ({target} : any) => {
               title={`${target?.name}'s Profile`}
               href="https://twitter.com/mannupaaji"
             >
-              <div className="overflow-hidden h-[290px] w-full">
+              <div className="overflow-hidden h-[290px] w-full relative">
                 <Image
                   src={target.banner_picture ? target.banner_picture : "/car1.jpg"}
                   fill

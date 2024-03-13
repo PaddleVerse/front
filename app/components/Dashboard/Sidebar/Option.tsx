@@ -150,7 +150,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                     width={13}
                     height={13}
                     alt="image"
-                    className="z-0"
+                    className="z-0 h-auto w-auto"
                   ></Image>
                 </motion.div>
                 {/* {game} */}

@@ -8,10 +8,11 @@ const Achievement = () => {
     <div className=" w-full text-white flex items-center gap-2 p-2">
       <Image
         src={"/badge2_c.png"}
-        width={100}
-        height={100}
+        width={40}
+        height={40}
         alt="badge"
-        className="w-[40px]"
+
+
       ></Image>
       <div className="flex flex-col w-full">
         <h1 className={`text-[14px] font-[500] ${rajdhani.className}`}>FIRST WIN</h1>

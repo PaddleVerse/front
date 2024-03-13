@@ -21,15 +21,14 @@ const UserProfileSecond = ({ user }: any) => {
       <div className=" w-full h-full relative flex flex-col 2xl:gap-[80px] gap-12 rounded-md">
         <div className="w-full  h-[290px] relative">
           <PinContainer title="Overview" href="https://twitter.com/mannupaaji">
-            <div className="overflow-hidden h-[290px] w-full">
+            <div className="overflow-hidden h-[290px] w-full relative">
               <Image
                 src={user.banner_picture ? user.banner_picture : "/car1.jpg"}
                 fill
                 priority
-                style={{ objectFit: "cover" }}
                 alt="bg"
                 sizes="auto"
-                className="z-[-1]"
+                className="z-[-1] object-cover"
               />
             </div>
           </PinContainer>
