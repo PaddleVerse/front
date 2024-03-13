@@ -29,7 +29,7 @@ const responsive = {
 
 const Caroussel = () => {
   return (
-    <div className="mt-[75px] 2xl:mb-4 xl:mb-[175px] mb-[50px] border 2xl:max-w-[1800px] xl:max-w-[950px] mx-auto 2xl:pl-4">
+    <div className="mt-[75px] 2xl:mb-4 xl:mb-[175px] mb-[50px]  2xl:max-w-[1800px] xl:max-w-[950px] mx-auto 2xl:pl-4">
       <Carousel
         responsive={responsive}
         autoPlay={false}

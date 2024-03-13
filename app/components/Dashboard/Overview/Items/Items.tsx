@@ -30,7 +30,8 @@ const Items = () => {
               alt={"image"}
               key={index}
               sizes="100vh 100vw"
-              className="w-[70px] h-auto"
+              // style={{ width: "70px", height: "70px" }}
+              className="w-[70px] h-[70px]"
             />
         ))}
       </div>
