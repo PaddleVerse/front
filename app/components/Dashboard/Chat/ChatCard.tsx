@@ -28,7 +28,7 @@ export const ChatCard = (props: any) => {
   }, [props.value.id, props.self.id, props.value.user, props.update]);
   
   return (
-    <div
+    <motion.div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
       onClick={(e) => {
         if (props.value.user === false) {
@@ -41,6 +41,9 @@ export const ChatCard = (props: any) => {
         props.setUpdate(true);
         e.preventDefault();
       }}
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.25 * props.index}}
     >
       <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">
         <img
@@ -79,7 +82,7 @@ export const ChatCard = (props: any) => {
       <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative hidden">
         Feb 1
       </p>
-    </div>
+    </motion.div>
   );
 };
 

@@ -9,9 +9,12 @@ const roboto = Roboto({
 });
 const OneGame_2 = ({ status }: { status: string }) => {
   return (
-    <div className="rounded-md w-full h-[70px]  bg-gradient-to-r from-[#172234] via-[#172234] to-[#172234] flex items-center justify-between px-4">
-      <div className="flex items-center justify-between w-[42%]">
-        <div>
+    <motion.div
+      className="rounded-md w-full sm:h-[70px] bg-gradient-to-r bg-[#172234] flex items-center justify-between px-4"
+      whileHover={{ x: -5 }}
+    >
+      <div className="flex items-center justify-between 2xl:w-[42%] sm:w-[80%] w-[88%]">
+        <div className="relative w-[50px] h-[50px] sm:flex hidden ">
           <Image
             src="/b.png"
             fill
@@ -64,7 +67,7 @@ const OneGame_2 = ({ status }: { status: string }) => {
           
         </div>
       </div>
-      <div className="flex items-center justify-center py-1 px-[11px] text-[15px] tracking-tight font-semibold rounded-md bg-[#202B43]">
+      <div className="flex items-center sm:w-auto w-[25px] justify-center py-1 sm:px-[11px] sm:text-[15px] text-[11px] tracking-tight font-semibold rounded-md sm:bg-[#202B43]">
         Mar 5, 2024
       </div>
       <div className="items-center justify-between w-[42%] hidden 2xl:flex">

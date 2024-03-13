@@ -252,7 +252,7 @@ const Page = () => {
 
 
   return (
-    <div className="w-full lg:h-full  md:h-[92%] h-[97%] flex justify-center mt-5 overflow-hidden">
+    <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
         {modlar && <JoinChannel handleClick={handleClick}/>}
       </AnimatePresence>

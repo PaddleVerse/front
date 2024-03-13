@@ -63,7 +63,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
             <RxDashboard className="hover:bg-[#34202A]" />
           ) : label === "Chat" ? (
             <div className="relative"> 
-              <PiChatCircleTextLight className="hover:bg-blurredRed" />
+              <PiChatCircleTextLight className="hover:bg-[#34202A]"/>
               {notifed && (
                 <div className="absolute bg-gray-900 p-1 rounded-full top-0 right-0">
                   <div className="bg-red-500 rounded-full w-[6px] h-[6px]"></div>
