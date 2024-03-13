@@ -34,7 +34,7 @@ const Modlar = ({
   };
   return (
     <motion.div
-      className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-10"
+      className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50"
       >
       <motion.div
         className="bg-black rounded-lg flex justify-center p-[50px] text-white gap-8  relative"
