@@ -94,16 +94,21 @@ const UserProfileSecond = ({ user }: any) => {
                     <h1 className="ml-1 2xl:text-[17px] xl:text-[14px] font-[500] sm:text-[11px] text-[14px]">
                       LVL 2
                     </h1>
-                    <span className="2xl:text-xs text-[8px] text-buttonGray 2xl:mr-3 sm:mr-7 mr-7">
+                    <span className="2xl:text-xs text-[8px] text-white 2xl:mr-3 sm:mr-7 mr-7">
                       250/1000
                     </span>
                   </div>
-                  <div className="sm:w-[95%] w-[91%] 2xl:w-full bg-progressBg rounded-full p-[1px] dark:bg-gray-700">
+                  <div className="sm:w-[95%] w-[91%] 2xl:w-[98%] b bg-[#D6D6D6] rounded-full">
                     <div
-                      className="bg-progressColor sm:h-2.5 h-2 rounded-full relative"
+                      className="bg-[#FF4654] p-2 sm:h-2.5 h-2 rounded-full relative"
                       style={{ width: "45%" }}
                     >
-                      <div className="absolute bg-progressIndicator w-4 h-4 rounded-full -right-2 sm:-top-[3px] -top-[4px]"></div>
+                      <div className="relative">
+                        <div className="absolute 2xl:w-4 2xl:h-4 w-3 h-3  bg-[#FF4656] 2xl:-right-[13px] -right-[11px] top-[16px]  transform rotate-45"></div>
+                      </div>
+                      <div className="absolute bg-[#FF4656] w-10 h-6 rounded-sm -right-4 -bottom-[34px] text-white flex items-center justify-center text-[12px] text-center">
+                        45%
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -111,7 +116,7 @@ const UserProfileSecond = ({ user }: any) => {
               {/* <div className="  2xl:w-[30%] w-full h-[40%] 2xl:h-auto bg-dashBack rounded-md border"></div> */}
             </div>
           </div>
- 
+
           <div
             className={`2xl:w-[30%] p-5 text-white ${rajdhani.className} bg-[#172234] sm:w-[42%]  rounded-lg h-[250px] flex flex-col gap-4`}
             // style={{
@@ -148,8 +153,8 @@ const UserProfileSecond = ({ user }: any) => {
                         stroke: `#FF4654`,
                       },
                       text: {
-                        fill: '#FF4654',
-                        fontSize: '16px',
+                        fill: "#FF4654",
+                        fontSize: "16px",
                       },
                     }}
                   />
@@ -161,7 +166,7 @@ const UserProfileSecond = ({ user }: any) => {
                 </div>
               </div>
               <div className="flex gap-4 items-center">
-              <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
+                <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
                   <CircularProgressbar
                     value={66}
                     text={`${66}%`}
@@ -171,8 +176,8 @@ const UserProfileSecond = ({ user }: any) => {
                         stroke: `#FF4654`,
                       },
                       text: {
-                        fill: '#FF4654',
-                        fontSize: '16px',
+                        fill: "#FF4654",
+                        fontSize: "16px",
                       },
                     }}
                   />
