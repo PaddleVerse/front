@@ -28,31 +28,44 @@ const modalVariants = {
   },
 };
 
-
-const JoinChannel = ({ handleClick, user }: { handleClick: () => void, user: user }) => {
+const JoinChannel = ({
+  handleClick,
+  user,
+  socket,
+}: {
+  handleClick: () => void;
+  user: user;
+  socket: any;
+}) => {
   const [channels, setChannels] = useState<any[]>([]);
   const [filteredChannels, setFilteredChannels] = useState<any[]>([]);
   const search = useRef<HTMLInputElement>(null);
   const { register } = useForm();
   useEffect(() => {
     const fetchChannels = async () => {
-      const res = await axios.get("http://localhost:8080/channels").then((data) => {
-        setChannels(data.data);
-        setFilteredChannels(data.data);
-      });
+      const res = await axios
+        .get("http://localhost:8080/channels")
+        .then((data) => {
+          setChannels(data.data);
+          setFilteredChannels(data.data);
+        });
     };
-    fetchChannels();    
+    fetchChannels();
   }, []);
 
   const filterBySearch = (e: React.ChangeEvent, value: string | null) => {
-      const res = channels.filter((channel) => {
-        return channel.name.toLowerCase().includes(value?.toLowerCase() as string);
-      });
+    const res = channels.filter((channel) => {
+      return channel.name
+        .toLowerCase()
+        .includes(value?.toLowerCase() as string);
+    });
     setFilteredChannels(res);
   };
 
   return (
-    <div className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}>
+    <div
+      className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}
+    >
       <motion.div
         className="overflow-y-auto border border-red-500/[0.3] h-[70%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] px-10 py-16 flex flex-col bg-transparent rounded-xl"
         initial="closed"
@@ -76,11 +89,22 @@ const JoinChannel = ({ handleClick, user }: { handleClick: () => void, user: use
               filterBySearch(e, search.current?.value!);
             }}
           />
-          <IoIosSearch className="absolute top-[15px] left-[10px] text-gray-400" size={17} />
+          <IoIosSearch
+            className="absolute top-[15px] left-[10px] text-gray-400"
+            size={17}
+          />
         </div>
         <div className=" grid-cols-2 grid mt-10 overflow-y-auto">
           {filteredChannels.map((channel, key) => {
-            return <JoinChannelBubble key={key} lock={channel.state === "protected"} channel={channel} user={ user} />;
+            return (
+              <JoinChannelBubble
+                key={key}
+                lock={channel.state === "protected"}
+                channel={channel}
+                user={user}
+                socket={socket}
+              />
+            );
           })}
         </div>
         <div className="absolute top-2 right-2 cursor-pointer">

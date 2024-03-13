@@ -1,4 +1,5 @@
 import { channel, user } from "@/app/Dashboard/Chat/type";
+import axios from "axios";
 import React, { useState } from "react";
 import { GoLock } from "react-icons/go";
 
@@ -20,15 +21,30 @@ const JoinChannelBubble = ({
   lock,
   channel,
   user,
+  socket
 }: {
   lock: boolean;
   channel: channel;
-  user: user;
+    user: user;
+    socket: any;
 }) => {
   const [hover, setHover] = useState(false);
 
+
+  const handleClick = async () => {
+    const participantObject = {
+
+    };
+    const res = await axios.post("http://localhost:8080/participants", participantObject);
+    
+    if (res.status === 200) {
+      // socket.emit("joinRoom", { room: channel.name, user: user })
+      console.log("Channel joined");
+    }
+  }
+
   return (
-    <div className="flex ga-2 items-center col-start text-inherit relative">
+    <div className="flex ga-2 items-center col-start text-inherit relative" onClick={(e)=> console.log('clicked to join', channel.state)}>
       <img
         src="/badge1.png"
         alt="image"
