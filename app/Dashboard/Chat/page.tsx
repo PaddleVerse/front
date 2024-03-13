@@ -1,4 +1,5 @@
 "use client";
+import {motion} from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
 import { AnimatePresence } from "framer-motion";
@@ -16,6 +17,7 @@ import {
   FormEventHandler,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -23,9 +25,10 @@ import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { sendError } from "next/dist/server/api-utils";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
+import { useSwipeable } from "react-swipeable";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +46,7 @@ export type message = {
 
 const Page = () => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
+  const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
   const { register } = useForm();
@@ -250,9 +254,30 @@ const Page = () => {
     setModlar(false);
   }
 
-
+  const handleSwitching = () => {
+    setShowMessage(!showMessage);
+  }
+  function useWindowSize() {
+    const [size, setSize] = useState(0);
+    useLayoutEffect(() => {
+      function updateSize() {
+        setSize(window.innerWidth);
+      }
+      window.addEventListener("resize", updateSize);
+      updateSize();
+      return () => window.removeEventListener("resize", updateSize);
+    }, []);
+    return size;
+  }
+  const tablet = useWindowSize() < 769;
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setShowMessage(true),
+    onSwipedRight: () => setShowMessage(false),
+    // onSwiped:()=>setExpanded(!expanded),
+  });
+  console.log(showMessage);
   return (
-    <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5 overflow-hidden">
+    <div className="w-[91%] mx-auto lg:h-full md:h-[92%] h-[80%] flex justify-center mt-5 overflow-hidden" >
       <AnimatePresence>
         {modlar && <JoinChannel handleClick={handleClick}/>}
       </AnimatePresence>
@@ -264,11 +289,14 @@ const Page = () => {
             backgroundColor: "rgba(13, 9, 10, 0.7)",
           }}
         >
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">
-              <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 no-scrollbar">
+              <motion.section className={` flex flex-col flex-none overflow-auto ${showMessage && tablet ? 'invisible' : 'visible'} group lg:max-w-[280px] md:w-2/5 no-scrollbar`}
+              initial={{display:'flex', width: '100%', opacity: 1}}
+              animate={{display: showMessage && tablet ? 'hidden': 'flex', width: showMessage && tablet ? '0' : '100%', opacity: showMessage && tablet ? 0 : 1, transition: {duration: 0.25}}}
+              >
               <div className=" p-4 flex-none mt-4">
-                  <p className={`text-2xl font-bold hidden md:block group-hover:block mb-4`}>
+                  <p className={`text-2xl font-bold md:block group-hover:block mb-4`}>
                     Messages
                   </p>
                   <form onSubmit={(e) => e.preventDefault()}>
@@ -305,6 +333,7 @@ const Page = () => {
                       return (
                         <ChatCard
                           key={key}
+                          swipe={setShowMessage}
                           index={key}
                           setTargetChannel={setTargetChannel}
                           setTargetUser={setTargetUser}
@@ -314,11 +343,12 @@ const Page = () => {
                           update={update}
                           online={online}
                           setOnline={setOnline}
+                          handleClick={handleSwitching}
                         ></ChatCard>
                       );
                     })}
                 </div>
-              </section>
+              </motion.section>
               {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
                 <section className="flex flex-col flex-auto border-l border-gray-800 border">
@@ -359,7 +389,9 @@ const Page = () => {
                     className=" p-4 flex-1 overflow-y-scroll no-scrollbar"
                     ref={containerRef}
                   >
-                    <div className="flex flex-row justify-start overflow-y-auto">
+                    <div className="flex flex-row justify-start overflow-y-auto "
+                    {...handlers}
+                    >
                       <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
                         {messages &&
                           messages.map((value, key: any) => {

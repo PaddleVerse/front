@@ -29,7 +29,7 @@ export const ChatCard = (props: any) => {
   
   return (
     <motion.div
-      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
+      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative sm:w-auto"
       onClick={(e) => {
         if (props.value.user === false) {
           props.setTargetChannel(props.value);
@@ -39,6 +39,7 @@ export const ChatCard = (props: any) => {
           props.setTargetChannel(null);
         }
         props.setUpdate(true);
+        props.handleClick();
         e.preventDefault();
       }}
       initial={{ opacity: 0, y: -20 }}
@@ -64,7 +65,7 @@ export const ChatCard = (props: any) => {
             ))}
         </div>
       </div>
-      <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
+      <div className="flex-auto min-w-0 ml-4 mr-6  md:block group-hover:block">
         <div className="flex justify-between w-full">
           <p className="text-white">{props.value.name}</p>
           <p className="text-gray-400 text-sm">
@@ -79,7 +80,7 @@ export const ChatCard = (props: any) => {
           </div>
         </div>
       </div>
-      <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative hidden">
+      <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative ">
         Feb 1
       </p>
     </motion.div>
