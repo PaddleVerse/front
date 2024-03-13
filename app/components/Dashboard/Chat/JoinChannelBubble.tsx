@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { GoLock } from "react-icons/go";
 import { Socket } from "socket.io-client";
+import { Unlock } from "next/font/google";
 
 const JoinChannelBubble = ({
   lock,
@@ -17,7 +18,8 @@ const JoinChannelBubble = ({
     user: user;
     handleClick: () => void;
   socket: Socket;
-}) => {
+  }) => {
+  const [unlock, setUnlock] = useState(false);
   const handleClicks = async () => {
     const participantObject = {
 
@@ -44,17 +46,24 @@ const JoinChannelBubble = ({
         alt="image"
         className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
       />
-      <div
-        className="flex flex-col gap-1"
-        title={channel.topic}
-      >
+      <div className="flex flex-col gap-1" title={channel.topic}>
         <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
           {channel.name}
         </h2>
-        <p className="text-gray-400 xl:text-sm truncate md:text-xs lg:max-w-full md:max-w-[120px]">
-          {channel.topic.substring(0, 30) +
-            (channel.topic.length > 30 && " ...")}
-        </p>
+        {unlock ? (
+          <input
+            type="text"
+            className="left-0 top-[45px] rounded-md lp-2 w-[180px] bg-dashBack h-10 text-white "
+          />
+        ) : (
+          <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
+            {channel.topic.substring(0, 30) +
+              (channel.topic.length > 30 && " ...")}
+            {/* a fun interactive group of people */}
+          </p>
+        )}
+        {/* <p className="text-gray-400 xl:text-sm truncate md:text-xs lg:max-w-full md:max-w-[120px]">
+        </p> */}
       </div>
       {lock && (
         <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
