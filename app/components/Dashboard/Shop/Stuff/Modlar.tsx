@@ -71,7 +71,7 @@ const Modlar = ({
             width={700}
             height={400}
             priority
-            className="object-cover object-center"
+            className="object-cover object-center w-auto h-auto"
             // sizes="(max-width: 100px) 100vw, 33vw"
           />
         </div>

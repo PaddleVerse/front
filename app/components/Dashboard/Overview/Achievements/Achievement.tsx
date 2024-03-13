@@ -12,7 +12,7 @@ const Achievement = () => {
         height={40}
         alt="badge"
 
-
+        className="w-auto h-auto"
       ></Image>
       <div className="flex flex-col w-full">
         <h1 className={`text-[14px] font-[500] ${rajdhani.className}`}>FIRST WIN</h1>
