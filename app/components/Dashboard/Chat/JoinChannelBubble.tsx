@@ -66,7 +66,9 @@ const JoinChannelBubble = ({
         </p> */}
       </div>
       {lock && (
-        <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
+        <div>
+          <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
+        </div>
       )}
     </div>
   );
