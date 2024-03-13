@@ -1,27 +1,34 @@
 "use client";
 import React from "react";
+
+import {motion} from 'framer-motion'
 import FormElement from "./FormElement";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 interface Props {
   user: any;
+  index: number;
 }
 
-const LeaderRow = ({ user }: Props) => {
+const LeaderRow = ({ user, index }: Props) => {
   const router = useRouter();
   const { state } = useGlobalState();
   const User: any = state.user;
+
 
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${user.id}`);
   };
   return (
-    <tr
+    <motion.tr
       className={`${
         user.id % 2 === 0 ? "bg-[#101823]" : "bg-[#161F2F]"
       } text-white sm:text-[12px] text-[10px] cursor-pointer`}
       onClick={handleClick}
+      initial={{ opacity: 0, y:-20 }}
+      animate={{ opacity: 1, y:0 }}
+      transition={{ delay: 0.25 * index }}
     >
       <td scope="row" className=" sm:py-[7px] font-medium text-[14px]">
         {user.id === 1 ? (
@@ -80,7 +87,7 @@ const LeaderRow = ({ user }: Props) => {
           ))}
         </div>
       </td> */}
-    </tr>
+    </motion.tr>
   );
 };
 

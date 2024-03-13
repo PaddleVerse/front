@@ -1,4 +1,5 @@
 import React from "react";
+import {motion} from "framer-motion";
 import { Rajdhani } from "next/font/google";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -98,9 +99,12 @@ const UserProfileSecond = ({ user }: any) => {
                     </span>
                   </div>
                   <div className="sm:w-[95%] w-[91%] 2xl:w-[98%] b bg-[#D6D6D6] rounded-full">
-                    <div
-                      className="bg-[#FF4654] p-2 sm:h-2.5 h-2 rounded-full relative"
-                      style={{ width: "45%" }}
+                    <motion.div
+                      className="bg-[#FF4654] p-2 sm:h-2.5 h-2 rounded-full relative w-[45%]"
+                      initial={{ width: "0%" }}
+                      animate={{ width: "45%" }}
+                      transition={{ duration: 1 }}
+                      // style={{ width: "45%" }}
                     >
                       <div className="relative">
                         <div className="absolute 2xl:w-4 2xl:h-4 w-3 h-3  bg-[#FF4656] 2xl:-right-[13px] -right-[11px] top-[16px]  transform rotate-45"></div>
@@ -108,7 +112,7 @@ const UserProfileSecond = ({ user }: any) => {
                       <div className="absolute bg-[#FF4656] w-10 h-6 rounded-sm -right-4 -bottom-[34px] text-white flex items-center justify-center text-[12px] text-center">
                         45%
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </div>
