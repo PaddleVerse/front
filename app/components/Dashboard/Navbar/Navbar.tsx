@@ -56,11 +56,11 @@ const Navbar = () => {
     <div className="w-full flex justify-center"
     >
       <div
-        className="w-[95%] h-14 bg-transparent rounded-b-sm md:flex hidden justify-between items-center"
-        style={{
-          backdropFilter: "blur(20px)",
-          backgroundColor: "rgba(13, 9, 10, 0.7)",
-        }}
+        className="w-[95%] h-14 bg-[#101823] rounded-b-sm md:flex hidden justify-between items-center"
+        // style={{
+        //   backdropFilter: "blur(20px)",
+        //   backgroundColor: "rgba(13, 9, 10, 0.7)",
+        // }}
       >
         <span className="text-gray-400 ml-10 text-[14px]">{pathname}</span>
         <button
