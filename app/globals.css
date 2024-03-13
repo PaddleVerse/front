@@ -80,6 +80,7 @@
   font-family: "fontt"; /*a name to be used later*/
   src: url("../public/DINCondensed-Bold.ttf"); /*URL to font*/
 }
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

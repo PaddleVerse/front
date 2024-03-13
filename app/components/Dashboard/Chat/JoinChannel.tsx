@@ -98,6 +98,7 @@ const JoinChannel = ({
           {filteredChannels.map((channel, key) => {
             return (
               <JoinChannelBubble
+                handleClick={handleClick}
                 key={key}
                 lock={channel.state === "protected"}
                 channel={channel}

@@ -6,12 +6,14 @@ import axios from "axios";
 import { IoNotifications } from "react-icons/io5";
 import { useGlobalState } from "../../Sign/GlobalState";
 import NotificationCard from './NotificationCard';
+import { set } from "react-hook-form";
 
 
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [notifed, setNotifed] = useState(false);
   const {state, dispatch} = useGlobalState();
   const {user, socket} = state;
 
@@ -24,6 +26,7 @@ const Navbar = () => {
     // });
 
     setOpen(!open) 
+    setNotifed(false);
   };
 
   const cleanCookie = () => {
@@ -38,8 +41,15 @@ const Navbar = () => {
   }
 
   useEffect(() => {
+    if (!user || !socket) return;
+    socket?.on('notification', () => {
+      setNotifed(true);
+    });
+  }, [socket]);
+
+  useEffect(() => {
     if (!socket || !user) return;
-    socket?.on('refresh', (data: any) =>{
+    socket?.on('notification', (data: any) =>{
       if (data?.ok === 0) return;
       axios.get(`http://localhost:8080/user/${user?.id}`).then((res) => {
         (dispatch && dispatch({type: "UPDATE_USER", payload: res.data}));
@@ -82,19 +92,24 @@ const Navbar = () => {
   return (
     <div className="w-full flex justify-center z-50">
       <div
-        className="w-[95%] h-14 bg-transparent rounded-b-sm md:flex hidden justify-between items-center"
-        style={{
-          backdropFilter: "blur(20px)",
-          backgroundColor: "rgba(13, 9, 10, 0.7)",
-        }}
+        className="w-[95%] h-14 bg-[#101823] rounded-b-sm md:flex hidden justify-between items-center"
+        // style={{
+        //   backdropFilter: "blur(20px)",
+        //   backgroundColor: "rgba(13, 9, 10, 0.7)",
+        // }}
       >
         <span className="text-gray-400 ml-10 text-[14px]">{pathname}</span>
         <div className="flex justify-center items-center relative">
           <div >
             <button
               onClick={handleClick}
-              className="h-8 w-8 flex justify-center items-center text-gray-300 select-none rounded-2xl text-center align-middle font-sans text-xs font-medium uppercase transition-all hover:bg-gray-100/10 active:bg-gray-100/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-              <IoNotifications className="h-6 w-6" />
+              className=" relative h-8 w-8 flex justify-center items-center text-gray-300 select-none rounded-2xl text-center align-middle font-sans text-xs font-medium uppercase transition-all hover:bg-gray-100/10 active:bg-gray-100/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                <IoNotifications className="h-6 w-6" />
+                { notifed && (
+                  <div className="absolute bg-gray-900 p-1 rounded-full top-0 right-0">
+                    <div className="bg-red-500 rounded-full w-[6px] h-[6px]"></div>
+                  </div>
+                )}
             </button>
               {open && (
                 <ul className="absolute w-[200%] #9c9c9c66 bg-gray-200 left-[-100%] rounded-xl mt-2" onBlur={() => setOpen(false)}>

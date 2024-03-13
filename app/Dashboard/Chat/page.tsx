@@ -1,4 +1,6 @@
 "use client";
+import  Image  from "next/image";
+import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
 import { AnimatePresence } from "framer-motion";
@@ -11,6 +13,7 @@ import {
   FormEventHandler,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -20,9 +23,9 @@ import { channel, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
+import { useSwipeable } from "react-swipeable";
 
 const inter = Inter({ subsets: ["latin"] });
-
 
 export type message = {
   id?: number;
@@ -37,6 +40,7 @@ export type message = {
 
 const Page = () => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
+  const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
   const { register } = useForm();
@@ -47,6 +51,7 @@ const Page = () => {
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
+  const [channelManagement, setChannelManagement] = useState(false);
   useEffect(() => {
     if (globalState.state.user) {
       axios
@@ -60,24 +65,23 @@ const Page = () => {
       if (targetUser) {
         axios.get(`http://localhost:8080/user/${targetUser.id}`).then((res) => {
           setTargetUser(res.data);
-        }
-        );
+        });
       }
     }
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
   //press escape to close the modal
-  const handleEscapeKeyPress = useCallback((e:any) => {
-    if (e.key === 'Escape') {
+  const handleEscapeKeyPress = useCallback((e: any) => {
+    if (e.key === "Escape") {
       setModlar(false);
     }
   }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleEscapeKeyPress);
+    document.addEventListener("keydown", handleEscapeKeyPress);
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKeyPress);
+      document.removeEventListener("keydown", handleEscapeKeyPress);
     };
   }, [handleEscapeKeyPress]);
   ///////////////////////////////////////////////////////////
@@ -109,8 +113,7 @@ const Page = () => {
   }, [messages]);
 
   useEffect(() => {
-    globalState?.state?.socket?.on("message", (data: any) => {
-    });
+    globalState?.state?.socket?.on("message", (data: any) => {});
   }, [globalState?.state?.socket]);
 
   // useEffect(() => {
@@ -176,7 +179,7 @@ const Page = () => {
       });
     return data;
   };
-  
+
   const fetchMessagesForChannel = (
     id: number | undefined
   ): Promise<message[]> => {
@@ -242,15 +245,36 @@ const Page = () => {
   };
   const handleClick = () => {
     setModlar(false);
+  };
+
+  const handleSwitching = () => {
+    setShowMessage(!showMessage);
+  };
+  function useWindowSize() {
+    const [size, setSize] = useState(0);
+    useLayoutEffect(() => {
+      function updateSize() {
+        setSize(window.innerWidth);
+      }
+      window.addEventListener("resize", updateSize);
+      updateSize();
+      return () => window.removeEventListener("resize", updateSize);
+    }, []);
+    return size;
   }
-
-
+  const tablet = useWindowSize() < 769;
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setShowMessage(true),
+    onSwipedRight: () => setShowMessage(false),
+    // onSwiped:()=>setExpanded(!expanded),
+  });
+  console.log(showMessage);
   return (
-    <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
+    <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
-        {modlar && <JoinChannel handleClick={handleClick} user={globalState.state.user} />}
+        {modlar && <JoinChannel handleClick={handleClick} user={globalState.state.user} socket={globalState.state.socket}/>}
       </AnimatePresence>
-      <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
+      <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
           style={{
@@ -258,11 +282,24 @@ const Page = () => {
             backgroundColor: "rgba(13, 9, 10, 0.7)",
           }}
         >
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">
-              <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 no-scrollbar">
-              <div className=" p-4 flex-none mt-4">
-                  <p className={`text-2xl font-bold hidden md:block group-hover:block mb-4`}>
+              <motion.section
+                className={` flex flex-col flex-none overflow-auto ${
+                  showMessage && tablet ? "invisible" : "visible"
+                } group lg:max-w-[280px] md:w-2/5 no-scrollbar`}
+                initial={{ display: "flex", width: "100%", opacity: 1 }}
+                animate={{
+                  display: showMessage && tablet ? "hidden" : "flex",
+                  width: showMessage && tablet ? "0" : "100%",
+                  opacity: showMessage && tablet ? 0 : 1,
+                  transition: { duration: 0.25 },
+                }}
+              >
+                <div className=" p-4 flex-none mt-4">
+                  <p
+                    className={`text-2xl font-bold md:block group-hover:block mb-4`}
+                  >
                     Messages
                   </p>
                   <form onSubmit={(e) => e.preventDefault()}>
@@ -283,10 +320,17 @@ const Page = () => {
                         </span>
                       </label>
                     </div>
-                  </form> 
+                  </form>
                 </div>
                 <p className="ml-8">
-                    Join a <span onClick={() => setModlar(true)} className="text-sky-500 cursor-pointer">Public</span> Group Chat
+                  Join a{" "}
+                  <span
+                    onClick={() => setModlar(true)}
+                    className="text-sky-500 cursor-pointer"
+                  >
+                    Public
+                  </span>{" "}
+                  Group Chat
                 </p>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"
@@ -299,6 +343,8 @@ const Page = () => {
                       return (
                         <ChatCard
                           key={key}
+                          swipe={setShowMessage}
+                          index={key}
                           setTargetChannel={setTargetChannel}
                           setTargetUser={setTargetUser}
                           value={value}
@@ -307,14 +353,15 @@ const Page = () => {
                           update={update}
                           online={online}
                           setOnline={setOnline}
+                          handleClick={handleSwitching}
                         ></ChatCard>
                       );
                     })}
                 </div>
-              </section>
+              </motion.section>
               {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
-                <section className="flex flex-col flex-auto border-l border-gray-800">
+                <section className="flex flex-col flex-auto border-l border-gray-800 border">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
@@ -343,57 +390,82 @@ const Page = () => {
                     </div>
 
                     <div className="flex items-center">
-                      <div className="block rounded-full  w-6 h-6 ml-4">
+                      <div
+                        className="block rounded-full  w-6 h-6 ml-4"
+                        onClick={() => setChannelManagement(!channelManagement)}
+                      >
                         <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
                     </div>
                   </div>
                   <div
-                    className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar"
+                    className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
                     ref={containerRef}
                   >
-                    <div className="flex flex-row justify-start ">
-                      <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
-                        {messages &&
-                          messages.map((value, key: any) => {
-                            if (value.sender_id === globalState.state.user.id) {
-                              return (
-                                <div className="" key={key}>
-                                  <MiddleBubbleRight message={value} />
-                                </div>
-                              );
-                            } else {
-                              return (
-                                <MiddleBuble
-                                  message={value}
-                                  key={key}
-                                  showProfilePic={
-                                    (!messages[key + 1] ||
-                                      messages[key + 1].sender_id !==
-                                        value.sender_id) &&
-                                    value &&
-                                    value.sender_picture
-                                  }
-                                  picture={messages[key].sender_picture}
-                                />
-                              );
-                            }
-                          })}
+                    {!channelManagement ? (
+                      <div className="w-full h-full" {...handlers}>
+                        <div className="flex flex-row justify-start overflow-y-auto">
+                          <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
+                            {messages &&
+                              messages.map((value, key: any) => {
+                                if (
+                                  value.sender_id === globalState.state.user.id
+                                ) {
+                                  return (
+                                    <div className="" key={key}>
+                                      <MiddleBubbleRight message={value} />
+                                    </div>
+                                  );
+                                } else {
+                                  return (
+                                    <MiddleBuble
+                                      message={value}
+                                      key={key}
+                                      showProfilePic={
+                                        (!messages[key + 1] ||
+                                          messages[key + 1].sender_id !==
+                                            value.sender_id) &&
+                                        value &&
+                                        value.sender_picture
+                                      }
+                                      picture={messages[key].sender_picture}
+                                    />
+                                  );
+                                }
+                              })}
+                          </div>
+                        </div>
+                        <p className="p-4 text-center text-sm text-gray-500">
+                          {messages && messages.length > 0
+                            ? messages[messages.length - 1].createdAt
+                                .toString()
+                                .substring(0, 10) +
+                              " at " +
+                              messages[messages.length - 1].createdAt
+                                .toString()
+                                .substring(11, 16)
+                            : "No messages yet"}
+                        </p>
                       </div>
-                    </div>
-                    <p className="p-4 text-center text-sm text-gray-500">
-                      {messages && messages.length > 0
-                        ? messages[messages.length - 1].createdAt
-                            .toString()
-                            .substring(0, 10) +
-                          " at " +
-                          messages[messages.length - 1].createdAt
-                            .toString()
-                            .substring(11, 16)
-                        : "No messages yet"}
-                    </p>
+                    ) : (
+                      <div className="w-full h-full bg-white flex justify-evenly items-center">
+                        <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
+                          <Image
+                            src="/badge1.png"
+                            alt="image"
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                        <div className="w-[45%] h-full bg-red-500"></div>
+                      </div>
+                    )}
                   </div>
-                  <div className="chat-footer flex-none">
+                  <div
+                    className={`chat-footer flex-none ${
+                      channelManagement ? "hidden" : ""
+                    }`}
+                  >
                     <div className="flex flex-row items-center p-4">
                       <button
                         type="button"

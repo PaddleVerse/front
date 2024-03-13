@@ -50,9 +50,9 @@ const BigCard = ({ infos, handleClick, selected}: BigCardProps) => {
         }`}
         alt="shop"
         fill
-        sizes="width:auto height:auto"
+        sizes="h-auto w-auto"
         priority
-        className="object-cover object-center rounded-lg "
+        className="object-cover object-center rounded-lg"
         onClick={handleCardClick}
       />
       <motion.div

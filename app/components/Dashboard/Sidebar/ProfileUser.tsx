@@ -24,7 +24,7 @@ const ProfileUser = ({
           initial={{ opacity: 1 }}
           animate={{ opacity: expanded ? 1 : 0 }}
           transition={{ duration: expanded ? 2.2 : 0.2 }}
-          className="2xl:text-[15px] text-[13px]"
+          className={`2xl:text-[15px] text-[13px]`}
         >
           {name}
         </motion.span>

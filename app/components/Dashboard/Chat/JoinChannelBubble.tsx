@@ -8,15 +8,17 @@ import { Socket } from "socket.io-client";
 const JoinChannelBubble = ({
   lock,
   channel,
+  handleClick,
   user,
   socket,
 }: {
   lock: boolean;
   channel: channel;
-  user: user;
+    user: user;
+    handleClick: () => void;
   socket: Socket;
 }) => {
-  const handleClick = async () => {
+  const handleClicks = async () => {
     const participantObject = {};
     const res = await axios.post(
       "http://localhost:8080/participants",

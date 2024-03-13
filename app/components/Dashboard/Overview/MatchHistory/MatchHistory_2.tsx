@@ -1,24 +1,35 @@
-import React from 'react'
-import { Rajdhani } from 'next/font/google'
-import OneGame_2 from './OneGame_2'
+import React from "react";
+import { Rajdhani } from "next/font/google";
+import OneGame_2 from "./OneGame_2";
 
-
-const rajdhani = Rajdhani({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
+const rajdhani = Rajdhani({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 const MatchHistory_2 = () => {
   return (
-        <div className="   w-full rounded-md bg-transparent overflow-y-auto h-[700px] p-6 text-white flex flex-col gap-7"
-    style={{
-      backdropFilter: "blur(20px)",
-      backgroundColor: "rgba(13, 9, 10, 0.5)",
-    }}>
-       <h1 className={`text-4xl font-semibold ${rajdhani.className}`}>All Matches</h1>
-       <div className='w-full h-full flex flex-col gap-2'>
-        {Array(10).fill(10).map((_, i) => (
-            <OneGame_2 key={i} />
-        ))}
-       </div>
+    <div
+      className="w-full rounded-md bg-[#101823] overflow-y-auto h-[700px] text-white flex flex-col overflow-x-hidden"
+    >
+      <div className="w-full p-6 sticky top-0 bg-[#101823] z-30">
+        <h1 className={`sm:text-4xl text-2xl font-semibold ${rajdhani.className}`}>
+          All Matches
+        </h1>
+      </div>
+      <div className="w-full h-full px-6 flex flex-col gap-[12px] ml-1">
+        <OneGame_2 status={"win"} />
+        <OneGame_2 status={"lose"} />
+        <OneGame_2 status={"win"} />
+        <OneGame_2 status={"lose"} />
+        <OneGame_2 status={"win"} />
+        <OneGame_2 status={"lose"} />
+        <OneGame_2 status={"win"} />
+        <OneGame_2 status={"lose"} />
+        <OneGame_2 status={"win"} />
+        <OneGame_2 status={"lose"} />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default MatchHistory_2
+export default MatchHistory_2;
