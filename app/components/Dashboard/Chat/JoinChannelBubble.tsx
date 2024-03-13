@@ -20,7 +20,7 @@ const JoinChannelBubble = ({
   socket: Socket;
   }) => {
   const [unlock, setUnlock] = useState(false);
-  const handleClicks = async () => {
+  const handleSubmit = async () => {
     const participantObject = {
 
     };
@@ -34,44 +34,105 @@ const JoinChannelBubble = ({
     }
   };
 
-  return (
-    <div
-      className="flex ga-2 items-center col-start text-inherit relative"
-      onClick={(e) => console.log("clicked to join", channel.state)}
-    >
-      <Image
-        width={100}
-        height={100}
-        src="/badge1.png"
-        alt="image"
-        className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
-      />
-      <div className="flex flex-col gap-1" title={channel.topic}>
-        <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
-          {channel.name}
-        </h2>
-        {unlock ? (
-          <input
-            type="text"
-            className="left-0 top-[45px] rounded-md lp-2 w-[180px] bg-dashBack h-10 text-white "
-          />
-        ) : (
-          <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
-            {channel.topic.substring(0, 30) +
+  // return (
+  //   <div
+  //     className="flex ga-2 items-center col-start text-inherit relative"
+  //     onClick={(e) => console.log("clicked to join", channel.state)}
+  //   >
+  //     <Image
+  //       width={100}
+  //       height={100}
+  //       src="/badge1.png"
+  //       alt="image"
+  //       className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
+  //     />
+  //     <div className="flex flex-col gap-1" title={channel.topic}>
+  //       <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
+  //         {channel.name}
+  //       </h2>
+  //       {unlock ? (
+  //         <input
+  //           type="text"
+  //           className="left-0 top-[45px] rounded-md lp-2 w-[180px] bg-dashBack h-10 text-white "
+  //         />
+  //       ) : (
+  //         <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
+  //           {channel.topic.substring(0, 30) +
+  //             (channel.topic.length > 30 && " ...")}
+  //           {/* a fun interactive group of people */}
+  //         </p>
+  //       )}
+  //       {/* <p className="text-gray-400 xl:text-sm truncate md:text-xs lg:max-w-full md:max-w-[120px]">
+  //       </p> */}
+  //     </div>
+  //     {lock && (
+  //       <div>
+  //         <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+  // return (
+  //   <div className="flex ga-2 items-center col-start text-inherit relative border">
+  //     <img
+  //       src="/badge1.png"
+  //       alt="image"
+  //       className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
+  //     />
+  //     <div className="flex flex-col gap-1">
+  //       <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
+  //         {channel.name}
+  //       </h2>
+  //       {unlock ? (
+  //         <input
+  //           type="text"
+  //           className="left-0 top-[45px] rounded-md lp-2 w-[180px] bg-dashBack h-10 text-white "
+  //         />
+  //       ) : (
+  //         <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
+  //                       {channel.topic.substring(0, 30) +
+  //             (channel.topic.length > 30 && " ...")}
+  //         </p>
+  //       )}
+  //     </div>
+  //     {lock && (
+  //       <div>
+  //         <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+    return (
+      <div className="flex ga-2 items-center col-start text-inherit relative">
+        <img
+          src="/badge1.png"
+          alt="image"
+          className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
+        />
+        <div className="flex flex-col gap-1">
+          <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
+            {channel.name}
+          </h2>
+          {unlock ? (
+            <input
+              type="text"
+              className="left-0 top-[45px] rounded-md lp-2 w-[180px] bg-dashBack h-10 text-white "
+              onSubmit={handleSubmit}
+            />
+          ) : (
+            <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
+              {channel.topic.substring(0, 30) +
               (channel.topic.length > 30 && " ...")}
-            {/* a fun interactive group of people */}
-          </p>
-        )}
-        {/* <p className="text-gray-400 xl:text-sm truncate md:text-xs lg:max-w-full md:max-w-[120px]">
-        </p> */}
-      </div>
-      {lock && (
-        <div>
-          <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
+            </p>
+          )}
         </div>
-      )}
-    </div>
-  );
+        {lock && (
+          <div onClick={() => setUnlock(!unlock)}>
+            <GoLock className="absolute top-6 2xl:right-[91px] xl:right-[41px] lg:right-[35px] text-white hidden md:text-[14px] 2xl:text-[16px] lg:flex" />
+          </div>
+        )}
+      </div>
+    );
 };
 
 export default JoinChannelBubble;
