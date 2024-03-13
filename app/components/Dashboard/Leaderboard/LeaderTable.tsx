@@ -56,7 +56,7 @@ const LeaderTable = () => {
           <tbody className="">
               { users && users.map((user : any , index : number) =>
                 {
-                  return <StandingRow key={index} user={user} />
+                  return <StandingRow key={index} user={user} index={index} />
                 }
               )}
           </tbody>

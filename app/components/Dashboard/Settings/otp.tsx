@@ -81,7 +81,6 @@ export default function EnterCode({ register, isError , reset}: any) {
 
     const handleBackspace = (e: any) => {
         if (e.key === 'Backspace') {
-            // Clear all inputs and set focus to the first input
             inputRefs.forEach(ref => {
                 ref.current.value = '';
             });

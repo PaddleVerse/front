@@ -9,6 +9,7 @@ const SmallCard = () => {
         src="/smallShop.png"
         fill
         alt="image"
+        sizes="h-auto w-auto"
         className="object-cover rounded-lg"
       />
       <div className="absolute bottom-2 right-2 ">
