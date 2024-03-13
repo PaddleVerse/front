@@ -7,7 +7,8 @@ import ProfileUser from "./ProfileUser";
 import { useSwipeable } from "react-swipeable";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { io } from "socket.io-client";
-
+import { Oswald } from "next/font/google";
+const oswald = Oswald({ subsets: ["latin"], weight: ["400", "500"] });
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 
@@ -126,8 +127,8 @@ const Sidebar = () => {
   
 
   return (
-    <div className="flex relative lg:h-[fit-content] h-auto z-50" {...handlers}>
-      <div className="h-screen w-full absolute bg-dashBack"></div>
+    <div className={`flex relative lg:h-[fit-content] h-auto z-40 ${oswald.className}`} {...handlers}>
+      <div className="h-screen w-full absolute bg-[#101823]"></div>
       <motion.div
         className="absolute border w-5 h-5 cursor-pointer z-40 lg:-right-[10px] -right-[15px] top-[80px] border-rightArrowColor lg:p-[2px] p-[20px]  text-rightArrowColor bg-rightArrowBg rounded-full flex items-center justify-center"
         onClick={() => setExpanded(!expanded)}
@@ -137,7 +138,7 @@ const Sidebar = () => {
         <FaChevronRight />
       </motion.div>
       <motion.div
-        className={`text-white bg-dashBack  flex-col h-full ${
+        className={`text-white bg-[#101823]  flex-col h-full ${
           tablet && !expanded ? "" : "pl-6 pr-7 z-20"
         }   select-none sm:flex lg:relative absolute overflow-auto lg:overflow-visible no-scrollbar`}
         variants={containerVariants}
@@ -181,7 +182,7 @@ const Sidebar = () => {
                   key="modal"
                 >
                   <span className="text-[12px] text-buttonGray">NOOB</span>
-                  <span className="text-[14px] w-22">{user && user.name}</span>
+                  <span className="text-[17px] w-22">{user && user.name}</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -192,6 +193,7 @@ const Sidebar = () => {
             initial={{ paddingLeft: "29px" }}
             animate={{ paddingLeft: expanded ? "29px" : "8px" }}
             // transition={{ duration: expanded ? 1.5 : 0.1 }}
+          
           >
             MAIN
           </motion.span>

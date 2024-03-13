@@ -60,7 +60,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
           expanded={expanded}
         >
           {label === "Dashboard" ? (
-            <RxDashboard className="hover:bg-blurredRed" />
+            <RxDashboard className="hover:bg-[#34202A]" />
           ) : label === "Chat" ? (
             <div className="relative"> 
               <PiChatCircleTextLight className="hover:bg-blurredRed" />
@@ -71,11 +71,11 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
               )}
             </div>
           ) : label === "Shop" ? (
-            <LiaShoppingCartSolid className="hover:bg-blurredRed" />
+            <LiaShoppingCartSolid className="hover:bg-[#34202A]" />
           ) : label === "Search" ? (
-            <IoIosSearch className=" hover:bg-blurredRed" />
+            <IoIosSearch className=" hover:bg-[#34202A]" />
           ) : label === "Game" ? (
-            <PiGameController className="hover:bg-blurredRed" />
+            <PiGameController className="hover:bg-[#34202A]" />
           ) : (
           <RxDashboard />
           )}
@@ -150,9 +150,9 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                     className={`py-2 block ${!expanded ? 'ml-2':''} ${
                       lastSegment === game ||
                       (lastSegment === "Dashboard" && game === "Overview")
-                        ? "bg-blurredRed text-white"
+                        ? "bg-[#34202A] text-[#FF5866]"
                         : ""
-                    }  w-32 rounded-lg cursor-pointer text-sm pl-4 hover:bg-blurredRed hover:text-white text-buttonGray `}
+                    }  w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-[#FF5866] text-buttonGray `}
                   >
                     {game}
                   </span>
@@ -174,7 +174,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                     width={13}
                     height={13}
                     alt="image"
-                    className="z-0"
+                    className="z-0 h-auto w-auto"
                   ></Image>
                 </motion.div>
                 {/* {game} */}

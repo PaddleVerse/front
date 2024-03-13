@@ -252,11 +252,11 @@ const Page = () => {
 
 
   return (
-    <div className="w-full lg:h-full md:h-[92%] h-[97%] flex justify-center mt-5">
+    <div className="w-full lg:h-full  md:h-[92%] h-[97%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
         {modlar && <JoinChannel handleClick={handleClick}/>}
       </AnimatePresence>
-      <div className="lg:h-[91%] lg:w-[91%] w-full h-full">
+      <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
           style={{
@@ -305,6 +305,7 @@ const Page = () => {
                       return (
                         <ChatCard
                           key={key}
+                          index={key}
                           setTargetChannel={setTargetChannel}
                           setTargetUser={setTargetUser}
                           value={value}
@@ -320,7 +321,7 @@ const Page = () => {
               </section>
               {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
-                <section className="flex flex-col flex-auto border-l border-gray-800">
+                <section className="flex flex-col flex-auto border-l border-gray-800 border">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
@@ -355,10 +356,10 @@ const Page = () => {
                     </div>
                   </div>
                   <div
-                    className="chat-body p-4 flex-1 overflow-y-scroll no-scrollbar"
+                    className=" p-4 flex-1 overflow-y-scroll no-scrollbar"
                     ref={containerRef}
                   >
-                    <div className="flex flex-row justify-start ">
+                    <div className="flex flex-row justify-start overflow-y-auto">
                       <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
                         {messages &&
                           messages.map((value, key: any) => {

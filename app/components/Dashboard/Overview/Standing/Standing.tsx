@@ -8,11 +8,11 @@ const Standing = () => {
 
 
   return (
-    <div className='w-full bg-transparent  flex flex-col gap-2 p-2 rounded-md'
-    style={{
-      backdropFilter: "blur(20px)",
-      backgroundColor: "rgba(13, 9, 10, 0.7)",
-    }}
+    <div className='w-full bg-[#101823]  flex flex-col gap-2 p-2 rounded-md'
+    // style={{
+    //   backdropFilter: "blur(20px)",
+    //   backgroundColor: "rgba(13, 9, 10, 0.7)",
+    // }}
     >
       <div className='flex text-white sm:gap-0 gap-1'>
         <Image src='/standing.svg' width={40} height={40} alt={'standing'} />

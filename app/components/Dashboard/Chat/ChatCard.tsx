@@ -1,6 +1,6 @@
-import Image from "next/image";
 import React from "react";
-import { useEffect, useRef, useState } from "react";
+import {motion} from 'framer-motion'
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
 import { getTime } from "@/app/utils";
@@ -29,7 +29,7 @@ export const ChatCard = (props: any) => {
   
   return (
     <div
-      className="flex justify-between items-center lg:p-3 p-1 hover:bg-[#9494943d] rounded-lg relative cursor-pointer"
+      className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative "
       onClick={(e) => {
         if (props.value.user === false) {
           props.setTargetChannel(props.value);
@@ -76,6 +76,9 @@ export const ChatCard = (props: any) => {
           </div>
         </div>
       </div>
+      <p className="ml-2 whitespace-no-wrap text-gray-600 text-sm sm:relative hidden">
+        Feb 1
+      </p>
     </div>
   );
 };

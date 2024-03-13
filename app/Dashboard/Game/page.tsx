@@ -3,7 +3,7 @@ import GameOptions from '@/app/components/Dashboard/Overview/Game/GameOptions'
 
 const page = () => {
   return (
-    <div className='w-full h-full flex justify-center mt-[50px]'>
+    <div className='w-full flex justify-center mt-[50px]'>
       <GameOptions /> 
     </div>
   )

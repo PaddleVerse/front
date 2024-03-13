@@ -63,7 +63,7 @@ const Coin = ({ size }: { size: string }) => {
             opacity: hover || owned ? 0 : 1,
           }}
         >
-          <Image src={"/ShopVec.svg"} width={16} height={16} alt="coin image" />
+          <Image src={"/ShopVec.svg"} width={16} height={16} alt="coin image" className="h-auto w-auto" />
         </motion.div>
       </AnimatePresence>
     </motion.div>
