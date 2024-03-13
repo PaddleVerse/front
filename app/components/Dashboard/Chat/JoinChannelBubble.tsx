@@ -19,7 +19,9 @@ const JoinChannelBubble = ({
   socket: Socket;
 }) => {
   const handleClicks = async () => {
-    const participantObject = {};
+    const participantObject = {
+
+    };
     const res = await axios.post(
       "http://localhost:8080/participants",
       participantObject
@@ -36,6 +38,8 @@ const JoinChannelBubble = ({
       onClick={(e) => console.log("clicked to join", channel.state)}
     >
       <Image
+        width={100}
+        height={100}
         src="/badge1.png"
         alt="image"
         className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"

@@ -268,11 +268,17 @@ const Page = () => {
     onSwipedRight: () => setShowMessage(false),
     // onSwiped:()=>setExpanded(!expanded),
   });
-  console.log(showMessage);
+  // console.log(showMessage);
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
-        {modlar && <JoinChannel handleClick={handleClick} user={globalState.state.user} socket={globalState.state.socket}/>}
+        {modlar && (
+          <JoinChannel
+            handleClick={handleClick}
+            user={globalState.state.user}
+            socket={globalState.state.socket}
+          />
+        )}
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
@@ -359,18 +365,16 @@ const Page = () => {
                     })}
                 </div>
               </motion.section>
-              {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
                 <section className="flex flex-col flex-auto border-l border-gray-800 border">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                        {/* this image needs to be filled with the target user */}
                         <img
                           className="shadow-md rounded-full w-full h-full object-cover"
                           src={
                             (targetUser && targetUser.picture) ||
-                            "https://randomuser.me/api/portraits/women/33.jpg"
+                            targetChannel?.picture
                           }
                           alt=""
                         />
@@ -392,7 +396,7 @@ const Page = () => {
                     <div className="flex items-center">
                       <div
                         className="block rounded-full  w-6 h-6 ml-4"
-                        onClick={() => setChannelManagement(!channelManagement)}
+                        onClick={() => setChannelManagement(!channelManagement)} 
                       >
                         <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
@@ -402,7 +406,7 @@ const Page = () => {
                     className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
                     ref={containerRef}
                   >
-                    {!channelManagement ? (
+                    {targetUser ? (
                       <div className="w-full h-full" {...handlers}>
                         <div className="flex flex-row justify-start overflow-y-auto">
                           <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
@@ -448,6 +452,50 @@ const Page = () => {
                         </p>
                       </div>
                     ) : (
+                      (!channelManagement ? (<div className="w-full h-full" {...handlers}>
+                        <div className="flex flex-row justify-start overflow-y-auto">
+                          <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
+                            {messages &&
+                              messages.map((value, key: any) => {
+                                if (
+                                  value.sender_id === globalState.state.user.id
+                                ) {
+                                  return (
+                                    <div className="" key={key}>
+                                      <MiddleBubbleRight message={value} />
+                                    </div>
+                                  );
+                                } else {
+                                  return (
+                                    <MiddleBuble
+                                      message={value}
+                                      key={key}
+                                      showProfilePic={
+                                        (!messages[key + 1] ||
+                                          messages[key + 1].sender_id !==
+                                            value.sender_id) &&
+                                        value &&
+                                        value.sender_picture
+                                      }
+                                      picture={messages[key].sender_picture}
+                                    />
+                                  );
+                                }
+                              })}
+                          </div>
+                        </div>
+                        <p className="p-4 text-center text-sm text-gray-500">
+                          {messages && messages.length > 0
+                            ? messages[messages.length - 1].createdAt
+                                .toString()
+                                .substring(0, 10) +
+                              " at " +
+                              messages[messages.length - 1].createdAt
+                                .toString()
+                                .substring(11, 16)
+                            : "No messages yet"}
+                        </p>
+                    </div>) :
                       <div className="w-full h-full bg-white flex justify-evenly items-center">
                         <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
                           <Image
@@ -459,11 +507,12 @@ const Page = () => {
                         </div>
                         <div className="w-[45%] h-full bg-red-500"></div>
                       </div>
+                    )
                     )}
                   </div>
                   <div
                     className={`chat-footer flex-none ${
-                      channelManagement ? "hidden" : ""
+                      channelManagement && targetChannel ? "hidden" : ""
                     }`}
                   >
                     <div className="flex flex-row items-center p-4">
