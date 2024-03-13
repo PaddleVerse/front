@@ -389,48 +389,52 @@ const Page = () => {
                     className=" p-4 flex-1 overflow-y-scroll no-scrollbar"
                     ref={containerRef}
                   >
-                    <div className="flex flex-row justify-start overflow-y-auto "
+                    <div className="w-full h-full"
                     {...handlers}
                     >
-                      <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
-                        {messages &&
-                          messages.map((value, key: any) => {
-                            if (value.sender_id === globalState.state.user.id) {
-                              return (
-                                <div className="" key={key}>
-                                  <MiddleBubbleRight message={value} />
-                                </div>
-                              );
-                            } else {
-                              return (
-                                <MiddleBuble
-                                  message={value}
-                                  key={key}
-                                  showProfilePic={
-                                    (!messages[key + 1] ||
-                                      messages[key + 1].sender_id !==
-                                        value.sender_id) &&
-                                    value &&
-                                    value.sender_picture
-                                  }
-                                  picture={messages[key].sender_picture}
-                                />
-                              );
-                            }
-                          })}
+                      <div className="flex flex-row justify-start overflow-y-auto"
+                    
+                      >
+                        <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
+                          {messages &&
+                            messages.map((value, key: any) => {
+                              if (value.sender_id === globalState.state.user.id) {
+                                return (
+                                  <div className="" key={key}>
+                                    <MiddleBubbleRight message={value} />
+                                  </div>
+                                );
+                              } else {
+                                return (
+                                  <MiddleBuble
+                                    message={value}
+                                    key={key}
+                                    showProfilePic={
+                                      (!messages[key + 1] ||
+                                        messages[key + 1].sender_id !==
+                                          value.sender_id) &&
+                                      value &&
+                                      value.sender_picture
+                                    }
+                                    picture={messages[key].sender_picture}
+                                  />
+                                );
+                              }
+                            })}
+                        </div>
                       </div>
+                      <p className="p-4 text-center text-sm text-gray-500">
+                        {messages && messages.length > 0
+                          ? messages[messages.length - 1].createdAt
+                              .toString()
+                              .substring(0, 10) +
+                            " at " +
+                            messages[messages.length - 1].createdAt
+                              .toString()
+                              .substring(11, 16)
+                          : "No messages yet"}
+                      </p>
                     </div>
-                    <p className="p-4 text-center text-sm text-gray-500">
-                      {messages && messages.length > 0
-                        ? messages[messages.length - 1].createdAt
-                            .toString()
-                            .substring(0, 10) +
-                          " at " +
-                          messages[messages.length - 1].createdAt
-                            .toString()
-                            .substring(11, 16)
-                        : "No messages yet"}
-                    </p>
                   </div>
                   <div className="chat-footer flex-none">
                     <div className="flex flex-row items-center p-4">
