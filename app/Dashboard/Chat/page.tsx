@@ -1,5 +1,5 @@
 "use client";
-import  Image  from "next/image";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
+import { CgAdd } from "react-icons/cg";
 import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
@@ -328,16 +329,23 @@ const Page = () => {
                     </div>
                   </form>
                 </div>
-                <p className="ml-8">
-                  Join a{" "}
-                  <span
-                    onClick={() => setModlar(true)}
-                    className="text-sky-500 cursor-pointer"
-                  >
-                    Public
-                  </span>{" "}
-                  Group Chat
-                </p>
+                <div className="flex flex-row justify-around w-full">
+                  <p className="ml-8">
+                    Join a{" "}
+                    <span
+                      onClick={() => setModlar(true)}
+                      className="text-sky-500 cursor-pointer"
+                    >
+                      Public
+                    </span>{" "}
+                    Group Chat
+                  </p>
+                  <div>
+                    <span className="">
+                      <CgAdd />
+                    </span>
+                  </div>
+                </div>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"
                   onClick={(e) => {
