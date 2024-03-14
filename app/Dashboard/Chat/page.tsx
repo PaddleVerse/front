@@ -293,7 +293,7 @@ const Page = () => {
               <motion.section
                 className={` flex flex-col flex-none overflow-auto ${
                   showMessage && tablet ? "invisible" : "visible"
-                } group lg:max-w-[280px] md:w-2/5 no-scrollbar`}
+                } group lg:max-w-[300px] md:w-2/5 no-scrollbar`}
                 initial={{ display: "flex", width: "100%", opacity: 1 }}
                 animate={{
                   display: showMessage && tablet ? "hidden" : "flex",

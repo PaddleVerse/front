@@ -27,6 +27,29 @@ export const ChatCard = (props: any) => {
     }
   }, [props.value.id, props.self.id, props.value.user, props.update]);
 
+
+  if (!msg) {
+    return <div>Loading...</div>;
+  }
+  const notificationTime = new Date(msg[msg.length - 1]?.createdAt);
+
+  const now = new Date();
+
+  const timeDiff = now.getTime() - notificationTime.getTime();
+
+  function formatTimeDiff(diffInMs: number): string {
+    if (diffInMs < 60 * 1000) {
+      const seconds = Math.floor(diffInMs / 1000);
+      return `${seconds} seconds ago`;
+    } else if (diffInMs < 3600 * 1000) {
+      const minutes = Math.floor(diffInMs / (60 * 1000));
+      return `${minutes} minutes ago`;
+    } else {
+      const hours = Math.floor(diffInMs / (3600 * 1000));
+      return `${hours} hours ago`;
+    }
+  }
+
   return (
     <motion.div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative sm:w-auto w-full cursor-pointer transition-all duration-300 ease-in-out hover:shadow-lg"
@@ -86,7 +109,7 @@ export const ChatCard = (props: any) => {
       </div>
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm ">
-          {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
+        {formatTimeDiff(timeDiff)}
         </p>
       </div>
     </motion.div>
