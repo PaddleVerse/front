@@ -62,7 +62,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                   <div className="flex flex-row gap-4">
                     <Button
                       onClick={() => friendReq("acceptFriendRequest")}
-                      borderRadius="1.75rem"
+                      borderRadius="10px"
                       borderClassName=" bg-[radial-gradient(var(--green-500)_40%,transparent_60%)]"
                       className={`text-white border-slate-800 w-full sm:mt-0 mt-4 bg-green-500/[0.5]`}
                     >
@@ -70,7 +70,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                     </Button>
                     <Button
                       onClick={() => friendReq("rejectFriendRequest")}
-                      borderRadius="1.75rem"
+                      borderRadius="10px"
                       borderClassName=" bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
                       className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-[#FF4654]/[0.6]`}
                     >
@@ -80,7 +80,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                   : recv && recv === "ACCEPTED" ?
                   <Button
                     onClick={removeFriend}
-                    borderRadius="1.75rem"
+                    borderRadius="10px"
                     borderClassName="bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
                     className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-[#FF4654]/[0.6]`}
                   >
@@ -90,7 +90,7 @@ const Userstatus = ({target, status, recv, friendReq, removeFriend, handleSender
                   : status && status === "BLOCKED" ? null
                   : <Button
                     onClick={handleSender}
-                    borderRadius="1.75rem"
+                    borderRadius="10px"
                     borderClassName={status === "ACCEPTED" ? "bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]" : ""}
                     className={`text-white border-slate-800 w-full sm:mt-0 mt-4  ${status === "PENDING" ? "bg-slate-600" : status === "ACCEPTED"  ? "bg-red-600/[0.3]"  : ""}`}
                   >
