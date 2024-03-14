@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ContentWrapper from "./ContentWrapper";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,8 @@ export default function RootLayout({
         className={`${inter.className} w-screen h-screen bg-[#15202E] bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
       >
         <ContentWrapper>
-          {children}
+        {children}
+        <Toaster position="top-right"/>
         </ContentWrapper>
       </section>
   );

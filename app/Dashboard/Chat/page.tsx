@@ -396,7 +396,7 @@ const Page = () => {
                     <div className="flex items-center">
                       <div
                         className="block rounded-full  w-6 h-6 ml-4"
-                        onClick={() => setChannelManagement(!channelManagement)} 
+                        onClick={() => setChannelManagement(!channelManagement)}
                       >
                         <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
@@ -451,8 +451,8 @@ const Page = () => {
                             : "No messages yet"}
                         </p>
                       </div>
-                    ) : (
-                      (!channelManagement ? (<div className="w-full h-full" {...handlers}>
+                    ) : !channelManagement ? (
+                      <div className="w-full h-full" {...handlers}>
                         <div className="flex flex-row justify-start overflow-y-auto">
                           <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
                             {messages &&
@@ -495,7 +495,8 @@ const Page = () => {
                                 .substring(11, 16)
                             : "No messages yet"}
                         </p>
-                    </div>) :
+                      </div>
+                    ) : (
                       <div className="w-full h-full bg-white flex justify-evenly items-center">
                         <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
                           <Image
@@ -505,9 +506,12 @@ const Page = () => {
                             height={100}
                           />
                         </div>
-                        <div className="w-[45%] h-full bg-red-500"></div>
+                        <div className="w-[45%] h-[700px] bg-black flex flex-col gap-4 items-center overflow-y-scroll">
+                          {/* {Array.from({ length: 50 }, (_, index) => (
+                            <div className="w-full h-[250px] bg-red-500" key={index}></div>
+                          ))} */}
+                        </div>
                       </div>
-                    )
                     )}
                   </div>
                   <div
