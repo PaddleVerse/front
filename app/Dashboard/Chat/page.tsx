@@ -20,7 +20,7 @@ import {
 } from "react";
 import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { channel, target, user } from "./type";
+import { channel, participants, target, user } from "./type";
 import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
 import { useForm } from "react-hook-form";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
@@ -41,6 +41,7 @@ export type message = {
 
 const Page = () => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
+  const [participants, setParticipants] = useState<participants[]>([]);
   const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
@@ -160,10 +161,23 @@ const Page = () => {
         data.then((res) => {
           setMessages(res);
         });
+        fetchChannelParticipants(targetChannel.id);
+        console.log(participants);
         setUpdate(false);
       }
     }
   }, [targetChannel, update]);
+
+  const fetchChannelParticipants = async (id: number | undefined) => {
+    const data = await axios
+      .get(`http://localhost:8080/channels/participants/${id}`)
+      .then((res) => {
+        setParticipants(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const fetchMessagesForUser = async (
     id: number | undefined
@@ -269,7 +283,6 @@ const Page = () => {
     onSwipedRight: () => setShowMessage(false),
     // onSwiped:()=>setExpanded(!expanded),
   });
-  // console.log(showMessage);
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
@@ -507,12 +520,19 @@ const Page = () => {
                     ) : (
                       <div className="w-full h-full bg-white flex justify-evenly items-center">
                         <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
-                          <Image
-                            src="/badge1.png"
-                            alt="image"
-                            width={100}
-                            height={100}
-                          />
+                          <div>
+                            <Image
+                              src="/badge1.png"
+                              alt="image"
+                              width={100}
+                              height={100}
+                            />
+                          </div>
+                              <div>
+                                <form action="" onSubmit={(handleSubmit)}>
+
+                                </form>
+                          </div>
                         </div>
                         <div className="w-[45%] h-[700px] bg-black flex flex-col gap-4 items-center overflow-y-scroll">
                           {/* {Array.from({ length: 50 }, (_, index) => (

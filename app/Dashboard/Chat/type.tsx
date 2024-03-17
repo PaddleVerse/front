@@ -5,6 +5,14 @@ export type message = {
   time: Date;
 };
 
+export type participants = {
+  id: number;
+  user_id: number;
+  channel_id: number;
+  role: string;
+  mute: boolean;
+};
+
 export type channel = {
   key: string;
   state: string;
