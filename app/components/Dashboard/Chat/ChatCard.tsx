@@ -31,24 +31,7 @@ export const ChatCard = (props: any) => {
   if (!msg) {
     return <div>Loading...</div>;
   }
-  const notificationTime = new Date(msg[msg.length - 1]?.createdAt);
 
-  const now = new Date();
-
-  const timeDiff = now.getTime() - notificationTime.getTime();
-
-  function formatTimeDiff(diffInMs: number): string {
-    if (diffInMs < 60 * 1000) {
-      const seconds = Math.floor(diffInMs / 1000);
-      return `${seconds} seconds ago`;
-    } else if (diffInMs < 3600 * 1000) {
-      const minutes = Math.floor(diffInMs / (60 * 1000));
-      return `${minutes} minutes ago`;
-    } else {
-      const hours = Math.floor(diffInMs / (3600 * 1000));
-      return `${hours} hours ago`;
-    }
-  }
 
   return (
     <motion.div
@@ -80,7 +63,6 @@ export const ChatCard = (props: any) => {
             alt="User2"
           />
           <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
-            {/*here we check the status of the user if he is online or not */}
             {props.value.user &&
               (props.value.status === "ONLINE" ? (
                 <div className="bg-green-500 rounded-full w-2 h-2"></div>
@@ -109,7 +91,10 @@ export const ChatCard = (props: any) => {
       </div>
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm ">
-        {formatTimeDiff(timeDiff)}
+          {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
+        </p>
+        <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
+          Feb 1{ /** this should change to get the date only */}
         </p>
       </div>
     </motion.div>
