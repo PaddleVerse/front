@@ -25,6 +25,7 @@ import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/Midd
 import { useForm } from "react-hook-form";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
+import { promises } from "dns";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,8 @@ export type message = {
 
 const Page = () => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
+  const topicInput = useRef<HTMLInputElement | null>(null);
+  const channelNameInput = useRef<HTMLInputElement | null>(null);
   const [participants, setParticipants] = useState<participants[]>([]);
   const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
@@ -161,23 +164,30 @@ const Page = () => {
         data.then((res) => {
           setMessages(res);
         });
-        fetchChannelParticipants(targetChannel.id);
-        console.log(participants);
+        const part = fetchChannelParticipants(targetChannel.id);
+        part.then((res) => {
+          setParticipants(res);
+        });
         setUpdate(false);
       }
     }
   }, [targetChannel, update]);
 
-  const fetchChannelParticipants = async (id: number | undefined) => {
+  const fetchChannelParticipants = async (
+    id: number | undefined
+  ): Promise<participants[]> => {
     const data = await axios
-      .get(`http://localhost:8080/channels/participants/${id}`)
+      .get(
+        `http://localhost:8080/channels/participants/${id}?uid=${globalState.state.user.id}`
+      )
       .then((res) => {
-        setParticipants(res.data);
+        return res.data;
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+    return data;
+  };
 
   const fetchMessagesForUser = async (
     id: number | undefined
@@ -482,9 +492,7 @@ const Page = () => {
                                   value.sender_id === globalState.state.user.id
                                 ) {
                                   return (
-                                    <div className="" key={key}>
-                                      <MiddleBubbleRight message={value} />
-                                    </div>
+                                    <MiddleBubbleRight message={value} key={key} />
                                   );
                                 } else {
                                   return (
@@ -518,8 +526,8 @@ const Page = () => {
                         </p>
                       </div>
                     ) : (
-                      <div className="w-full h-full bg-white flex justify-evenly items-center">
-                        <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
+                      <div className="w-full h-full bg-white flex juti items-center">
+                        <div className="w-[45%] h-full bg-blue-400 flex flex-col">
                           <div>
                             <Image
                               src="/badge1.png"
@@ -528,10 +536,23 @@ const Page = () => {
                               height={100}
                             />
                           </div>
-                              <div>
-                                <form action="" onSubmit={(handleSubmit)}>
-
-                                </form>
+                          <div>
+                            <form action="" onSubmit={handleSubmit} className="flex flex-col">
+                              <input
+                                type="text"
+                                placeholder="change topic"
+                                {...register("topicInput", { required: false })}
+                                ref={topicInput}
+                                />
+                              <input
+                                type="text"
+                                placeholder="change channel name"
+                                {...register("channelNameInput", {
+                                  required: false,
+                                })}
+                                ref={channelNameInput}
+                              />
+                            </form>
                           </div>
                         </div>
                         <div className="w-[45%] h-[700px] bg-black flex flex-col gap-4 items-center overflow-y-scroll">
