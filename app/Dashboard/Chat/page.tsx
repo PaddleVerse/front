@@ -272,7 +272,7 @@ const Page = () => {
       });
     }
     inputMessage.current!.value = "";
-    // setUpdate(true);
+    setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
   const handleClick = () => {
