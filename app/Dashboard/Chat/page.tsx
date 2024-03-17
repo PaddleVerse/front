@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
 import { promises } from "dns";
+import toast from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -103,6 +104,7 @@ const Page = () => {
 
   useEffect(() => {
     globalState?.state?.socket?.on("update", (data: any) => {
+      console.log("recievec update from server");
       setUpdate(true);
     });
     return () => {
@@ -159,6 +161,7 @@ const Page = () => {
 
   useEffect(() => {
     if (targetChannel) {
+      console.log("in channel");
       if (update) {
         const data = fetchMessagesForChannel(targetChannel.id);
         data.then((res) => {
@@ -168,8 +171,8 @@ const Page = () => {
         part.then((res) => {
           setParticipants(res);
         });
-        setUpdate(false);
       }
+      setUpdate(false);
     }
   }, [targetChannel, update]);
 
@@ -236,15 +239,18 @@ const Page = () => {
       };
       await axios
         .post(`http://localhost:8080/message`, message)
+        .then((res) => console.log(res.data))
         .catch((error) => {
           console.log(error);
+          toast.error("failed to send message");
+          return;
         });
       globalState?.state?.socket?.emit("channelmessage", {
-        channel: targetChannel.id,
-        sender: globalState.state.user.id,
+        roomName: targetChannel.name,
+        user: globalState?.state?.user,
       });
     }
-    if (targetUser) {
+    else if (targetUser) {
       await axios
         .post(`http://localhost:8080/message`, {
           message: {
@@ -256,6 +262,7 @@ const Page = () => {
           user2: globalState.state.user.id,
           user1: targetUser.id,
         })
+        .then((res) => console.log("sent"))
         .catch((error) => {
           console.log(error);
         });
@@ -265,7 +272,7 @@ const Page = () => {
       });
     }
     inputMessage.current!.value = "";
-    setUpdate(true);
+    // setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
   const handleClick = () => {
@@ -291,7 +298,6 @@ const Page = () => {
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
     onSwipedRight: () => setShowMessage(false),
-    // onSwiped:()=>setExpanded(!expanded),
   });
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
@@ -492,7 +498,10 @@ const Page = () => {
                                   value.sender_id === globalState.state.user.id
                                 ) {
                                   return (
-                                    <MiddleBubbleRight message={value} key={key} />
+                                    <MiddleBubbleRight
+                                      message={value}
+                                      key={key}
+                                    />
                                   );
                                 } else {
                                   return (
@@ -537,13 +546,17 @@ const Page = () => {
                             />
                           </div>
                           <div>
-                            <form action="" onSubmit={handleSubmit} className="flex flex-col">
+                            <form
+                              action=""
+                              onSubmit={handleSubmit}
+                              className="flex flex-col"
+                            >
                               <input
                                 type="text"
                                 placeholder="change topic"
                                 {...register("topicInput", { required: false })}
                                 ref={topicInput}
-                                />
+                              />
                               <input
                                 type="text"
                                 placeholder="change channel name"

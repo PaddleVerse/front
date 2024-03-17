@@ -36,20 +36,13 @@ const JoinChannelBubble = ({
         channel: channel,
       };
       await axios.post(`http://localhost:8080/participants`, obj).then((res) => {
-        // console.log("joined", res.data);
-
+        toast.success(`you have joined ${channel.name}`)
+        socket.emit("joinRoom", { user: user, roomName: channel.name });
       }).catch((err) => {
         console.log(err.response.data.message);
         toast(err.response.data.message);
       })
-      // try {
-      //   const response = await axios.post(
-      //     `http://localhost:8080/participants`,
-      //     obj
-      //   );
-      // } catch (error: any) {
-      //   toast(error.response.message);
-      // }
+      
     } else {
       const obj = {
         participant: {
@@ -60,9 +53,10 @@ const JoinChannelBubble = ({
         channel: channel,
       };
       await axios
-        .post(`http://localhost:8080/participants`, obj)
-        .then((res) => {
-          console.log("joined", res.data);
+      .post(`http://localhost:8080/participants`, obj)
+      .then((res) => {
+        toast.success(`you have joined ${channel.name}`)
+          socket.emit("joinRoom", { user: user, roomName: channel.name });
         })
         .catch((err) => {
           toast(err.response.data.message);
