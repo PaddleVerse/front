@@ -17,6 +17,14 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 
+const BgWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
+      <Boxes />
+      {children}
+    </div>
+  );
+};
 
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
@@ -182,11 +190,4 @@ const LabelInputContainer = ({
   );
 };
 
-export const BgWrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
-      <Boxes />
-      {children}
-    </div>
-  );
-}
+

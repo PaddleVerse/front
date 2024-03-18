@@ -39,7 +39,6 @@ const JoinChannelBubble = ({
         toast.success(`you have joined ${channel.name}`)
         socket.emit("joinRoom", { user: user, roomName: channel.name });
       }).catch((err) => {
-        console.log(err.response.data.message);
         toast(err.response.data.message);
       })
       

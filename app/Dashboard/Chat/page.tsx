@@ -1,58 +1,38 @@
 "use client";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
-import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { CgAdd } from "react-icons/cg";
-import { Input } from "@/components/ui/newinput";
 import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
-  FormEventHandler,
   useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { channel, participants, target, user } from "./type";
-import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
+import { channel, participants, user, message } from "./type";
 import { useForm } from "react-hook-form";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
-import { promises } from "dns";
 import toast from "react-hot-toast";
-import MemberList from "@/app/components/Dashboard/Chat/MemberList";
 import { OnlinePreview } from "@/app/components/Dashboard/Chat/onlinePreview";
-
+import ChannelManagement from "@/app/components/Dashboard/Chat/channelManagement";
+import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
 const inter = Inter({ subsets: ["latin"] });
-
-export type message = {
-  id?: number;
-  channel_id?: number;
-  sender_id?: number;
-  sender_picture?: string;
-  conversation_id?: number;
-  content: string;
-  content_type: string;
-  createdAt: Date;
-};
-
 const Page = () => {
+  const { register } = useForm();
   const inputMessage = useRef<HTMLInputElement | null>(null);
-  const topicInput = useRef<HTMLInputElement | null>(null);
-  const channelNameInput = useRef<HTMLInputElement | null>(null);
   const [participants, setParticipants] = useState<participants[]>([]);
   const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
-  const { register } = useForm();
   const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
   const [targetUser, setTargetUser] = useState<user | null>();
@@ -69,15 +49,14 @@ const Page = () => {
           setChatList(res.data);
         })
         .catch((error) => {
-          console.log(error);
         });
       if (targetUser) {
         axios.get(`http://localhost:8080/user/${targetUser.id}`).then((res) => {
           setTargetUser(res.data);
-        });
+        }).catch((error) => {});
       }
     }
-  }, [globalState, update]);
+  }, [globalState, update, targetUser]);
   ///////////////////////////////////////////////////////////
   //press escape to close the modal
   const handleEscapeKeyPress = useCallback((e: any) => {
@@ -107,11 +86,11 @@ const Page = () => {
 
   useEffect(() => {
     globalState?.state?.socket?.on("update", (data: any) => {
-      console.log("recievec update from server");
+      // console.log("recievec update from server"); // for debugging
       setUpdate(true);
     });
     return () => {
-      globalState?.state?.socket?.off("ok");
+      globalState?.state?.socket?.off("update");
     };
   }, [globalState?.state?.socket]);
 
@@ -121,32 +100,6 @@ const Page = () => {
       container.scrollTop = container.scrollHeight;
     }
   }, [messages]);
-
-  useEffect(() => {
-    globalState?.state?.socket?.on("message", (data: any) => {});
-  }, [globalState?.state?.socket]);
-
-  // useEffect(() => {
-  //   if (socket.current) {
-  //     socket.current.on("message", (data: any) => {
-  //       if (targetUser) {
-  //         if (data.sender_id === targetUser.id) {
-  //           setUpdate(true);
-  //         }
-  //       }
-  //       if (targetChannel) {
-  //         if (data.channel_id === targetChannel.id) {
-  //           setUpdate(true);
-  //         }
-  //       }
-  //     });
-  //   }
-  //   return () => {
-  //     if (socket.current) {
-  //       socket.current.off("message");
-  //     }
-  //   };
-  // }, [socket.current]);
 
   useEffect(() => {
     if (targetUser) {
@@ -162,20 +115,24 @@ const Page = () => {
     };
   }, [targetUser, update]);
 
+  // is updated to use the data i get from the chat list when including the other data in it
   useEffect(() => {
-    if (targetChannel) {
-      console.log("in channel");
-      if (update) {
-        const data = fetchMessagesForChannel(targetChannel.id);
-        data.then((res) => {
-          setMessages(res);
-        });
-        const part = fetchChannelParticipants(targetChannel.id);
-        part.then((res) => {
-          setParticipants(res);
-        });
+    if (update) {
+      if (targetChannel) {
+        console.log(targetChannel);
+        if (update) {
+          const data = fetchMessagesForChannel(targetChannel.id);
+          data.then((res) => {
+            setMessages(res);
+            const part = fetchChannelParticipants(targetChannel.id);
+            part.then((res) => {
+              setParticipants(res);
+            });
+          }).catch((error: AxiosError) => {
+          });
+        }
+        setUpdate(false);
       }
-      setUpdate(false);
     }
   }, [targetChannel, update]);
 
@@ -187,11 +144,12 @@ const Page = () => {
         `http://localhost:8080/channels/participants/${id}?uid=${globalState.state.user.id}`
       )
       .then((res) => {
-        return res.data;
-      })
-      .catch((error) => {
-        console.log(error);
+        if (res.status === 200) {
+          return res.data;
+        }
+      }).catch((error: AxiosError) => {
       });
+
     return data;
   };
 
@@ -203,11 +161,8 @@ const Page = () => {
         `http://localhost:8080/conversations?uid1=${id}&uid2=${globalState.state.user.id}`
       )
       .then((res) => {
-        return res.data.messages;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        if (res.status === 200) return res.data.messages;
+      }).catch((error: AxiosError) => { })
     return data;
   };
 
@@ -220,9 +175,8 @@ const Page = () => {
       )
       .then((res) => {
         return res.data;
-      })
-      .catch((error) => {
-        console.log(error);
+      }).catch((error: AxiosError) => {
+        toast.error(`failed to fetch messages for ${targetChannel!.name}`);
       });
     return data;
   };
@@ -242,11 +196,11 @@ const Page = () => {
       };
       await axios
         .post(`http://localhost:8080/message`, message)
-        .then((res) => console.log(res.data))
+        .then((res) => {
+          //console.log(res.data)
+        })
         .catch((error) => {
-          console.log(error);
           toast.error("failed to send message");
-          return;
         });
       globalState?.state?.socket?.emit("channelmessage", {
         roomName: targetChannel.name,
@@ -264,19 +218,17 @@ const Page = () => {
           user2: globalState.state.user.id,
           user1: targetUser.id,
         })
-        .then((res) => console.log("sent"))
+        .then((res) => {})
         .catch((error) => {
-          console.log(error);
           toast.error("failed to send message");
-
         });
       globalState?.state?.socket?.emit("dmmessage", {
         reciever: targetUser.id,
         sender: globalState.state.user.id,
       });
+      setUpdate(true);
     }
     inputMessage.current!.value = "";
-    setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
   const handleClick = () => {
@@ -444,175 +396,19 @@ const Page = () => {
                     ref={containerRef}
                   >
                     {targetUser ? (
-                      <div className="w-full h-full" {...handlers}>
-                        <div className="flex flex-row justify-start overflow-y-auto">
-                          <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
-                            {messages &&
-                              messages.map((value, key: any) => {
-                                if (
-                                  value.sender_id === globalState.state.user.id
-                                ) {
-                                  return (
-                                    <div className="" key={key}>
-                                      <MiddleBubbleRight message={value} />
-                                    </div>
-                                  );
-                                } else {
-                                  return (
-                                    <MiddleBuble
-                                      message={value}
-                                      key={key}
-                                      showProfilePic={
-                                        (!messages[key + 1] ||
-                                          messages[key + 1].sender_id !==
-                                            value.sender_id) &&
-                                        value &&
-                                        value.sender_picture
-                                      }
-                                      picture={messages[key].sender_picture}
-                                    />
-                                  );
-                                }
-                              })}
-                          </div>
-                        </div>
-                        <p className="p-4 text-center text-sm text-gray-500">
-                          {messages && messages.length > 0
-                            ? messages[messages.length - 1].createdAt
-                                .toString()
-                                .substring(0, 10) +
-                              " at " +
-                              messages[messages.length - 1].createdAt
-                                .toString()
-                                .substring(11, 16)
-                            : "No messages yet"}
-                        </p>
-                      </div>
-                    ) : // change it
-                    !channelManagement ? (
-                      <div className="w-full h-full" {...handlers}>
-                        <div className="flex flex-row justify-start overflow-y-auto">
-                          <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
-                            {messages &&
-                              messages.map((value, key: any) => {
-                                if (
-                                  value.sender_id === globalState.state.user.id
-                                ) {
-                                  return (
-                                    <MiddleBubbleRight
-                                      message={value}
-                                      key={key}
-                                    />
-                                  );
-                                } else {
-                                  return (
-                                    <MiddleBuble
-                                      message={value}
-                                      key={key}
-                                      showProfilePic={
-                                        (!messages[key + 1] ||
-                                          messages[key + 1].sender_id !==
-                                            value.sender_id) &&
-                                        value &&
-                                        value.sender_picture
-                                      }
-                                      picture={messages[key].sender_picture}
-                                    />
-                                  );
-                                }
-                              })}
-                          </div>
-                        </div>
-                        <p className="p-4 text-center text-sm text-gray-500">
-                          {messages && messages.length > 0
-                            ? messages[messages.length - 1].createdAt
-                                .toString()
-                                .substring(0, 10) +
-                              " at " +
-                              messages[messages.length - 1].createdAt
-                                .toString()
-                                .substring(11, 16)
-                            : "No messages yet"}
-                        </p>
-                      </div>
+                      <ChatComponent
+                        handlers={handlers}
+                        messages={messages!}
+                        globalStateUserId={globalState.state.user.id}
+                      />
+                    ) : !channelManagement ? (
+                      <ChatComponent
+                        handlers={handlers}
+                        messages={messages!}
+                        globalStateUserId={globalState.state.user.id}
+                      />
                     ) : (
-                      <motion.div
-                        className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "
-                        initial={{ opacity: 0, y: -120 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                      >
-                        <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
-                          <Image
-                            src={"/badge1.png"}
-                            width={200}
-                            height={200}
-                            alt="channel picture"
-                          />
-                          <form
-                            action=""
-                            onSubmit={handleSubmit}
-                            className="flex flex-col w-[50%] items-center justify-center  gap-4"
-                          >
-                            <Input
-                              type="text"
-                              placeholder="change topic"
-                              {...register("topicInput", { required: false })}
-                              ref={topicInput}
-                              className="rounded-lg "
-                            />
-                            <Input
-                              type="text"
-                              placeholder="change channel name"
-                              {...register("channelNameInput", {
-                                required: false,
-                              })}
-                              ref={channelNameInput}
-                              className="rounded-lg "
-                            />
-                          </form>
-                          <div className="flex gap-2 items-center flex-wrap">
-                            <label htmlFor="f" className="2xl:text-md text-sm">
-                              private
-                            </label>
-                            <input type="radio" name="" id="f" />
-                            <label htmlFor="s" className="2xl:text-md text-sm">
-                              public
-                            </label>
-                            <input type="radio" name="" id="s" />
-                            <label htmlFor="t" className="2xl:text-md text-sm">
-                              protected
-                            </label>
-                            <input type="radio" name="" id="t" />
-                          </div>
-                          <form
-                            action=""
-                            onSubmit={handleSubmit}
-                            className="flex flex-col w-[50%] items-center justify-center"
-                          >
-                            <Input
-                              type="text"
-                              placeholder="change topic"
-                              {...register("topicInput", { required: false })}
-                              ref={topicInput}
-                              className="rounded-lg "
-                            />
-                            <button
-                              type="submit"
-                              className="py-2 px-5 bg-red-500 rounded-md mt-4"
-                            >
-                              Submit
-                            </button>
-                          </form>
-                        </div>
-                        <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
-                          <div className="mt-10  flex flex-col gap-4 items-center">
-                            {Array.from({ length: 50 }, (_, index) => (
-                              <MemberList key={index} />
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
+                      <ChannelManagement participants={participants} />
                     )}
                   </div>
                   <div

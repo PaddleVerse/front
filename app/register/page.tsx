@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { BgWrapper } from "../page";
+// import { BgWrapper } from "../page";
 
 import {
   IconBrandGithub,
@@ -50,7 +50,7 @@ export default function SignupFormDemo() {
 
   function onSubmit(values : any) {
     setIs(isValidValues(values));
-    console.log(values);
+    // console.log(values);
     axios.post("http://localhost:8080/auth/signup", {
       name: values.name,
       nickname: values.nickname,

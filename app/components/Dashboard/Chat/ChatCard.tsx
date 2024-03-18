@@ -2,8 +2,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { message } from "@/app/Dashboard/Chat/page";
+import { message } from "@/app/Dashboard/Chat/type";
 import { getTime } from "@/app/utils";
+import toast from "react-hot-toast";
 
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message[] | null>();
@@ -15,7 +16,8 @@ export const ChatCard = (props: any) => {
         )
         .then((res) => {
           setMessage(res.data.messages);
-        });
+        })
+        .catch((err) => {});
     } else {
       axios
         .get(
@@ -23,20 +25,20 @@ export const ChatCard = (props: any) => {
         )
         .then((res) => {
           setMessage(res.data);
-        });
+        })
+        .catch((err) => {});
     }
   }, [props.value.id, props.self.id, props.value.user, props.update]);
-
 
   if (!msg) {
     return <div>Loading...</div>;
   }
 
-
   return (
     <motion.div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative sm:w-auto w-full cursor-pointer transition-all duration-300 ease-in-out hover:shadow-lg"
       onClick={(e) => {
+        e.preventDefault();
         if (props.value.user === false) {
           props.setTargetChannel(props.value);
           props.setTargetUser(null);
@@ -46,7 +48,6 @@ export const ChatCard = (props: any) => {
         }
         props.setUpdate(true);
         props.handleClick();
-        e.preventDefault();
       }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -77,12 +78,13 @@ export const ChatCard = (props: any) => {
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
                 <p className="">
-                  {
-                    (msg && msg.length > 0 && msg[msg.length - 1]?.content.length >= 10) ?
-                    msg[msg.length - 1]?.content.slice(0, 10) + "..."
-                    : (msg && msg.length > 0) ? msg[msg.length - 1]?.content
-                    : null
-                  }
+                  {msg &&
+                  msg.length > 0 &&
+                  msg[msg.length - 1]?.content.length >= 10
+                    ? msg[msg.length - 1]?.content.slice(0, 10) + "..."
+                    : msg && msg.length > 0
+                    ? msg[msg.length - 1]?.content
+                    : null}
                 </p>
               </div>
             </div>
@@ -94,7 +96,7 @@ export const ChatCard = (props: any) => {
           {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
         </p>
         <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
-          Feb 1{ /** this should change to get the date only */}
+          Feb 1{/** this should change to get the date only */}
         </p>
       </div>
     </motion.div>
