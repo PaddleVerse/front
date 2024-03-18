@@ -45,6 +45,7 @@ const Navbar = () => {
     socket?.on('notification', () => {
       setNotifed(true);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const Navbar = () => {
         (dispatch && dispatch({type: "UPDATE_USER", payload: res.data}));
       }).catch(() => {});
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   } , [socket]);
 
   const getCookie = (name: string) => {

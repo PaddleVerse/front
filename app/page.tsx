@@ -93,7 +93,6 @@ export default function SignupFormDemo() {
   }
 
   return (
-    <BgWrapper>
       <div className="w-full h-full flex items-center justify-center">
           <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#101823] ring-[0.2px] ring-red-500 z-10">
               <motion.h1
@@ -155,7 +154,6 @@ export default function SignupFormDemo() {
             </div>
           </div>
       </div>
-    </BgWrapper>
   );
 }
 
@@ -182,11 +180,11 @@ const LabelInputContainer = ({
   );
 };
 
-export const BgWrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
-      <Boxes />
-      {children}
-    </div>
-  );
-}
+// export const BgWrapper = ({ children }: { children: React.ReactNode }) => {
+//   return (
+//     <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
+//       <Boxes />
+//       {children}
+//     </div>
+//   );
+// }

@@ -76,7 +76,7 @@ const JoinChannelBubble = ({
         }
       }}
     >
-      <img
+      <Image
         src="/badge1.png"
         alt="image"
         className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"

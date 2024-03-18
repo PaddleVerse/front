@@ -26,9 +26,6 @@ const BigCard = ({ infos, handleClick, selected}: BigCardProps) => {
     handleClick(infos);
   };
   const [hover, setHover] = React.useState(false);
-  useEffect(() => {
-    console.log(selected);
-  },[]);
   const imageUrls = {
     first: `/${selected}/first.png`,
     second: `/${selected}/second.png`,

@@ -74,6 +74,7 @@ const Page = () => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
   //press escape to close the modal
@@ -157,6 +158,7 @@ const Page = () => {
     return () => {
       setUpdate(false);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetUser, update]);
 
   useEffect(() => {
@@ -174,6 +176,7 @@ const Page = () => {
       }
       setUpdate(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetChannel, update]);
 
   const fetchChannelParticipants = async (
@@ -407,11 +410,10 @@ const Page = () => {
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                        <img
+                        <Image
                           className="shadow-md rounded-full w-full h-full object-cover"
                           src={
-                            (targetUser && targetUser.picture) ||
-                            targetChannel?.picture
+                            (targetUser && targetUser?.picture) || (targetChannel && targetChannel?.picture) || ""
                           }
                           alt=""
                         />

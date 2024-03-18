@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
 import { getTime } from "@/app/utils";
+import Image from "next/image";
 
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message[] | null>();
@@ -54,7 +55,7 @@ export const ChatCard = (props: any) => {
     >
       <div className="flex gap-4 w-full">
         <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">
-          <img
+          <Image
             className="shadow-md rounded-full w-10 h-10 object-cover"
             src={
               props.value?.picture ||
