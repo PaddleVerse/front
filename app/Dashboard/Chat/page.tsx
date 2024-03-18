@@ -8,6 +8,7 @@ import { Inter } from "next/font/google";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { CgAdd } from "react-icons/cg";
+import { Input } from "@/components/ui/newinput";
 import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
@@ -27,6 +28,8 @@ import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
 import { promises } from "dns";
 import toast from "react-hot-toast";
+import MemberList from "@/app/components/Dashboard/Chat/MemberList";
+import { OnlinePreview } from "@/app/components/Dashboard/Chat/onlinePreview";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -249,8 +252,7 @@ const Page = () => {
         roomName: targetChannel.name,
         user: globalState?.state?.user,
       });
-    }
-    else if (targetUser) {
+    } else if (targetUser) {
       await axios
         .post(`http://localhost:8080/message`, {
           message: {
@@ -265,6 +267,8 @@ const Page = () => {
         .then((res) => console.log("sent"))
         .catch((error) => {
           console.log(error);
+          toast.error("failed to send message");
+
         });
       globalState?.state?.socket?.emit("dmmessage", {
         reciever: targetUser.id,
@@ -413,20 +417,16 @@ const Page = () => {
                             (targetUser && targetUser.picture) ||
                             targetChannel?.picture
                           }
-                          alt=""
+                          alt="user or channel picture"
                         />
                       </div>
                       <div className="text-sm">
                         <p className="font-bold">
                           {targetUser ? targetUser.name : targetChannel!.name}
                         </p>
-                        {/** needs to be fixed */}
-                        {targetUser &&
-                          (targetUser.status === "ONLINE" ? (
-                            <p className="text-green-500">Online</p>
-                          ) : (
-                            <p className="text-gray-400">Offline</p>
-                          ))}
+                        {targetUser && (
+                          <OnlinePreview status={targetUser!.status!} />
+                        )}
                       </div>
                     </div>
 
@@ -488,7 +488,8 @@ const Page = () => {
                             : "No messages yet"}
                         </p>
                       </div>
-                    ) : !channelManagement ? (
+                    ) : // change it
+                    !channelManagement ? (
                       <div className="w-full h-full" {...handlers}>
                         <div className="flex flex-row justify-start overflow-y-auto">
                           <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
@@ -535,45 +536,83 @@ const Page = () => {
                         </p>
                       </div>
                     ) : (
-                      <div className="w-full h-full bg-white flex juti items-center">
-                        <div className="w-[45%] h-full bg-blue-400 flex flex-col">
-                          <div>
-                            <Image
-                              src="/badge1.png"
-                              alt="image"
-                              width={100}
-                              height={100}
+                      <motion.div
+                        className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "
+                        initial={{ opacity: 0, y: -120 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                      >
+                        <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
+                          <Image
+                            src={"/badge1.png"}
+                            width={200}
+                            height={200}
+                            alt="channel picture"
+                          />
+                          <form
+                            action=""
+                            onSubmit={handleSubmit}
+                            className="flex flex-col w-[50%] items-center justify-center  gap-4"
+                          >
+                            <Input
+                              type="text"
+                              placeholder="change topic"
+                              {...register("topicInput", { required: false })}
+                              ref={topicInput}
+                              className="rounded-lg "
                             />
+                            <Input
+                              type="text"
+                              placeholder="change channel name"
+                              {...register("channelNameInput", {
+                                required: false,
+                              })}
+                              ref={channelNameInput}
+                              className="rounded-lg "
+                            />
+                          </form>
+                          <div className="flex gap-2 items-center flex-wrap">
+                            <label htmlFor="f" className="2xl:text-md text-sm">
+                              private
+                            </label>
+                            <input type="radio" name="" id="f" />
+                            <label htmlFor="s" className="2xl:text-md text-sm">
+                              public
+                            </label>
+                            <input type="radio" name="" id="s" />
+                            <label htmlFor="t" className="2xl:text-md text-sm">
+                              protected
+                            </label>
+                            <input type="radio" name="" id="t" />
                           </div>
-                          <div>
-                            <form
-                              action=""
-                              onSubmit={handleSubmit}
-                              className="flex flex-col"
+                          <form
+                            action=""
+                            onSubmit={handleSubmit}
+                            className="flex flex-col w-[50%] items-center justify-center"
+                          >
+                            <Input
+                              type="text"
+                              placeholder="change topic"
+                              {...register("topicInput", { required: false })}
+                              ref={topicInput}
+                              className="rounded-lg "
+                            />
+                            <button
+                              type="submit"
+                              className="py-2 px-5 bg-red-500 rounded-md mt-4"
                             >
-                              <input
-                                type="text"
-                                placeholder="change topic"
-                                {...register("topicInput", { required: false })}
-                                ref={topicInput}
-                              />
-                              <input
-                                type="text"
-                                placeholder="change channel name"
-                                {...register("channelNameInput", {
-                                  required: false,
-                                })}
-                                ref={channelNameInput}
-                              />
-                            </form>
+                              Submit
+                            </button>
+                          </form>
+                        </div>
+                        <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
+                          <div className="mt-10  flex flex-col gap-4 items-center">
+                            {Array.from({ length: 50 }, (_, index) => (
+                              <MemberList key={index} />
+                            ))}
                           </div>
                         </div>
-                        <div className="w-[45%] h-[700px] bg-black flex flex-col gap-4 items-center overflow-y-scroll">
-                          {/* {Array.from({ length: 50 }, (_, index) => (
-                            <div className="w-full h-[250px] bg-red-500" key={index}></div>
-                          ))} */}
-                        </div>
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                   <div
