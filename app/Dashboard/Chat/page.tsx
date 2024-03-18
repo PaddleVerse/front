@@ -41,11 +41,20 @@ const Page = () => {
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
   const [channelManagement, setChannelManagement] = useState(false);
+  // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
+
+
+
+
+
+
+  //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
   useEffect(() => {
     if (globalState.state.user) {
       axios
         .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
         .then((res) => {
+          console.log("here at update the chat list state", res.data);
           setChatList(res.data);
         })
         .catch((error) => {
@@ -86,7 +95,7 @@ const Page = () => {
 
   useEffect(() => {
     globalState?.state?.socket?.on("update", (data: any) => {
-      // console.log("recievec update from server"); // for debugging
+      console.log("recievec update from server"); // for debugging
       setUpdate(true);
     });
     return () => {
@@ -197,7 +206,6 @@ const Page = () => {
       await axios
         .post(`http://localhost:8080/message`, message)
         .then((res) => {
-          //console.log(res.data)
         })
         .catch((error) => {
           toast.error("failed to send message");
