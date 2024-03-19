@@ -302,6 +302,9 @@ const Page = () => {
     onSwipedLeft: () => setShowMessage(true),
     onSwipedRight: () => setShowMessage(false),
   });
+
+
+
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
@@ -415,6 +418,8 @@ const Page = () => {
                           src={
                             (targetUser && targetUser?.picture) || (targetChannel && targetChannel?.picture) || ""
                           }
+                          width={100}
+                          height={100}
                           alt=""
                         />
                       </div>

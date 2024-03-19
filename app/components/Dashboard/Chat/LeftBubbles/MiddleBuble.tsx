@@ -11,6 +11,8 @@ const MiddleBuble = (props: any) => {
             className="shadow-md rounded-full w-full h-full object-cover"
             src={props.picture}
             alt=""
+            width={100}
+            height={100}
           />
         )}
       </div>

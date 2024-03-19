@@ -36,7 +36,7 @@ const NotificationCard = (props : any) => {
     <div onClick={hanndleClick}>
         <button className="flex items-center w-full gap-4 px-3 py-2 pl-2 pr-8 leading-tight transition-all rounded-md outline-none cursor-pointer select-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
           <Image alt="paypal" src={props.not?.sender_picture || "https://dwglogo.com/wp-content/uploads/2016/08/PayPal_Logo_Icon.png"}
-            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" width={100} height={100} />
           <div className="flex flex-col gap-1">
             <p className="block font-sans text-sm antialiased font-semibold leading-normal text-black">
               {props.not?.type === "REQUEST" ? "New friend request" : "New message"} from {props.not?.sender_name}

@@ -61,6 +61,8 @@ export const ChatCard = (props: any) => {
               props.value?.picture ||
               "https://randomuser.me/api/portraits/women/87.jpg"
             }
+            width={40}
+            height={40}
             alt="User2"
           />
           <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
@@ -93,9 +95,6 @@ export const ChatCard = (props: any) => {
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm ">
           {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
-        </p>
-        <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
-          Feb 1{ /** this should change to get the date only */}
         </p>
       </div>
     </motion.div>
