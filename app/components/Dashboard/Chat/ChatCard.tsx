@@ -93,9 +93,6 @@ export const ChatCard = (props: any) => {
         <p className="text-gray-400 text-sm ">
           {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
         </p>
-        <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
-          Feb 1{ /** this should change to get the date only */}
-        </p>
       </div>
     </motion.div>
   );

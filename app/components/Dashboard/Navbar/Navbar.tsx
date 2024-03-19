@@ -24,8 +24,10 @@ const Navbar = () => {
     // }).catch((err) => {
     //   console.log(err);
     // });
-
-    setOpen(!open) 
+    if (socket) {
+      socket.emit('!notified', {'userId': user?.id} );
+    }
+    setOpen(!open);
     setNotifed(false);
   };
 
@@ -42,10 +44,12 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!user || !socket) return;
+    console.log(user?.notified);
+    if (user?.notified === true) setNotifed(true);
     socket?.on('notification', () => {
       setNotifed(true);
     });
-  }, [socket]);
+  }, [socket, user]);
 
   useEffect(() => {
     if (!socket || !user) return;
