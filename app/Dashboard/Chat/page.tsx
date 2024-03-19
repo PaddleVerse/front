@@ -25,6 +25,8 @@ import toast from "react-hot-toast";
 import { OnlinePreview } from "@/app/components/Dashboard/Chat/onlinePreview";
 import ChannelManagement from "@/app/components/Dashboard/Chat/channelManagement";
 import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
+import Image from "next/image";
+import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 const inter = Inter({ subsets: ["latin"] });
 const Page = () => {
   const { register } = useForm();
@@ -40,13 +42,9 @@ const Page = () => {
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
+  const [createModlar, setCreateModlar] = useState(false);
   const [channelManagement, setChannelManagement] = useState(false);
   // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
-
-
-
-
-
 
   //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
   useEffect(() => {
@@ -57,12 +55,14 @@ const Page = () => {
           console.log("here at update the chat list state", res.data);
           setChatList(res.data);
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
       if (targetUser) {
-        axios.get(`http://localhost:8080/user/${targetUser.id}`).then((res) => {
-          setTargetUser(res.data);
-        }).catch((error) => {});
+        axios
+          .get(`http://localhost:8080/user/${targetUser.id}`)
+          .then((res) => {
+            setTargetUser(res.data);
+          })
+          .catch((error) => {});
       }
     }
   }, [globalState, update, targetUser]);
@@ -71,6 +71,7 @@ const Page = () => {
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
       setModlar(false);
+      setCreateModlar(false);
     }
   }, []);
 
@@ -131,14 +132,15 @@ const Page = () => {
         console.log(targetChannel);
         if (update) {
           const data = fetchMessagesForChannel(targetChannel.id);
-          data.then((res) => {
-            setMessages(res);
-            const part = fetchChannelParticipants(targetChannel.id);
-            part.then((res) => {
-              setParticipants(res);
-            });
-          }).catch((error: AxiosError) => {
-          });
+          data
+            .then((res) => {
+              setMessages(res);
+              const part = fetchChannelParticipants(targetChannel.id);
+              part.then((res) => {
+                setParticipants(res);
+              });
+            })
+            .catch((error: AxiosError) => {});
         }
         setUpdate(false);
       }
@@ -156,8 +158,8 @@ const Page = () => {
         if (res.status === 200) {
           return res.data;
         }
-      }).catch((error: AxiosError) => {
-      });
+      })
+      .catch((error: AxiosError) => {});
 
     return data;
   };
@@ -171,7 +173,8 @@ const Page = () => {
       )
       .then((res) => {
         if (res.status === 200) return res.data.messages;
-      }).catch((error: AxiosError) => { })
+      })
+      .catch((error: AxiosError) => {});
     return data;
   };
 
@@ -184,7 +187,8 @@ const Page = () => {
       )
       .then((res) => {
         return res.data;
-      }).catch((error: AxiosError) => {
+      })
+      .catch((error: AxiosError) => {
         toast.error(`failed to fetch messages for ${targetChannel!.name}`);
       });
     return data;
@@ -205,8 +209,7 @@ const Page = () => {
       };
       await axios
         .post(`http://localhost:8080/message`, message)
-        .then((res) => {
-        })
+        .then((res) => {})
         .catch((error) => {
           toast.error("failed to send message");
         });
@@ -266,13 +269,19 @@ const Page = () => {
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
-        {modlar && (
+        {modlar ? (
           <JoinChannel
             handleClick={handleClick}
             user={globalState.state.user}
             socket={globalState.state.socket}
           />
-        )}
+        ) : (true ? (
+            <CreateChannel
+              handleClick={()=> setCreateModlar(false)}
+            user={globalState.state.user}
+            socket={globalState.state.socket}
+          />
+        ) : null)}
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
@@ -334,8 +343,16 @@ const Page = () => {
                     Group Chat
                   </p>
                   <div>
-                    <span className="">
-                      <CgAdd />
+                    <span
+                      className=""
+                      onClick={() => setCreateModlar(true)}
+                    >
+                      <Image
+                        width={24}
+                        height={24}
+                        src="/Chat/vector.svg"
+                        alt="create svg"
+                      />
                     </span>
                   </div>
                 </div>
