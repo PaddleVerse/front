@@ -58,13 +58,7 @@ const Elements = () => {
     <div className="w-full h-full flex justify-center">
       <div className=" flex flex-col gap-5 w-[89%] mt-[50px]">
         <Header onSelect={handleHeaderSelect} />
-        <div
-          className="w-full rounded-xl bg-transparent pb-10  flex flex-col overflow-y-auto no-scrollbar"
-          style={{
-            backdropFilter: "blur(20px)",
-            backgroundColor: "rgba(13, 9, 10, 0.7)",
-          }}
-        >
+        <div className="w-full rounded-xl bg-[#101823] pb-10  flex flex-col overflow-y-auto no-scrollbar">
           <div className="flex flex-col w-full h-full relative 2xl:px-[65px] xl:px-[35px] sm:px-[20px] px-[10px]">
             <div className="w-full grid grid-flow-col-1 gap-7 sm:grid-cols-3 place-items-center mt-6">
               <BigCard

@@ -95,7 +95,7 @@ export default function EnterCode({ register, isError , reset}: any) {
         <div className="flex gap-2 relative" onKeyDown={handleBackspace}>
             {[0, 1, 2, 3, 4, 5].map((index) => (
                 <input
-                    className={`text-2xl bg-red-500/[0.2] w-10 flex p-2 text-center text-white rounded-lg shadow-input px-3 py-2  placeholder-text-neutral-600 
+                    className={`text-2xl bg-[#263850] w-10 flex p-2 text-center text-white rounded-lg shadow-input px-3 py-2  placeholder-text-neutral-600 
                         focus-visible:outline-none focus-visible:ring-[2px] focus-visible:ring-neutral-600 disabled:cursor-not-allowed disabled:opacity-50 group-hover/input:shadow-none transition duration-400 ${isError ? errorClass : 'border-none'}`}
                     key={index}
                     type="text"

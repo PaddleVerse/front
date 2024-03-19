@@ -17,13 +17,7 @@ const Header = ({ onSelect }: { onSelect: (e: string) => void }) => {
   };
 
   return (
-    <div className="flex justify-between  bg-transparent rounded-lg"
-    style={{
-      backdropFilter: "blur(7px)",
-      backgroundColor: "rgba(13, 9, 10, 0.7)",
-    }}
-    
-    >
+    <div className="flex justify-between bg-[#101823] rounded-lg">
       <div
         className="h-[61px] cursor-pointer pl-2 rounded-lg  grid place-items-start items-center  text-white"
       >
