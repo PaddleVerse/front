@@ -9,6 +9,8 @@ import { user } from "@/app/Dashboard/Chat/type";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/newinput";
 import { Button } from "@/components/ui/moving-border";
+import { BottomGradient } from "@/app/register/page";
+import toast from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -40,16 +42,57 @@ const CreateChannel = ({
   socket: any;
 }) => {
   const password = useRef<HTMLInputElement>(null);
+  const topic = useRef<HTMLInputElement>(null);
   const name = useRef<HTMLInputElement>(null);
   const [channelAppearence, setChannelAppearence] = useState(false);
   const { register } = useForm();
+
+  const validateForm = () => {
+    if (name.current!.value!.trim().length < 3) {
+      toast.error("Name must be at least 3 characters long.");
+      return false;
+    }
+    if (
+      password.current!.value!.match(/(["'><])/) ||
+      name.current!.value!.match(/(['"><])/)
+    ) {
+      toast.error("you sneaky bastard");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCreateChannel = async () => {
+    if (!validateForm()) return;
+    const channelObject = {
+      name: name.current!.value,
+      password: password.current!.value,
+      appearence: channelAppearence
+        ? "private"
+        : password.current!.value
+        ? "protected"
+        : "public",
+      user: user,
+    };
+    console.log(channelObject);
+    // const res = await axios.post("http://localhost:8080/channels", )
+
+    handleClick();
+    // socket.emit("create-channel", {
+    //   name: name.current!.value,
+    //   password: password.current!.value,
+    //   appearence: channelAppearence ? "private" : "public",
+    //   user: user,
+    // });
+    // handleClick();
+  };
 
   return (
     <div
       className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}
     >
       <motion.div
-        className="overflow-y-auto border border-red-500/[0.3] h-[70%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] flex flex-col bg-transparent rounded-xl p-[150px] gap-5"
+        className="overflow-y-auto scroll border border-red-500/[0.3] h-[60%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] flex flex-col bg-transparent rounded-xl p-[150px] gap-5"
         initial="closed"
         animate="open"
         exit="closed"
@@ -64,7 +107,16 @@ const CreateChannel = ({
           channels is where you and your friends can communicate as a group and
           you can have three types of channels, Public, private, and Protected.
         </p>
-
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" typeof="file_input">
+            Upload file
+          </label>
+          <input
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            type="file"
+            name="file"
+          />
+        </div>
         <div className="inline-flex items-center cursor-pointer">
           <input type="checkbox" value="" className="sr-only" />
           <div
@@ -100,38 +152,54 @@ const CreateChannel = ({
 
         <form
           className="flex flex-col gap-2"
-          onSubmit={() => console.log("submit")}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleCreateChannel();
+          }}
         >
           <label htmlFor="Name">Name</label>
           <Input
             placeholder="channel name"
             {...register("name", { required: true })}
             ref={name}
-            className="rounded-lg mb-5"
+            className="rounded-lg"
           />
-          <label htmlFor="Password">Passowrd</label>
+          <label htmlFor="Password" className="mt-5">
+            Passowrd (optional)
+          </label>
           <Input
             type="text"
             placeholder="password"
             {...register("password", { required: false })}
             ref={password}
-            className="rounded-lg mb-5"
+            className="rounded-lg"
           />
-          <div className="flex flex-row justify-around">
-            <Button
-              className="w-[45%]"
-              borderRadius="10px"
-              borderClassName=" bg-[radial-gradient(var(--green-500)_40%,transparent_60%)]"
+          <label htmlFor="Password" className="mt-5">
+            topic (optional)
+          </label>
+          <Input
+            type="text"
+            placeholder="topic"
+            {...register("topic", { required: false })}
+            ref={topic}
+            className="rounded-lg"
+          />
+          <div className="flex flex-row justify-around mt-5">
+            <button
+              className="w-[45%] bg-gradient-to-br relative group/btn from-zinc-900 to-zinc-900 block bg-zinc-800  text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+              type="button"
+              onClick={handleClick}
             >
-              cancel
-            </Button>
-            <Button
-              className="w-[45%]"
-              borderRadius="10px"
-              borderClassName=" bg-[radial-gradient(var(--green-500)_40%,transparent_60%)]"
+              Cancel
+              <BottomGradient />
+            </button>
+            <button
+              className="bg-gradient-to-br relative group/btn from-zinc-900 to-zinc-900 block bg-zinc-800 w-[45%] text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+              type="submit"
             >
-              submit
-            </Button>
+              Submit
+              <BottomGradient />
+            </button>
           </div>
         </form>
       </motion.div>

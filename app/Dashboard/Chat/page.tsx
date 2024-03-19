@@ -275,7 +275,7 @@ const Page = () => {
             user={globalState.state.user}
             socket={globalState.state.socket}
           />
-        ) : (true ? (
+        ) : (createModlar ? (
             <CreateChannel
               handleClick={()=> setCreateModlar(false)}
             user={globalState.state.user}
