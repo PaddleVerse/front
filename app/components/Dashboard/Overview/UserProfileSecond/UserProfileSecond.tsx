@@ -22,7 +22,7 @@ const UserProfileSecond = ({ user }: any) => {
       <div className=" w-full h-full relative flex flex-col 2xl:gap-[80px] gap-12 rounded-md">
         <div className="w-full  h-[290px] relative">
           <PinContainer title="Overview" href="https://twitter.com/mannupaaji">
-            <div className="overflow-hidden h-[290px] w-full">
+            <div className="overflow-hidden h-[290px] w-full relative">
               {
                 user ? (
                   <Image
@@ -113,6 +113,7 @@ const UserProfileSecond = ({ user }: any) => {
                   <Image
                     src={"/badge1.png"}
                     width={150}
+                    priority
                     height={130}
                     alt="badge"
                     className="2xl:w-[150px] xl:w-[115px] md:w-[112px] w-[105px]"

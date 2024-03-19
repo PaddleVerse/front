@@ -68,10 +68,10 @@ const Modlar = ({
             }`}
             alt="shop"
             sizes="width:auto height:auto"
-            width={700}
-            height={400}
+            width={0}
+            height={0}
             priority
-            className="object-cover object-center w-auto h-auto"
+            className="object-cover object-center 2xl:w-[750px] 2xl:h-[750px] lg:w-[450px] lg:h-[450px] w-[250px] h-[250px]"
             // sizes="(max-width: 100px) 100vw, 33vw"
           />
         </div>
