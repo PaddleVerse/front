@@ -18,7 +18,7 @@ import {
 import axios, { Axios, AxiosError } from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { channel, participants, user, message } from "./type";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
 import toast from "react-hot-toast";
@@ -49,23 +49,18 @@ const Page = () => {
   //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
   useEffect(() => {
     if (globalState.state.user) {
-      axios
-        .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
-        .then((res) => {
-          console.log("here at update the chat list state", res.data);
-          setChatList(res.data);
-        })
-        .catch((error) => {});
-      if (targetUser) {
+      if (!update) {
         axios
-          .get(`http://localhost:8080/user/${targetUser.id}`)
+          .get(
+            `http://localhost:8080/chat/chatlist/${globalState.state.user.id}`
+          )
           .then((res) => {
-            setTargetUser(res.data);
+            setChatList(res.data);
           })
           .catch((error) => {});
       }
     }
-  }, [globalState, update, targetUser]);
+  }, [globalState, update]);
   ///////////////////////////////////////////////////////////
   //press escape to close the modal
   const handleEscapeKeyPress = useCallback((e: any) => {
@@ -96,7 +91,6 @@ const Page = () => {
 
   useEffect(() => {
     globalState?.state?.socket?.on("update", (data: any) => {
-      console.log("recievec update from server"); // for debugging
       setUpdate(true);
     });
     return () => {
@@ -114,10 +108,15 @@ const Page = () => {
   useEffect(() => {
     if (targetUser) {
       if (update) {
-        const data = fetchMessagesForUser(targetUser.id);
-        data.then((res) => {
-          setMessages(res);
-        });
+        axios
+          .get(`http://localhost:8080/user/${targetUser.id}`)
+          .then((res) => {
+            fetchMessagesForUser(targetUser.id).then((res) => {
+              setMessages(res);
+            });
+            setTargetUser(res.data);
+          })
+          .catch((error) => {});
       }
     }
     return () => {
@@ -129,7 +128,6 @@ const Page = () => {
   useEffect(() => {
     if (update) {
       if (targetChannel) {
-        console.log(targetChannel);
         if (update) {
           const data = fetchMessagesForChannel(targetChannel.id);
           data
@@ -242,6 +240,7 @@ const Page = () => {
     inputMessage.current!.value = "";
     return (e: FormEvent<HTMLFormElement>) => {};
   };
+
   const handleClick = () => {
     setModlar(false);
   };
@@ -275,13 +274,13 @@ const Page = () => {
             user={globalState.state.user}
             socket={globalState.state.socket}
           />
-        ) : (createModlar ? (
-            <CreateChannel
-              handleClick={()=> setCreateModlar(false)}
+        ) : createModlar ? (
+          <CreateChannel
+            handleClick={() => setCreateModlar(false)}
             user={globalState.state.user}
             socket={globalState.state.socket}
           />
-        ) : null)}
+        ) : null}
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
@@ -343,10 +342,7 @@ const Page = () => {
                     Group Chat
                   </p>
                   <div>
-                    <span
-                      className=""
-                      onClick={() => setCreateModlar(true)}
-                    >
+                    <span className="" onClick={() => setCreateModlar(true)}>
                       <Image
                         width={24}
                         height={24}

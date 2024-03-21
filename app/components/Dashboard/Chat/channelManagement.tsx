@@ -20,8 +20,6 @@ const ChannelManagement = ({
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
-
-	console.log(selectedOption);
   return (
     <motion.div
       className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "

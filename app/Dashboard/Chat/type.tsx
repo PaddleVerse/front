@@ -63,4 +63,5 @@ export type user = {
   createdAt: Date;
   twoFa: boolean;
   twoFaSecret: string;
+  conversations: conversation;
 };

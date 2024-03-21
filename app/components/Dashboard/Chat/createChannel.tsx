@@ -42,6 +42,7 @@ const CreateChannel = ({
   socket: any;
 }) => {
   const password = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
   const topic = useRef<HTMLInputElement>(null);
   const name = useRef<HTMLInputElement>(null);
   const [channelAppearence, setChannelAppearence] = useState(false);
@@ -65,28 +66,51 @@ const CreateChannel = ({
   const handleCreateChannel = async () => {
     if (!validateForm()) return;
     const channelObject = {
-      name: name.current!.value,
-      password: password.current!.value,
-      appearence: channelAppearence
-        ? "private"
-        : password.current!.value
-        ? "protected"
-        : "public",
+      channel: {
+        name: name.current!.value,
+        key: password.current!.value ? password.current!.value : null,
+        state: channelAppearence
+          ? "private"
+          : password.current!.value
+          ? "protected"
+          : "public",
+      },
       user: user,
     };
-    console.log(channelObject);
-    // const res = await axios.post("http://localhost:8080/channels", )
-
+    axios
+      .post("http://localhost:8080/channels", channelObject)
+      .then((res) => {
+        if (!res.data.success) {
+          toast.error("error in creating channel");
+          return;
+        }
+        if (file) {
+          if (!file.type.startsWith("image/")) {
+            alert("Please select an image file.");
+            return;
+          }
+          const formData = new FormData();
+          formData.append("image", file);
+          axios
+            .post(
+              `http://localhost:8080/channels/image?channel=${res.data.id}&user=${user.id}`,
+             formData,
+              {
+                headers: { "Content-Type": "multipart/form-data" },
+              }
+            )
+            .then((res) => {
+              if (!res.data.success) {
+                toast.error("error in uploading image");
+              }
+            })
+            .catch();
+        }
+          socket.emit("joinRoom", {roomName:res.data.name, user: user});
+      })
+      .catch();
     handleClick();
-    // socket.emit("create-channel", {
-    //   name: name.current!.value,
-    //   password: password.current!.value,
-    //   appearence: channelAppearence ? "private" : "public",
-    //   user: user,
-    // });
-    // handleClick();
   };
-
   return (
     <div
       className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}
@@ -108,13 +132,25 @@ const CreateChannel = ({
           you can have three types of channels, Public, private, and Protected.
         </p>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" typeof="file_input">
+          <label
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            typeof="file_input"
+          >
             Upload file
           </label>
           <input
             className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
             type="file"
-            name="file"
+            accept="image/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                if (!e.target.files[0].type.startsWith("image/")) {
+                  toast.error("Please select an image file.");
+                  return;
+                }
+                setFile(e.target.files[0]);
+              }
+            }}
           />
         </div>
         <div className="inline-flex items-center cursor-pointer">
