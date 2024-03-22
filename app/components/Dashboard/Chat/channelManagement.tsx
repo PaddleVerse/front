@@ -12,6 +12,7 @@ const ChannelManagement = ({
 }: {
   participants: participants[];
 }) => {
+  const [picture, setPicture] = useState<File>();
   const { register } = useForm();
   const topicInput = useRef<HTMLInputElement | null>(null);
   const channelNameInput = useRef<HTMLInputElement | null>(null);
@@ -20,6 +21,7 @@ const ChannelManagement = ({
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
+
   return (
     <motion.div
       className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "
@@ -28,17 +30,17 @@ const ChannelManagement = ({
       exit={{ opacity: 0, y: -20 }}
     >
       <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
-        <Image
-          src={"/badge1.png"}
-          width={200}
-          height={200}
-          alt="channel picture"
-        />
         <form
           action=""
           //   onSubmit={handleSubmit}
           className="flex flex-col w-[50%] items-center justify-center  gap-4"
         >
+          <Image
+            src={"/badge1.png"}
+            width={200}
+            height={200}
+            alt="channel picture"
+          />
           <Input
             type="text"
             placeholder="change topic"
@@ -113,9 +115,12 @@ const ChannelManagement = ({
       </div>
       <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
         <div className="mt-10  flex flex-col gap-4 items-center">
-          {Array.from({ length: 50 }, (_, index) => (
+          {/* {par.from({ length: 50 }, (_, index) => (
             <MemberList key={index} />
-          ))}
+          ))} */}
+          {participants.map((participant, index) => {
+            return <MemberList key={index} participant={participant} />;
+          })}
         </div>
       </div>
     </motion.div>
@@ -123,6 +128,5 @@ const ChannelManagement = ({
 };
 
 export default ChannelManagement;
-
 
 // still need form validation and submit logic depending on the selected option, and the participants management is to be added later

@@ -406,7 +406,10 @@ const Page = () => {
                     <div className="flex items-center">
                       <div
                         className="block rounded-full  w-6 h-6 ml-4"
-                        onClick={() => setChannelManagement(!channelManagement)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setChannelManagement(!channelManagement);
+                        }}
                       >
                         <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
