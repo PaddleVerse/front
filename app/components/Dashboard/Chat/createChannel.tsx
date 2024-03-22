@@ -94,19 +94,23 @@ const CreateChannel = ({
           axios
             .post(
               `http://localhost:8080/channels/image?channel=${res.data.id}&user=${user.id}`,
-             formData,
+              formData,
               {
                 headers: { "Content-Type": "multipart/form-data" },
               }
             )
             .then((res) => {
               if (!res.data.success) {
-                toast.error("error in uploading image");
+                toast.error(
+                  "error in uploading image, using the default image."
+                );
               }
+              socket.emit("joinRoom", { roomName: res.data.name, user: user });
             })
             .catch();
+        } else {
+          socket.emit("joinRoom", { roomName: res.data.name, user: user });
         }
-          socket.emit("joinRoom", {roomName:res.data.name, user: user});
       })
       .catch();
     handleClick();

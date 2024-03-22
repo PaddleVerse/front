@@ -45,11 +45,11 @@ const Page = () => {
   const [createModlar, setCreateModlar] = useState(false);
   const [channelManagement, setChannelManagement] = useState(false);
   // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
-
   //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
+
   useEffect(() => {
     if (globalState.state.user) {
-      if (!update) {
+      if (update) {
         axios
           .get(
             `http://localhost:8080/chat/chatlist/${globalState.state.user.id}`
@@ -432,7 +432,7 @@ const Page = () => {
                         globalStateUserId={globalState.state.user.id}
                       />
                     ) : (
-                      <ChannelManagement participants={participants} />
+                      <ChannelManagement participants={participants} channel={targetChannel!} />
                     )}
                   </div>
                   <div

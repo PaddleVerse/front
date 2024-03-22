@@ -1,16 +1,18 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Input } from "@/components/ui/newinput";
 import MemberList from "./MemberList";
 import { useForm } from "react-hook-form";
-import { participants } from "@/app/Dashboard/Chat/type";
+import { channel, participants } from "@/app/Dashboard/Chat/type";
+import Image from "next/image";
 
 const ChannelManagement = ({
   participants,
+  channel,
 }: {
   participants: participants[];
+  channel: channel;
 }) => {
   const [picture, setPicture] = useState<File>();
   const { register } = useForm();
@@ -32,15 +34,65 @@ const ChannelManagement = ({
       <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
         <form
           action=""
-          //   onSubmit={handleSubmit}
+          //   onSubmit={handleSubmit} here we are going to add the submit logic
           className="flex flex-col w-[50%] items-center justify-center  gap-4"
         >
-          <Image
-            src={"/badge1.png"}
-            width={200}
-            height={200}
-            alt="channel picture"
-          />
+          {/* <div className="rounded-full overflow-hidden relative w-[200px] h-[200px]">
+            <input
+              type="file"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  setPicture(e.target.files[0]);
+                }
+              }}
+              className="z-10"
+              onClick={() => { console.log("clicked") }}
+            />
+            <Image
+              src={channel.picture}
+              width={200}
+              height={200}
+              alt="channel picture"
+              className="absolute z-20 blur-sm"
+            />
+
+            <Image
+              src={"/Chat/plusOverPicture.svg"}
+              width={75}
+              height={75}
+              alt="channel picture"
+              className="absolute top-[35%] left-[30%] z-30"
+            />
+          </div> */}
+          <div className="rounded-full overflow-hidden relative w-[200px] h-[200px]">
+            <input
+              type="file"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  setPicture(e.target.files[0]);
+                }
+              }}
+              className="absolute opacity-0 z-30 w-full h-full cursor-pointer"
+              onClick={() => {
+                console.log("clicked");
+              }}
+            />
+            <Image
+              src={channel.picture}
+              width={200}
+              height={200}
+              alt="channel picture"
+              className="absolute z-10 blur-sm"
+            />
+
+            <Image
+              src={"/Chat/plusOverPicture.svg"}
+              width={75}
+              height={75}
+              alt="channel picture"
+              className="absolute top-[35%] left-[30%] z-20"
+            />
+          </div>
           <Input
             type="text"
             placeholder="change topic"
