@@ -97,3 +97,5 @@ const MemberList = ({
 };
 
 export default MemberList;
+
+// need to add something to the backend so when i kick a user or ban a user, the user is removed from the channel and from the room in the socket
