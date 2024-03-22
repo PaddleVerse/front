@@ -16,6 +16,13 @@ const ChannelManagement = ({
   channel: channel;
   user: user;
 }) => {
+  const [priviliged, setPriviliged] = useState<participants>(
+    participants.filter(
+      (participant) =>
+        (participant.role === "ADMIN" || participant.role === "MOD") &&
+        participant.user_id === user.id
+    )[0]
+  );
   const [picture, setPicture] = useState<File>();
   const { register } = useForm();
   const topicInput = useRef<HTMLInputElement | null>(null);
@@ -25,7 +32,6 @@ const ChannelManagement = ({
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
-
   return (
     <motion.div
       className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "
@@ -47,13 +53,12 @@ const ChannelManagement = ({
               type="file"
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]) {
+                  console.log(e.target.files[0]);
                   setPicture(e.target.files[0]);
                 }
               }}
               className="absolute opacity-0 z-30 w-full h-full cursor-pointer"
-              onClick={() => {
-                console.log("clicked");
-              }}
+              disabled={priviliged ? false : true}
             />
             <Image
               src={channel.picture}
@@ -77,6 +82,7 @@ const ChannelManagement = ({
             {...register("topicInput", { required: false })}
             ref={topicInput}
             className="rounded-lg "
+            disabled={priviliged ? false : true}
           />
           <Input
             type="text"
@@ -86,9 +92,13 @@ const ChannelManagement = ({
             })}
             ref={channelNameInput}
             className="rounded-lg "
+            disabled={priviliged ? false : true}
           />
         </form>
-        <fieldset className="flex gap-2 items-center flex-wrap">
+        <fieldset
+          className="flex gap-2 items-center flex-wrap"
+          disabled={priviliged ? false : true}
+        >
           <label htmlFor="private" className="2xl:text-md text-sm">
             private
           </label>
@@ -134,10 +144,12 @@ const ChannelManagement = ({
             {...register("topicInput", { required: false })}
             ref={topicInput}
             className="rounded-lg "
+            disabled={priviliged ? false : true}
           />
           <button
             type="submit"
             className="py-2 px-5 bg-red-500 rounded-md mt-4"
+            disabled={priviliged ? false : true}
           >
             Submit
           </button>
@@ -145,11 +157,8 @@ const ChannelManagement = ({
       </div>
       <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
         <div className="mt-10  flex flex-col gap-4 items-center">
-          {/* {par.from({ length: 50 }, (_, index) => (
-            <MemberList key={index} />
-          ))} */}
           {participants.map((participant, index) => {
-            return <MemberList key={index} participant={participant} />;
+            return <MemberList key={index} participant={participant} exec={priviliged} />;
           })}
         </div>
       </div>

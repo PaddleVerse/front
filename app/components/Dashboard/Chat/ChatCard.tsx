@@ -46,7 +46,7 @@ export const ChatCard = (props: any) => {
           props.setTargetUser(props.value);
           props.setTargetChannel(null);
         }
-        props.setUpdate(true);
+        // props.setUpdate(true);
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}
@@ -57,11 +57,8 @@ export const ChatCard = (props: any) => {
         <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">
           <img
             className="shadow-md rounded-full w-10 h-10 object-cover"
-            src={
-              props.value?.picture ||
-              "https://randomuser.me/api/portraits/women/87.jpg"
-            }
-            alt="User2"
+            src={props.value?.picture}
+            alt="picture"
           />
           <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
             {props.value.user &&

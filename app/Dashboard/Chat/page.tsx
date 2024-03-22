@@ -35,7 +35,7 @@ const Page = () => {
   const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState(true);
   const [chatList, setChatList] = useState([]);
   const [targetUser, setTargetUser] = useState<user | null>();
   const [targetChannel, setTargetChannel] = useState<channel | null>();
@@ -48,17 +48,15 @@ const Page = () => {
   //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
 
   useEffect(() => {
-    if (globalState.state.user) {
-      if (update) {
-        axios
-          .get(
-            `http://localhost:8080/chat/chatlist/${globalState.state.user.id}`
-          )
-          .then((res) => {
-            setChatList(res.data);
-          })
-          .catch((error) => {});
-      }
+    if (globalState?.state?.user) {
+      axios
+        .get(
+          `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`
+        )
+        .then((res) => {
+          setChatList(res.data);
+        })
+        .catch((error) => { });
     }
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
@@ -432,7 +430,11 @@ const Page = () => {
                         globalStateUserId={globalState.state.user.id}
                       />
                     ) : (
-                      <ChannelManagement participants={participants} channel={targetChannel!} />
+                      <ChannelManagement
+                        participants={participants}
+                        channel={targetChannel!}
+                        user={globalState.state!.user!}
+                      />
                     )}
                   </div>
                   <div
