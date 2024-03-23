@@ -46,7 +46,7 @@ export const ChatCard = (props: any) => {
           props.setTargetUser(props.value);
           props.setTargetChannel(null);
         }
-        // props.setUpdate(true);
+        props.setUpdate(true);
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}

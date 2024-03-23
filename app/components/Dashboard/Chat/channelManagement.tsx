@@ -6,15 +6,19 @@ import MemberList from "./MemberList";
 import { useForm } from "react-hook-form";
 import { channel, participants, user } from "@/app/Dashboard/Chat/type";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const ChannelManagement = ({
   participants,
   channel,
   user,
+  update,
 }: {
   participants: participants[];
   channel: channel;
-  user: user;
+    user: user;
+    update: (arg0: boolean) => void;
 }) => {
   const [priviliged, setPriviliged] = useState<participants>(
     participants.filter(
@@ -23,6 +27,7 @@ const ChannelManagement = ({
         participant.user_id === user.id
     )[0]
   );
+  const router = useRouter();
   const [picture, setPicture] = useState<File>();
   const { register } = useForm();
   const topicInput = useRef<HTMLInputElement | null>(null);
@@ -32,6 +37,17 @@ const ChannelManagement = ({
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
+
+  const handleLeave = () => {
+    axios
+      .delete(`http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`)
+      .then((res) => {
+        // update(true);
+        router.push("/Dashboard/");
+      })
+      .catch();
+  };
+
   return (
     <motion.div
       className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "
@@ -154,11 +170,24 @@ const ChannelManagement = ({
             Submit
           </button>
         </form>
+        <button
+          // type="submit"
+          onClick={() => handleLeave()}
+          className="py-2 px-5 bg-red-500 rounded-md mt-4"
+        >
+          leave channel
+        </button>
       </div>
       <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
         <div className="mt-10  flex flex-col gap-4 items-center">
           {participants.map((participant, index) => {
-            return <MemberList key={index} participant={participant} exec={priviliged} />;
+            return (
+              <MemberList
+                key={index}
+                participant={participant}
+                exec={priviliged}
+              />
+            );
           })}
         </div>
       </div>

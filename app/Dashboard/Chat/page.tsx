@@ -28,17 +28,19 @@ import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 const inter = Inter({ subsets: ["latin"] });
+
 const Page = () => {
+  // const chatQuery  =  
   const { register } = useForm();
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const [participants, setParticipants] = useState<participants[]>([]);
   const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
-  const [update, setUpdate] = useState(true);
+  const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
-  const [targetUser, setTargetUser] = useState<user | null>();
-  const [targetChannel, setTargetChannel] = useState<channel | null>();
+  const [targetUser, setTargetUser] = useState<user | null>(null);
+  const [targetChannel, setTargetChannel] = useState<channel | null>(null);
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
@@ -49,14 +51,14 @@ const Page = () => {
 
   useEffect(() => {
     if (globalState?.state?.user) {
-      axios
-        .get(
-          `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`
-        )
-        .then((res) => {
-          setChatList(res.data);
-        })
-        .catch((error) => { });
+        axios
+          .get(
+            `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`
+          )
+          .then((res) => {
+            setChatList(res.data);
+          })
+          .catch((error) => {});
     }
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
@@ -127,6 +129,7 @@ const Page = () => {
     if (update) {
       if (targetChannel) {
         if (update) {
+          console.log("fetching messages for channel");
           const data = fetchMessagesForChannel(targetChannel.id);
           data
             .then((res) => {
@@ -433,7 +436,8 @@ const Page = () => {
                       <ChannelManagement
                         participants={participants}
                         channel={targetChannel!}
-                        user={globalState.state!.user!}
+                            user={globalState.state!.user!}
+                            update={setUpdate}
                       />
                     )}
                   </div>
