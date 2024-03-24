@@ -186,6 +186,7 @@ const ChannelManagement = ({
                 key={index}
                 participant={participant}
                 exec={priviliged}
+                channel={channel}
               />
             );
           })}

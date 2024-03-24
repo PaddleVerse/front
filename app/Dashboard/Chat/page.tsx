@@ -27,10 +27,15 @@ import ChannelManagement from "@/app/components/Dashboard/Chat/channelManagement
 import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Search } from "lucide-react";
 const inter = Inter({ subsets: ["latin"] });
 
 const Page = () => {
   // const chatQuery  =  
+  // const url = "http://localhost:8080/chat/1";
+  // const router = useRouter(); // for later improvement when i want to add a chat id to the url
+  const searchParam = useSearchParams();
   const { register } = useForm();
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const [participants, setParticipants] = useState<participants[]>([]);
@@ -51,6 +56,9 @@ const Page = () => {
 
   useEffect(() => {
     if (globalState?.state?.user) {
+      // if (searchParam.get("id")) {
+
+      // }
         axios
           .get(
             `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`

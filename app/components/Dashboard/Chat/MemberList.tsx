@@ -1,7 +1,7 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { participants, user } from "@/app/Dashboard/Chat/type";
+import { channel, participants, user } from "@/app/Dashboard/Chat/type";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -11,45 +11,20 @@ import { FaBan } from "react-icons/fa6";
 import { FaChessKing } from "react-icons/fa6";
 import { FaChessPawn } from "react-icons/fa6";
 import toast from "react-hot-toast";
-
-const initialMenu = { visible: false, x: 0, y: 0 };
-
-export const ContextMenu = ({
-  x,
-  y,
-  exec,
-  participant,
-}: {
-  x: number;
-  y: number;
-  exec: participants;
-  participant: participants;
-}) => {
-  console.log("here rerendering", x, y);
-  return (
-    <div>
-      <div
-        className={`absolute text-white`}
-        style={{
-          top: y,
-          left: x,
-        }}
-      >
-        hello world
-      </div>
-    </div>
-  );
-};
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const MemberList = ({
   participant,
   exec,
+  channel,
 }: {
   participant: participants;
   exec: participants;
+  channel: channel;
 }) => {
   const [user, setUser] = useState<user>();
   const router = useRouter();
+  const { state, dispatch } = useGlobalState();
 
   useEffect(() => {
     axios
@@ -79,13 +54,29 @@ const MemberList = ({
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     if (!exec) {
-      toast.error("You cannot take privilage from yourself");
+      toast.error("You do not have privilage to kick");
       return;
     }
     if (participant.role === "ADMIN") {
       toast.error("You cannot kick an admin");
       return;
     }
+    const obj = {
+      channel: exec.channel_id,
+      executor: exec.user_id,
+    };
+    axios
+      .put(`http://localhost:8080/participants/kick/${participant.user_id}`, obj)
+      .then((res) => {
+        state?.socket?.emit("leaveUpdate", {
+          roomName: channel.name,
+          user: user,
+        });
+        router.push("/Dashboard/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     console.log("kick");
   };
 
@@ -94,14 +85,13 @@ const MemberList = ({
   ) => {
     e.preventDefault();
     if (!exec) {
-      toast.error("You cannot take privilage from yourself");
+      toast.error("you do not have privilage to promote/demote");
       return;
     }
     if (participant.role === "ADMIN") {
       toast.error("You cannot take privilage from admin");
       return;
     }
-
     const obj = {
       channel: exec.channel_id,
       executor: exec.user_id,
@@ -110,10 +100,12 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://localhost:8080/participants/${participant.id}`, obj)
+      .put(`http://localhost:8080/participants/${participant.user_id}`, obj)
       .then((res) => {
-        console.log(res);
-        //here i will emit  to the server an update and they all need to update their state
+        state?.socket?.emit("channelUpdate", {
+          roomName: channel.name,
+          user: user,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -125,15 +117,33 @@ const MemberList = ({
   const handleMuteUnMute = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
+    e.preventDefault();
     if (!exec) {
-      toast.error("You cannot take privilage from yourself");
+      toast.error("You do not have privilage to mute/unmute");
       return;
     }
     if (participant.role === "ADMIN") {
       toast.error("You cannot mute an admin");
       return;
     }
-    e.preventDefault();
+    const obj = {
+      channel: exec.channel_id,
+      executor: exec.user_id,
+      participant: {
+        mute: participant.mute ? false : true,
+      },
+    };
+    axios
+      .put(`http://localhost:8080/participants/${participant.user_id}`, obj)
+      .then((res) => {
+        state?.socket?.emit("channelUpdate", {
+          roomName: channel.name,
+          user: user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     console.log("mute/unmute");
   };
 
