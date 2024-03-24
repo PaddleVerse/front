@@ -317,13 +317,7 @@ const Page = () => {
         )}
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
-        <div
-          className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
-          style={{
-            backdropFilter: "blur(20px)",
-            backgroundColor: "rgba(13, 9, 10, 0.7)",
-          }}
-        >
+        <div className={`h-full w-full flex antialiased text-gray-200 bg-[#101823] rounded-xl ${inter.className}`}>
           <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">
               <motion.section

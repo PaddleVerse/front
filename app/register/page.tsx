@@ -111,7 +111,7 @@ export default function SignupFormDemo() {
               {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
             </LabelInputContainer>
             <button
-              className="bg-gradient-to-br relative group/btn bg-[#192536] w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+              className="bg-gradient-to-br relative group/btn bg-[#192536] bloc w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
               type="submit"
             >
               Sign up &rarr;
@@ -121,29 +121,29 @@ export default function SignupFormDemo() {
             <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
 
             <div className="flex flex-col space-y-4">
-                <button
-                  className=" relative group/btn bg-[#192536] flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input "
-                  type="button"
-                  onClick={handle42}
-                >
-                  <Image src="/Apple Logo.svg" className="w-5" alt="42" width={100} height={100} />
-                  <span className="text-neutral-300 text-sm">
-                    Intra 42
-                  </span>
-                  <BottomGradient />
-                </button>
-                <button
-                  className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full  rounded-md h-10 font-medium shadow-input bg-[#192536]"
-                  type="button"
-                  onClick={handleGoogle}
-                >
-                  <IconBrandGoogle className="h-4 w-4 text-neutral-300" />
-                  <span className="text-neutral-300 text-sm">
-                    Google
-                  </span>
-                  <BottomGradient />
-                </button>
-              </div>
+              <button
+                className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-[#192536]"
+                type="button"
+                onClick={handle42}
+              >
+                <Image alt="42" src="/Apple Logo.svg" className="w-5" width={100} height={100} />
+                <span className="text-neutral-300 text-sm">
+                  Intra 42
+                </span>
+                <BottomGradient />
+              </button>
+              <button
+                className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-[#192536]"
+                type="button"
+                onClick={handleGoogle}
+              >
+                <IconBrandGoogle className="h-4 w-4 text-neutral-300" />
+                <span className="text-neutral-300 text-sm">
+                  Google
+                </span>
+                <BottomGradient />
+              </button>
+            </div>
           </form>
           <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
           <div className="w-full flex justify-between">

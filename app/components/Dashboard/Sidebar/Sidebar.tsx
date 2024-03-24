@@ -12,23 +12,6 @@ const oswald = Oswald({ subsets: ["latin"], weight: ["400", "500"] });
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 
-const image2 =
-  "https://img.pikbest.com/origin/09/26/71/799pIkbEsTSty.png!w700wp";
-// const showElementssideVariants = {
-//   closed: {
-//     transition: {
-//       staggerChildren: 0.2,
-//       staggerDirection: -1,
-//     },
-//   },
-//   open: {
-//     transition: {
-//       staggerChildren: 0.2,
-//       staggerDirection: 1,
-//     },
-//   },
-// };
-
 
 
 interface User{
@@ -41,11 +24,6 @@ interface User{
   createdAt : Date,
 }
 
-const ProfileInfoVariants = {
-  opened: { opacity: 1 },
-  closed: { opacity: 0 },
-  exit: { opacity: 0 },
-};
 function useWindowSize() {
   const [size, setSize] = useState(0);
   useLayoutEffect(() => {
@@ -67,7 +45,6 @@ const Sidebar = () => {
   const handlers = useSwipeable({
     onSwipedLeft: () => setExpanded(false),
     onSwipedRight: () => setExpanded(true),
-    // onSwiped:()=>setExpanded(!expanded),
   });
 
   const tablet = useWindowSize() < 769;
@@ -93,6 +70,8 @@ const Sidebar = () => {
     if (typeof window === "undefined") {
       return;
     }
+    if (dispatch === undefined || state === undefined)
+      return;
     
     // get the access token from the cookie
     const accessToken = getCookie("access_token");

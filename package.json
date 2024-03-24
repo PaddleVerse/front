@@ -20,6 +20,7 @@
     "clsx": "^2.1.0",
     "embla-carousel-react": "^8.0.0-rc22",
     "framer-motion": "^10.18.0",
+    "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.295.0",
     "mini-svg-data-uri": "^1.4.4",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
