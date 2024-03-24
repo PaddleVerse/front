@@ -95,8 +95,8 @@ const JoinChannelBubble = ({
           </form>
         ) : (
           <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
-            {channel.topic.substring(0, 30) +
-              (channel.topic.length > 30 && " ...")}
+            {channel.topic?.substring(0, 30) +
+              (channel.topic?.length > 30 ? " ..." : "")}
           </p>
         )}
       </div>

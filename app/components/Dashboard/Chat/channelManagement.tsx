@@ -8,6 +8,12 @@ import { channel, participants, user } from "@/app/Dashboard/Chat/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useGlobalState } from "../../Sign/GlobalState";
+
+
+
+// this still needs work in terms of realtime and stuff, but the basic functionality is there
 
 const ChannelManagement = ({
   participants,
@@ -17,8 +23,8 @@ const ChannelManagement = ({
 }: {
   participants: participants[];
   channel: channel;
-    user: user;
-    update: (arg0: boolean) => void;
+  user: user;
+  update: (arg0: boolean) => void;
 }) => {
   const [priviliged, setPriviliged] = useState<participants>(
     participants.filter(
@@ -32,7 +38,9 @@ const ChannelManagement = ({
   const { register } = useForm();
   const topicInput = useRef<HTMLInputElement | null>(null);
   const channelNameInput = useRef<HTMLInputElement | null>(null);
+  const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState("");
+  const { state } = useGlobalState();
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -40,12 +48,78 @@ const ChannelManagement = ({
 
   const handleLeave = () => {
     axios
-      .delete(`http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`)
+      .delete(
+        `http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`
+      )
       .then((res) => {
-        // update(true);
         router.push("/Dashboard/");
       })
       .catch();
+  };
+
+  const validateForm = () => {
+    if (
+      channelNameInput.current?.value === ""
+    ) {
+      return false;
+    }
+    if (selectedOption === "protected" && keyInput.current?.value === "") {
+      return false;
+    }
+    return true;
+  };
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // if (!validateForm()) {
+    //   toast.error("Please fill in the required fields.");
+    //   return;
+    // }
+    const obj = {
+      channel: {
+        name: channelNameInput.current?.value! || channel.name,
+        key: keyInput.current?.value! || channel.key,
+        topic: topicInput.current?.value! || channel.topic,
+        state: selectedOption === "" ? channel.state : selectedOption,
+      },
+      user: { id: priviliged.user_id },
+    };
+    console.log(obj);
+    axios
+      .put(`http://localhost:8080/channels/${channel.id}`, obj)
+      .then((res) => {
+        if (picture) {
+          if (!picture.type.startsWith("image/")) {
+            alert("Please select an image picture.");
+            return;
+          }
+          const formData = new FormData();
+          formData.append("image", picture);
+          axios
+            .post(
+              `http://localhost:8080/channels/image?channel=${channel.id}&user=${user.id}`,
+              formData,
+              {
+                headers: { "Content-Type": "multipart/form-data" },
+              }
+            )
+            .then((res) => {
+              if (!res.data.success) {
+                toast.error(
+                  "error in uploading image, using the default image."
+                );
+              }
+              state?.socket?.emit("channelUpdate", { roomName: channel.name, user: user });
+            })
+            .catch();
+          }
+          state?.socket?.emit("channelUpdate", { roomName: channel.name, user: user });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(obj);
   };
 
   return (
@@ -58,10 +132,7 @@ const ChannelManagement = ({
       <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
         <form
           action=""
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log(picture);
-          }}
+          onSubmit={handleSubmit}
           className="flex flex-col w-[50%] items-center justify-center  gap-4"
         >
           <div className="rounded-full overflow-hidden relative w-[200px] h-[200px]">
@@ -94,66 +165,60 @@ const ChannelManagement = ({
           </div>
           <Input
             type="text"
-            placeholder="change topic"
-            {...register("topicInput", { required: false })}
-            ref={topicInput}
+            placeholder="change name"
+            {...register("channelNameInput", { required: false })}
+            ref={channelNameInput}
             className="rounded-lg "
             disabled={priviliged ? false : true}
           />
           <Input
             type="text"
-            placeholder="change channel name"
-            {...register("channelNameInput", {
-              required: false,
+            placeholder="change password"
+            {...register("keyInput", {
+              required: selectedOption === "protected" ? true : false,
             })}
-            ref={channelNameInput}
+            ref={keyInput}
             className="rounded-lg "
+            disabled={priviliged ? false : true && selectedOption === "protected"}
+          />
+          <fieldset
+            className="flex gap-2 items-center flex-wrap"
             disabled={priviliged ? false : true}
-          />
-        </form>
-        <fieldset
-          className="flex gap-2 items-center flex-wrap"
-          disabled={priviliged ? false : true}
-        >
-          <label htmlFor="private" className="2xl:text-md text-sm">
-            private
-          </label>
-          <input
-            type="radio"
-            name="access"
-            id="private"
-            value="private"
-            onChange={handleOptionChange}
-            checked={selectedOption === "private"}
-          />
-          <label htmlFor="public" className="2xl:text-md text-sm">
-            public
-          </label>
-          <input
-            type="radio"
-            name="access"
-            id="public"
-            value="public"
-            onChange={handleOptionChange}
-            checked={selectedOption === "public"}
-          />
-          <label htmlFor="protected" className="2xl:text-md text-sm">
-            protected
-          </label>
-          <input
-            type="radio"
-            name="access"
-            id="protected"
-            value="protected"
-            onChange={handleOptionChange}
-            checked={selectedOption === "protected"}
-          />
-        </fieldset>
-        <form
-          action=""
-          //   onSubmit={handleSubmit}
-          className="flex flex-col w-[50%] items-center justify-center"
-        >
+          >
+            <label htmlFor="private" className="2xl:text-md text-sm">
+              private
+            </label>
+            <input
+              type="radio"
+              name="access"
+              id="private"
+              value="private"
+              onChange={handleOptionChange}
+              checked={selectedOption === "private"}
+            />
+            <label htmlFor="public" className="2xl:text-md text-sm">
+              public
+            </label>
+            <input
+              type="radio"
+              name="access"
+              id="public"
+              value="public"
+              onChange={handleOptionChange}
+              checked={selectedOption === "public"}
+            />
+            <label htmlFor="protected" className="2xl:text-md text-sm">
+              protected
+            </label>
+            <input
+              type="radio"
+              name="access"
+              id="protected"
+              value="protected"
+              onChange={handleOptionChange}
+              checked={selectedOption === "protected"}
+            />
+          </fieldset>
           <Input
             type="text"
             placeholder="change topic"
@@ -171,7 +236,6 @@ const ChannelManagement = ({
           </button>
         </form>
         <button
-          // type="submit"
           onClick={() => handleLeave()}
           className="py-2 px-5 bg-red-500 rounded-md mt-4"
         >

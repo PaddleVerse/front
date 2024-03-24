@@ -48,7 +48,20 @@ const MemberList = ({
       toast.error("You cannot ban an admin");
       return;
     }
-    console.log("ban");
+    const obj = {
+      cid: exec.channel_id,
+      uid: participant.user_id,
+    };
+    console.log(obj);
+    axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
+      console.log(res.data);
+      // state?.socket?.emit("leaveUpdate", {
+      //   roomName: channel.name,
+      //   user: user,
+      // });
+      // router.push("/Dashboard/");
+    })
+    // console.log("ban");
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

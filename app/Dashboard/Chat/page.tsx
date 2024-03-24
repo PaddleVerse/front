@@ -32,7 +32,7 @@ import { Search } from "lucide-react";
 const inter = Inter({ subsets: ["latin"] });
 
 const Page = () => {
-  // const chatQuery  =  
+  // const chatQuery  =
   // const url = "http://localhost:8080/chat/1";
   // const router = useRouter(); // for later improvement when i want to add a chat id to the url
   const searchParam = useSearchParams();
@@ -59,14 +59,14 @@ const Page = () => {
       // if (searchParam.get("id")) {
 
       // }
-        axios
-          .get(
-            `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`
-          )
-          .then((res) => {
-            setChatList(res.data);
-          })
-          .catch((error) => {});
+      axios
+        .get(
+          `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`
+        )
+        .then((res) => {
+          setChatList(res.data);
+        })
+        .catch((error) => {});
     }
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
@@ -393,12 +393,11 @@ const Page = () => {
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                        <img
+                        <Image
                           className="shadow-md rounded-full w-full h-full object-cover"
-                          src={
-                            (targetUser && targetUser.picture) ||
-                            targetChannel?.picture
-                          }
+                          height={100}
+                          width={100}
+                          src={targetUser?.picture! || targetChannel?.picture!}
                           alt="user or channel picture"
                         />
                       </div>
@@ -444,8 +443,8 @@ const Page = () => {
                       <ChannelManagement
                         participants={participants}
                         channel={targetChannel!}
-                            user={globalState.state!.user!}
-                            update={setUpdate}
+                        user={globalState.state!.user!}
+                        update={setUpdate}
                       />
                     )}
                   </div>
