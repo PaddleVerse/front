@@ -4,6 +4,7 @@ import UserSearchCard from './UserSearchCard'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useGlobalState } from '../../Sign/GlobalState';
+import { debounce } from 'lodash';
 
 const SearchBarPop = () => {
     const router = useRouter();
