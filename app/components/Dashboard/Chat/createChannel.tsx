@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/newinput";
 import { Button } from "@/components/ui/moving-border";
 import { BottomGradient } from "@/app/register/page";
 import toast from "react-hot-toast";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -33,14 +34,12 @@ const modalVariants = {
 };
 
 const CreateChannel = ({
-  handleClick,
-  user,
-  socket,
+  handleClick
 }: {
   handleClick: () => void;
-  user: user;
-  socket: any;
-}) => {
+
+  }) => {
+  const { state, dispatch } = useGlobalState();
   const password = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const topic = useRef<HTMLInputElement>(null);
@@ -75,7 +74,7 @@ const CreateChannel = ({
           ? "protected"
           : "public",
       },
-      user: user,
+      user: state?.user,
     };
     axios
       .post("http://localhost:8080/channels", channelObject)
@@ -93,7 +92,7 @@ const CreateChannel = ({
           formData.append("image", file);
           axios
             .post(
-              `http://localhost:8080/channels/image?channel=${res.data.id}&user=${user.id}`,
+              `http://localhost:8080/channels/image?channel=${res.data.id}&user=${state?.user.id}`,
               formData,
               {
                 headers: { "Content-Type": "multipart/form-data" },
@@ -105,11 +104,11 @@ const CreateChannel = ({
                   "error in uploading image, using the default image."
                 );
               }
-              socket.emit("joinRoom", { roomName: res.data.name, user: user });
+              state?.socket.emit("joinRoom", { roomName: res.data.name, user: state?.user });
             })
             .catch();
         } else {
-          socket.emit("joinRoom", { roomName: res.data.name, user: user });
+          state?.socket.emit("joinRoom", { roomName: res.data.name, user: state?.user });
         }
       })
       .catch();

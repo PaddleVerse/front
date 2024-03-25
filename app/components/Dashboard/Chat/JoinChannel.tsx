@@ -31,11 +31,9 @@ const modalVariants = {
 const JoinChannel = ({
   handleClick,
   user,
-  socket,
 }: {
   handleClick: () => void;
   user: user;
-  socket: any;
 }) => {
   const [channels, setChannels] = useState<any[]>([]);
   const [filteredChannels, setFilteredChannels] = useState<any[]>([]);
@@ -103,7 +101,6 @@ const JoinChannel = ({
                 lock={channel.state === "protected"}
                 channel={channel}
                 user={user}
-                socket={socket}
               />
             );
           })}

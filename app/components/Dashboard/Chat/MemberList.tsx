@@ -55,13 +55,12 @@ const MemberList = ({
     console.log(obj);
     axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
       console.log(res.data);
-      // state?.socket?.emit("leaveUpdate", {
-      //   roomName: channel.name,
-      //   user: user,
-      // });
-      // router.push("/Dashboard/");
+      state?.socket?.emit("leaveUpdate", {
+        roomName: channel.name,
+        user: user,
+      });
+      router.push("/Dashboard/");
     })
-    // console.log("ban");
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -79,7 +78,7 @@ const MemberList = ({
       executor: exec.user_id,
     };
     axios
-      .put(`http://localhost:8080/participants/kick/${participant.user_id}`, obj)
+      .delete(`http://localhost:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
       .then((res) => {
         state?.socket?.emit("leaveUpdate", {
           roomName: channel.name,
@@ -88,9 +87,8 @@ const MemberList = ({
         router.push("/Dashboard/");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
-    console.log("kick");
   };
 
   const handlePromoteDemote = (
@@ -121,10 +119,8 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
-
-    console.log("promote/demote");
   };
 
   const handleMuteUnMute = (

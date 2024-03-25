@@ -6,23 +6,23 @@ import { GoLock } from "react-icons/go";
 import { Socket } from "socket.io-client";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const JoinChannelBubble = ({
   lock,
   channel,
   handleClick,
   user,
-  socket,
 }: {
   lock: boolean;
   channel: channel;
   user: user;
   handleClick: () => void;
-  socket: Socket;
 }) => {
   const lockRef = useRef<HTMLInputElement>(null);
   const { register } = useForm();
   const [unlock, setUnlock] = useState(false);
+  const {state, dispatch} = useGlobalState();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (lock) {
@@ -37,7 +37,7 @@ const JoinChannelBubble = ({
       };
       await axios.post(`http://localhost:8080/participants`, obj).then((res) => {
         toast.success(`you have joined ${channel.name}`)
-        socket.emit("joinRoom", { user: user, roomName: channel.name });
+        state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
       }).catch((err) => {
         toast(err.response.data.message);
       })
@@ -55,7 +55,7 @@ const JoinChannelBubble = ({
       .post(`http://localhost:8080/participants`, obj)
       .then((res) => {
         toast.success(`you have joined ${channel.name}`)
-          socket.emit("joinRoom", { user: user, roomName: channel.name });
+          state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
         })
         .catch((err) => {
           toast(err.response.data.message);

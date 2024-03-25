@@ -5,9 +5,14 @@ import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/type";
 import { getTime } from "@/app/utils";
 import toast from "react-hot-toast";
-
+import  {useRouter}  from "next/navigation";
+import { useGlobalState } from "../../Sign/GlobalState";
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message[] | null>();
+  const [update, setUpdate] = useState(false);
+  const {state, dispatch} = useGlobalState();
+  const router = useRouter();
+
   useEffect(() => {
     if (props.value.user) {
       axios
@@ -28,7 +33,22 @@ export const ChatCard = (props: any) => {
         })
         .catch((err) => {});
     }
-  }, [props.value.id, props.self.id, props.value.user, props.update]);
+    console.log("update from chatCard");
+    return () => {
+      setUpdate(false);
+    };
+  }, [props.value.id, props.self.id, props.value.user, update]);
+
+
+  useEffect(() => {
+    state?.socket?.on("update", (data: any) => {
+      console.log("update from server in chatCard");
+      setUpdate(true);
+    });
+    return () => {
+      state?.socket?.off("update");
+    };
+  }, [state?.socket]);
 
   if (!msg) {
     return <div>Loading...</div>;
@@ -40,18 +60,21 @@ export const ChatCard = (props: any) => {
       onClick={(e) => {
         e.preventDefault();
         if (props.value.user === false) {
-          props.setTargetChannel(props.value);
-          props.setTargetUser(null);
+          // props.setTargetChannel(props.value);
+          router.push(`/Dashboard/Chat/channel/${props?.value?.id}`)
+          // props.setTargetUser(null);
         } else {
-          props.setTargetUser(props.value);
-          props.setTargetChannel(null);
+          router.push(`/Dashboard/Chat/dm/${props.value.id}`)
+          // props.setTargetUser(props.value);
+          // props.setTargetChannel(null);
         }
-        props.setUpdate(true);
+        // props.setUpdate(true);
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.25 * props.index }}
+
     >
       <div className="flex gap-4 w-full">
         <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">

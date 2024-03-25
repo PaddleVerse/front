@@ -52,7 +52,9 @@ const ChannelManagement = ({
         `http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`
       )
       .then((res) => {
-        router.push("/Dashboard/");
+        console.log("leaving channel");
+        router.push("/Dashboard/Chat");
+        // router.reload();
       })
       .catch();
   };

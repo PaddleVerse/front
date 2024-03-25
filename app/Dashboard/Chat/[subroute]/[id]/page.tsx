@@ -1,0 +1,313 @@
+"use client";
+import ReactLoading from "react-loading";
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useForm } from "react-hook-form";
+import { channel, message, participants, user } from "../../type";
+import { IoSendOutline } from "react-icons/io5";
+import Image from "next/image";
+import { OnlinePreview } from "@/app/components/Dashboard/Chat/onlinePreview";
+import { IoIosInformationCircleOutline } from "react-icons/io";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
+import ChannelManagement from "@/app/components/Dashboard/Chat/channelManagement";
+import { CiCirclePlus } from "react-icons/ci";
+import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import { useSwipeable } from "react-swipeable";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+
+const Page = () => {
+  const parameters = useParams();
+  const searchParam = useSearchParams();
+  const router = useRouter();
+  const { register } = useForm();
+  const [participants, setParticipants] = useState<participants[]>([]);
+  const [channelManagement, setChannelManagement] = useState(false);
+  const { state, dispatch } = useGlobalState();
+  const containerRef = useRef(null);
+  // const [online, setOnline] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const inputMessage = useRef<HTMLInputElement | null>(null);
+  const [targetUser, setTargetUser] = useState<user | null>(null);
+  const [targetChannel, setTargetChannel] = useState<channel | null>(null);
+  const [messages, setMessages] = useState<message[] | null>(null);
+
+  useEffect(() => {
+    if (parameters.subroute === "dm") {
+      console.log("dm route");
+      axios
+        .get(`http://localhost:8080/user/${parameters?.id!}`)
+        .then((res) => {
+          setTargetUser(res.data);
+          const fetchData = async () => {
+            try {
+              const messagesData = await axios.get(
+                `http://localhost:8080/conversations?uid1=${state?.user?.id}&uid2=${res.data.id}`
+              );
+              console.log(messagesData.data.messages);
+              setMessages(messagesData.data.messages);
+            } catch (error) {}
+          };
+          fetchData();
+        })
+        .catch((error) => {
+          toast.error("failed to fetch user");
+        });
+    } else if (parameters.subroute === "channel") {
+      axios
+        .get(`http://localhost:8080/channels/${parameters!.id!}`)
+        .then((res) => {
+          setTargetChannel(res.data);
+          const fetchData = async () => {
+            try {
+              const messagesData = await fetchMessagesForChannel(res.data.id);
+              setMessages(messagesData);
+
+              const participantsData = await fetchChannelParticipants(
+                res.data.id
+              );
+              setParticipants(participantsData);
+            } catch (error) {
+            }
+          };
+          fetchData();
+        })
+        .catch((error) => {
+          toast.error("failed to fetch channel");
+        });
+    }
+    return () => {
+      setUpdate(false);
+    };
+  }, [parameters, update]);
+
+  const fetchChannelParticipants = async (
+    id: number | undefined
+  ): Promise<participants[]> => {
+    console.log("fetching participants");
+    const data = await axios
+      .get(
+        `http://localhost:8080/channels/participants/${id}?uid=${state!.user!
+          .id!}`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          return res.data;
+        }
+      })
+      .catch((error: AxiosError) => {});
+
+    return data;
+  };
+  const fetchMessagesForChannel = (
+    id: number | undefined
+  ): Promise<message[]> => {
+    console.log("fetching messages for channel");
+    const data = axios
+      .get(
+        `http://localhost:8080/channels/messages/${id}?uid=${state!.user!.id!}`
+      )
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error: AxiosError) => {
+        toast.error(`failed to fetch messages for ${targetChannel!.name}`);
+      });
+    return data;
+  };
+  useEffect(() => {
+    const container: any = containerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    state?.socket?.on("ok", (data: any) => {
+      if (data === null) return;
+      setUpdate(true);
+    });
+    state?.socket?.emit("refresh");
+    return () => {
+      state?.socket?.off("ok");
+    };
+  }, [state?.socket]);
+
+  useEffect(() => {
+    state?.socket?.on("update", (data: any) => {
+      setUpdate(true);
+    });
+    return () => {
+      state?.socket?.off("update");
+    };
+  }, [state?.socket]);
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setShowMessage(true),
+    onSwipedRight: () => setShowMessage(false),
+  });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (targetChannel) {
+      const message = {
+        message: {
+          content: inputMessage.current!.value,
+          content_type: "string",
+          sender_id: state.user.id,
+          sender_picture: state.user.picture,
+        },
+        channel: { name: targetChannel.name },
+        user1: state.user.id,
+      };
+      await axios
+        .post(`http://localhost:8080/message`, message)
+        .then((res) => {})
+        .catch((error) => {
+          toast.error("failed to send message");
+        });
+      state?.socket?.emit("channelmessage", {
+        roomName: targetChannel.name,
+        user: state?.user,
+      });
+    } else if (targetUser) {
+      await axios
+        .post(`http://localhost:8080/message`, {
+          message: {
+            content: inputMessage.current!.value,
+            content_type: "text",
+            sender_id: state.user.id,
+            sender_picture: state.user.picture,
+          },
+          user2: state.user.id,
+          user1: targetUser.id,
+        })
+        .then((res) => {})
+        .catch((error) => {
+          toast.error("failed to send message");
+        });
+      state?.socket?.emit("dmmessage", {
+        reciever: targetUser.id,
+        sender: state.user.id,
+      });
+      setUpdate(true);
+    }
+    inputMessage.current!.value = "";
+    return (e: FormEvent<HTMLFormElement>) => {};
+  };
+
+  if (state?.user === null) {
+    return;
+  }
+
+  if (!messages) {
+    return;
+  }
+
+  return (
+    <>
+      {targetChannel || targetUser ? (
+        <section className="flex flex-col flex-auto border-l border-gray-800 border">
+          <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
+            <div className="flex">
+              <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
+                <Image
+                  className="shadow-md rounded-full w-full h-full object-cover"
+                  height={100}
+                  width={100}
+                  src={targetUser?.picture! || targetChannel?.picture!}
+                  alt="user or channel picture"
+                />
+              </div>
+              <div className="text-sm">
+                <p className="font-bold">
+                  {targetUser ? targetUser.name : targetChannel!.name}
+                </p>
+                {targetUser && <OnlinePreview status={targetUser!.status!} />}
+              </div>
+            </div>
+
+            <div className="flex items-center">
+              <div
+                className="block rounded-full  w-6 h-6 ml-4"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setChannelManagement(!channelManagement);
+                }}
+              >
+                <IoIosInformationCircleOutline className="w-full h-full text-white" />
+              </div>
+            </div>
+          </div>
+          <div
+            className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
+            ref={containerRef}
+          >
+            {targetUser ? (
+              <ChatComponent
+                handlers={handlers}
+                messages={messages!}
+                globalStateUserId={state!.user!.id!}
+              />
+            ) : !channelManagement ? (
+              <ChatComponent
+                handlers={handlers}
+                messages={messages!}
+                globalStateUserId={state!.user!.id!}
+              />
+            ) : (
+              <ChannelManagement
+                participants={participants}
+                channel={targetChannel!}
+                user={state!.user!}
+                update={setUpdate}
+              />
+            )}
+          </div>
+          <div
+            className={`chat-footer flex-none ${
+              channelManagement && targetChannel ? "hidden" : ""
+            }`}
+          >
+            <div className="flex flex-row items-center p-4">
+              <button
+                type="button"
+                className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6 "
+              >
+                <CiCirclePlus className="w-full h-full" />
+              </button>
+              <div className="relative flex-grow">
+                <form onSubmit={(e) => handleSubmit(e)}>
+                  <input
+                    className="rounded-3xl py-[10px] pl-3 pr-10 w-full bg-[#1b1b1b] focus:ring-[1px] focus:ring-gray-500 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
+                    type="text"
+                    ref={inputMessage}
+                    placeholder="Aa"
+                    {...(register("inputMessage"), { required: true })}
+                  />
+                  <button
+                    type="submit"
+                    className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none  text-white hover:text-gray-300 w-6 h-6 "
+                  >
+                    <IoSendOutline className="w-full h-full " />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <div className="text-white">is empty</div>
+      )}
+    </>
+  );
+};
+
+export default Page;
