@@ -27,9 +27,12 @@ const NotificationCard = (props : any) => {
     } else if (diffInMs < 3600 * 1000) {
       const minutes = Math.floor(diffInMs / (60 * 1000));
       return `${minutes} minutes ago`;
-    } else {
+    } else if (diffInMs < 24 * 3600 * 1000) {
       const hours = Math.floor(diffInMs / (3600 * 1000));
       return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(diffInMs / (24 * 3600 * 1000));
+      return `${days} days ago`;
     }
   }
   return (

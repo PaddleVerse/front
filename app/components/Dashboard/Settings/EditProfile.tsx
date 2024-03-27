@@ -38,8 +38,6 @@ const EditProfile = () => {
         refreshUser();
         reset();
       }
-      else
-        alert('Error');
     })
     .catch((error) => {
       console.error('Error updating user', error);
