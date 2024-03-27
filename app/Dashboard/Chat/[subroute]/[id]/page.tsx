@@ -148,7 +148,8 @@ const Page = (props: any) => {
     onSwipedLeft: () => setShowMessage(true),
     onSwipedRight: () => {
       setShowMessage(false);
-      router.push(`/Dashboard/Chat?show=true`);
+      router.push(`/Dashboard/Chat`);
+      dispatch({ type: "UPDATE_SHOW", payload: false });  
     },
   });
 

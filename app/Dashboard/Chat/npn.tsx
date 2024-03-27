@@ -19,6 +19,7 @@ import { useSwipeable } from "react-swipeable";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 import { useParams, useSearchParams } from "next/navigation";
+import { set } from "react-hook-form";
 const inter = Inter({ subsets: ["latin"] });
 
 const Page = ({ children }: { children: React.ReactNode }) => {
@@ -31,11 +32,12 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
+  const {show} = state;
   // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
   //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
-  const show = useSearchParams();
+  // const show = useSearchParams();
   useEffect(() => {
-    setShowMessage(show.get("show") === "true" ? false:true);
+    !show && setShowMessage(false);
   },[show] )
   // if (show.get("show") === "true") {
   //   setShowMessage(false);
@@ -106,6 +108,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   const handleSwitching = () => {
     setShowMessage(!showMessage);
+    dispatch({ type: "UPDATE_SHOW", payload: true });
   };
   function useWindowSize() {
     const [size, setSize] = useState(0);

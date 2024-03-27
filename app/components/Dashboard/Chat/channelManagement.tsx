@@ -57,12 +57,10 @@ const ChannelManagement = ({
       })
       .catch();
   };
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (!validateForm()) {
-    //   toast.error("Please fill in the required fields.");
-    //   return;
-    // }
     const obj = {
       channel: {
         name: channelNameInput.current?.value! || channel.name,
