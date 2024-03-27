@@ -5,12 +5,12 @@ import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/type";
 import { getTime } from "@/app/utils";
 import toast from "react-hot-toast";
-import  {useRouter}  from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useGlobalState } from "../../Sign/GlobalState";
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message[] | null>();
   const [update, setUpdate] = useState(false);
-  const {state, dispatch} = useGlobalState();
+  const { state, dispatch } = useGlobalState();
   const router = useRouter();
 
   useEffect(() => {
@@ -31,21 +31,54 @@ export const ChatCard = (props: any) => {
         .then((res) => {
           setMessage(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          toast.error("failed to fetch messages in chatcard 1");
+        });
     }
-    return () => {
-      setUpdate(false);
-    };
-  }, [props.value.id, props.self.id, props.value.user, update]);
-
+    return () => {};
+  }, [props.value.id, props.self.id, props.value.user]);
 
   useEffect(() => {
-    state?.socket?.on("update", (data: any) => {
-      console.log("update from server in chatCard");
-      setUpdate(true);
+    state?.socket?.on("dmupdate", (data: {user1: number, user2: number}) => {
+        const fetchData = async () => {
+          try {
+            const res = await axios.get(
+              `http://localhost:8080/conversations?uid1=${data.user1}&uid2=${data.user2}`
+            );
+            setMessage(res.data.messages);
+            console.log("fetch messages on event in dmupdate", res.data.messages[res.data.messages.length - 1]);
+          } catch (error) {
+            toast.error("failed to fetch message");
+          }
+        };
+        fetchData();
     });
+
     return () => {
-      state?.socket?.off("update");
+      state?.socket?.off("dmupdate");
+    };
+  }, [state?.socket]);
+
+  useEffect(() => {
+    state?.socket?.on("channelupdate", (data: any) => {
+      if (!props.value.user) {
+        const fetchData = async () => {
+          try {
+            const res = await axios.get(
+              `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
+            );
+            console.log("fetch messages on event in channelupdate", res.data[res.data.length - 1]);
+            setMessage(res.data);
+          } catch (error) {
+            toast.error("failed to fetch messages chatcard 2");
+          }
+        };
+        fetchData();
+      }
+    });
+
+    return () => {
+      state?.socket?.off("channelupdate");
     };
   }, [state?.socket]);
 
@@ -59,21 +92,15 @@ export const ChatCard = (props: any) => {
       onClick={(e) => {
         e.preventDefault();
         if (props.value.user === false) {
-          // props.setTargetChannel(props.value);
-          router.push(`/Dashboard/Chat/channel/${props?.value?.id}`)
-          // props.setTargetUser(null);
+          router.push(`/Dashboard/Chat/channel/${props?.value?.id}`);
         } else {
-          router.push(`/Dashboard/Chat/dm/${props.value.id}`)
-          // props.setTargetUser(props.value);
-          // props.setTargetChannel(null);
+          router.push(`/Dashboard/Chat/dm/${props.value.id}`);
         }
-        // props.setUpdate(true);
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.25 * props.index }}
-
     >
       <div className="flex gap-4 w-full">
         <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">

@@ -3,62 +3,44 @@ import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
-import {
-  FormEvent,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import axios, { Axios, AxiosError } from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { channel, participants, user, message } from "./type";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
-import { useSwipeable } from "react-swipeable";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
-import { useParams, useSearchParams } from "next/navigation";
-import { set } from "react-hook-form";
 const inter = Inter({ subsets: ["latin"] });
 
 const Page = ({ children }: { children: React.ReactNode }) => {
   const [showMessage, setShowMessage] = useState(false);
-  const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
   const [update, setUpdate] = useState(true);
   const [chatList, setChatList] = useState([]);
   const { state, dispatch } = useGlobalState();
-  const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
-  const {show} = state;
-  // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
-  //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
-  // const show = useSearchParams();
+  const { show } = state;
   useEffect(() => {
     !show && setShowMessage(false);
-  },[show] )
-  // if (show.get("show") === "true") {
-  //   setShowMessage(false);
-  // }
+  }, [show]);
+
   useEffect(() => {
-    if (state.user) {
+    if (state?.user) {
       axios
-      .get(`http://localhost:8080/chat/chatlist/${state?.user?.id}`)
-      .then((res) => {
-        setChatList(res.data);
-      })
-      .catch((error) => {
-        console.log("failed to fetch chat list");
-      });
+        .get(`http://localhost:8080/chat/chatlist/${state?.user?.id}`)
+        .then((res) => {
+          console.log("fetched chat list");
+          setChatList(res.data);
+        })
+        .catch((error) => {
+          console.log("failed to fetch chat list");
+        });
     }
-      return () => {
-        setUpdate(false);
-      }
+    return () => {
+      setUpdate(false);
+    };
   }, [state, update]);
-  ///////////////////////////////////////////////////////////
-  //press escape to close the modal
+
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
       setModlar(false);
@@ -73,7 +55,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       document.removeEventListener("keydown", handleEscapeKeyPress);
     };
   }, [handleEscapeKeyPress]);
-  ///////////////////////////////////////////////////////////
+
   useEffect(() => {
     state?.socket?.on("ok", (data: any) => {
       if (data === null) return;
@@ -94,13 +76,6 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       state?.socket?.off("update");
     };
   }, [state?.socket]);
-
-  useEffect(() => {
-    const container: any = containerRef.current;
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-  }, [messages]);
 
   const handleClick = () => {
     setModlar(false);
@@ -123,20 +98,12 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     return size;
   }
   const tablet = useWindowSize() < 769;
-  // const handlers = useSwipeable({
-  //   onSwipedLeft: () => setShowMessage(true),
-  //   onSwipedRight: () => setShowMessage(false),
-  // });
-
 
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
         {modlar ? (
-          <JoinChannel
-            handleClick={handleClick}
-            user={state.user}
-          />
+          <JoinChannel handleClick={handleClick} user={state.user} />
         ) : createModlar ? (
           <CreateChannel handleClick={() => setCreateModlar(false)} />
         ) : null}
@@ -224,12 +191,8 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                           key={key}
                           swipe={setShowMessage}
                           index={key}
-                          // setTargetChannel={setTargetChannel}
-                          // setTargetUser={setTargetUser}
                           value={value}
                           self={state.user}
-                          // setUpdate={setUpdate}
-                          // update={update}
                           online={online}
                           setOnline={setOnline}
                           handleClick={handleSwitching}

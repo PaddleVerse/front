@@ -20,7 +20,12 @@ import { CiCirclePlus } from "react-icons/ci";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useSwipeable } from "react-swipeable";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 
 const Page = (props: any) => {
   const parameters = useParams();
@@ -37,7 +42,6 @@ const Page = (props: any) => {
   const [targetUser, setTargetUser] = useState<user | null>(null);
   const [targetChannel, setTargetChannel] = useState<channel | null>(null);
   const [messages, setMessages] = useState<message[] | null>(null);
-  const params = usePathname();
   useEffect(() => {
     if (parameters.subroute === "dm") {
       axios
@@ -47,7 +51,9 @@ const Page = (props: any) => {
           const fetchData = async () => {
             try {
               const messagesData = await axios.get(
-                `http://localhost:8080/conversations?uid1=${state?.user?.id}&uid2=${res.data.id}`
+                `http://localhost:8080/conversations?uid1=${
+                  state?.user?.id
+                }&uid2=${parameters!.id!}`
               );
               setMessages(messagesData.data.messages);
             } catch (error) {}
@@ -71,8 +77,7 @@ const Page = (props: any) => {
                 res.data.id
               );
               setParticipants(participantsData);
-            } catch (error) {
-            }
+            } catch (error) {}
           };
           fetchData();
         })
@@ -136,23 +141,51 @@ const Page = (props: any) => {
   }, [state?.socket]);
 
   useEffect(() => {
-    state?.socket?.on("update", (data: any) => {
-      setUpdate(true);
+    state?.socket?.on("dmupdate", (data: any) => {
+      const fetchData = async () => {
+        try {
+          const messagesData = await axios.get(
+            `http://localhost:8080/conversations?uid1=${
+              state?.user?.id
+            }&uid2=${parameters?.id!}`
+          );
+          setMessages(messagesData.data.messages);
+        } catch (error) {}
+      };
+      fetchData();
     });
     return () => {
-      state?.socket?.off("update");
+      state?.socket?.off("dmupdate");
     };
   }, [state?.socket]);
-
+  
+  useEffect(() => {
+    state?.socket?.on("channelmessage", (data: any) => {
+      const fetchData = async () => {
+        try {
+          const messagesData = await axios.get(
+            `http://localhost:8080/channels/messages/${targetChannel?.id!}?uid=${state!.user!.id!}`
+          );
+          setMessages(messagesData.data);
+        } catch (error) {
+          toast.error("failed to fetch messagess");
+        }
+      };
+      fetchData();
+    });
+    return () => {
+      state?.socket?.off("channelupdate");
+    };
+  }, [state?.socket]);
+    
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
     onSwipedRight: () => {
       setShowMessage(false);
       router.push(`/Dashboard/Chat`);
-      dispatch({ type: "UPDATE_SHOW", payload: false });  
+      dispatch({ type: "UPDATE_SHOW", payload: false });
     },
   });
-
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -210,11 +243,11 @@ const Page = (props: any) => {
   if (!messages) {
     return;
   }
-  
+
   return (
     <>
       {targetChannel || targetUser ? (
-        <section className="flex flex-col flex-auto border-l border-gray-800 border">
+        <section className="flex flex-col flex-auto border-l border-gray-800">
           <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div className="flex">
               <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
@@ -311,3 +344,5 @@ const Page = (props: any) => {
 };
 
 export default Page;
+
+// nneed to change somehting in terms of sockets and how it responds to new data or events

@@ -14,7 +14,7 @@ const ChatComponent = ({
   }) => {
 
   return (
-    <div className="w-full h-full border" {...handlers}>
+    <div className="w-full h-full" {...handlers}>
       <div className="flex flex-row justify-start overflow-y-auto">
         <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
           {messages &&
