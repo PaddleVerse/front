@@ -52,9 +52,7 @@ const MemberList = ({
       cid: exec.channel_id,
       uid: participant.user_id,
     };
-    console.log(obj);
     axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
-      console.log(res.data);
       state?.socket?.emit("leaveUpdate", {
         roomName: channel.name,
         user: user,
@@ -87,7 +85,6 @@ const MemberList = ({
         router.push("/Dashboard/");
       })
       .catch((err) => {
-        // console.log(err);
       });
   };
 
@@ -119,7 +116,6 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        // console.log(err);
       });
   };
 
@@ -153,7 +149,6 @@ const MemberList = ({
       .catch((err) => {
         console.log(err);
       });
-    console.log("mute/unmute");
   };
 
   return (

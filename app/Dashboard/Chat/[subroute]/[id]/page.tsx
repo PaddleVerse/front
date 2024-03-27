@@ -20,9 +20,9 @@ import { CiCirclePlus } from "react-icons/ci";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useSwipeable } from "react-swipeable";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Page = () => {
+const Page = (props: any) => {
   const parameters = useParams();
   const searchParam = useSearchParams();
   const router = useRouter();
@@ -31,17 +31,15 @@ const Page = () => {
   const [channelManagement, setChannelManagement] = useState(false);
   const { state, dispatch } = useGlobalState();
   const containerRef = useRef(null);
-  // const [online, setOnline] = useState(false);
   const [update, setUpdate] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const [targetUser, setTargetUser] = useState<user | null>(null);
   const [targetChannel, setTargetChannel] = useState<channel | null>(null);
   const [messages, setMessages] = useState<message[] | null>(null);
-
+  const params = usePathname();
   useEffect(() => {
     if (parameters.subroute === "dm") {
-      console.log("dm route");
       axios
         .get(`http://localhost:8080/user/${parameters?.id!}`)
         .then((res) => {
@@ -51,7 +49,6 @@ const Page = () => {
               const messagesData = await axios.get(
                 `http://localhost:8080/conversations?uid1=${state?.user?.id}&uid2=${res.data.id}`
               );
-              console.log(messagesData.data.messages);
               setMessages(messagesData.data.messages);
             } catch (error) {}
           };
@@ -91,7 +88,6 @@ const Page = () => {
   const fetchChannelParticipants = async (
     id: number | undefined
   ): Promise<participants[]> => {
-    console.log("fetching participants");
     const data = await axios
       .get(
         `http://localhost:8080/channels/participants/${id}?uid=${state!.user!
@@ -109,7 +105,6 @@ const Page = () => {
   const fetchMessagesForChannel = (
     id: number | undefined
   ): Promise<message[]> => {
-    console.log("fetching messages for channel");
     const data = axios
       .get(
         `http://localhost:8080/channels/messages/${id}?uid=${state!.user!.id!}`
@@ -151,8 +146,12 @@ const Page = () => {
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
-    onSwipedRight: () => setShowMessage(false),
+    onSwipedRight: () => {
+      setShowMessage(false);
+      router.push(`/Dashboard/Chat?show=true`);
+    },
   });
+
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -210,7 +209,7 @@ const Page = () => {
   if (!messages) {
     return;
   }
-
+  
   return (
     <>
       {targetChannel || targetUser ? (

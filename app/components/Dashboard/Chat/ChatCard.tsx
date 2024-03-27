@@ -33,7 +33,6 @@ export const ChatCard = (props: any) => {
         })
         .catch((err) => {});
     }
-    console.log("update from chatCard");
     return () => {
       setUpdate(false);
     };

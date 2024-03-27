@@ -1,5 +1,5 @@
 import { message } from '@/app/Dashboard/Chat/type';
-import React from 'react'
+import React, { useEffect } from 'react'
 import MiddleBubbleRight from './RightBubbles/MiddleBubbleRight';
 import MiddleBuble from './LeftBubbles/MiddleBuble';
 
@@ -11,9 +11,10 @@ const ChatComponent = ({
 		handlers: any;
 		messages: message[];
 		globalStateUserId: number;
-}) => {
+  }) => {
+
   return (
-    <div className="w-full h-full" {...handlers}>
+    <div className="w-full h-full border" {...handlers}>
       <div className="flex flex-row justify-start overflow-y-auto">
         <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
           {messages &&

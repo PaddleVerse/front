@@ -52,26 +52,11 @@ const ChannelManagement = ({
         `http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`
       )
       .then((res) => {
-        console.log("leaving channel");
+        // emit to the server that the user left
         router.push("/Dashboard/Chat");
-        // router.reload();
       })
       .catch();
   };
-
-  const validateForm = () => {
-    if (
-      channelNameInput.current?.value === ""
-    ) {
-      return false;
-    }
-    if (selectedOption === "protected" && keyInput.current?.value === "") {
-      return false;
-    }
-    return true;
-  };
-
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // if (!validateForm()) {
@@ -87,7 +72,6 @@ const ChannelManagement = ({
       },
       user: { id: priviliged.user_id },
     };
-    console.log(obj);
     axios
       .put(`http://localhost:8080/channels/${channel.id}`, obj)
       .then((res) => {
@@ -121,7 +105,6 @@ const ChannelManagement = ({
       .catch((err) => {
         console.log(err);
       });
-    console.log(obj);
   };
 
   return (
@@ -142,7 +125,6 @@ const ChannelManagement = ({
               type="file"
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]) {
-                  console.log(e.target.files[0]);
                   setPicture(e.target.files[0]);
                 }
               }}

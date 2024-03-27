@@ -18,6 +18,7 @@ import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
+import { useParams, useSearchParams } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 const Page = ({ children }: { children: React.ReactNode }) => {
@@ -32,13 +33,18 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const [createModlar, setCreateModlar] = useState(false);
   // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
   //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
-
+  const show = useSearchParams();
+  useEffect(() => {
+    setShowMessage(show.get("show") === "true" ? false:true);
+  },[show] )
+  // if (show.get("show") === "true") {
+  //   setShowMessage(false);
+  // }
   useEffect(() => {
     if (state.user) {
       axios
       .get(`http://localhost:8080/chat/chatlist/${state?.user?.id}`)
       .then((res) => {
-        console.log(res.data);
         setChatList(res.data);
       })
       .catch((error) => {
@@ -114,10 +120,11 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     return size;
   }
   const tablet = useWindowSize() < 769;
-  const handlers = useSwipeable({
-    onSwipedLeft: () => setShowMessage(true),
-    onSwipedRight: () => setShowMessage(false),
-  });
+  // const handlers = useSwipeable({
+  //   onSwipedLeft: () => setShowMessage(true),
+  //   onSwipedRight: () => setShowMessage(false),
+  // });
+
 
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">

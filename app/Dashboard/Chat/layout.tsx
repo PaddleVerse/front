@@ -1,14 +1,18 @@
-import React, { ReactNode } from "react";
+'use client'
+import React, { ReactNode, use, useEffect, useState } from "react";
 import ChatLayout from "./npn";
 
-const page = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = (props: any) => {
+  // const [showMessage, setShowMessage] = useState(false);
+  // props.params.newProp = "***************************************************************************************************************************************************************";
+
   return (
     <>
-      <ChatLayout >
-        {children}
+      <ChatLayout>
+        {props.children}
       </ChatLayout>
     </>
   );
 };
 
-export default page;
+export default RootLayout;
