@@ -65,27 +65,15 @@ const Popup = ()  => {
         axios.put(`http://localhost:8080/user/${user?.id}`, data),
       ])
       .then(axios.spread((resImg, resUser) => {
-        if (
-          (!selectedFile || (resImg && resImg.data !== '')) &&
-          resUser &&
-          resUser.data !== ''
-        ) {
+        if (!selectedFile || (resImg && resImg?.data !== '')) 
+          if (selectedFile) setSelectedFile(null);
+        if (resUser && resUser?.data !== '') {
           refreshUser();
-          if (selectedFile)
-            setSelectedFile(null);
           reset();
-          axios.put(`http://localhost:8080/user/visible/${user?.id}`, {first_time: false})
-          .then((res) => {
-            if (res.data !== '')
-              refreshUser();
-          })
-        } else {
-          throw new Error('Error updating user data');
         }
+        axios.put(`http://localhost:8080/user/visible/${user?.id}`, {first_time: false})
+        .then((res) => { if (res.data !== '') refreshUser();})
       }))
-      .catch(error => {
-        alert('Error: ' + error.message);
-      });
   };
 
   return (
