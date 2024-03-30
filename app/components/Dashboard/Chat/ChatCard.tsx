@@ -8,50 +8,58 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "../../Sign/GlobalState";
 export const ChatCard = (props: any) => {
-  const [msg, setMessage] = useState<message[] | null>();
+  const [msg, setMessage] = useState<message | null>();
   const [update, setUpdate] = useState(false);
   const { state, dispatch } = useGlobalState();
   const router = useRouter();
 
   useEffect(() => {
     if (props.value.user) {
-      axios
-        .get(
-          `http://localhost:8080/conversations?uid1=${props.value.id}&uid2=${props.self.id}`
-        )
-        .then((res) => {
-          setMessage(res.data.messages);
-        })
-        .catch((err) => {});
-    } else {
-      axios
-        .get(
-          `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
-        )
-        .then((res) => {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8080/conversations/lastMessage?uid1=${props.value.id}&uid2=${props.self.id}`
+          );
           setMessage(res.data);
-        })
-        .catch((err) => {
+        } catch (error) {
+          toast.error("failed to fetch user message");
+        }
+      };
+      fetchData();
+    } else {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
+          );
+          setMessage(res.data);
+        } catch (error) {
           toast.error("failed to fetch messages in chatcard 1");
-        });
+        }
+      };
+      fetchData();
     }
     return () => {};
   }, [props.value.id, props.self.id, props.value.user]);
 
   useEffect(() => {
-    state?.socket?.on("dmupdate", (data: {user1: number, user2: number}) => {
+    state?.socket?.on("dmupdate", (data: { user1: number; user2: number }) => {
+      if (
+        (props.value.id === data.user1 && props.self.id === data.user2) ||
+        (props.value.id === data.user2 && props.self.id === data.user1)
+      ) {
         const fetchData = async () => {
           try {
             const res = await axios.get(
-              `http://localhost:8080/conversations?uid1=${data.user1}&uid2=${data.user2}`
+              `http://localhost:8080/conversations/lastMessage?uid1=${data.user1}&uid2=${data.user2}`
             );
-            setMessage(res.data.messages);
-            console.log("fetch messages on event in dmupdate", res.data.messages[res.data.messages.length - 1]);
+            setMessage(res.data);
           } catch (error) {
-            toast.error("failed to fetch message");
+            toast.error("failed to fetch user message");
           }
         };
         fetchData();
+      }
     });
 
     return () => {
@@ -67,10 +75,9 @@ export const ChatCard = (props: any) => {
             const res = await axios.get(
               `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
             );
-            console.log("fetch messages on event in channelupdate", res.data[res.data.length - 1]);
             setMessage(res.data);
           } catch (error) {
-            toast.error("failed to fetch messages chatcard 2");
+            toast.error("failed to channel messages chatcard");
           }
         };
         fetchData();
@@ -80,11 +87,7 @@ export const ChatCard = (props: any) => {
     return () => {
       state?.socket?.off("channelupdate");
     };
-  }, [state?.socket]);
-
-  if (!msg) {
-    return <div>Loading...</div>;
-  }
+  }, [state?.socket, props]);
 
   return (
     <motion.div
@@ -124,12 +127,10 @@ export const ChatCard = (props: any) => {
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
                 <p className="">
-                  {msg &&
-                  msg.length > 0 &&
-                  msg[msg.length - 1]?.content.length >= 10
-                    ? msg[msg.length - 1]?.content.slice(0, 10) + "..."
-                    : msg && msg.length > 0
-                    ? msg[msg.length - 1]?.content
+                  {msg && msg?.content?.length >= 10
+                    ? msg?.content.slice(0, 10) + "..."
+                    : msg
+                    ? msg?.content
                     : null}
                 </p>
               </div>
@@ -139,7 +140,7 @@ export const ChatCard = (props: any) => {
       </div>
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm ">
-          {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
+          {msg && getTime(msg.createdAt)}
         </p>
         <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
           Feb 1{/** this should change to get the date only */}

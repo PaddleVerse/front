@@ -8,7 +8,7 @@ const MiddleBuble = (props: any) => {
         {props.showProfilePic && (
           <img
             className="shadow-md rounded-full w-full h-full object-cover"
-            src={props.picture}
+            src={props?.picture}
             alt=""
           />
         )}

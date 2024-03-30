@@ -9,6 +9,7 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
+import toast from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 const Page = ({ children }: { children: React.ReactNode }) => {
@@ -26,20 +27,19 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (state?.user) {
-      axios
-        .get(`http://localhost:8080/chat/chatlist/${state?.user?.id}`)
-        .then((res) => {
-          console.log("fetched chat list");
+      const fetchChatList = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8080/chat/chatlist/${state?.user?.id}`
+          );
           setChatList(res.data);
-        })
-        .catch((error) => {
-          console.log("failed to fetch chat list");
-        });
+        } catch (error) {
+          toast.error("failed to fetch chat list");
+        } 
+      }
+      fetchChatList();
     }
-    return () => {
-      setUpdate(false);
-    };
-  }, [state, update]);
+  }, [state?.user, update]);
 
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
@@ -63,17 +63,8 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     });
     state?.socket?.emit("refresh");
     return () => {
+      setUpdate(false);
       state?.socket?.off("ok");
-    };
-  }, [state?.socket]);
-
-  useEffect(() => {
-    state?.socket?.on("update", (data: any) => {
-      console.log("update from server");
-      setUpdate(true);
-    });
-    return () => {
-      state?.socket?.off("update");
     };
   }, [state?.socket]);
 

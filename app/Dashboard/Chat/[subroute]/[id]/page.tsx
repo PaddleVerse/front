@@ -44,84 +44,64 @@ const Page = (props: any) => {
   const [messages, setMessages] = useState<message[] | null>(null);
   useEffect(() => {
     if (parameters.subroute === "dm") {
-      axios
-        .get(`http://localhost:8080/user/${parameters?.id!}`)
-        .then((res) => {
-          setTargetUser(res.data);
-          const fetchData = async () => {
-            try {
-              const messagesData = await axios.get(
-                `http://localhost:8080/conversations?uid1=${
-                  state?.user?.id
-                }&uid2=${parameters!.id!}`
-              );
-              setMessages(messagesData.data.messages);
-            } catch (error) {}
-          };
-          fetchData();
-        })
-        .catch((error) => {
-          toast.error("failed to fetch user");
-        });
+      const fetchData = async () => {
+        try { // need to check if the state is null or not
+          const pageUser = await axios.get(
+            `http://localhost:8080/user/${parameters?.id!}`
+          );
+          setTargetUser(pageUser.data);
+          const messagesData = await axios.get(
+            `http://localhost:8080/conversations/messages?uid1=${
+              state!.user!.id!
+            }&uid2=${parameters!.id!}`
+          );
+          setMessages(messagesData.data);
+        } catch (error) {
+          toast.error("failed to fetch user messagess");
+        }
+      };
+      fetchData();
     } else if (parameters.subroute === "channel") {
-      axios
-        .get(`http://localhost:8080/channels/${parameters!.id!}`)
-        .then((res) => {
-          setTargetChannel(res.data);
-          const fetchData = async () => {
-            try {
-              const messagesData = await fetchMessagesForChannel(res.data.id);
-              setMessages(messagesData);
-
-              const participantsData = await fetchChannelParticipants(
-                res.data.id
-              );
-              setParticipants(participantsData);
-            } catch (error) {}
-          };
-          fetchData();
-        })
-        .catch((error) => {
+      const fetchData = async () => {
+        try {
+          const channelData = await axios.get(
+            `http://localhost:8080/channels/${parameters!.id!}`
+          );
+          setTargetChannel(channelData.data);
+          const messagesData = await axios.get(
+            `http://localhost:8080/channels/messages/${parameters!
+              .id!}?uid=${state!.user!.id!}`
+          );
+          setMessages(messagesData.data);
+          const participantsData = await axios.get(
+            `http://localhost:8080/channels/participants/${parameters!
+              .id!}?uid=${state!.user!.id!}`
+          );
+          setParticipants(participantsData.data);
+        } catch (error) {
           toast.error("failed to fetch channel");
-        });
+        }
+      };
+      fetchData();
     }
     return () => {
       setUpdate(false);
     };
   }, [parameters, update]);
 
-  const fetchChannelParticipants = async (
-    id: number | undefined
-  ): Promise<participants[]> => {
-    const data = await axios
-      .get(
-        `http://localhost:8080/channels/participants/${id}?uid=${state!.user!
-          .id!}`
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          return res.data;
+    useEffect(() => {
+      state?.socket?.on(
+        "dmupdate",
+        (data: { user1: number; user2: number }) => {
+          console.log("socket got updated in user msg");
+          setUpdate(true);
         }
-      })
-      .catch((error: AxiosError) => {});
+      );
+      return () => {
+        state?.socket?.off("dmupdate");
+      };
+    }, [state?.socket]);
 
-    return data;
-  };
-  const fetchMessagesForChannel = (
-    id: number | undefined
-  ): Promise<message[]> => {
-    const data = axios
-      .get(
-        `http://localhost:8080/channels/messages/${id}?uid=${state!.user!.id!}`
-      )
-      .then((res) => {
-        return res.data;
-      })
-      .catch((error: AxiosError) => {
-        toast.error(`failed to fetch messages for ${targetChannel!.name}`);
-      });
-    return data;
-  };
   useEffect(() => {
     const container: any = containerRef.current;
     if (container) {
@@ -140,44 +120,8 @@ const Page = (props: any) => {
     };
   }, [state?.socket]);
 
-  useEffect(() => {
-    state?.socket?.on("dmupdate", (data: any) => {
-      const fetchData = async () => {
-        try {
-          const messagesData = await axios.get(
-            `http://localhost:8080/conversations?uid1=${
-              state?.user?.id
-            }&uid2=${parameters?.id!}`
-          );
-          setMessages(messagesData.data.messages);
-        } catch (error) {}
-      };
-      fetchData();
-    });
-    return () => {
-      state?.socket?.off("dmupdate");
-    };
-  }, [state?.socket]);
-  
-  useEffect(() => {
-    state?.socket?.on("channelmessage", (data: any) => {
-      const fetchData = async () => {
-        try {
-          const messagesData = await axios.get(
-            `http://localhost:8080/channels/messages/${targetChannel?.id!}?uid=${state!.user!.id!}`
-          );
-          setMessages(messagesData.data);
-        } catch (error) {
-          toast.error("failed to fetch messagess");
-        }
-      };
-      fetchData();
-    });
-    return () => {
-      state?.socket?.off("channelupdate");
-    };
-  }, [state?.socket]);
-    
+
+
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
     onSwipedRight: () => {
@@ -190,47 +134,44 @@ const Page = (props: any) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (targetChannel) {
-      const message = {
-        message: {
-          content: inputMessage.current!.value,
-          content_type: "string",
-          sender_id: state.user.id,
-          sender_picture: state.user.picture,
-        },
-        channel: { name: targetChannel.name },
-        user1: state.user.id,
-      };
-      await axios
-        .post(`http://localhost:8080/message`, message)
-        .then((res) => {})
-        .catch((error) => {
-          toast.error("failed to send message");
-        });
-      state?.socket?.emit("channelmessage", {
-        roomName: targetChannel.name,
-        user: state?.user,
-      });
-    } else if (targetUser) {
-      await axios
-        .post(`http://localhost:8080/message`, {
+      try {
+        const message = {
           message: {
             content: inputMessage.current!.value,
-            content_type: "text",
+            content_type: "string",
             sender_id: state.user.id,
             sender_picture: state.user.picture,
           },
+          channel: { name: targetChannel.name },
+          user1: state.user.id,
+        };
+        const res = await axios.post(`http://localhost:8080/message`, message);
+        state?.socket?.emit("channelmessage", {
+          roomName: targetChannel.name,
+          user: state?.user,
+        });
+      } catch (error) {
+        toast.error("failed to send message to channel");
+      }
+    } else if (targetUser) {
+      try {
+        const res = await axios.post(`http://localhost:8080/message`, {
+          message: {
+            content: inputMessage.current!.value,
+            content_type: "text",
+            sender_id: state?.user?.id!,
+            sender_picture: state?.user?.picture!,
+          },
           user2: state.user.id,
           user1: targetUser.id,
-        })
-        .then((res) => {})
-        .catch((error) => {
-          toast.error("failed to send message");
         });
-      state?.socket?.emit("dmmessage", {
-        reciever: targetUser.id,
-        sender: state.user.id,
-      });
-      setUpdate(true);
+        state?.socket?.emit("dmmessage", {
+          reciever: targetUser?.id!,
+          sender: state?.user?.id!,
+        });
+      } catch (error) {
+        toast.error("failed to send message to friend");
+      }
     }
     inputMessage.current!.value = "";
     return (e: FormEvent<HTMLFormElement>) => {};
