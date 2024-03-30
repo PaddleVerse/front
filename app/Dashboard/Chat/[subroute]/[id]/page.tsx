@@ -73,6 +73,7 @@ const Page = (props: any) => {
               `http://localhost:8080/channels/messages/${parameters!
                 .id!}?uid=${state!.user!.id!}`
             );
+            messagesData.data.sort((a: message, b: message) => { a?.id! - b?.id! })
             setMessages(messagesData.data);
             const participantsData = await axios.get(
               `http://localhost:8080/channels/participants/${parameters!
@@ -100,6 +101,35 @@ const Page = (props: any) => {
       state?.socket?.off("dmupdate");
     };
   }, [state?.socket]);
+  useEffect(() => {
+    state?.socket?.on("channelupdate", (data: any) => {
+      const fetchData = async () => {
+        try {
+          const channelData = await axios.get(
+            `http://localhost:8080/channels/${parameters!.id!}`
+          );
+          setTargetChannel(channelData.data);
+          const messagesData = await axios.get(
+            `http://localhost:8080/channels/messages/${parameters!
+              .id!}?uid=${state!.user!.id!}`
+          );
+          messagesData.data.sort((a: message, b: message) => { a?.id! - b?.id! })
+          setMessages(messagesData.data);
+          const participantsData = await axios.get(
+            `http://localhost:8080/channels/participants/${parameters!
+              .id!}?uid=${state!.user!.id!}`
+          );
+          setParticipants(participantsData.data);
+        } catch (error) {
+          toast.error("failed to fetch channel");
+        }
+      };
+      fetchData();
+    })
+    return () => {
+      state?.socket?.off("channelupdate");
+    };
+  },[state?.socket])
 
   useEffect(() => {
     const container: any = containerRef.current;
@@ -178,7 +208,7 @@ const Page = (props: any) => {
     return;
   }
 
-  if (!messages) {
+  if (!messages || messages.length === 0) {
     return;
   }
 

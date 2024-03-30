@@ -33,12 +33,7 @@ const modalVariants = {
   },
 };
 
-const CreateChannel = ({
-  handleClick
-}: {
-  handleClick: () => void;
-
-  }) => {
+const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
   const { state, dispatch } = useGlobalState();
   const password = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -76,42 +71,40 @@ const CreateChannel = ({
       },
       user: state?.user,
     };
-    axios
-      .post("http://localhost:8080/channels", channelObject)
-      .then((res) => {
-        if (!res.data.success) {
-          toast.error("error in creating channel");
+    try {
+      if (file) {
+        if (!file.type.startsWith("image/")) {
+          toast.error("Please select an image file.");
           return;
         }
-        if (file) {
-          if (!file.type.startsWith("image/")) {
-            alert("Please select an image file.");
-            return;
-          }
-          const formData = new FormData();
-          formData.append("image", file);
-          axios
-            .post(
-              `http://localhost:8080/channels/image?channel=${res.data.id}&user=${state?.user.id}`,
-              formData,
-              {
-                headers: { "Content-Type": "multipart/form-data" },
-              }
-            )
-            .then((res) => {
-              if (!res.data.success) {
-                toast.error(
-                  "error in uploading image, using the default image."
-                );
-              }
-              state?.socket.emit("joinRoom", { roomName: res.data.name, user: state?.user });
-            })
-            .catch();
-        } else {
-          state?.socket.emit("joinRoom", { roomName: res.data.name, user: state?.user });
+      }
+      const ret = await axios.post(
+        "http://localhost:8080/channels",
+        channelObject
+      );
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file);
+        try {
+          const picture = await axios.post(
+            `http://localhost:8080/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
+            formData,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          );
+        } catch (error) {
+          toast.error("error in uploading image, using the default image");
         }
-      })
-      .catch();
+      }
+      state?.socket.emit("joinRoom", {
+        roomName: ret?.data?.name,
+        user: state?.user,
+      });
+    } catch (error) {
+      toast.error("error in creating channel");
+      return;
+    }
     handleClick();
   };
   return (

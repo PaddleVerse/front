@@ -12,6 +12,7 @@ const ChatComponent = ({
 		messages: message[];
 		globalStateUserId: number;
   }) => {
+  console.log("hello from chat component")
 
   return (
     <div className="w-full h-full" {...handlers}>
@@ -19,6 +20,7 @@ const ChatComponent = ({
         <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
           {messages &&
             messages.map((value, key: any) => {
+              // console.log(value, key)
               if (value.sender_id === globalStateUserId) {
                 return <MiddleBubbleRight message={value} key={key} />;
               } else {

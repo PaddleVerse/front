@@ -11,8 +11,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 
-
-
 // this still needs work in terms of realtime and stuff, but the basic functionality is there
 
 const ChannelManagement = ({
@@ -58,7 +56,6 @@ const ChannelManagement = ({
       .catch();
   };
 
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const obj = {
@@ -70,39 +67,45 @@ const ChannelManagement = ({
       },
       user: { id: priviliged.user_id },
     };
-    axios
-      .put(`http://localhost:8080/channels/${channel.id}`, obj)
-      .then((res) => {
+    const updateChannel = async () => {
+      try {
         if (picture) {
           if (!picture.type.startsWith("image/")) {
             alert("Please select an image picture.");
             return;
           }
-          const formData = new FormData();
-          formData.append("image", picture);
-          axios
-            .post(
-              `http://localhost:8080/channels/image?channel=${channel.id}&user=${user.id}`,
-              formData,
-              {
-                headers: { "Content-Type": "multipart/form-data" },
-              }
-            )
-            .then((res) => {
-              if (!res.data.success) {
-                toast.error(
-                  "error in uploading image, using the default image."
-                );
-              }
-              state?.socket?.emit("channelUpdate", { roomName: channel.name, user: user });
-            })
-            .catch();
+        }
+        const res = await axios.put(
+          `http://localhost:8080/channels/${channel.id}`,
+          obj
+        );
+        if (picture) {
+          try {
+            const formData = new FormData();
+            formData.append("image", picture);
+            const pic = await axios
+              .post(
+                `http://localhost:8080/channels/image?channel=${channel.id}&user=${user.id}`,
+                formData,
+                {
+                  headers: { "Content-Type": "multipart/form-data" },
+                }
+              )
+          } catch (error) {
+            toast.error(
+              "error in uploading image, using the default image."
+            );
           }
-          state?.socket?.emit("channelUpdate", { roomName: channel.name, user: user });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          state?.socket?.emit("channelUpdate", {
+            roomName: channel.name,
+            user: user,
+          });
+        }
+      } catch (error) {
+        toast.error("error in updating channel");
+      }
+    };
+    updateChannel();
   };
 
   return (
@@ -161,7 +164,9 @@ const ChannelManagement = ({
             })}
             ref={keyInput}
             className="rounded-lg "
-            disabled={priviliged ? false : true && selectedOption === "protected"}
+            disabled={
+              priviliged ? false : true && selectedOption === "protected"
+            }
           />
           <fieldset
             className="flex gap-2 items-center flex-wrap"

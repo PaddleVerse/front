@@ -75,7 +75,6 @@ export const ChatCard = (props: any) => {
             const res = await axios.get(
               `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
             );
-            console.log(res.data);
             setMessage(res.data);
           } catch (error) {
             toast.error("failed to get channel messages chatcard");
