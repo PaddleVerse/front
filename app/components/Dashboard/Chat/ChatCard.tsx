@@ -22,7 +22,7 @@ export const ChatCard = (props: any) => {
           );
           setMessage(res.data);
         } catch (error) {
-          toast.error("failed to fetch user message");
+          toast.error("failed to fetch user message for user");
         }
       };
       fetchData();
@@ -30,11 +30,11 @@ export const ChatCard = (props: any) => {
       const fetchData = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
+            `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
           );
           setMessage(res.data);
         } catch (error) {
-          toast.error("failed to fetch messages in chatcard 1");
+          toast.error("failed to fetch messages for channel");
         }
       };
       fetchData();
@@ -73,11 +73,12 @@ export const ChatCard = (props: any) => {
         const fetchData = async () => {
           try {
             const res = await axios.get(
-              `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
+              `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
             );
+            console.log(res.data);
             setMessage(res.data);
           } catch (error) {
-            toast.error("failed to channel messages chatcard");
+            toast.error("failed to get channel messages chatcard");
           }
         };
         fetchData();
@@ -87,7 +88,7 @@ export const ChatCard = (props: any) => {
     return () => {
       state?.socket?.off("channelupdate");
     };
-  }, [state?.socket, props]);
+  }, [state?.socket]);
 
   return (
     <motion.div

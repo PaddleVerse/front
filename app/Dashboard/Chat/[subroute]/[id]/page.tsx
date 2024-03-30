@@ -43,64 +43,63 @@ const Page = (props: any) => {
   const [targetChannel, setTargetChannel] = useState<channel | null>(null);
   const [messages, setMessages] = useState<message[] | null>(null);
   useEffect(() => {
-    if (parameters.subroute === "dm") {
-      const fetchData = async () => {
-        try { // need to check if the state is null or not
-          const pageUser = await axios.get(
-            `http://localhost:8080/user/${parameters?.id!}`
-          );
-          setTargetUser(pageUser.data);
-          const messagesData = await axios.get(
-            `http://localhost:8080/conversations/messages?uid1=${
-              state!.user!.id!
-            }&uid2=${parameters!.id!}`
-          );
-          setMessages(messagesData.data);
-        } catch (error) {
-          toast.error("failed to fetch user messagess");
-        }
-      };
-      fetchData();
-    } else if (parameters.subroute === "channel") {
-      const fetchData = async () => {
-        try {
-          const channelData = await axios.get(
-            `http://localhost:8080/channels/${parameters!.id!}`
-          );
-          setTargetChannel(channelData.data);
-          const messagesData = await axios.get(
-            `http://localhost:8080/channels/messages/${parameters!
-              .id!}?uid=${state!.user!.id!}`
-          );
-          setMessages(messagesData.data);
-          const participantsData = await axios.get(
-            `http://localhost:8080/channels/participants/${parameters!
-              .id!}?uid=${state!.user!.id!}`
-          );
-          setParticipants(participantsData.data);
-        } catch (error) {
-          toast.error("failed to fetch channel");
-        }
-      };
-      fetchData();
+    if (state?.user) {
+      if (parameters.subroute === "dm") {
+        const fetchData = async () => {
+          try {
+            const pageUser = await axios.get(
+              `http://localhost:8080/user/${parameters?.id!}`
+            );
+            setTargetUser(pageUser.data);
+            const messagesData = await axios.get(
+              `http://localhost:8080/conversations/messages?uid1=${state!.user!
+                .id!}&uid2=${parameters!.id!}`
+            );
+            setMessages(messagesData.data);
+          } catch (error) {
+            console.log(error);
+            toast.error("failed to fetch user messagess");
+          }
+        };
+        fetchData();
+      } else if (parameters.subroute === "channel") {
+        const fetchData = async () => {
+          try {
+            const channelData = await axios.get(
+              `http://localhost:8080/channels/${parameters!.id!}`
+            );
+            setTargetChannel(channelData.data);
+            const messagesData = await axios.get(
+              `http://localhost:8080/channels/messages/${parameters!
+                .id!}?uid=${state!.user!.id!}`
+            );
+            setMessages(messagesData.data);
+            const participantsData = await axios.get(
+              `http://localhost:8080/channels/participants/${parameters!
+                .id!}?uid=${state!.user!.id!}`
+            );
+            setParticipants(participantsData.data);
+          } catch (error) {
+            toast.error("failed to fetch channel");
+          }
+        };
+        fetchData();
+      }
     }
     return () => {
       setUpdate(false);
     };
   }, [parameters, update]);
 
-    useEffect(() => {
-      state?.socket?.on(
-        "dmupdate",
-        (data: { user1: number; user2: number }) => {
-          console.log("socket got updated in user msg");
-          setUpdate(true);
-        }
-      );
-      return () => {
-        state?.socket?.off("dmupdate");
-      };
-    }, [state?.socket]);
+  useEffect(() => {
+    state?.socket?.on("dmupdate", (data: { user1: number; user2: number }) => {
+      console.log("socket got updated in user msg");
+      setUpdate(true);
+    });
+    return () => {
+      state?.socket?.off("dmupdate");
+    };
+  }, [state?.socket]);
 
   useEffect(() => {
     const container: any = containerRef.current;
@@ -119,8 +118,6 @@ const Page = (props: any) => {
       state?.socket?.off("ok");
     };
   }, [state?.socket]);
-
-
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),

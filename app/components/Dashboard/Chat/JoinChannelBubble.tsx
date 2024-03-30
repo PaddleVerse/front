@@ -22,7 +22,7 @@ const JoinChannelBubble = ({
   const lockRef = useRef<HTMLInputElement>(null);
   const { register } = useForm();
   const [unlock, setUnlock] = useState(false);
-  const {state, dispatch} = useGlobalState();
+  const { state, dispatch } = useGlobalState();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (lock) {
@@ -35,13 +35,13 @@ const JoinChannelBubble = ({
         user: user,
         channel: channel,
       };
-      await axios.post(`http://localhost:8080/participants`, obj).then((res) => {
-        toast.success(`you have joined ${channel.name}`)
+      try {
+        const res = await axios.post(`http://localhost:8080/participants`, obj);
+        toast.success(`you have joined ${channel.name}`);
         state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
-      }).catch((err) => {
-        toast(err.response.data.message);
-      })
-      
+      } catch (error) {
+        toast.error("failed to join channel");
+      }
     } else {
       const obj = {
         participant: {
@@ -51,15 +51,13 @@ const JoinChannelBubble = ({
         user: user,
         channel: channel,
       };
-      await axios
-      .post(`http://localhost:8080/participants`, obj)
-      .then((res) => {
-        toast.success(`you have joined ${channel.name}`)
-          state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
-        })
-        .catch((err) => {
-          toast(err.response.data.message);
-        });
+      try {
+        const res = await axios.post(`http://localhost:8080/participants`, obj);
+        toast.success(`you have joined ${channel.name}`);
+        state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
+      } catch (error) {
+        toast.error("failed to join channel");
+      }
     }
     setUnlock(false);
   };
@@ -85,7 +83,7 @@ const JoinChannelBubble = ({
           {channel.name}
         </h2>
         {unlock && lock ? (
-          <form onSubmit={(e)=>handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <input
               type="text"
               className="left-0 top-[45px] rounded-md lp-2 w-[180px] bg-dashBack h-10 text-white"

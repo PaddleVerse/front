@@ -35,9 +35,12 @@ const Page = ({ children }: { children: React.ReactNode }) => {
           setChatList(res.data);
         } catch (error) {
           toast.error("failed to fetch chat list");
-        } 
-      }
+        }
+      };
       fetchChatList();
+    }
+    return () => {
+      setUpdate(false);
     }
   }, [state?.user, update]);
 
@@ -55,6 +58,17 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       document.removeEventListener("keydown", handleEscapeKeyPress);
     };
   }, [handleEscapeKeyPress]);
+
+  useEffect(() => {
+    state?.socket?.on("channelupdate", (data: any) => {
+      console.log("here at create channel");
+      setUpdate(true);
+    });
+    return () => {
+      state?.socket?.off("channelupdate");
+      setUpdate(false);
+    };
+  },[state?.socket]);
 
   useEffect(() => {
     state?.socket?.on("ok", (data: any) => {
