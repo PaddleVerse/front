@@ -9,9 +9,9 @@ import { user } from "@/app/Dashboard/Chat/type";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/newinput";
 import { Button } from "@/components/ui/moving-border";
-import { BottomGradient } from "@/app/register/page";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
+import BottomGradient from "@/components/ui/bottomGradiant";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {

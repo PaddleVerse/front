@@ -42,7 +42,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     return () => {
       setUpdate(false);
     }
-  }, [state?.user, update]);
+  }, [update]);
 
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
@@ -60,12 +60,11 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   }, [handleEscapeKeyPress]);
 
   useEffect(() => {
-    state?.socket?.on("channelupdate", (data: any) => {
-      console.log("here at create channel");
+    state?.socket?.on("update", (data: any) => {
       setUpdate(true);
-    });
+    })
     return () => {
-      state?.socket?.off("channelupdate");
+      state?.socket?.off("update");
       setUpdate(false);
     };
   },[state?.socket]);

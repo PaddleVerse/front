@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/newinput";
 import MemberList from "./MemberList";
@@ -14,23 +14,16 @@ import { useGlobalState } from "../../Sign/GlobalState";
 // this still needs work in terms of realtime and stuff, but the basic functionality is there
 
 const ChannelManagement = ({
-  participants,
   channel,
   user,
   update,
 }: {
-  participants: participants[];
   channel: channel;
   user: user;
   update: (arg0: boolean) => void;
 }) => {
-  const [priviliged, setPriviliged] = useState<participants>(
-    participants.filter(
-      (participant) =>
-        (participant.role === "ADMIN" || participant.role === "MOD") &&
-        participant.user_id === user.id
-    )[0]
-  );
+  const [participants, setParticipants] = useState<participants[]>([]);
+  const [priviliged, setPriviliged] = useState<participants>();
   const router = useRouter();
   const [picture, setPicture] = useState<File>();
   const { register } = useForm();
@@ -38,7 +31,48 @@ const ChannelManagement = ({
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState("");
-  const { state } = useGlobalState();
+  const { state, dispatch } = useGlobalState();
+  const { user: u, socket } = state;
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
+        );
+        setParticipants(res.data);
+        setPriviliged(
+          res.data.filter(
+            (participant: participants) =>
+              (participant.role === "ADMIN" || participant.role === "MOD") &&
+              participant.user_id === user.id
+          )[0]
+        );
+      } catch (error) {
+        toast.error("failed to fetch participants");
+      }
+    }
+    fetchParticipants();
+  }, []);
+
+  useEffect(() => {
+    socket.on("update", (data: any) => {
+      const fetchParticipants = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8080/participants/${channel.id}`
+          );
+          setParticipants(res.data);
+        } catch (error) {
+          toast.error("failed to fetch participants");
+        }
+      }
+      fetchParticipants();
+    })
+    return () => {
+      socket.off("update");
+    }
+  }, [socket]);
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -65,7 +99,7 @@ const ChannelManagement = ({
         topic: topicInput.current?.value! || channel.topic,
         state: selectedOption === "" ? channel.state : selectedOption,
       },
-      user: { id: priviliged.user_id },
+      user: { id: priviliged?.user_id! },
     };
     const updateChannel = async () => {
       try {
@@ -83,18 +117,15 @@ const ChannelManagement = ({
           try {
             const formData = new FormData();
             formData.append("image", picture);
-            const pic = await axios
-              .post(
-                `http://localhost:8080/channels/image?channel=${channel.id}&user=${user.id}`,
-                formData,
-                {
-                  headers: { "Content-Type": "multipart/form-data" },
-                }
-              )
-          } catch (error) {
-            toast.error(
-              "error in uploading image, using the default image."
+            const pic = await axios.post(
+              `http://localhost:8080/channels/image?channel=${channel.id}&user=${user.id}`,
+              formData,
+              {
+                headers: { "Content-Type": "multipart/form-data" },
+              }
             );
+          } catch (error) {
+            toast.error("error in uploading image, using the default image.");
           }
           state?.socket?.emit("channelUpdate", {
             roomName: channel.name,
@@ -236,7 +267,7 @@ const ChannelManagement = ({
               <MemberList
                 key={index}
                 participant={participant}
-                exec={priviliged}
+                exec={priviliged!}
                 channel={channel}
               />
             );

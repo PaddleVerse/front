@@ -32,16 +32,13 @@ const Page = (props: any) => {
   const searchParam = useSearchParams();
   const router = useRouter();
   const { register } = useForm();
-  const [participants, setParticipants] = useState<participants[]>([]);
   const [channelManagement, setChannelManagement] = useState(false);
   const { state, dispatch } = useGlobalState();
-  const containerRef = useRef(null);
   const [update, setUpdate] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const [targetUser, setTargetUser] = useState<user | null>(null);
   const [targetChannel, setTargetChannel] = useState<channel | null>(null);
-  const [messages, setMessages] = useState<message[] | null>(null);
   useEffect(() => {
     if (state?.user) {
       if (parameters.subroute === "dm") {
@@ -51,14 +48,8 @@ const Page = (props: any) => {
               `http://localhost:8080/user/${parameters?.id!}`
             );
             setTargetUser(pageUser.data);
-            const messagesData = await axios.get(
-              `http://localhost:8080/conversations/messages?uid1=${state!.user!
-                .id!}&uid2=${parameters!.id!}`
-            );
-            setMessages(messagesData.data);
           } catch (error) {
-            console.log(error);
-            toast.error("failed to fetch user messagess");
+            toast.error("failed to fetch user");
           }
         };
         fetchData();
@@ -69,17 +60,6 @@ const Page = (props: any) => {
               `http://localhost:8080/channels/${parameters!.id!}`
             );
             setTargetChannel(channelData.data);
-            const messagesData = await axios.get(
-              `http://localhost:8080/channels/messages/${parameters!
-                .id!}?uid=${state!.user!.id!}`
-            );
-            messagesData.data.sort((a: message, b: message) => { a?.id! - b?.id! })
-            setMessages(messagesData.data);
-            const participantsData = await axios.get(
-              `http://localhost:8080/channels/participants/${parameters!
-                .id!}?uid=${state!.user!.id!}`
-            );
-            setParticipants(participantsData.data);
           } catch (error) {
             toast.error("failed to fetch channel");
           }
@@ -92,51 +72,7 @@ const Page = (props: any) => {
     };
   }, [parameters, update]);
 
-  useEffect(() => {
-    state?.socket?.on("dmupdate", (data: { user1: number; user2: number }) => {
-      console.log("socket got updated in user msg");
-      setUpdate(true);
-    });
-    return () => {
-      state?.socket?.off("dmupdate");
-    };
-  }, [state?.socket]);
-  useEffect(() => {
-    state?.socket?.on("channelupdate", (data: any) => {
-      const fetchData = async () => {
-        try {
-          const channelData = await axios.get(
-            `http://localhost:8080/channels/${parameters!.id!}`
-          );
-          setTargetChannel(channelData.data);
-          const messagesData = await axios.get(
-            `http://localhost:8080/channels/messages/${parameters!
-              .id!}?uid=${state!.user!.id!}`
-          );
-          messagesData.data.sort((a: message, b: message) => { a?.id! - b?.id! })
-          setMessages(messagesData.data);
-          const participantsData = await axios.get(
-            `http://localhost:8080/channels/participants/${parameters!
-              .id!}?uid=${state!.user!.id!}`
-          );
-          setParticipants(participantsData.data);
-        } catch (error) {
-          toast.error("failed to fetch channel");
-        }
-      };
-      fetchData();
-    })
-    return () => {
-      state?.socket?.off("channelupdate");
-    };
-  },[state?.socket])
 
-  useEffect(() => {
-    const container: any = containerRef.current;
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-  }, [messages]);
 
   useEffect(() => {
     state?.socket?.on("ok", (data: any) => {
@@ -208,10 +144,6 @@ const Page = (props: any) => {
     return;
   }
 
-  if (!messages || messages.length === 0) {
-    return;
-  }
-
   return (
     <>
       {targetChannel || targetUser ? (
@@ -249,23 +181,23 @@ const Page = (props: any) => {
           </div>
           <div
             className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
-            ref={containerRef}
           >
             {targetUser ? (
               <ChatComponent
                 handlers={handlers}
-                messages={messages!}
+                us={true}
+                channel={false}
                 globalStateUserId={state!.user!.id!}
               />
             ) : !channelManagement ? (
               <ChatComponent
-                handlers={handlers}
-                messages={messages!}
+                  handlers={handlers}
+                  us={false}
+                  channel={true}
                 globalStateUserId={state!.user!.id!}
               />
             ) : (
               <ChannelManagement
-                participants={participants}
                 channel={targetChannel!}
                 user={state!.user!}
                 update={setUpdate}
@@ -305,7 +237,7 @@ const Page = (props: any) => {
           </div>
         </section>
       ) : (
-        <div className="text-white">is empty</div>
+        <div className="text-white"></div>
       )}
     </>
   );
