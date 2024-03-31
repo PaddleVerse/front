@@ -26,6 +26,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
+import { Socket } from "socket.io-client";
 
 const Page = (props: any) => {
   const parameters = useParams();
@@ -39,6 +40,7 @@ const Page = (props: any) => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const [targetUser, setTargetUser] = useState<user | null>(null);
   const [targetChannel, setTargetChannel] = useState<channel | null>(null);
+  // const containerRef = useRef(null);
   useEffect(() => {
     if (state?.user) {
       if (parameters.subroute === "dm") {
@@ -72,8 +74,6 @@ const Page = (props: any) => {
     };
   }, [parameters, update]);
 
-
-
   useEffect(() => {
     state?.socket?.on("ok", (data: any) => {
       if (data === null) return;
@@ -84,6 +84,15 @@ const Page = (props: any) => {
       state?.socket?.off("ok");
     };
   }, [state?.socket]);
+
+  // useEffect(() => {
+  //   state?.socket?.on("update", (data: any) => {
+  //     const container: any = containerRef.current;
+  //     if (container) {
+  //       container.scrollTop = container.scrollHeight;
+  //     }
+  //   });
+  // }, [state?.socket]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
@@ -181,6 +190,7 @@ const Page = (props: any) => {
           </div>
           <div
             className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
+            // ref={containerRef}
           >
             {targetUser ? (
               <ChatComponent
@@ -191,9 +201,9 @@ const Page = (props: any) => {
               />
             ) : !channelManagement ? (
               <ChatComponent
-                  handlers={handlers}
-                  us={false}
-                  channel={true}
+                handlers={handlers}
+                us={false}
+                channel={true}
                 globalStateUserId={state!.user!.id!}
               />
             ) : (

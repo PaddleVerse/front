@@ -90,11 +90,18 @@ const ChatComponent = ({
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-  }, [messages]);
+    console.log("container", container);
+  }, [messages])
+
+
+  console.log("container ref",containerRef);
 
   if (messages.length === 0) {
     return (
-      <div className="w-full h-full" {...handlers} ref={containerRef}>
+      <div
+        className="w-full h-full overflow-y-scroll no-scrollbar"
+        {...handlers}
+      >
         <div className="flex flex-row justify-start overflow-y-auto">
           <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
             <p className="text-center text-gray-500">No messages yet</p>
@@ -106,7 +113,11 @@ const ChatComponent = ({
 
 
   return (
-    <div className="w-full h-full" {...handlers} ref={containerRef}>
+    <div
+      className="w-full h-full overflow-y-scroll no-scrollbar"
+      {...handlers}
+      ref={containerRef}
+    >
       <div className="flex flex-row justify-start overflow-y-auto">
         <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
           {messages.map((value, key: any) => {
