@@ -90,11 +90,9 @@ const ChatComponent = ({
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-    console.log("container", container);
   }, [messages])
 
 
-  console.log("container ref",containerRef);
 
   if (messages.length === 0) {
     return (

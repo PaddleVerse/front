@@ -147,7 +147,6 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
