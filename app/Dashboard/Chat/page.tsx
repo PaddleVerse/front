@@ -1,78 +1,72 @@
 "use client";
-import { Image } from "next/image";
 import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
-import MiddleBuble from "@/app/components/Dashboard/Chat/LeftBubbles/MiddleBuble";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
-import { LuPhone } from "react-icons/lu";
-import { IoVideocamOutline } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
-import { IoCameraOutline } from "react-icons/io5";
-import { PiMicrophoneLight } from "react-icons/pi";
+import { CgAdd } from "react-icons/cg";
 import { IoSendOutline } from "react-icons/io5";
 import {
   FormEvent,
-  FormEventHandler,
   useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { channel, target, user } from "./type";
-import MiddleBubbleRight from "@/app/components/Dashboard/Chat/RightBubbles/MiddleBubbleRight";
+import { channel, participants, user, message } from "./type";
 import { set, useForm } from "react-hook-form";
-import { sendError } from "next/dist/server/api-utils";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import { useSwipeable } from "react-swipeable";
-
+import toast from "react-hot-toast";
+import { OnlinePreview } from "@/app/components/Dashboard/Chat/onlinePreview";
+import ChannelManagement from "@/app/components/Dashboard/Chat/channelManagement";
+import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
+import Image from "next/image";
+import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Search } from "lucide-react";
 const inter = Inter({ subsets: ["latin"] });
 
-export type message = {
-  id?: number;
-  channel_id?: number;
-  sender_id?: number;
-  sender_picture?: string;
-  conversation_id?: number;
-  content: string;
-  content_type: string;
-  createdAt: Date;
-};
-
 const Page = () => {
+  // const chatQuery  =
+  // const url = "http://localhost:8080/chat/1";
+  // const router = useRouter(); // for later improvement when i want to add a chat id to the url
+  const searchParam = useSearchParams();
+  const { register } = useForm();
   const inputMessage = useRef<HTMLInputElement | null>(null);
+  const [participants, setParticipants] = useState<participants[]>([]);
   const [showMessage, setShowMessage] = useState(false);
   const containerRef = useRef(null);
   const [online, setOnline] = useState(false);
-  const { register } = useForm();
   const [update, setUpdate] = useState(false);
   const [chatList, setChatList] = useState([]);
-  const [targetUser, setTargetUser] = useState<user | null>();
-  const [targetChannel, setTargetChannel] = useState<channel | null>();
+  const [targetUser, setTargetUser] = useState<user | null>(null);
+  const [targetChannel, setTargetChannel] = useState<channel | null>(null);
   const globalState = useGlobalState();
   const [messages, setMessages] = useState<message[] | null>(null);
   const [modlar, setModlar] = useState(false);
+  const [createModlar, setCreateModlar] = useState(false);
   const [channelManagement, setChannelManagement] = useState(false);
+  // ill be addin a loading screen in the chat card while waiting for everything to update properly, and i will have to use pagination when getting that chat list from the server
+  //test , remove the push method when creating a message in the server and see if the messages gets pushed automatically in the backed
+
   useEffect(() => {
-    if (globalState.state.user) {
+    if (globalState?.state?.user) {
+      // if (searchParam.get("id")) {
+
+      // }
       axios
-        .get(`http://localhost:8080/chat/chatlist/${globalState.state.user.id}`)
+        .get(
+          `http://localhost:8080/chat/chatlist/${globalState?.state?.user?.id}`
+        )
         .then((res) => {
           setChatList(res.data);
         })
-        .catch((error) => {
-          console.log(error);
-        });
-      if (targetUser) {
-        axios.get(`http://localhost:8080/user/${targetUser.id}`).then((res) => {
-          setTargetUser(res.data);
-        });
-      }
+        .catch((error) => {});
     }
   }, [globalState, update]);
   ///////////////////////////////////////////////////////////
@@ -80,6 +74,7 @@ const Page = () => {
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
       setModlar(false);
+      setCreateModlar(false);
     }
   }, []);
 
@@ -107,7 +102,7 @@ const Page = () => {
       setUpdate(true);
     });
     return () => {
-      globalState?.state?.socket?.off("ok");
+      globalState?.state?.socket?.off("update");
     };
   }, [globalState?.state?.socket]);
 
@@ -119,38 +114,17 @@ const Page = () => {
   }, [messages]);
 
   useEffect(() => {
-    globalState?.state?.socket?.on("message", (data: any) => {});
-  }, [globalState?.state?.socket]);
-
-  // useEffect(() => {
-  //   if (socket.current) {
-  //     socket.current.on("message", (data: any) => {
-  //       if (targetUser) {
-  //         if (data.sender_id === targetUser.id) {
-  //           setUpdate(true);
-  //         }
-  //       }
-  //       if (targetChannel) {
-  //         if (data.channel_id === targetChannel.id) {
-  //           setUpdate(true);
-  //         }
-  //       }
-  //     });
-  //   }
-  //   return () => {
-  //     if (socket.current) {
-  //       socket.current.off("message");
-  //     }
-  //   };
-  // }, [socket.current]);
-
-  useEffect(() => {
     if (targetUser) {
       if (update) {
-        const data = fetchMessagesForUser(targetUser.id);
-        data.then((res) => {
-          setMessages(res);
-        });
+        axios
+          .get(`http://localhost:8080/user/${targetUser.id}`)
+          .then((res) => {
+            fetchMessagesForUser(targetUser.id).then((res) => {
+              setMessages(res);
+            });
+            setTargetUser(res.data);
+          })
+          .catch((error) => {});
       }
     }
     return () => {
@@ -158,17 +132,44 @@ const Page = () => {
     };
   }, [targetUser, update]);
 
+  // is updated to use the data i get from the chat list when including the other data in it
   useEffect(() => {
-    if (targetChannel) {
-      if (update) {
-        const data = fetchMessagesForChannel(targetChannel.id);
-        data.then((res) => {
-          setMessages(res);
-        });
+    if (update) {
+      if (targetChannel) {
+        if (update) {
+          console.log("fetching messages for channel");
+          const data = fetchMessagesForChannel(targetChannel.id);
+          data
+            .then((res) => {
+              setMessages(res);
+              const part = fetchChannelParticipants(targetChannel.id);
+              part.then((res) => {
+                setParticipants(res);
+              });
+            })
+            .catch((error: AxiosError) => {});
+        }
         setUpdate(false);
       }
     }
   }, [targetChannel, update]);
+
+  const fetchChannelParticipants = async (
+    id: number | undefined
+  ): Promise<participants[]> => {
+    const data = await axios
+      .get(
+        `http://localhost:8080/channels/participants/${id}?uid=${globalState.state.user.id}`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          return res.data;
+        }
+      })
+      .catch((error: AxiosError) => {});
+
+    return data;
+  };
 
   const fetchMessagesForUser = async (
     id: number | undefined
@@ -178,11 +179,9 @@ const Page = () => {
         `http://localhost:8080/conversations?uid1=${id}&uid2=${globalState.state.user.id}`
       )
       .then((res) => {
-        return res.data.messages;
+        if (res.status === 200) return res.data.messages;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error: AxiosError) => {});
     return data;
   };
 
@@ -196,8 +195,8 @@ const Page = () => {
       .then((res) => {
         return res.data;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error: AxiosError) => {
+        toast.error(`failed to fetch messages for ${targetChannel!.name}`);
       });
     return data;
   };
@@ -217,15 +216,15 @@ const Page = () => {
       };
       await axios
         .post(`http://localhost:8080/message`, message)
+        .then((res) => {})
         .catch((error) => {
-          console.log(error);
+          toast.error("failed to send message");
         });
       globalState?.state?.socket?.emit("channelmessage", {
-        channel: targetChannel.id,
-        sender: globalState.state.user.id,
+        roomName: targetChannel.name,
+        user: globalState?.state?.user,
       });
-    }
-    if (targetUser) {
+    } else if (targetUser) {
       await axios
         .post(`http://localhost:8080/message`, {
           message: {
@@ -237,18 +236,20 @@ const Page = () => {
           user2: globalState.state.user.id,
           user1: targetUser.id,
         })
+        .then((res) => {})
         .catch((error) => {
-          console.log(error);
+          toast.error("failed to send message");
         });
       globalState?.state?.socket?.emit("dmmessage", {
         reciever: targetUser.id,
         sender: globalState.state.user.id,
       });
+      setUpdate(true);
     }
     inputMessage.current!.value = "";
-    setUpdate(true);
     return (e: FormEvent<HTMLFormElement>) => {};
   };
+
   const handleClick = () => {
     setModlar(false);
   };
@@ -272,13 +273,23 @@ const Page = () => {
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
     onSwipedRight: () => setShowMessage(false),
-    // onSwiped:()=>setExpanded(!expanded),
   });
-  console.log(showMessage);
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
-        {modlar && <JoinChannel handleClick={handleClick} />}
+        {modlar ? (
+          <JoinChannel
+            handleClick={handleClick}
+            user={globalState.state.user}
+            socket={globalState.state.socket}
+          />
+        ) : createModlar ? (
+          <CreateChannel
+            handleClick={() => setCreateModlar(false)}
+            user={globalState.state.user}
+            socket={globalState.state.socket}
+          />
+        ) : null}
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
@@ -293,7 +304,7 @@ const Page = () => {
               <motion.section
                 className={` flex flex-col flex-none overflow-auto ${
                   showMessage && tablet ? "invisible" : "visible"
-                } group lg:max-w-[280px] md:w-2/5 no-scrollbar`}
+                } group lg:max-w-[300px] md:w-2/5 no-scrollbar`}
                 initial={{ display: "flex", width: "100%", opacity: 1 }}
                 animate={{
                   display: showMessage && tablet ? "hidden" : "flex",
@@ -328,16 +339,28 @@ const Page = () => {
                     </div>
                   </form>
                 </div>
-                <p className="ml-8">
-                  Join a{" "}
-                  <span
-                    onClick={() => setModlar(true)}
-                    className="text-sky-500 cursor-pointer"
-                  >
-                    Public
-                  </span>{" "}
-                  Group Chat
-                </p>
+                <div className="flex flex-row justify-around w-full">
+                  <p className="ml-8">
+                    Join a{" "}
+                    <span
+                      onClick={() => setModlar(true)}
+                      className="text-sky-500 cursor-pointer"
+                    >
+                      Public
+                    </span>{" "}
+                    Group Chat
+                  </p>
+                  <div>
+                    <span className="" onClick={() => setCreateModlar(true)}>
+                      <Image
+                        width={24}
+                        height={24}
+                        src="/Chat/vector.svg"
+                        alt="create svg"
+                      />
+                    </span>
+                  </div>
+                </div>
                 <div
                   className="contacts p-2 flex-1 overflow-y-scroll"
                   onClick={(e) => {
@@ -365,40 +388,36 @@ const Page = () => {
                     })}
                 </div>
               </motion.section>
-              {/** here we display the messages and stuff, gonna do it after properly fetching data */}
               {targetChannel || targetUser ? (
                 <section className="flex flex-col flex-auto border-l border-gray-800 border">
                   <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                     <div className="flex">
                       <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
-                        {/* this image needs to be filled with the target user */}
-                        <img
+                        <Image
                           className="shadow-md rounded-full w-full h-full object-cover"
-                          src={
-                            (targetUser && targetUser.picture) ||
-                            "https://randomuser.me/api/portraits/women/33.jpg"
-                          }
-                          alt=""
+                          height={100}
+                          width={100}
+                          src={targetUser?.picture! || targetChannel?.picture!}
+                          alt="user or channel picture"
                         />
                       </div>
                       <div className="text-sm">
                         <p className="font-bold">
                           {targetUser ? targetUser.name : targetChannel!.name}
                         </p>
-                        {/** needs to be fixed */}
-                        {targetUser &&
-                          (targetUser.status === "ONLINE" ? (
-                            <p className="text-green-500">Online</p>
-                          ) : (
-                            <p className="text-gray-400">Offline</p>
-                          ))}
+                        {targetUser && (
+                          <OnlinePreview status={targetUser!.status!} />
+                        )}
                       </div>
                     </div>
 
                     <div className="flex items-center">
                       <div
                         className="block rounded-full  w-6 h-6 ml-4"
-                        onClick={() => setChannelManagement(!channelManagement)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setChannelManagement(!channelManagement);
+                        }}
                       >
                         <IoIosInformationCircleOutline className="w-full h-full text-white" />
                       </div>
@@ -408,68 +427,30 @@ const Page = () => {
                     className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
                     ref={containerRef}
                   >
-                    {!channelManagement ? (
-                      <div className="w-full h-full" {...handlers}>
-                        <div className="flex flex-row justify-start overflow-y-auto">
-                          <div className="text-sm text-gray-700 grid grid-flow-row gap-2 w-full">
-                            {messages &&
-                              messages.map((value, key: any) => {
-                                if (
-                                  value.sender_id === globalState.state.user.id
-                                ) {
-                                  return (
-                                    <div className="" key={key}>
-                                      <MiddleBubbleRight message={value} />
-                                    </div>
-                                  );
-                                } else {
-                                  return (
-                                    <MiddleBuble
-                                      message={value}
-                                      key={key}
-                                      showProfilePic={
-                                        (!messages[key + 1] ||
-                                          messages[key + 1].sender_id !==
-                                            value.sender_id) &&
-                                        value &&
-                                        value.sender_picture
-                                      }
-                                      picture={messages[key].sender_picture}
-                                    />
-                                  );
-                                }
-                              })}
-                          </div>
-                        </div>
-                        <p className="p-4 text-center text-sm text-gray-500">
-                          {messages && messages.length > 0
-                            ? messages[messages.length - 1].createdAt
-                                .toString()
-                                .substring(0, 10) +
-                              " at " +
-                              messages[messages.length - 1].createdAt
-                                .toString()
-                                .substring(11, 16)
-                            : "No messages yet"}
-                        </p>
-                      </div>
+                    {targetUser ? (
+                      <ChatComponent
+                        handlers={handlers}
+                        messages={messages!}
+                        globalStateUserId={globalState.state.user.id}
+                      />
+                    ) : !channelManagement ? (
+                      <ChatComponent
+                        handlers={handlers}
+                        messages={messages!}
+                        globalStateUserId={globalState.state.user.id}
+                      />
                     ) : (
-                      <div className="w-full h-full bg-white flex justify-evenly items-center">
-                        <div className="w-[45%] h-full bg-blue-400 flex flex-col justify-center">
-                          <Image
-                            src="/badge1.png"
-                            alt="image"
-                            width={100}
-                            height={100}
-                          />
-                        </div>
-                        <div className="w-[45%] h-full bg-red-500"></div>
-                      </div>
+                      <ChannelManagement
+                        participants={participants}
+                        channel={targetChannel!}
+                        user={globalState.state!.user!}
+                        update={setUpdate}
+                      />
                     )}
                   </div>
                   <div
                     className={`chat-footer flex-none ${
-                      channelManagement ? "hidden" : ""
+                      channelManagement && targetChannel ? "hidden" : ""
                     }`}
                   >
                     <div className="flex flex-row items-center p-4">

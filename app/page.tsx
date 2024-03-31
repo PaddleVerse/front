@@ -17,6 +17,14 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 
+const BgWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
+      <Boxes />
+      {children}
+    </div>
+  );
+};
 
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
@@ -95,7 +103,7 @@ export default function SignupFormDemo() {
   return (
     <BgWrapper>
       <div className="w-full h-full flex items-center justify-center">
-          <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black ring-[0.2px] ring-red-500 z-10">
+          <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#101823] ring-[0.2px] ring-red-500 z-10">
               <motion.h1
                 className='text-red-500 lg:text-4xl md:text-3xl text-2xl font-semibold mb-2 sm:mb-0 text-center'
               >
@@ -114,7 +122,7 @@ export default function SignupFormDemo() {
                 {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
               </LabelInputContainer>
               <button
-                className="bg-gradient-to-br relative group/btn from-zinc-900 to-zinc-900 block bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+                className="bg-gradient-to-br relative group/btn bg-[#192536] block w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
                 type="submit"
               >
                 Sign In &rarr;
@@ -125,7 +133,7 @@ export default function SignupFormDemo() {
 
               <div className="flex flex-col space-y-4">
                 <button
-                  className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900"
+                  className=" relative group/btn bg-[#192536] flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input "
                   type="button"
                   onClick={handle42}
                 >
@@ -136,7 +144,7 @@ export default function SignupFormDemo() {
                   <BottomGradient />
                 </button>
                 <button
-                  className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900"
+                  className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full  rounded-md h-10 font-medium shadow-input bg-[#192536]"
                   type="button"
                   onClick={handleGoogle}
                 >
@@ -182,11 +190,4 @@ const LabelInputContainer = ({
   );
 };
 
-export const BgWrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
-      <Boxes />
-      {children}
-    </div>
-  );
-}
+

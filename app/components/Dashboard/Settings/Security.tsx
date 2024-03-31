@@ -2,6 +2,11 @@
 import React, {  useEffect, useState } from 'react'
 import { useGlobalState } from '../../Sign/GlobalState'
 import Image from 'next/image'
+
+import { cn } from "@/components/cn";
+import { Label } from "@/components/ui/newlabel";
+import { Input } from "@/components/ui/newinput";
+
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import EnterCode from './otp'
@@ -115,22 +120,16 @@ const Security = () => {
       <form >
           <div className='flex justify-between items-end gap-20'>
             <div className='flex flex-col gap-2 w-1/3'>
-              <label className='text-white font-light'>Old password</label>
-              <input
-                type='password'
-                placeholder='old password'
-                className='bg-[#7d7d7d4f] px-4 py-2 rounded-2xl focus:outline-none focus:ring-red-400/[0.5] text-white font-light w-full'
-                // {...register('name')}
-              />
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="old password">Old password</Label>
+                <Input id="old password" placeholder="Enter your old password" type="text"/>
+              </LabelInputContainer>
             </div>
             <div className='flex flex-col gap-2 w-1/3'>
-              <label className='text-white font-light'>New password</label>
-              <input
-                type='password'
-                placeholder='new password'
-                className='bg-[#7d7d7d4f] px-4 py-2 rounded-2xl focus:outline-none focus:ring-red-400/[0.5] text-white font-light w-full'
-                // {...register('username')}
-              />
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="new password">New password</Label>
+                <Input id="new password" placeholder="Enter your new password" type="text"/>
+              </LabelInputContainer>
             </div>
           </div>
           <div className='flex flex-col mt-10 w-1/6'>
@@ -194,33 +193,18 @@ const Security = () => {
 }
 
 export default Security
-    // <div className=''>
-    //   <button
-    //     onClick={enable}
-    //     className='bg-gray-700 text-white font-bold py-2 px-4 rounded'
-    //   >
-    //     { user?.twoFa ? 'Disable 2fa' : 'Enable 2fa' }
-    //   </button>
-    //   <button onClick={enable}>Open Popup</button>
-    //   {showPopup && (
-    //     <Popup isVisible={showPopup} seter={setShowPopup} reset={reset}>
-    //       <div className='flex flex-col items-center gap-4'>
-    //         { qrcode && <img src={qrcode} alt='qrcode' /> }
-    //         <form onSubmit={handleSubmit(onSubmit)}>
-    //           <input
-    //             type='text'
-    //             autoComplete="off"
-    //             {...register("value")}
-    //             className="rounded-xl w-[80%] px-4 text-[#000000] font-semibold text-lg xm:text-xl md:text-2xl border-b-2 tracking-wider"
-    //           />
-    //           <button
-    //             type="submit"
-    //             className="mt-4 p-2 bg-green-500 hover:bg-green-700 text-white w-full rounded-md"
-    //           >
-    //             Submit
-    //           </button>
-    //         </form>
-    //       </div>
-    //     </Popup>
-    //   )}
-    // </div>
+
+
+const LabelInputContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("flex flex-col space-y-2 w-full", className)}>
+      {children}
+    </div>
+  );
+};

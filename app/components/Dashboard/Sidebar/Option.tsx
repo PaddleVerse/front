@@ -65,7 +65,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
             <div className="relative"> 
               <PiChatCircleTextLight className="hover:bg-[#34202A]"/>
               {notifed && (
-                <div className="absolute bg-gray-900 p-1 rounded-full top-0 right-0">
+                <div className="absolute bg-[#34202A] p-1 rounded-full top-0 right-0">
                   <div className="bg-red-500 rounded-full w-[6px] h-[6px]"></div>
                 </div>
               )}

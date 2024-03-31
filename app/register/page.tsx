@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { BgWrapper } from "../page";
+// import { BgWrapper } from "../page";
 
 import {
   IconBrandGithub,
@@ -50,7 +50,7 @@ export default function SignupFormDemo() {
 
   function onSubmit(values : any) {
     setIs(isValidValues(values));
-    console.log(values);
+    // console.log(values);
     axios.post("http://localhost:8080/auth/signup", {
       name: values.name,
       nickname: values.nickname,
@@ -157,7 +157,7 @@ export default function SignupFormDemo() {
   );
 }
 
-const BottomGradient = () => {
+export const BottomGradient = () => {
   return (
     <>
       <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
