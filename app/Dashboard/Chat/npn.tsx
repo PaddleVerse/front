@@ -18,6 +18,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const [update, setUpdate] = useState(true);
   const [chatList, setChatList] = useState([]);
   const { state, dispatch } = useGlobalState();
+  const { user, socket } = state;
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
   const { show } = state;
@@ -26,11 +27,11 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   }, [show]);
 
   useEffect(() => {
-    if (state?.user) {
+    if (user) {
       const fetchChatList = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:8080/chat/chatlist/${state?.user?.id}`
+            `http://localhost:8080/chat/chatlist/${user?.id}`
           );
           setChatList(res.data);
         } catch (error) {
@@ -41,8 +42,8 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     }
     return () => {
       setUpdate(false);
-    }
-  }, [update]);
+    };
+  }, [update, chatList]);
 
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
@@ -60,26 +61,41 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   }, [handleEscapeKeyPress]);
 
   useEffect(() => {
-    state?.socket?.on("update", (data: any) => {
+    socket?.on("update", (data: any) => {
+      // console.log(data);
+      if (user) {
+        const fetchChatList = async () => {
+          try {
+            const res: any = await axios.get(
+              `http://localhost:8080/chat/chatlist/${user?.id}`
+            );
+            // setChatList([...chatList, res.data]);
+            setChatList(res.data);
+          } catch (error) {
+            toast.error("failed to fetch chat list");
+          }
+        };
+        fetchChatList();
+      }
       setUpdate(true);
-    })
+      // setChatList([]);
+    });
     return () => {
-      state?.socket?.off("update");
-      setUpdate(false);
+      socket?.off("update");
     };
-  },[state?.socket]);
+  }, [socket]);
 
   useEffect(() => {
-    state?.socket?.on("ok", (data: any) => {
+    socket?.on("ok", (data: any) => {
       if (data === null) return;
       setUpdate(true);
     });
-    state?.socket?.emit("refresh");
+    socket?.emit("refresh");
     return () => {
       setUpdate(false);
-      state?.socket?.off("ok");
+      socket?.off("ok");
     };
-  }, [state?.socket]);
+  }, [socket]);
 
   const handleClick = () => {
     setModlar(false);
@@ -200,6 +216,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                           online={online}
                           setOnline={setOnline}
                           handleClick={handleSwitching}
+                          update={update}
                         ></ChatCard>
                       );
                     })}

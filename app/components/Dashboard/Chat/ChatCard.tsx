@@ -40,62 +40,66 @@ export const ChatCard = (props: any) => {
       fetchData();
     }
     return () => {};
-  }, []);
+  }, [props]);
 
-  useEffect(() => {
-    state?.socket?.on("update", (data: any) => {
-        if (props.value.user) {
-          const fetchData = async () => {
-            try {
-              const res = await axios.get(
-                `http://localhost:8080/conversations/lastMessage?uid1=${props.value.id}&uid2=${props.self.id}`
-              );
-              setMessage(res.data);
-            } catch (error) {
-              toast.error("failed to fetch user message for user");
-            }
-          };
-          fetchData();
-        } else {
-          const fetchData = async () => {
-            try {
-              const res = await axios.get(
-                `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
-              );
-              setMessage(res.data);
-            } catch (error) {
-              toast.error("failed to fetch messages for channel");
-            }
-          };
-          fetchData();
-        }
-    });
-    return () => {
-      state?.socket?.off("update");
-    };
-  }, [state?.socket]);
+  // useEffect(() => {
+  //   state?.socket?.on("update", (data: any) => {
+  //       if (props.value.user) {
+  //         const fetchData = async () => {
+  //           // console.log("fetching data for: ", props.value.name);
+  //           try {
+  //             const res = await axios.get(
+  //               `http://localhost:8080/conversations/lastMessage?uid1=${props.value.id}&uid2=${props.self.id}`
+  //             );
+  //             setMessage(res.data);
+  //             console.log("message: ", res.data);
+  //           } catch (error) {
+  //             toast.error("failed to fetch user message for user");
+  //           }
+  //         };
+  //         fetchData();
+  //       } else {
+  //         const fetchData = async () => {
+  //           // console.log("fetching data for: ", props.value.name);
+  //           try {
+  //             const res = await axios.get(
+  //               `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
+  //             );
+  //             setMessage(res.data);
+  //             console.log("message in channel for " + props.value.name +": ", res.data);
+  //           } catch (error) {
+  //             toast.error("failed to fetch messages for channel");
+  //           }
+  //         };
+  //         fetchData();
+  //       }
+  //   });
+  //   return () => {
+  //     state?.socket?.off("update");
+  //   };
+  // }, [state?.socket]);
 
-  useEffect(() => {
-    state?.socket?.on("channelupdate", (data: any) => {
-      if (!props.value.user) {
-        const fetchData = async () => {
-          try {
-            const res = await axios.get(
-              `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
-            );
-            setMessage(res.data);
-          } catch (error) {
-            toast.error("failed to get channel messages chatcard");
-          }
-        };
-        fetchData();
-      }
-    });
+  // useEffect(() => {
+  //   state?.socket?.on("channelupdate", (data: any) => {
+  //     if (!props.value.user) {
+  //       const fetchData = async () => {
+  //         try {
+  //           const res = await axios.get(
+  //             `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
+  //           );
+  //           setMessage(res.data);
+  //         } catch (error) {
+  //           toast.error("failed to get channel messages chatcard");
+  //         }
+  //       };
+  //       fetchData();
+  //     }
+  //   });
 
-    return () => {
-      state?.socket?.off("channelupdate");
-    };
-  }, [state?.socket]);
+  //   return () => {
+  //     state?.socket?.off("channelupdate");
+  //   };
+  // }, [state?.socket]);
 
   return (
     <motion.div
