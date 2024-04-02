@@ -3,14 +3,14 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/type";
-import { getTime } from "@/app/utils";
+import { getShortDate, getTime } from "@/app/utils";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "../../Sign/GlobalState";
 export const ChatCard = (props: any) => {
   const [msg, setMessage] = useState<message | null>();
-  const [update, setUpdate] = useState(false);
-  const { state, dispatch } = useGlobalState();
+  // const [update, setUpdate] = useState(false);
+  // const { state, dispatch } = useGlobalState();
   const router = useRouter();
 
   useEffect(() => {
@@ -41,65 +41,6 @@ export const ChatCard = (props: any) => {
     }
     return () => {};
   }, [props]);
-
-  // useEffect(() => {
-  //   state?.socket?.on("update", (data: any) => {
-  //       if (props.value.user) {
-  //         const fetchData = async () => {
-  //           // console.log("fetching data for: ", props.value.name);
-  //           try {
-  //             const res = await axios.get(
-  //               `http://localhost:8080/conversations/lastMessage?uid1=${props.value.id}&uid2=${props.self.id}`
-  //             );
-  //             setMessage(res.data);
-  //             console.log("message: ", res.data);
-  //           } catch (error) {
-  //             toast.error("failed to fetch user message for user");
-  //           }
-  //         };
-  //         fetchData();
-  //       } else {
-  //         const fetchData = async () => {
-  //           // console.log("fetching data for: ", props.value.name);
-  //           try {
-  //             const res = await axios.get(
-  //               `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
-  //             );
-  //             setMessage(res.data);
-  //             console.log("message in channel for " + props.value.name +": ", res.data);
-  //           } catch (error) {
-  //             toast.error("failed to fetch messages for channel");
-  //           }
-  //         };
-  //         fetchData();
-  //       }
-  //   });
-  //   return () => {
-  //     state?.socket?.off("update");
-  //   };
-  // }, [state?.socket]);
-
-  // useEffect(() => {
-  //   state?.socket?.on("channelupdate", (data: any) => {
-  //     if (!props.value.user) {
-  //       const fetchData = async () => {
-  //         try {
-  //           const res = await axios.get(
-  //             `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
-  //           );
-  //           setMessage(res.data);
-  //         } catch (error) {
-  //           toast.error("failed to get channel messages chatcard");
-  //         }
-  //       };
-  //       fetchData();
-  //     }
-  //   });
-
-  //   return () => {
-  //     state?.socket?.off("channelupdate");
-  //   };
-  // }, [state?.socket]);
 
   return (
     <motion.div
@@ -155,7 +96,8 @@ export const ChatCard = (props: any) => {
           {msg && getTime(msg.createdAt)}
         </p>
         <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
-          Feb 1{/** this should change to get the date only */}
+          {/* Feb 1* this should change to get the date only */}
+          {msg && getShortDate(new Date(msg.createdAt))}
         </p>
       </div>
     </motion.div>
