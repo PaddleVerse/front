@@ -2,9 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { getShortDate, getTime } from "@/app/utils";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ChatCard = (props: any) => {
   const router = useRouter();
+  const clt = useQueryClient();
 
   return (
     <motion.div
@@ -12,10 +14,12 @@ export const ChatCard = (props: any) => {
       onClick={(e) => {
         e.preventDefault();
         if (props.value.user === false) {
+          // clt.invalidateQueries({queryKey: ["targetChannel"]})
           router.push(`/Dashboard/Chat/channel/${props?.value?.id}`);
         } else {
           router.push(`/Dashboard/Chat/dm/${props.value.id}`);
         }
+        clt.invalidateQueries({queryKey: ["targetUser", "targetChannel"]})
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}

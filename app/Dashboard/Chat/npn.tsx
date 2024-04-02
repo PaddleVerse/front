@@ -36,7 +36,6 @@ const fetchChatList = async (userId: string) => {
       }
     })
   );
-  console.log("the data with messages is: ", dataWithMessages);
   return dataWithMessages;
 };
 
@@ -88,13 +87,10 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     socket?.on("ok", (data: any) => {
       if (data === null) return;
-      // need to use data revalidation
-      // setUpdate(true);
+      clt.invalidateQueries({ queryKey: ["chatList"] });
     });
     socket?.emit("refresh");
     return () => {
-      // need to use data revalidation
-      // setUpdate(false);
       socket?.off("ok");
     };
   }, [socket]);
@@ -122,7 +118,6 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const tablet = useWindowSize() < 769;
 
   return (
-    // <QueryClientProvider client={queryClient}>
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
         {modlar ? (
@@ -229,7 +224,6 @@ const Page = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
     </div>
-    // </QueryClientProvider>
   );
 };
 

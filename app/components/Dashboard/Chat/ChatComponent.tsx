@@ -24,66 +24,66 @@ const ChatComponent = ({
   const { socket, user } = state;
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    if (user) {
-      const fetchDataChannel = async () => {
-        try {
-          const mes = await axios.get(
-            `http://localhost:8080/channels/messages/${p?.id!}?uid=${user?.id!}`
-          );
-          setMessages(mes.data);
-        } catch (error) {
-          toast.error("failed to fetch messages");
-        }
-      };
-      const fetchDataDM = async () => {
-        try {
-          const mes = await axios.get(
-            `http://localhost:8080/conversations/messages?uid1=${p?.id!}&uid2=${user?.id!}`
-          );
-          setMessages(mes.data);
-        } catch (error) {
-          toast.error("failed to fetch messages");
-        }
-      };
-      if (channel) {
-        fetchDataChannel();
-      } else {
-        fetchDataDM();
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     const fetchDataChannel = async () => {
+  //       try {
+  //         const mes = await axios.get(
+  //           `http://localhost:8080/channels/messages/${p?.id!}?uid=${user?.id!}`
+  //         );
+  //         setMessages(mes.data);
+  //       } catch (error) {
+  //         toast.error("failed to fetch messages");
+  //       }
+  //     };
+  //     const fetchDataDM = async () => {
+  //       try {
+  //         const mes = await axios.get(
+  //           `http://localhost:8080/conversations/messages?uid1=${p?.id!}&uid2=${user?.id!}`
+  //         );
+  //         setMessages(mes.data);
+  //       } catch (error) {
+  //         toast.error("failed to fetch messages");
+  //       }
+  //     };
+  //     if (channel) {
+  //       fetchDataChannel();
+  //     } else {
+  //       fetchDataDM();
+  //     }
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    socket.on("update", (data: any) => {
-      if (channel) {
-        const fetchDataChannel = async () => {
-          try {
-            const mes = await axios.get(
-              `http://localhost:8080/channels/messages/${p?.id!}?uid=${user?.id!}`
-            );
-            setMessages(mes.data);
-          } catch (error) {
-            toast.error("failed to fetch messages");
-          }
-        };
-        fetchDataChannel();
-      }
-      else if (us) {
-        const fetchDataDM = async () => {
-          try {
-            const mes = await axios.get(
-              `http://localhost:8080/conversations/messages?uid1=${p?.id!}&uid2=${user?.id!}`
-            );
-            setMessages(mes.data);
-          } catch (error) {
-            toast.error("failed to fetch messages");
-          }
-        };
-        fetchDataDM();
-      }
-    })
-  }, [socket]);
+  // useEffect(() => {
+  //   socket?.on("update", (data: any) => {
+  //     if (channel) {
+  //       const fetchDataChannel = async () => {
+  //         try {
+  //           const mes = await axios.get(
+  //             `http://localhost:8080/channels/messages/${p?.id!}?uid=${user?.id!}`
+  //           );
+  //           setMessages(mes.data);
+  //         } catch (error) {
+  //           toast.error("failed to fetch messages");
+  //         }
+  //       };
+  //       fetchDataChannel();
+  //     }
+  //     else if (us) {
+  //       const fetchDataDM = async () => {
+  //         try {
+  //           const mes = await axios.get(
+  //             `http://localhost:8080/conversations/messages?uid1=${p?.id!}&uid2=${user?.id!}`
+  //           );
+  //           setMessages(mes.data);
+  //         } catch (error) {
+  //           toast.error("failed to fetch messages");
+  //         }
+  //       };
+  //       fetchDataDM();
+  //     }
+  //   })
+  // }, [socket]);
 
   useEffect(() => {
     const container: any = containerRef.current;

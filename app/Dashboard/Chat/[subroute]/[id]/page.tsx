@@ -1,14 +1,8 @@
 "use client";
 import ReactLoading from "react-loading";
-import React, {
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { channel, message, participants, user } from "../../type";
+
 import { IoSendOutline } from "react-icons/io5";
 import Image from "next/image";
 import { OnlinePreview } from "@/app/components/Dashboard/Chat/onlinePreview";
@@ -20,79 +14,75 @@ import { CiCirclePlus } from "react-icons/ci";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useSwipeable } from "react-swipeable";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-import { Socket } from "socket.io-client";
+import { useParams, useRouter } from "next/navigation";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+
+const FetchUser = async (router: any) => {
+  if (router.subroute === "dm") {
+    const res = await axios.get(`http://localhost:8080/user/${router.id}`);
+    console.log(res.data);
+    return res.data;
+  }
+  return null;
+};
+
+const FetchChannel = async (router: any) => {
+  if (router.subroute === "channel") {
+    const res = await axios.get(`http://localhost:8080/channels/${router.id}`);
+    console.log(res.data);
+    return res.data;
+  }
+  return null;
+};
 
 const Page = (props: any) => {
-  const parameters = useParams();
-  const searchParam = useSearchParams();
+  const clt = useQueryClient();
   const router = useRouter();
+  const param = useParams();
   const { register } = useForm();
   const [channelManagement, setChannelManagement] = useState(false);
   const { state, dispatch } = useGlobalState();
+  const { user, socket } = state;
   const [update, setUpdate] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const inputMessage = useRef<HTMLInputElement | null>(null);
-  const [targetUser, setTargetUser] = useState<user | null>(null);
-  const [targetChannel, setTargetChannel] = useState<channel | null>(null);
-  // const containerRef = useRef(null);
-  useEffect(() => {
-    if (state?.user) {
-      if (parameters.subroute === "dm") {
-        const fetchData = async () => {
-          try {
-            const pageUser = await axios.get(
-              `http://localhost:8080/user/${parameters?.id!}`
-            );
-            setTargetUser(pageUser.data);
-          } catch (error) {
-            toast.error("failed to fetch user");
-          }
-        };
-        fetchData();
-      } else if (parameters.subroute === "channel") {
-        const fetchData = async () => {
-          try {
-            const channelData = await axios.get(
-              `http://localhost:8080/channels/${parameters!.id!}`
-            );
-            setTargetChannel(channelData.data);
-          } catch (error) {
-            toast.error("failed to fetch channel");
-          }
-        };
-        fetchData();
-      }
-    }
-    return () => {
-      setUpdate(false);
-    };
-  }, [parameters, update]);
+
+  const {
+    data: targetUser,
+    error: userError,
+    isLoading: userLoading,
+  } = useQuery({
+    queryKey: ["targetUser"],
+    queryFn: () => FetchUser(param),
+  });
+  const {
+    data: targetChannel,
+    error: channelError,
+    isLoading: channelLoading,
+  } = useQuery({
+    queryKey: ["targetChannel"],
+    queryFn: () => FetchChannel(param),
+  });
 
   useEffect(() => {
-    state?.socket?.on("ok", (data: any) => {
+    socket?.on("update", (data: any) => {
+      clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
+    })
+    return () => {
+      socket?.off("update");
+    };
+  },[socket])
+
+  useEffect(() => {
+    socket?.on("ok", (data: any) => {
       if (data === null) return;
-      setUpdate(true);
+      clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
     });
-    state?.socket?.emit("refresh");
+    socket?.emit("refresh");
     return () => {
-      state?.socket?.off("ok");
+      socket?.off("ok");
     };
-  }, [state?.socket]);
-
-  // useEffect(() => {
-  //   state?.socket?.on("update", (data: any) => {
-  //     const container: any = containerRef.current;
-  //     if (container) {
-  //       container.scrollTop = container.scrollHeight;
-  //     }
-  //   });
-  // }, [state?.socket]);
+  }, [socket]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
@@ -118,7 +108,7 @@ const Page = (props: any) => {
           user1: state.user.id,
         };
         const res = await axios.post(`http://localhost:8080/message`, message);
-        state?.socket?.emit("channelmessage", {
+        socket?.emit("channelmessage", {
           roomName: targetChannel.name,
           user: state?.user,
         });
@@ -137,7 +127,7 @@ const Page = (props: any) => {
           user2: state.user.id,
           user1: targetUser.id,
         });
-        state?.socket?.emit("dmmessage", {
+        socket?.emit("dmmessage", {
           reciever: targetUser?.id!,
           sender: state?.user?.id!,
         });
@@ -148,10 +138,6 @@ const Page = (props: any) => {
     inputMessage.current!.value = "";
     return (e: FormEvent<HTMLFormElement>) => {};
   };
-
-  if (state?.user === null) {
-    return;
-  }
 
   return (
     <>
@@ -197,19 +183,19 @@ const Page = (props: any) => {
                 handlers={handlers}
                 us={true}
                 channel={false}
-                globalStateUserId={state!.user!.id!}
+                globalStateUserId={user?.id!}
               />
             ) : !channelManagement ? (
               <ChatComponent
                 handlers={handlers}
                 us={false}
                 channel={true}
-                globalStateUserId={state!.user!.id!}
+                globalStateUserId={user?.id!}
               />
             ) : (
               <ChannelManagement
                 channel={targetChannel!}
-                user={state!.user!}
+                user={user!}
                 update={setUpdate}
               />
             )}
