@@ -1,46 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { message } from "@/app/Dashboard/Chat/type";
 import { getShortDate, getTime } from "@/app/utils";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useGlobalState } from "../../Sign/GlobalState";
-export const ChatCard = (props: any) => {
-  const [msg, setMessage] = useState<message | null>();
-  // const [update, setUpdate] = useState(false);
-  // const { state, dispatch } = useGlobalState();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (props.value.user) {
-      const fetchData = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:8080/conversations/lastMessage?uid1=${props.value.id}&uid2=${props.self.id}`
-          );
-          setMessage(res.data);
-        } catch (error) {
-          toast.error("failed to fetch user message for user");
-        }
-      };
-      fetchData();
-    } else {
-      const fetchData = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:8080/channels/messages/lastMessage/${props.value.id}?uid=${props.self.id}`
-          );
-          setMessage(res.data);
-        } catch (error) {
-          toast.error("failed to fetch messages for channel");
-        }
-      };
-      fetchData();
-    }
-    return () => {};
-  }, [props]);
+export const ChatCard = (props: any) => {
+  const router = useRouter();
 
   return (
     <motion.div
@@ -80,10 +44,10 @@ export const ChatCard = (props: any) => {
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
                 <p className="">
-                  {msg && msg?.content?.length >= 10
-                    ? msg?.content.slice(0, 10) + "..."
-                    : msg
-                    ? msg?.content
+                  {props.msg && props.msg?.content?.length >= 10
+                    ? props.msg?.content.slice(0, 10) + "..."
+                    : props.msg
+                    ? props.msg?.content
                     : null}
                 </p>
               </div>
@@ -93,11 +57,10 @@ export const ChatCard = (props: any) => {
       </div>
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm ">
-          {msg && getTime(msg.createdAt)}
+          {props.msg && getTime(props.msg.createdAt)}
         </p>
         <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
-          {/* Feb 1* this should change to get the date only */}
-          {msg && getShortDate(new Date(msg.createdAt))}
+          {props.msg && getShortDate(new Date(props.msg.createdAt))}
         </p>
       </div>
     </motion.div>

@@ -4,49 +4,90 @@ import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import axios, { Axios, AxiosError } from "axios";
+import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 import toast from "react-hot-toast";
-import { QueryClient, QueryClientProvider } from "react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 const inter = Inter({ subsets: ["latin"] });
 
 const queryClient = new QueryClient();
 
+// const fetchChatList = async (userId: string) => {
+//   const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
+//   const mapper = res.data.map((value: any) => {
+//     if (value.user) {
+//       const fetchMessage = async () => {
+//         return await axios.get(
+//           `http://localhost:8080/conversations/lastMessage?uid1=${value.id}&uid2=${self.id}`
+//         );
+//       }
+//       const results = fetchMessage();
+//       return {...value.data, msg: results};
+//     } else {
+//       const res = await axios.get(
+//         `http://localhost:8080/channels/messages/lastMessage/${value.id}?uid=${self.id}`
+//       );
+//       return res.data;
+//     }
+    
+//   });
+//   return res.data;
+// };
+
+const fetchChatList = async (userId: string) => {
+  const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
+  const dataWithMessages = await Promise.all(
+    res.data.map(async (value: any) => {
+      if (value.user) {
+        const messageRes = await axios.get(
+          `http://localhost:8080/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`
+        );
+        return { ...value, msg: messageRes.data };
+      } else {
+        const channelRes = await axios.get(
+          `http://localhost:8080/channels/messages/lastMessage/${value.id}?uid=${userId}`
+        );
+        return { ...value, msg: channelRes.data };
+      }
+    })
+  );
+  console.log("the data with messages is: ", dataWithMessages);
+  return dataWithMessages;
+};
+
 const Page = ({ children }: { children: React.ReactNode }) => {
   const [showMessage, setShowMessage] = useState(false);
-  const [online, setOnline] = useState(false);
-  const [update, setUpdate] = useState(true);
-  const [chatList, setChatList] = useState([]);
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
   const { show } = state;
+  const {
+    data: chatList,
+    isLoading: listLoading,
+    isError: listError,
+  } = useQuery({
+    queryFn: () => fetchChatList(user?.id),
+    queryKey: ["chatList"],
+  });
+  const clt = useQueryClient();
+
+
+
+
+
+
   useEffect(() => {
     !show && setShowMessage(false);
   }, [show]);
-
-  useEffect(() => {
-    if (user) {
-      const fetchChatList = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:8080/chat/chatlist/${user?.id}`
-          );
-          setChatList(res.data);
-        } catch (error) {
-          toast.error("failed to fetch chat list");
-        }
-      };
-      fetchChatList();
-    }
-    return () => {
-      setUpdate(false);
-    };
-  }, [update]);
 
   const handleEscapeKeyPress = useCallback((e: any) => {
     if (e.key === "Escape") {
@@ -64,37 +105,21 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   }, [handleEscapeKeyPress]);
 
   useEffect(() => {
-    socket?.on("update", (data: any) => {
-      if (user) {
-        const fetchChatList = async () => {
-          try {
-            const res: any = await axios.get(
-              `http://localhost:8080/chat/chatlist/${user?.id}`
-            );
-            console.log("hello at chat list update");
-            setChatList(res.data);
-          } catch (error) {
-            toast.error("failed to fetch chat list");
-          }
-        };
-        // fetchChatList();
-        setUpdate(true);
-      }
-    });
-    return () => {
-      socket?.off("update");
-      setUpdate(false);
-    };
-  }, [socket]);
+    socket?.on("update", (data: any)=> {
+      
+    })
+  }, [socket])
 
   useEffect(() => {
     socket?.on("ok", (data: any) => {
       if (data === null) return;
-      setUpdate(true);
+      // need to use data revalidation
+      // setUpdate(true);
     });
     socket?.emit("refresh");
     return () => {
-      setUpdate(false);
+      // need to use data revalidation
+      // setUpdate(false);
       socket?.off("ok");
     };
   }, [socket]);
@@ -122,7 +147,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const tablet = useWindowSize() < 769;
 
   return (
-    <QueryClientProvider>
+    // <QueryClientProvider client={queryClient}>
       <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
         <AnimatePresence>
           {modlar ? (
@@ -216,10 +241,8 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                             index={key}
                             value={value}
                             self={state.user}
-                            online={online}
-                            setOnline={setOnline}
                             handleClick={handleSwitching}
-                            update={update}
+                            msg={value.msg}
                           ></ChatCard>
                         );
                       })}
@@ -231,7 +254,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </div>
-    </QueryClientProvider>
+    // </QueryClientProvider>
   );
 };
 
