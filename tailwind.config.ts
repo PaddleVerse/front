@@ -49,7 +49,7 @@ module.exports = {
         /////////////////////////////////
         primaryColor: "#101823",
         secondaryColor: "#172234",
-        redColor: "#000000",
+        redColor: "#FF5866",
         greenColor:"#24D8AF",
         /////////////////////////////////
         buttonGray: "#808080",
