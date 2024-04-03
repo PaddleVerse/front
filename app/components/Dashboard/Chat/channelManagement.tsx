@@ -10,8 +10,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
-
-// this still needs work in terms of realtime and stuff, but the basic functionality is there
+import { useQueryClient } from "@tanstack/react-query";
 
 const ChannelManagement = ({
   channel,
@@ -32,6 +31,7 @@ const ChannelManagement = ({
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState("");
   const { state, dispatch } = useGlobalState();
+  const clt = useQueryClient()
   const { user: u, socket } = state;
 
   useEffect(() => {
@@ -85,6 +85,7 @@ const ChannelManagement = ({
       )
       .then((res) => {
         // emit to the server that the user left
+        clt.invalidateQueries({queryKey: ["chatList"]})
         router.push("/Dashboard/Chat");
       })
       .catch();

@@ -11,8 +11,6 @@ import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 import toast from "react-hot-toast";
 import {
-  QueryClient,
-  QueryClientProvider,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
@@ -77,6 +75,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
+      console.log("hello from chatList update");
       clt.invalidateQueries({queryKey: ["chatList"]});
     });
     return () => {
@@ -128,11 +127,11 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       </AnimatePresence>
       <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
         <div
-          className={`h-full w-full flex antialiased text-gray-200 bg-transparent rounded-xl ${inter.className}`}
-          style={{
-            backdropFilter: "blur(20px)",
-            backgroundColor: "rgba(13, 9, 10, 0.7)",
-          }}
+          className={`h-full w-full flex antialiased text-gray-200 bg-primaryColor rounded-xl ${inter.className}`}
+          // style={{
+          //   backdropFilter: "blur(20px)",
+          //   backgroundColor: "rgba(13, 9, 10, 0.7)",
+          // }}
         >
           <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">

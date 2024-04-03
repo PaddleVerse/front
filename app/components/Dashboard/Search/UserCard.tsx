@@ -1,25 +1,29 @@
-'use cient';
-import React from 'react'
-import { useRouter } from 'next/navigation';
-import { CardBody, CardContainer, CardItem } from '../../../../components/ui/3d-card';
-import Image from 'next/image';
+"use cient";
+import React from "react";
+import { useRouter } from "next/navigation";
+import {
+  CardBody,
+  CardContainer,
+  CardItem,
+} from "../../../../components/ui/3d-card";
+import Image from "next/image";
 
 interface Props {
-    user: any
+  user: any;
 }
 
-const UserCard = ({user}: Props) => {
+const UserCard = ({ user }: Props) => {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/Dashboard/Profile?id=${user.id}`); 
-  }
+    router.push(`/Dashboard/Profile?id=${user.id}`);
+  };
   return (
-    <div onClick={handleClick} className='cursor-pointer'>
+    <div onClick={handleClick} className="cursor-pointer">
       <CardContainer className="inter-var">
-        <CardBody className="relative group/card  hover:shadow-2xl hover:shadow-[#FF5866]/[0.1] bg-black border-[#FF4656]/[0.8] w-auto h-auto rounded-xl p-6 border">
+        <CardBody className="relative group/card  hover:shadow-2xl hover:shadow-redColor/[0.1] bg-black border-[#FF4656]/[0.8] w-auto h-auto rounded-xl p-6 border">
           <CardItem translateZ="100" className="w-full mt-4">
             <Image
-              src={user.picture ? user.picture :"/friend.png"}
+              src={user.picture ? user.picture : "/friend.png"}
               height="1000"
               width="1000"
               className="h-60 w-60 object-cover rounded-xl group-hover/card:shadow-xl"
@@ -37,7 +41,7 @@ const UserCard = ({user}: Props) => {
             <CardItem
               translateZ={20}
               as="div"
-              className="px-4 py-2 rounded-xl bg-[#34202A] text-[#FF5866] text-xs font-bold"
+              className="px-4 py-2 rounded-xl bg-[#34202A] text-redColor text-xs font-bold"
             >
               @{user?.username}
             </CardItem>
@@ -45,7 +49,7 @@ const UserCard = ({user}: Props) => {
         </CardBody>
       </CardContainer>
     </div>
-    )
-  }
-  
-  export default UserCard
+  );
+};
+
+export default UserCard;

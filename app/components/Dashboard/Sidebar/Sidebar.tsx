@@ -1,7 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FaChevronRight, FaPlus} from "react-icons/fa6";
+import { FaChevronRight, FaPlus } from "react-icons/fa6";
 import Option from "./Option";
 import ProfileUser from "./ProfileUser";
 import { useSwipeable } from "react-swipeable";
@@ -29,16 +29,14 @@ const image2 =
 //   },
 // };
 
-
-
-interface User{
-  username    : string,
-  name      : string,
-  picture   :string,
-  banner_picture :string 
-  status    :string,
-  level    : Number
-  createdAt : Date,
+interface User {
+  username: string;
+  name: string;
+  picture: string;
+  banner_picture: string;
+  status: string;
+  level: Number;
+  createdAt: Date;
 }
 
 const ProfileInfoVariants = {
@@ -59,9 +57,8 @@ function useWindowSize() {
   return size;
 }
 const Sidebar = () => {
-
   const { state, dispatch } = useGlobalState();
-  const user : any = state.user;
+  const user: any = state.user;
   const [expanded, setExpanded] = useState(true);
   const sidebarRef = useRef(null);
   const handlers = useSwipeable({
@@ -75,60 +72,62 @@ const Sidebar = () => {
     opened: { width: "270px" },
     closed: { width: tablet ? "1px" : "95px" },
   };
-  
+
   const getCookie = (name: string) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    
+
     if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(';').shift();
+      const cookieValue = parts.pop()?.split(";").shift();
       return cookieValue;
     } else {
       return undefined;
     }
   };
 
-
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
-    
+
     // get the access token from the cookie
     const accessToken = getCookie("access_token");
-    let socket : any = null;
-    if (accessToken)
-    {
-      
-        fetch("http://localhost:8080/auth/protected", {
-        method: 'GET',
+    let socket: any = null;
+    if (accessToken) {
+      fetch("http://localhost:8080/auth/protected", {
+        method: "GET",
         headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => {
+          return response.json();
         })
-        .then(response => { return response.json();})
-        .then(data => {
-          if (data || data.message !== "Unauthorized")
-          {
-            socket = io('http://localhost:8080', {query: { userId: data?.id } });
-            dispatch({type: 'UPDATE_SOCKET', payload: socket});
-            dispatch({type: 'UPDATE_USER', payload: data});
+        .then((data) => {
+          if (data || data.message !== "Unauthorized") {
+            socket = io("http://localhost:8080", {
+              query: { userId: data?.id },
+            });
+            dispatch({ type: "UPDATE_SOCKET", payload: socket });
+            dispatch({ type: "UPDATE_USER", payload: data });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Error during protected endpoint request", error);
         });
     }
     return () => {
-        socket?.disconnect();
+      socket?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
 
   return (
-    <div className={`flex relative lg:h-[fit-content] h-auto z-40 ${oswald.className}`} {...handlers}>
-      <div className="h-screen w-full absolute bg-[#101823]"></div>
+    <div
+      className={`flex relative lg:h-[fit-content] h-auto z-40 ${oswald.className}`}
+      {...handlers}
+    >
+      <div className="h-screen w-full absolute bg-primaryColor"></div>
       <motion.div
         className="absolute border w-5 h-5 cursor-pointer z-40 lg:-right-[10px] -right-[15px] top-[80px] border-rightArrowColor lg:p-[2px] p-[20px]  text-rightArrowColor bg-rightArrowBg rounded-full flex items-center justify-center"
         onClick={() => setExpanded(!expanded)}
@@ -138,7 +137,7 @@ const Sidebar = () => {
         <FaChevronRight />
       </motion.div>
       <motion.div
-        className={`text-white bg-[#101823]  flex-col h-full ${
+        className={`text-white bg-primaryColor  flex-col h-full ${
           tablet && !expanded ? "" : "pl-6 pr-7 z-20"
         }   select-none sm:flex lg:relative absolute overflow-auto lg:overflow-visible no-scrollbar`}
         variants={containerVariants}
@@ -193,15 +192,14 @@ const Sidebar = () => {
             initial={{ paddingLeft: "29px" }}
             animate={{ paddingLeft: expanded ? "29px" : "8px" }}
             // transition={{ duration: expanded ? 1.5 : 0.1 }}
-          
           >
             MAIN
           </motion.span>
           <div>
             <motion.div>
-              <Option label={"Dashboard"} expanded={expanded}/>
-              <Option label={"Chat"} expanded={expanded}/>
-              <Option label={"Game"} expanded={expanded}/>
+              <Option label={"Dashboard"} expanded={expanded} />
+              <Option label={"Chat"} expanded={expanded} />
+              <Option label={"Game"} expanded={expanded} />
               <Option label={"Shop"} expanded={expanded} />
               <Option label={"Search"} expanded={expanded} />
             </motion.div>

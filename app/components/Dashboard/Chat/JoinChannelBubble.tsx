@@ -63,7 +63,7 @@ const JoinChannelBubble = ({
   };
   return (
     <div
-      className="flex ga-2 items-center col-start text-inherit relative"
+      className="flex gap-2 items-center col-start text-inherit relative py-3"
       onClick={(e) => {
         e.preventDefault();
         if (lock) {
@@ -74,9 +74,9 @@ const JoinChannelBubble = ({
       }}
     >
       <img
-        src="/badge1.png"
+        src={channel.picture}
         alt="image"
-        className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px] rounded-full"
+        className="lg:w-[47px] lg:h-[47px] md:w-[31px] md:h-[31px] rounded-full"
       />
       <div className="flex flex-col gap-1">
         <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
@@ -92,7 +92,7 @@ const JoinChannelBubble = ({
             />
           </form>
         ) : (
-          <p className="text-gray-400 xl:text-sm truncate md:tex  t-xs lg:max-w-full md:max-w-[120px]">
+          <p className="text-gray-400 xl:text-sm truncate md:tex  text-xs lg:max-w-full md:max-w-[120px] ">
             {channel.topic?.substring(0, 30) +
               (channel.topic?.length > 30 ? " ..." : "")}
           </p>

@@ -10,7 +10,7 @@ const roboto = Roboto({
 const OneGame_2 = ({ status }: { status: string }) => {
   return (
     <motion.div
-      className="rounded-md w-full sm:h-[70px] bg-gradient-to-r bg-[#172234] flex items-center justify-between px-4"
+      className="rounded-md w-full sm:h-[70px] bg-gradient-to-r bg-secondaryColor flex items-center justify-between px-4"
       whileHover={{ x: -5 }}
     >
       <div className="flex items-center justify-between 2xl:w-[42%] sm:w-[80%] w-[88%]">
@@ -20,7 +20,9 @@ const OneGame_2 = ({ status }: { status: string }) => {
             fill
             alt="img"
             sizes="w-auto h-auto"
-            className={`rounded-full ring-[2px] ${status === 'lose' ? ' ring-[#FF4656]':'ring-[#24D8AF]'}`}
+            className={`rounded-full ring-[2px] ${
+              status === "lose" ? " ring-[#FF4656]" : "ring-greenColor"
+            }`}
           />
         </div>
         <div className="flex flex-col items-center justify-center sm:leading-5 leading-2">
@@ -36,7 +38,7 @@ const OneGame_2 = ({ status }: { status: string }) => {
         <div className="flex flex-col items-center justify-center sm:leading-5 leading-2">
           <span
             className={`${
-              status === "win" ? "text-[#24D8AF]" : "text-[#FF4656]"
+              status === "win" ? "text-greenColor" : "text-[#FF4656]"
             } font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter`}
           >
             2.00KD
@@ -48,7 +50,7 @@ const OneGame_2 = ({ status }: { status: string }) => {
         <div className="flex flex-col items-start sm:leading-5 leading-2">
           <span
             className={`${
-              status === "win" ? "text-[#24D8AF]" : "text-[#FF4656]"
+              status === "win" ? "text-greenColor" : "text-[#FF4656]"
             } font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter`}
           >
             55%
@@ -61,10 +63,9 @@ const OneGame_2 = ({ status }: { status: string }) => {
           <span className="text-white font-semibold xl:text-[20px] text-[12px] sm:text-[17px] tracking-tight">
             149 Combat Score
           </span>
-            <span className="text-[#EBAD40] font-[500] text-[8px] xl:text-[14px] sm:text-[11px] tracking-tight">
-              MVP
-            </span>
-          
+          <span className="text-[#EBAD40] font-[500] text-[8px] xl:text-[14px] sm:text-[11px] tracking-tight">
+            MVP
+          </span>
         </div>
       </div>
       <div className="flex items-center sm:w-auto w-[25px] justify-center py-1 sm:px-[11px] sm:text-[15px] text-[11px] tracking-tight font-semibold rounded-md sm:bg-[#202B43]">
@@ -88,7 +89,7 @@ const OneGame_2 = ({ status }: { status: string }) => {
         <div className="flex flex-col items-start leading-5">
           <span
             className={`${
-              status === "lose" ? "text-[#24D8AF]" : "text-[#FF4656]"
+              status === "lose" ? "text-greenColor" : "text-[#FF4656]"
             } font-semibold xl:text-[20px] sm:text-[17px] tracking-tighter`}
           >
             55%
@@ -100,7 +101,7 @@ const OneGame_2 = ({ status }: { status: string }) => {
         <div className="flex flex-col items-center justify-center leading-5">
           <span
             className={`${
-              status === "lose" ? "text-[#24D8AF]" : "text-[#FF4656]"
+              status === "lose" ? "text-greenColor" : "text-[#FF4656]"
             } font-semibold xl:text-[20px] sm:text-[17px] tracking-tighter`}
           >
             2.00KD
@@ -125,7 +126,9 @@ const OneGame_2 = ({ status }: { status: string }) => {
             fill
             alt="img"
             sizes="w-auto h-auto"
-            className={`ring-[2px] ${status === 'win' ? ' ring-[#FF4656]':'ring-[#24D8AF]'} rounded-full`}
+            className={`ring-[2px] ${
+              status === "win" ? " ring-[#FF4656]" : "ring-greenColor"
+            } rounded-full`}
           />
         </div>
       </div>{" "}

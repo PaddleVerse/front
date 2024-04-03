@@ -15,7 +15,6 @@ import { set } from "react-hook-form";
 const gameNames = ["Overview", "Leaderboard", "Settings"];
 
 const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
-
   const [showElements, setShowElements] = useState(false);
   const [notifed, setNotifed] = useState(false);
   const pathname = usePathname();
@@ -29,9 +28,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
         setNotifed(true);
       });
     }
-  } , [socket]);
-
-
+  }, [socket]);
 
   const handleDashboardClick = () => {
     if (label === "Dashboard") {
@@ -62,8 +59,8 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
           {label === "Dashboard" ? (
             <RxDashboard className="hover:bg-[#34202A]" />
           ) : label === "Chat" ? (
-            <div className="relative"> 
-              <PiChatCircleTextLight className="hover:bg-[#34202A]"/>
+            <div className="relative">
+              <PiChatCircleTextLight className="hover:bg-[#34202A]" />
               {notifed && (
                 <div className="absolute bg-[#34202A] p-1 rounded-full top-0 right-0">
                   <div className="bg-red-500 rounded-full w-[6px] h-[6px]"></div>
@@ -77,7 +74,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
           ) : label === "Game" ? (
             <PiGameController className="hover:bg-[#34202A]" />
           ) : (
-          <RxDashboard />
+            <RxDashboard />
           )}
         </MainOptions>
       </motion.div>
@@ -147,12 +144,12 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
               >
                 <Link href={`/Dashboard/${game === "Overview" ? "" : game}`}>
                   <span
-                    className={`py-2 block ${!expanded ? 'ml-2':''} ${
+                    className={`py-2 block ${!expanded ? "ml-2" : ""} ${
                       lastSegment === game ||
                       (lastSegment === "Dashboard" && game === "Overview")
-                        ? "bg-[#34202A] text-[#FF5866]"
+                        ? "bg-[#34202A] text-redColor"
                         : ""
-                    }  w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-[#FF5866] text-buttonGray `}
+                    }  w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-redColor text-buttonGray `}
                   >
                     {game}
                   </span>

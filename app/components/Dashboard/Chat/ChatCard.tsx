@@ -14,7 +14,6 @@ export const ChatCard = (props: any) => {
       onClick={(e) => {
         e.preventDefault();
         if (props.value.user === false) {
-          // clt.invalidateQueries({queryKey: ["targetChannel"]})
           router.push(`/Dashboard/Chat/channel/${props?.value?.id}`);
         } else {
           router.push(`/Dashboard/Chat/dm/${props.value.id}`);

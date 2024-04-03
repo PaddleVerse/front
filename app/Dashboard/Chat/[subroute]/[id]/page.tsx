@@ -20,7 +20,6 @@ import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 const FetchUser = async (router: any) => {
   if (router.subroute === "dm") {
     const res = await axios.get(`http://localhost:8080/user/${router.id}`);
-    console.log(res.data);
     return res.data;
   }
   return null;
@@ -29,7 +28,6 @@ const FetchUser = async (router: any) => {
 const FetchChannel = async (router: any) => {
   if (router.subroute === "channel") {
     const res = await axios.get(`http://localhost:8080/channels/${router.id}`);
-    console.log(res.data);
     return res.data;
   }
   return null;
