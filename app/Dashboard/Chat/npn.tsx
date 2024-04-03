@@ -18,30 +18,6 @@ import {
 } from "@tanstack/react-query";
 const inter = Inter({ subsets: ["latin"] });
 
-const queryClient = new QueryClient();
-
-// const fetchChatList = async (userId: string) => {
-//   const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
-//   const mapper = res.data.map((value: any) => {
-//     if (value.user) {
-//       const fetchMessage = async () => {
-//         return await axios.get(
-//           `http://localhost:8080/conversations/lastMessage?uid1=${value.id}&uid2=${self.id}`
-//         );
-//       }
-//       const results = fetchMessage();
-//       return {...value.data, msg: results};
-//     } else {
-//       const res = await axios.get(
-//         `http://localhost:8080/channels/messages/lastMessage/${value.id}?uid=${self.id}`
-//       );
-//       return res.data;
-//     }
-    
-//   });
-//   return res.data;
-// };
-
 const fetchChatList = async (userId: string) => {
   const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
   const dataWithMessages = await Promise.all(
@@ -59,7 +35,7 @@ const fetchChatList = async (userId: string) => {
       }
     })
   );
-  console.log("the data with messages is: ", dataWithMessages);
+  // console.log("the data with messages is: ", dataWithMessages);
   return dataWithMessages;
 };
 
@@ -79,11 +55,6 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     queryKey: ["chatList"],
   });
   const clt = useQueryClient();
-
-
-
-
-
 
   useEffect(() => {
     !show && setShowMessage(false);
@@ -105,24 +76,24 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   }, [handleEscapeKeyPress]);
 
   useEffect(() => {
-    socket?.on("update", (data: any)=> {
-      
+    socket?.on("update", (data: any) => {
+      console.log("hello from update use Effect")
+      clt.invalidateQueries({
+        queryKey: ['chatList']
+      });
     })
-  }, [socket])
-
-  useEffect(() => {
     socket?.on("ok", (data: any) => {
       if (data === null) return;
-      // need to use data revalidation
-      // setUpdate(true);
+      clt.invalidateQueries({
+        queryKey: ['chatList']
+      });
     });
     socket?.emit("refresh");
     return () => {
-      // need to use data revalidation
-      // setUpdate(false);
       socket?.off("ok");
-    };
-  }, [socket]);
+      socket?.off("update")
+    }
+  }, [socket, clt]);
 
   const handleClick = () => {
     setModlar(false);
