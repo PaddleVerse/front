@@ -72,6 +72,7 @@ const ChannelManagement = ({
       .then((res) => {
         // emit to the server that the user left, it is better to emit to the server and get back the event
         // clt.invalidateQueries({queryKey: ["chatList"]})
+        socket.emit("leaveRoom", { user: user, roomName: channel.name });
         router.push("/Dashboard/Chat");
       })
       .catch();
