@@ -8,17 +8,26 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-const FetchMessages = async (type: boolean, p: any, userId: string) => {
-  if (!type) {
+const FetchMessages = async (p: any, userId: string) => {
+  if (p.subroute == "channel") {
     const mes = await axios.get(
-      `http://localhost:8080/channels/messages/${p?.id!}?uid=${userId!}`
+      `http://localhost:8080/channels/messages/${p?.id!}?uid=${userId}`
+    );
+    console.log("the unsorted data: ", mes.data);
+
+    const sortedMessages = mes.data.sort((a: message, b: message) => {
+      a?.id! - b?.id!;
+    });
+
+    console.log("the sorted data: ", sortedMessages);
+
+    return mes.data;
+  } else {
+    const mes = await axios.get(
+      `http://localhost:8080/conversations/messages?uid1=${p?.id!}&uid2=${userId}`
     );
     return mes.data;
   }
-  const mes = await axios.get(
-    `http://localhost:8080/conversations/messages?uid1=${p?.id!}&uid2=${userId!}`
-  );
-  return mes.data;
 };
 
 const ChatComponent = ({
@@ -41,19 +50,14 @@ const ChatComponent = ({
     error: messagesError,
     isLoading: messagesLoading,
   } = useQuery<message[]>({
-    queryFn: () => FetchMessages(us, p, user?.id!),
+    queryFn: () => FetchMessages(p, user?.id!),
     queryKey: ["messages"],
   });
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    socket?.on("update", (data: any) => {
-      clt.invalidateQueries({ queryKey: ["messages"] });
-    });
-    return () => {
-      socket?.off("update");
-    };
-  }, [socket]);
+  // const { data: messages } = useQuery<message[]>({
+  //   queryKey: ["messages"],
+  //   queryFn: () => FetchMessages(p, user?.id),
+  // });
 
   useEffect(() => {
     const container: any = containerRef.current;
@@ -62,7 +66,7 @@ const ChatComponent = ({
     }
   }, [messages]);
 
-  if (messages?.length === 0) {
+  if (messages && messages.length === 0) {
     return (
       <div
         className="w-full h-full overflow-y-scroll no-scrollbar"

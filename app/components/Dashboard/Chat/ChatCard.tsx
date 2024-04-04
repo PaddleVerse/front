@@ -18,7 +18,7 @@ export const ChatCard = (props: any) => {
         } else {
           router.push(`/Dashboard/Chat/dm/${props.value.id}`);
         }
-        clt.invalidateQueries({queryKey: ["targetUser", "targetChannel"]})
+        clt.invalidateQueries({queryKey: ["targetChannel", "targetUser"]})
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}

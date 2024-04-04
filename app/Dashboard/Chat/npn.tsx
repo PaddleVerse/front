@@ -16,7 +16,6 @@ import {
 } from "@tanstack/react-query";
 const inter = Inter({ subsets: ["latin"] });
 
-
 const fetchChatList = async (userId: string) => {
   const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
   const dataWithMessages = await Promise.all(
@@ -34,6 +33,7 @@ const fetchChatList = async (userId: string) => {
       }
     })
   );
+  // console.log("the data with messages is: ", dataWithMessages);
   return dataWithMessages;
 };
 
@@ -75,24 +75,26 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
-      console.log("hello from chatList update");
-      clt.invalidateQueries({queryKey: ["chatList"]});
-    });
-    return () => {
-      socket?.off("update");
-    };
-  }, [socket]);
-
-  useEffect(() => {
+      console.log("hello from update use Effect")
+      clt.invalidateQueries({
+        queryKey: ['chatList']
+      });
+      clt.invalidateQueries({
+        queryKey: ['messages']
+      });
+    })
     socket?.on("ok", (data: any) => {
       if (data === null) return;
-      clt.invalidateQueries({ queryKey: ["chatList"] });
+      clt.invalidateQueries({
+        queryKey: ['chatList']
+      });
     });
     socket?.emit("refresh");
     return () => {
       socket?.off("ok");
-    };
-  }, [socket]);
+      socket?.off("update")
+    }
+  }, [socket, clt]);
 
   const handleClick = () => {
     setModlar(false);
