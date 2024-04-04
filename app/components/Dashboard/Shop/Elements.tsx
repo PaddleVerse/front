@@ -61,7 +61,7 @@ const Elements = () => {
           }}
         >
           <div className="flex flex-col w-full h-full relative 2xl:px-[65px] xl:px-[35px] sm:px-[20px] px-[10px]">
-            <div className="w-full grid grid-flow-col-1 gap-7 sm:grid-cols-3 place-items-center mt-6">
+            <div className="w-full grid grid-flow-col-1 gap-7 md:grid-cols-3 place-items-center mt-6">
               <BigCard
                 infos={BigCardinfos[0]}
                 handleClick={handleClick}
