@@ -1,8 +1,15 @@
 import React from "react";
 import Image from "next/image";
-import { inter, rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
-
+import { Inter, Rajdhani } from "next/font/google";
+const rajdhani = Rajdhani({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 const Header = () => {
   return (
     <div

@@ -1,10 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { inter, rajdhani } from "@/app/utils/fontConfig";
 
 import { motion } from "framer-motion";
 import { cn } from "@/components/cn";
-
+import { Inter, Rajdhani } from "next/font/google";
+const rajdhani = Rajdhani({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 const BigCard = ({ gameMode }: { gameMode: string }) => {
   return (
     <div className=" 2xl:h-[850px] xl:h-[550px] h-[600px] sm:h-[700px] sm:w-[95%] w-[87%] overflow-hidden cursor-pointer rounded-lg relative">

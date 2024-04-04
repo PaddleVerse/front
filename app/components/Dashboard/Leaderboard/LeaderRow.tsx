@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { cn } from "@/components/cn";
+import { cn } from '@/components/cn';
 interface Props {
   user: any;
   index: number;
@@ -15,18 +15,19 @@ const LeaderRow = ({ user, index }: Props) => {
   const { state } = useGlobalState();
   const User: any = state.user;
 
+
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${user.id}`);
   };
   return (
     <motion.tr
       className={cn(
-        "text-white sm:text-[12px] text-[10px] cursor-pointer",
-        user.id % 2 === 0 ? "bg-primaryColor" : "bg-[#161F2F]"
+        'text-white sm:text-[12px] text-[10px] cursor-pointer',
+        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]'
       )}
       onClick={handleClick}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y:-20 }}
+      animate={{ opacity: 1, y:0 }}
       transition={{ delay: 0.25 * index }}
     >
       <td scope="row" className=" sm:py-[7px] font-medium text-[14px]">
@@ -50,17 +51,17 @@ const LeaderRow = ({ user, index }: Props) => {
           </div>
         ) : user.id === 3 ? (
           <div className="flex items-center justify-center">
-            <Image
-              width={28}
-              height={28}
-              src="/3_leaderboard.svg"
-              alt="image"
+          <Image
+            width={28}
+            height={28}
+            src='/3_leaderboard.svg'
+            alt="image"
+            
             />
-          </div>
+        </div>
         ) : (
-          <span className="flex items-center justify-center text-[17px] font-semibold">
-            {user.id}
-          </span>
+          <span className="flex items-center justify-center text-[17px] font-semibold">{user.id}</span>
+          
         )}
       </td>
       <td className="sm:py-[7px] text-[13px] flex items-center gap-2 font-[500] text-center">
