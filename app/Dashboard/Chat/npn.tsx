@@ -81,6 +81,9 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       clt.invalidateQueries({
         queryKey: ['chatList']
       });
+      clt.invalidateQueries({
+        queryKey: ['messages']
+      });
     })
     socket?.on("ok", (data: any) => {
       if (data === null) return;

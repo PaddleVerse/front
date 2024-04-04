@@ -20,13 +20,29 @@ import { CiCirclePlus } from "react-icons/ci";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useSwipeable } from "react-swipeable";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-import { Socket } from "socket.io-client";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+
+const fetchTargetUser = async (parameters: any) => {
+  if (parameters.subroute === "dm") {
+    console.log("getting user: " + parameters.id)
+    const user = await axios.get(
+      `http://localhost:8080/user/${parameters?.id!}`
+    );
+    return user.data;
+  }
+  return null;
+};
+const fetchTargetChannel = async (parameters: any) => {
+  if (parameters.subroute === "channel") {
+    console.log("getting channel: " + parameters.id)
+    const channel = await axios.get(
+      `http://localhost:8080/channels/${parameters!.id!}`
+    );
+    return channel.data;
+  }
+  return null;
+};
 
 const Page = (props: any) => {
   const parameters = useParams();
@@ -38,41 +54,16 @@ const Page = (props: any) => {
   const [update, setUpdate] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const inputMessage = useRef<HTMLInputElement | null>(null);
-  const [targetUser, setTargetUser] = useState<user | null>(null);
-  const [targetChannel, setTargetChannel] = useState<channel | null>(null);
-  // const containerRef = useRef(null);
-  useEffect(() => {
-    if (state?.user) {
-      if (parameters.subroute === "dm") {
-        const fetchData = async () => {
-          try {
-            const pageUser = await axios.get(
-              `http://localhost:8080/user/${parameters?.id!}`
-            );
-            setTargetUser(pageUser.data);
-          } catch (error) {
-            toast.error("failed to fetch user");
-          }
-        };
-        fetchData();
-      } else if (parameters.subroute === "channel") {
-        const fetchData = async () => {
-          try {
-            const channelData = await axios.get(
-              `http://localhost:8080/channels/${parameters!.id!}`
-            );
-            setTargetChannel(channelData.data);
-          } catch (error) {
-            toast.error("failed to fetch channel");
-          }
-        };
-        fetchData();
-      }
-    }
-    return () => {
-      setUpdate(false);
-    };
-  }, [parameters, update]);
+
+  const { data: targetChannel } = useQuery<channel | null>({
+    queryKey: ["targetChannel"],
+    queryFn: () => fetchTargetChannel(parameters),
+  });
+  const { data: targetUser } = useQuery<user | null>({
+    queryKey: ["targetUser"],
+    queryFn: () => fetchTargetUser(parameters),
+  });
+  // const clt = useQueryClient();
 
   useEffect(() => {
     state?.socket?.on("ok", (data: any) => {
@@ -84,15 +75,6 @@ const Page = (props: any) => {
       state?.socket?.off("ok");
     };
   }, [state?.socket]);
-
-  // useEffect(() => {
-  //   state?.socket?.on("update", (data: any) => {
-  //     const container: any = containerRef.current;
-  //     if (container) {
-  //       container.scrollTop = container.scrollHeight;
-  //     }
-  //   });
-  // }, [state?.socket]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setShowMessage(true),
