@@ -65,14 +65,14 @@ const JoinChannel = ({
       className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}
     >
       <motion.div
-        className="overflow-y-auto border border-red-500/[0.3] h-[70%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] px-10 py-16 flex flex-col bg-transparent rounded-xl"
+        className="overflow-y-auto border border-red-500/[0.3] h-[70%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] px-10 py-16 flex flex-col bg-primaryColor rounded-xl"
         initial="closed"
         animate="open"
         exit="closed"
         variants={modalVariants}
         style={{
           backdropFilter: "blur(20px)",
-          backgroundColor: "rgba(13, 9, 10, 0.4)",
+          // backgroundColor: "rgba(13, 9, 10, 0.4)",
         }}
       >
         <h1 className="text-3xl">Expand your horizon</h1>

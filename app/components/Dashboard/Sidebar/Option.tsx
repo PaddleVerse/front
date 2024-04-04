@@ -111,11 +111,11 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                 <Link href={`/Dashboard/${game === "Overview" ? "" : game}`}>
                   <span
                     className={cn(
-                      "py-2 block w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-[#FF5866] text-buttonGray",
+                      "py-2 block w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-sidebarRedColor text-buttonGray",
                       !expanded ? "ml-2" : "",
                       lastSegment === game ||
                         (lastSegment === "Dashboard" && game === "Overview")
-                        ? "bg-[#34202A] text-[#FF5866]"
+                        ? "bg-[#34202A] text-sidebarRedColor"
                         : ""
                     )}
                   >

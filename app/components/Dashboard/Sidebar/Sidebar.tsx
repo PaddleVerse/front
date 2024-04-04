@@ -106,7 +106,7 @@ const Sidebar = () => {
       )}
       {...handlers}
     >
-      <div className="h-screen w-full absolute bg-[#101823]"></div>
+      <div className="h-screen w-full absolute bg-primaryColor"></div>
       <motion.div
         className="absolute border w-5 h-5 cursor-pointer z-40 lg:-right-[10px] -right-[15px] top-[80px] border-rightArrowColor lg:p-[2px] p-[20px]  text-rightArrowColor bg-rightArrowBg rounded-full flex items-center justify-center"
         onClick={() => setExpanded(!expanded)}
@@ -117,7 +117,7 @@ const Sidebar = () => {
       </motion.div>
       <motion.div
         className={cn(
-          "text-white bg-[#101823]  flex-col h-full",
+          "text-white bg-primaryColor  flex-col h-full",
           tablet && !expanded ? "" : "pl-6 pr-7 z-20",
           "select-none sm:flex lg:relative absolute overflow-auto lg:overflow-visible no-scrollbar"
         )}

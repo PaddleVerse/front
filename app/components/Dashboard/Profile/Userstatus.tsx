@@ -16,9 +16,8 @@ const Userstatus = ({
   return (
     <div
       className={cn(
-        "2xl:w-[30%] sm:w-[40%]  border-orange-500 bg-[#172234]  py-2 flex  h-[250px]  px-2 rounded-md",
+        "2xl:w-[30%] sm:w-[40%]  border-orange-500 bg-secondaryColor  py-2 flex  h-[250px]  px-2 rounded-md",
         rajdhani.className
-      
       )}
     >
       <div className="flex flex-col w-full h-full relative justify-around gap-2  ">
@@ -31,7 +30,9 @@ const Userstatus = ({
                 <span
                   className={cn(
                     "animate-ping absolute inline-flex h-full w-full rounded-full",
-                    target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500",
+                    target?.status === "ONLINE"
+                      ? "bg-green-500"
+                      : "bg-gray-500",
                     "opacity-75"
                   )}
                 ></span>
@@ -39,15 +40,15 @@ const Userstatus = ({
                   className={cn(
                     "relative inline-flex rounded-full h-3 w-3",
                     target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500"
-                  
                   )}
                 ></span>
               </span>
               <span
                 className={cn(
                   "2xl:text-xs xl:text-[12px] sm:text-[11px] text-[13px]",
-                  target?.status === "ONLINE" ? "text-green-500" : "text-gray-500"
-                
+                  target?.status === "ONLINE"
+                    ? "text-green-500"
+                    : "text-gray-500"
                 )}
               >
                 {target?.status === "ONLINE" ? "online" : "offline"}
@@ -117,7 +118,6 @@ const Userstatus = ({
                 : status === "ACCEPTED"
                 ? "bg-red-600/[0.3]"
                 : ""
-            
             )}
           >
             {status && status === "PENDING"

@@ -6,7 +6,7 @@ import { cn } from "@/components/cn";
 
 const Standing = () => {
   return (
-    <div className="w-full bg-[#101823]  flex flex-col gap-2 p-2 rounded-md">
+    <div className="w-full bg-primaryColor  flex flex-col gap-2 p-2 rounded-md">
       <div className="flex text-white sm:gap-0 gap-1">
         <Image src="/standing.svg" width={40} height={40} alt={"standing"} />
         <h1

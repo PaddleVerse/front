@@ -20,7 +20,7 @@ const MainOptions = ({
         label === "Dashboard" ? "mt-2" : "mt-5",
         "text-sm relative z-10 rounded-lg text-[#707b8f]  transition-colors duration-300 cursor-pointer hover:bg-[#221D29]",
         showElements && "bg-[#221D29]",
-        "bg-[#172234]"
+        "bg-secondaryColor"
       )}
       initial={{ marginLeft: "15px" }}
       animate={{
@@ -30,8 +30,8 @@ const MainOptions = ({
     >
       <div
         className={cn(
-          "bg-transparent inset-0 flex justify-between items-center group-hover:text-[#FF5866] transition-colors duration-300",
-          showElements && "text-[#FF5866] z-10"
+          "bg-transparent inset-0 flex justify-between items-center group-hover:text-sidebarRedColor transition-colors duration-300",
+          showElements && "text-sidebarRedColor z-10"
         )}
       >
         <div className="flex items-center gap-4">

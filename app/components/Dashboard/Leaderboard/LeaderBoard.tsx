@@ -6,7 +6,7 @@ import { cn } from "@/components/cn";
 const LeaderBoard = () => {
   return (
     <div className="  sm:w-[61%] p-[2px]  w-[95%] h-[88%]  mt-[50px] from-[#dc5051] from-10% via-[#C2584F] via-15% to-transparent to-90% flex flex-col  bg-gradient-to-b rounded-xl">
-      <div className=" rounded-xl h-full w-full bg-[#0E141D]">
+      <div className=" rounded-xl h-full w-full bg-primaryColor]">
         <div className="w-[95%] mx-auto flex mt-10 flex-col gap-10 ">
           <h1
             className={cn(

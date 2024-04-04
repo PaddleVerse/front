@@ -5,8 +5,8 @@ import { cn } from "@/components/cn";
 
 const MatchHistory_2 = () => {
   return (
-    <div className="w-full rounded-md bg-[#101823] overflow-y-auto h-[700px] text-white flex flex-col overflow-x-hidden">
-      <div className="w-full p-6 sticky top-0 bg-[#101823] z-30">
+    <div className="w-full rounded-md bg-primaryColor overflow-y-auto h-[700px] text-white flex flex-col overflow-x-hidden">
+      <div className="w-full p-6 sticky top-0 bg-primaryColor z-30">
         <h1
           className={cn(
             `sm:text-4xl text-2xl font-semibold`,

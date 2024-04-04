@@ -6,7 +6,7 @@ import { cn } from "@/components/cn";
 
 const Achievements = () => {
   return (
-    <div className=" w-full  rounded-md p-3 h-auto bg-[#101823]">
+    <div className=" w-full  rounded-md p-3 h-auto bg-primaryColor">
       <div className="w-full text-white flex gap-2  items-center">
         <Image
           src="/achievements.svg"

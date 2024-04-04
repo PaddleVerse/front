@@ -22,7 +22,7 @@ const LeaderRow = ({ user, index }: Props) => {
     <motion.tr
       className={cn(
         "text-white sm:text-[12px] text-[10px] cursor-pointer",
-        user.id % 2 === 0 ? "bg-[#101823]" : "bg-[#161F2F]"
+        user.id % 2 === 0 ? "bg-primaryColor" : "bg-[#161F2F]"
       )}
       onClick={handleClick}
       initial={{ opacity: 0, y: -20 }}
