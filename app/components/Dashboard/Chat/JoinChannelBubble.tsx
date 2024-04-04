@@ -7,6 +7,7 @@ import { Socket } from "socket.io-client";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { useQueryClient } from "@tanstack/react-query";
 
 const JoinChannelBubble = ({
   lock,
@@ -23,6 +24,7 @@ const JoinChannelBubble = ({
   const { register } = useForm();
   const [unlock, setUnlock] = useState(false);
   const { state, dispatch } = useGlobalState();
+  const clt = useQueryClient();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (lock) {
@@ -39,6 +41,7 @@ const JoinChannelBubble = ({
         const res = await axios.post(`http://localhost:8080/participants`, obj);
         toast.success(`you have joined ${channel.name}`);
         state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
+        clt?.invalidateQueries({ queryKey: ["chatList"] });
       } catch (error) {
         toast.error("failed to join channel");
       }
@@ -54,6 +57,7 @@ const JoinChannelBubble = ({
       try {
         const res = await axios.post(`http://localhost:8080/participants`, obj);
         toast.success(`you have joined ${channel.name}`);
+        clt?.invalidateQueries({ queryKey: ["chatList"] });
         state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
       } catch (error) {
         toast.error("failed to join channel");

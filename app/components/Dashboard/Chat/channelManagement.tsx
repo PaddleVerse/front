@@ -10,7 +10,25 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+const fetchParticipants = async (channel: channel, user: user) => {
+  const participants = await axios.get(
+    `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
+  );
+  return participants.data;
+};
+
+const FetchPriviliged= async (channel: channel, user: user) => {
+  const participants = await axios.get(
+    `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
+  );
+  return participants.data.filter(
+    (participant: participants) =>
+      (participant.role === "ADMIN" || participant.role === "MOD") &&
+      participant.user_id === user.id
+  )[0];
+};
 
 const ChannelManagement = ({
   channel,
@@ -21,8 +39,11 @@ const ChannelManagement = ({
   user: user;
   update: (arg0: boolean) => void;
 }) => {
-  const [participants, setParticipants] = useState<participants[]>([]);
-  const [priviliged, setPriviliged] = useState<participants>();
+  // const [participants, setParticipants] = useState<participants[]>([]);
+
+  const clt = useQueryClient();
+  const { state, dispatch } = useGlobalState();
+  const { user: u, socket } = state;
   const router = useRouter();
   const [picture, setPicture] = useState<File>();
   const { register } = useForm();
@@ -30,49 +51,14 @@ const ChannelManagement = ({
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState("");
-  const { state, dispatch } = useGlobalState();
-  const clt = useQueryClient()
-  const { user: u, socket } = state;
-
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
-        );
-        setParticipants(res.data);
-        setPriviliged(
-          res.data.filter(
-            (participant: participants) =>
-              (participant.role === "ADMIN" || participant.role === "MOD") &&
-              participant.user_id === user.id
-          )[0]
-        );
-      } catch (error) {
-        toast.error("failed to fetch participants");
-      }
-    }
-    fetchParticipants();
-  }, []);
-
-  useEffect(() => {
-    socket.on("update", (data: any) => {
-      const fetchParticipants = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:8080/participants/${channel.id}`
-          );
-          setParticipants(res.data);
-        } catch (error) {
-          toast.error("failed to fetch participants");
-        }
-      }
-      fetchParticipants();
-    })
-    return () => {
-      socket.off("update");
-    }
-  }, [socket]);
+  const {data: participants, error, isLoading} = useQuery<participants[]>({
+    queryKey: ["participants"],
+    queryFn: async () => fetchParticipants(channel, user),
+  });
+  const { data: priviliged } = useQuery<participants>({
+    queryKey: ["priviliged"],
+    queryFn: async () => FetchPriviliged(channel, user),
+  });
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -84,8 +70,8 @@ const ChannelManagement = ({
         `http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`
       )
       .then((res) => {
-        // emit to the server that the user left
-        clt.invalidateQueries({queryKey: ["chatList"]})
+        // emit to the server that the user left, it is better to emit to the server and get back the event
+        // clt.invalidateQueries({queryKey: ["chatList"]})
         router.push("/Dashboard/Chat");
       })
       .catch();
@@ -263,7 +249,7 @@ const ChannelManagement = ({
       </div>
       <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
         <div className="mt-10  flex flex-col gap-4 items-center">
-          {participants.map((participant, index) => {
+          {participants && participants.map((participant, index) => {
             return (
               <MemberList
                 key={index}
