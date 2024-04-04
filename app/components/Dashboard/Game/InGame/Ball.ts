@@ -24,7 +24,7 @@ class Ball extends THREE.Mesh {
     radius: number = 1,
     position: Position = { x: 0, y: 15, z: 0 },
     velocity: Velocity = { x: 0, y: 0, z: 0 },
-    texture: string = 'textures/ball.jpg',
+    texture: string = '/Game/textures/ball.jpg',
   ) {
     const geometry = new THREE.SphereGeometry(radius, 32, 32);
     const material = new THREE.MeshStandardMaterial({
@@ -52,7 +52,7 @@ class Ball extends THREE.Mesh {
 
     if ((this.material as THREE.MeshStandardMaterial).map) {
       const standardMaterial = this.material as THREE.MeshStandardMaterial;
-      if (standardMaterial.map){
+      if (standardMaterial.map) {
 
         standardMaterial.map.wrapS = THREE.RepeatWrapping;
         standardMaterial.map.wrapT = THREE.RepeatWrapping;

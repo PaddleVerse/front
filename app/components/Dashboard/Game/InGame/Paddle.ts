@@ -35,7 +35,7 @@ class PaddleModule {
     loadedData.scene.scale.set(0.1, 0.1, 0.1);
     loadedData.scene.position.set(this.position.x, this.position.y, this.position.z);
     loadedData.scene.rotation.set(0, this.rotationX, 0);
-    
+
     loadedData.scene.traverse((child: THREE.Object3D) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;

@@ -9,43 +9,40 @@ interface Position {
 class Plane extends THREE.Mesh {
   height: number;
   width: number;
-  boundingBox: THREE.Box3;
+  boundingBox: THREE.Box3 | undefined;
 
   constructor(
     height: number = 1,
     width: number = 1,
     position: Position = { x: 0, y: 0, z: 0 },
     rotationX: number = -Math.PI / 2,
-    texture: string = 'textures/plane.jpg',
+    texture: string = '/Game/textures/plane.png',
   ) {
     const geometry = new THREE.PlaneGeometry(height, width);
-    const material = new THREE.MeshStandardMaterial({
-      map: new THREE.TextureLoader().load(texture),
-    });
-
+    const material = new THREE.MeshStandardMaterial(); // Temporary material, will be replaced
     super(geometry, material);
-
-    this.rotation.x = rotationX;
-    this.position.set(position.x, position.y, position.z);
-
-    // Correctly typing the material to MeshStandardMaterial
-    if ((this.material as THREE.MeshStandardMaterial).map) {
-      const standardMaterial = this.material as THREE.MeshStandardMaterial;
-      if (standardMaterial.map) {
-        standardMaterial.map.wrapS = THREE.RepeatWrapping;
-        standardMaterial.map.wrapT = THREE.RepeatWrapping;
-        standardMaterial.map.repeat.set(20, 20);
-      }
-      
-    }
 
     this.height = height;
     this.width = width;
-    this.receiveShadow = true;
+    this.rotation.x = rotationX;
 
-    // Bounding box
-    const bbox = new THREE.Box3().setFromObject(this);
-    this.boundingBox = bbox;
+    const loader = new THREE.TextureLoader();
+    loader.load(texture, (texture) => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(20, 20);
+
+      this.material = new THREE.MeshStandardMaterial({
+        map: texture,
+      });
+
+      this.rotation.x = rotationX;
+      this.position.set(position.x, position.y, position.z);
+      this.receiveShadow = true;
+
+      // Bounding box can be calculated now, but it may need to be recalculated if the mesh changes later
+      this.boundingBox = new THREE.Box3().setFromObject(this);
+    });
   }
 }
 

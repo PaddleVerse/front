@@ -52,7 +52,7 @@ class TableModule {
   createNet(): void {
     const netPlane = new THREE.PlaneGeometry(17.5, 1.5);
     const material = new THREE.MeshStandardMaterial({
-      map: new THREE.TextureLoader().load("textures/net.png"),
+      map: new THREE.TextureLoader().load("/Game/textures/net.png"),
       side: THREE.DoubleSide,
       transparent: true,
     });
