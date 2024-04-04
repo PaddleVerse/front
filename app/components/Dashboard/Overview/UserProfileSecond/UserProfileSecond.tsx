@@ -113,7 +113,7 @@ const UserProfileSecond = ({ user }: any) => {
                   </div>
                   <div className="sm:w-[95%] w-[91%] 2xl:w-[98%] b bg-[#D6D6D6] rounded-full">
                     <motion.div
-                      className="bg-[#FF4654] p-2 sm:h-2.5 h-2 rounded-full relative w-[45%]"
+                      className="bg-mainRedColor p-2 sm:h-2.5 h-2 rounded-full relative w-[45%]"
                       initial={{ width: "0%" }}
                       animate={{ width: "45%" }}
                       transition={{ duration: 1 }}

@@ -87,7 +87,7 @@ const Userstatus = ({
               onClick={() => friendReq("rejectFriendRequest")}
               borderRadius="10px"
               borderClassName=" bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
-              className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-[#FF4654]/[0.6]`}
+              className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-mainRedColor/[0.6]`}
             >
               REJECTE
             </Button>
@@ -97,7 +97,7 @@ const Userstatus = ({
             onClick={removeFriend}
             borderRadius="10px"
             borderClassName="bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
-            className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-[#FF4654]/[0.6]`}
+            className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-mainRedColor/[0.6]`}
           >
             REMOVE FRIEND
           </Button>
