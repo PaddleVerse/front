@@ -30,7 +30,8 @@ module.exports = {
         md: "768px",
         lg: "1024px",
         xl: "1280px",
-        "2xl": "1536px",
+        xl2: "1408px", // Adjust the value according to your preference
+        "2xl": "1800px",
         boxShadow: {
           input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
         },
@@ -53,8 +54,9 @@ module.exports = {
         primaryColor: "#101823",
         secondaryColor: "#172234",
         sidebarRedColor: "#FF5866",
-        mainRedColor:"#FF4654",
-        mathHistoryGreenColor:"#24D8AF",
+        mainRedColor: "#FF4654",
+        mathHistoryGreenColor: "#24D8AF",
+        // progressBarRedColor:"#FF4654",
         ////////////////////////////////////////////
         optionMenu: "#171010",
         redd: "#a8353f",
