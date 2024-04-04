@@ -1,12 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
-import React from "react";
+import { AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
 import BigCard from "./Cards/BigCard";
 import SmallCard from "./Cards/SmallCard";
-import Modlar from "./Stuff/Modlar";
-import { motion, AnimatePresence } from "framer-motion";
 import Header from "./Header";
-
+import Modlar from "./Stuff/Modlar";
+import { Infos } from "./types";
 import cardsData from "./CardData";
 const infos = [
   {
@@ -28,11 +27,7 @@ const infos = [
     image: "third",
   },
 ];
-interface Infos {
-  title: string;
-  image: string;
-  description: string;
-}
+
 const Elements = () => {
   const handleClick = (e: any | null) => {
     console.log(e);

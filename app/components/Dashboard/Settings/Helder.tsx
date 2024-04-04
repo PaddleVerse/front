@@ -1,10 +1,8 @@
 'use client';
-import React, { useState } from 'react'
-import Sidebar from './Sidebar'
-import EditProfile from './EditProfile'
-import Security from './Security'
 import { Tabs } from "@/components/ui/tabs";
-import Image from 'next/image';
+import { useState } from 'react';
+import EditProfile from './EditProfile';
+import Security from './Security';
 
 const Helder = () => {
   const [current, setCurrent] = useState('My profile');
@@ -13,7 +11,6 @@ const Helder = () => {
       title: "My profile",
       value: "My profile",
       content: (
-        // <div className="w-full overflow-hidden relative h-full rounded-2xl p-10 bg-gradient-to-br from-blurredRed to-[#753b3b]">
         <div className="w-full overflow-hidden relative h-full rounded-2xl p-10 bg-black">
           <EditProfile />
         </div>
