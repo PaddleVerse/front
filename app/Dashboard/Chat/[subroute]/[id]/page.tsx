@@ -63,7 +63,6 @@ const Page = (props: any) => {
     queryKey: ["targetUser"],
     queryFn: () => fetchTargetUser(parameters),
   });
-  // const clt = useQueryClient();
 
   useEffect(() => {
     state?.socket?.on("ok", (data: any) => {
