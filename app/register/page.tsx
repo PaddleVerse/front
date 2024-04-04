@@ -1,21 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Label } from "../../components/ui/newlabel";
-import { Input } from "../../components/ui/newinput";
-import { cn } from "../../components/cn";
 import axios from "axios";
-import { useRouter } from 'next/navigation';
-import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { cn } from "../../components/cn";
+import { Input } from "../../components/ui/newinput";
+import { Label } from "../../components/ui/newlabel";
 // import { BgWrapper } from "../page";
 
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-} from "@tabler/icons-react";
-import Link from "next/link";
-import Image from "next/image";
 import BottomGradient from "@/components/ui/bottomGradiant";
+import {
+  IconBrandGoogle
+} from "@tabler/icons-react";
+import Image from "next/image";
+import Link from "next/link";
 
 
 export default function SignupFormDemo() {

@@ -1,21 +1,12 @@
 import React from "react";
-import { Rajdhani } from "next/font/google";
+import { rajdhani } from "@/app/utils/fontConfig";
 import Image from "next/image";
 import Achievement from "./Achievement";
+import { cn } from "@/components/cn";
 
-const rajdhani = Rajdhani({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 const Achievements = () => {
   return (
-    <div
-      className=" w-full  rounded-md p-3 h-auto bg-primaryColor"
-      // style={{
-      //     backdropFilter: "blur(20px)",
-      //     backgroundColor: "rgba(13, 9, 10, 0.7)",
-      //   }}
-    >
+    <div className=" w-full  rounded-md p-3 h-auto bg-primaryColor">
       <div className="w-full text-white flex gap-2  items-center">
         <Image
           src="/achievements.svg"
@@ -25,7 +16,10 @@ const Achievements = () => {
           className="w-auto h-auto"
         />
         <h1
-          className={`${rajdhani.className} font-[500] xl:text-[20px] lg:text-[17px]`}
+          className={cn(
+            "font-[500] xl:text-[20px] lg:text-[17px]",
+            rajdhani.className
+          )}
         >
           ACHIEVEMENTS
         </h1>

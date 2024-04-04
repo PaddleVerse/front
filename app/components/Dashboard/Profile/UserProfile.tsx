@@ -7,12 +7,9 @@ import { PinContainer } from "@/components/ui/3d-pin";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Userstatus from "./Userstatus";
-import { Rajdhani } from "next/font/google";
-import { Inter } from "next/font/google";
+import { rajdhani } from "@/app/utils/fontConfig";
 import LinkedFriend from "./LinkedFriend";
-
-const inter = Inter({ subsets: ["latin"] });
-const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
+import { cn } from "@/components/cn";
 
 const people = [
   {
@@ -309,7 +306,10 @@ const UserProfile = ({ target }: any) => {
             removeFriend={removeFriend}
           />
           <div
-            className={`2xl:w-[30%] p-5 text-white ${rajdhani.className} bg-secondaryColor sm:w-[42%]  rounded-lg h-[250px] flex flex-col gap-4`}
+            className={cn(
+              "2xl:w-[30%] p-5 text-white bg-secondaryColor sm:w-[42%]  rounded-lg h-[250px] flex flex-col gap-4",
+              rajdhani.className
+            )}
           >
             <h1 className="2xl:text-3xl xl:text-2xl text-xl font-[600]">
               Linked Friends

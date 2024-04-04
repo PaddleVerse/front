@@ -3,9 +3,8 @@ const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
 
-
 const svgToDataUri = require("mini-svg-data-uri");
- 
+
 const colors = require("tailwindcss/colors");
 
 module.exports = {
@@ -45,18 +44,18 @@ module.exports = {
         greenButton: "#124607",
 
         leaderboarddiv: "#252728",
-
-        /////////////////////////////////
-        primaryColor: "#101823",
-        secondaryColor: "#172234",
-        redColor: "#FF5866",
-        greenColor:"#24D8AF",
-        /////////////////////////////////
         buttonGray: "#808080",
         blurredRed: "#24191b",
         rightArrowBg: "#161214",
         buttonColor: "#4a3832",
         rightArrowColor: "#9f6689",
+        ////////////////////////////////////////////
+        primaryColor: "#101823",
+        secondaryColor: "#172234",
+        sidebarRedColor: "#FF5866",
+        mainRedColor:"#FF4654",
+        mathHistoryGreenColor:"#24D8AF",
+        ////////////////////////////////////////////
         optionMenu: "#171010",
         redd: "#a8353f",
         yellowUnderline: "#fff692",
@@ -151,14 +150,12 @@ module.exports = {
   ],
 };
 
-
-
 function addVariablesForColors({ addBase, theme }: any) {
   let allColors = flattenColorPalette(theme("colors"));
   let newVars = Object.fromEntries(
     Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
   );
- 
+
   addBase({
     ":root": newVars,
   });

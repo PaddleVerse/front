@@ -1,12 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { useGlobalState } from "../../Sign/GlobalState";
 import NotificationCard from "./NotificationCard";
-import { set } from "react-hook-form";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -95,13 +93,7 @@ const Navbar = () => {
 
   return (
     <div className="w-full flex justify-center z-50">
-      <div
-        className="w-[95%] h-14 bg-primaryColor rounded-b-sm md:flex hidden justify-between items-center"
-        // style={{
-        //   backdropFilter: "blur(20px)",
-        //   backgroundColor: "rgba(13, 9, 10, 0.7)",
-        // }}
-      >
+      <div className="w-[95%] h-14 bg-primaryColor rounded-b-sm md:flex hidden justify-between items-center">
         <span className="text-gray-400 ml-10 text-[14px]">{pathname}</span>
         <div className="flex justify-center items-center relative">
           <div>

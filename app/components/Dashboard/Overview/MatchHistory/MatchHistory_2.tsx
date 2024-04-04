@@ -1,17 +1,17 @@
 import React from "react";
-import { Rajdhani } from "next/font/google";
+import { rajdhani } from "@/app/utils/fontConfig";
 import OneGame_2 from "./OneGame_2";
+import { cn } from "@/components/cn";
 
-const rajdhani = Rajdhani({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 const MatchHistory_2 = () => {
   return (
     <div className="w-full rounded-md bg-primaryColor overflow-y-auto h-[700px] text-white flex flex-col overflow-x-hidden">
       <div className="w-full p-6 sticky top-0 bg-primaryColor z-30">
         <h1
-          className={`sm:text-4xl text-2xl font-semibold ${rajdhani.className}`}
+          className={cn(
+            `sm:text-4xl text-2xl font-semibold`,
+            rajdhani.className
+          )}
         >
           All Matches
         </h1>

@@ -1,24 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Rajdhani } from "next/font/google";
-import { Inter } from "next/font/google";
 import Image from "next/image";
 import { PinContainer } from "@/components/ui/3d-pin";
 import Friends from "./Friends";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-const inter = Inter({ subsets: ["latin"] });
-const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
-
+import { rajdhani } from "@/app/utils/fontConfig";
+import { cn } from "@/components/cn";
 const UserProfileSecond = ({ user }: any) => {
   return (
-    <div
-      className=" p-4 bg-primaryColor rounded-md "
-      // style={{
-      //   backdropFilter: "blur(1px)",
-      //   backgroundColor: "rgba(13, 9, 10, 0.3)",
-      // }}
-    >
+    <div className=" p-4 bg-primaryColor rounded-md ">
       <div className=" w-full h-full relative flex flex-col 2xl:gap-[80px] gap-12 rounded-md">
         <div className="w-full  h-[290px] relative">
           <PinContainer title="Overview" href="https://twitter.com/mannupaaji">
@@ -50,20 +41,8 @@ const UserProfileSecond = ({ user }: any) => {
               )}
             </div>
           </PinContainer>
-          <div
-            className="2xl:w-[170px]  xl:w-[120px] xl:h-[200px] absolute 2xl:h-[250px]  bg-primaryColor rounded-md 2xl:-bottom-[120px] 2xl:left-[100px] p-2 text-white sm:bottom-[10px] sm:left-[50px] sm:w-[110px] sm:h-[170px] bottom-[10px] left-[20px] w-[80px] h-[150px]"
-            // style={{
-            //   backdropFilter: "blur(10px)",
-            //   backgroundColor: "rgba(13, 9, 10, 0.3)",
-            // }}
-          >
-            <div
-              className="w-full h-full flex flex-col items-center bg-primaryColor rounded-md gap-4"
-              // style={{
-              //   backdropFilter: "blur(10px)",
-              //   backgroundColor: "rgba(13, 9, 10, 0.3)",
-              // }}
-            >
+          <div className="2xl:w-[170px]  xl:w-[120px] xl:h-[200px] absolute 2xl:h-[250px]  bg-primaryColor rounded-md 2xl:-bottom-[120px] 2xl:left-[100px] p-2 text-white sm:bottom-[10px] sm:left-[50px] sm:w-[110px] sm:h-[170px] bottom-[10px] left-[20px] w-[80px] h-[150px]">
+            <div className="w-full h-full flex flex-col items-center bg-primaryColor rounded-md gap-4">
               <div className="w-full h-[60%]   relative">
                 {user ? (
                   <Image
@@ -111,13 +90,7 @@ const UserProfileSecond = ({ user }: any) => {
 
         <div className="w-full   border-red-500 pb-5  flex sm:flex-row flex-col sm:flex-wrap 2xl:mt-0 mt-2 justify-between sm:gap-2 gap-5">
           <div className="2xl:w-[35%] sm:w-[55%]  border-yellow-500 flex sm:h-[250px]">
-            <div
-              className="w-full  border-green-500  2xl:self-end 2xl:h-[55%] lg:h-[100%] items-center bg-primaryColor  flex justify-between rounded-md 2xl:flex-row"
-              // style={{
-              //   backdropFilter: "blur(10px)",
-              //   backgroundColor: "rgba(13, 9, 10, 0.3)",
-              // }}
-            >
+            <div className="w-full  border-green-500  2xl:self-end 2xl:h-[55%] lg:h-[100%] items-center bg-primaryColor  flex justify-between rounded-md 2xl:flex-row">
               <div className="flex   sm:w-full items-center  sm:h-[40%] h-full 2xl:h-full w-full bg-secondaryColor rounded-md">
                 <div className="relative">
                   <Image
@@ -144,7 +117,6 @@ const UserProfileSecond = ({ user }: any) => {
                       initial={{ width: "0%" }}
                       animate={{ width: "45%" }}
                       transition={{ duration: 1 }}
-                      // style={{ width: "45%" }}
                     >
                       <div className="relative">
                         <div className="absolute 2xl:w-4 2xl:h-4 w-3 h-3  bg-[#FF4656] 2xl:-right-[13px] -right-[11px] top-[16px]  transform rotate-45"></div>
@@ -156,16 +128,14 @@ const UserProfileSecond = ({ user }: any) => {
                   </div>
                 </div>
               </div>
-              {/* <div className="  2xl:w-[30%] w-full h-[40%] 2xl:h-auto bg-dashBack rounded-md border"></div> */}
             </div>
           </div>
 
           <div
-            className={`2xl:w-[30%] p-5 text-white ${rajdhani.className} bg-secondaryColor sm:w-[42%]  rounded-lg h-[250px] flex flex-col gap-4`}
-            // style={{
-            //   backdropFilter: "blur(10px)",
-            //   backgroundColor: "rgba(13, 9, 10, 0.3)",
-            // }}
+            className={cn(
+              "2xl:w-[30%] p-5 text-white bg-secondaryColor sm:w-[42%]  rounded-lg h-[250px] flex flex-col gap-4",
+              rajdhani.className
+            )}
           >
             <h1 className="2xl:text-3xl xl:text-2xl text-xl font-[600]">
               TOP 3 FRIENDS
@@ -177,11 +147,10 @@ const UserProfileSecond = ({ user }: any) => {
             </div>
           </div>
           <div
-            className={` 2xl:w-[30%] w-full bg-secondaryColor flex flex-col rounded-lg text-3xl font-[600] text-white ${rajdhani.className} p-4`}
-            // style={{
-            //   backdropFilter: "blur(10px)",
-            //   backgroundColor: "rgba(13, 9, 10, 0.3)",
-            // }}
+            className={cn(
+              "2xl:w-[30%] w-full bg-secondaryColor flex flex-col rounded-lg text-3xl font-[600] text-white p-4",
+              rajdhani.className
+            )}
           >
             <h1 className="text-center">Lifetime Overview</h1>
             <div className="w-full  flex mt-4 gap-6 justify-evenly items-center">

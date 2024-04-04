@@ -1,12 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Roboto } from "next/font/google";
 import Image from "next/image";
+import { cn } from "@/components/cn";
 
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
-});
 const OneGame_2 = ({ status }: { status: string }) => {
   return (
     <motion.div
@@ -20,9 +16,10 @@ const OneGame_2 = ({ status }: { status: string }) => {
             fill
             alt="img"
             sizes="w-auto h-auto"
-            className={`rounded-full ring-[2px] ${
-              status === "lose" ? " ring-[#FF4656]" : "ring-greenColor"
-            }`}
+            className={cn(
+              "rounded-full ring-[2px]",
+              status === "win" ? "ring-[#FF4656]" : "ring-mathHistoryGreenColor"
+            )}
           />
         </div>
         <div className="flex flex-col items-center justify-center sm:leading-5 leading-2">
@@ -37,9 +34,12 @@ const OneGame_2 = ({ status }: { status: string }) => {
         </div>
         <div className="flex flex-col items-center justify-center sm:leading-5 leading-2">
           <span
-            className={`${
-              status === "win" ? "text-greenColor" : "text-[#FF4656]"
-            } font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter`}
+            className={cn(
+              "font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter",
+              status === "win"
+                ? "text-mathHistoryGreenColor"
+                : "text-mainRedColor"
+            )}
           >
             2.00KD
           </span>
@@ -49,9 +49,12 @@ const OneGame_2 = ({ status }: { status: string }) => {
         </div>
         <div className="flex flex-col items-start sm:leading-5 leading-2">
           <span
-            className={`${
-              status === "win" ? "text-greenColor" : "text-[#FF4656]"
-            } font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter`}
+            className={cn(
+              "font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter",
+              status === "win"
+                ? "text-mathHistoryGreenColor"
+                : "text-mainRedColor"
+            )}
           >
             55%
           </span>
@@ -88,9 +91,12 @@ const OneGame_2 = ({ status }: { status: string }) => {
         </div>
         <div className="flex flex-col items-start leading-5">
           <span
-            className={`${
-              status === "lose" ? "text-greenColor" : "text-[#FF4656]"
-            } font-semibold xl:text-[20px] sm:text-[17px] tracking-tighter`}
+            className={cn(
+              "font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter",
+              status === "win"
+                ? "text-mathHistoryGreenColor"
+                : "text-mainRedColor"
+            )}
           >
             55%
           </span>
@@ -100,9 +106,12 @@ const OneGame_2 = ({ status }: { status: string }) => {
         </div>
         <div className="flex flex-col items-center justify-center leading-5">
           <span
-            className={`${
-              status === "lose" ? "text-greenColor" : "text-[#FF4656]"
-            } font-semibold xl:text-[20px] sm:text-[17px] tracking-tighter`}
+            className={cn(
+              "font-semibold xl:text-[20px] sm:text-[17px] text-[12px] tracking-tighter",
+              status === "win"
+                ? "text-mathHistoryGreenColor"
+                : "text-mainRedColor"
+            )}
           >
             2.00KD
           </span>
@@ -126,12 +135,15 @@ const OneGame_2 = ({ status }: { status: string }) => {
             fill
             alt="img"
             sizes="w-auto h-auto"
-            className={`ring-[2px] ${
-              status === "win" ? " ring-[#FF4656]" : "ring-greenColor"
-            } rounded-full`}
+            className={cn(
+              "rounded-full ring-[2px]",
+              status === "win"
+                ? "ring-mainRedColor"
+                : "ring-mathHistoryGreenColor"
+            )}
           />
         </div>
-      </div>{" "}
+      </div>
     </motion.div>
   );
 };

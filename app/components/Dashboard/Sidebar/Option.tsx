@@ -1,16 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import MainOptions from "./MainOptions";
-import { RxDashboard } from "react-icons/rx";
-import { PiChatCircleTextLight, PiGameController } from "react-icons/pi";
-import { LiaShoppingCartSolid } from "react-icons/lia";
-import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { IoIosSearch } from "react-icons/io";
+import { LiaShoppingCartSolid } from "react-icons/lia";
+import { PiChatCircleTextLight, PiGameController } from "react-icons/pi";
+import { RxDashboard } from "react-icons/rx";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { set } from "react-hook-form";
+import MainOptions from "./MainOptions";
+import { cn } from "@/components/cn";
 
 const gameNames = ["Overview", "Leaderboard", "Settings"];
 
@@ -78,38 +78,6 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
           )}
         </MainOptions>
       </motion.div>
-      {/* <AnimatePresence>
-        {showElements && (
-          <motion.div>
-            <motion.img
-              // className="filter-white"
-              src="Union.svg"
-              // className="border-red-500"
-              alt="tree"
-              initial={{
-                height: 0,
-                top: "58px",
-                left: "20px",
-                position: "absolute",
-              }}
-              animate={{
-                height: 100,
-                position: "absolute",
-                top: expanded ? "58px" : "54px",
-                left: expanded ? "40px" : "17px",
-              }}
-              exit={{
-                // opacity: 0,
-                y: -20,
-                // x: 0,
-                height: 0,
-                transition: { duration: 0.7 },
-              }}
-              transition={{ duration: 0.29 }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence> */}
       <motion.div>
         {!expanded && showElements && (
           <motion.div
@@ -139,17 +107,17 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                   transition: { duration: 0.2, delay: index * 0.2 },
                 }}
                 transition={{ duration: 0.29, delay: index * 0.2 }}
-                // className="border"
-                // className="flex mb-2"
               >
                 <Link href={`/Dashboard/${game === "Overview" ? "" : game}`}>
                   <span
-                    className={`py-2 block ${!expanded ? "ml-2" : ""} ${
+                    className={cn(
+                      "py-2 block w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-sidebarRedColor text-buttonGray",
+                      !expanded ? "ml-2" : "",
                       lastSegment === game ||
-                      (lastSegment === "Dashboard" && game === "Overview")
-                        ? "bg-[#34202A] text-redColor"
+                        (lastSegment === "Dashboard" && game === "Overview")
+                        ? "bg-[#34202A] text-sidebarRedColor"
                         : ""
-                    }  w-32 rounded-lg cursor-pointer text-sm  pl-4 hover:bg-[#34202A] hover:text-redColor text-buttonGray `}
+                    )}
                   >
                     {game}
                   </span>
@@ -174,7 +142,6 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                     className="z-0 h-auto w-auto"
                   ></Image>
                 </motion.div>
-                {/* {game} */}
               </motion.div>
             )}
           </AnimatePresence>

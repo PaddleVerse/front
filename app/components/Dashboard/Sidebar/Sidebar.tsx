@@ -7,27 +7,10 @@ import ProfileUser from "./ProfileUser";
 import { useSwipeable } from "react-swipeable";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { io } from "socket.io-client";
-import { Oswald } from "next/font/google";
-const oswald = Oswald({ subsets: ["latin"], weight: ["400", "500"] });
+import { oswald } from "@/app/utils/fontConfig";
+import { cn } from "@/components/cn";
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
-
-const image2 =
-  "https://img.pikbest.com/origin/09/26/71/799pIkbEsTSty.png!w700wp";
-// const showElementssideVariants = {
-//   closed: {
-//     transition: {
-//       staggerChildren: 0.2,
-//       staggerDirection: -1,
-//     },
-//   },
-//   open: {
-//     transition: {
-//       staggerChildren: 0.2,
-//       staggerDirection: 1,
-//     },
-//   },
-// };
 
 interface User {
   username: string;
@@ -39,11 +22,6 @@ interface User {
   createdAt: Date;
 }
 
-const ProfileInfoVariants = {
-  opened: { opacity: 1 },
-  closed: { opacity: 0 },
-  exit: { opacity: 0 },
-};
 function useWindowSize() {
   const [size, setSize] = useState(0);
   useLayoutEffect(() => {
@@ -64,7 +42,6 @@ const Sidebar = () => {
   const handlers = useSwipeable({
     onSwipedLeft: () => setExpanded(false),
     onSwipedRight: () => setExpanded(true),
-    // onSwiped:()=>setExpanded(!expanded),
   });
 
   const tablet = useWindowSize() < 769;
@@ -119,12 +96,14 @@ const Sidebar = () => {
     return () => {
       socket?.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div
-      className={`flex relative lg:h-[fit-content] h-auto z-40 ${oswald.className}`}
+      className={cn(
+        "flex relative lg:h-[fit-content] h-auto z-40",
+        oswald.className
+      )}
       {...handlers}
     >
       <div className="h-screen w-full absolute bg-primaryColor"></div>
@@ -137,17 +116,17 @@ const Sidebar = () => {
         <FaChevronRight />
       </motion.div>
       <motion.div
-        className={`text-white bg-primaryColor  flex-col h-full ${
-          tablet && !expanded ? "" : "pl-6 pr-7 z-20"
-        }   select-none sm:flex lg:relative absolute overflow-auto lg:overflow-visible no-scrollbar`}
+        className={cn(
+          "text-white bg-primaryColor  flex-col h-full",
+          tablet && !expanded ? "" : "pl-6 pr-7 z-20",
+          "select-none sm:flex lg:relative absolute overflow-auto lg:overflow-visible no-scrollbar"
+        )}
         variants={containerVariants}
         animate={expanded ? "opened" : "closed"}
         initial={"opened"}
         ref={sidebarRef}
         transition={{
           duration: 0.5,
-          // staggerChildren: 0.015,
-          // staggerDirection: expanded ? 1 : -1,
         }}
       >
         <motion.div
@@ -157,7 +136,6 @@ const Sidebar = () => {
           }}
           className="relative z-20"
         >
-          {/* <div className={`${!expanded ? "hidden" : ""}`}> rounded-full w-20 h-20 object-cover mt-10 */}
           <motion.div className=" flex gap-4 mt-[65px] items-center">
             <motion.img
               src={user?.picture ? user?.picture : "/b.png"}
@@ -173,11 +151,6 @@ const Sidebar = () => {
                     opacity: expanded ? 1 : 0,
                     transition: { duration: 0.2 },
                   }}
-                  // exit={{
-                  //   opacity: 0,
-                  //   transition: { duration: 2.8 },
-                  // }}
-                  // transition={{ duration: 0.29 }}
                   key="modal"
                 >
                   <span className="text-[12px] text-buttonGray">NOOB</span>
@@ -191,7 +164,6 @@ const Sidebar = () => {
             className="text-buttonGray text-[12px] mt-12 block"
             initial={{ paddingLeft: "29px" }}
             animate={{ paddingLeft: expanded ? "29px" : "8px" }}
-            // transition={{ duration: expanded ? 1.5 : 0.1 }}
           >
             MAIN
           </motion.span>
@@ -203,14 +175,11 @@ const Sidebar = () => {
               <Option label={"Shop"} expanded={expanded} />
               <Option label={"Search"} expanded={expanded} />
             </motion.div>
-            {/* <div className="overflow-y-scroll no-scrollbar bg-red-500 w-full z-50"> */}
             <div className="text-buttonGray mt-10 flex justify-between pl-4">
               <motion.span
                 className="text-[12px]"
-                // className="text-buttonGray text-[12px] mt-12"
                 initial={{ marginLeft: "14px" }}
                 animate={{ marginLeft: expanded ? "14px" : "-24px" }}
-                // transition={{ duration: expanded ? 1.5 : 0.1 }}
               >
                 MESSAGES
               </motion.span>
@@ -239,26 +208,9 @@ const Sidebar = () => {
                 expanded={expanded}
               />
             </div>
-            {/* </div> */}
           </div>
         </motion.div>
       </motion.div>
-      {/* <motion.div
-        className="absolute h-[5rem] w-[5rem] -right-[20px] top-20 bg-rightArrowBg  rounded-3xl transform rotate-45 text-right pt-1 pr-1.5 text-[1.2rem] border  cursor-pointer text-rightArrowColor border-rightArrowColor"
-        // initial={{ right: "100px" }}
-        animate={{ right: hovered || tablet ? "-20px" : "100px", transition: { duration: 0.4, delay:!hovered ? 0.5:0 } }}
-        onMouseOver={() => setHovered(true)}
-        onMouseOut={() => setHovered(false)}
-        onClick={() => setExpanded(!expanded)}
-      >
-        <motion.div
-          initial={{ rotate: 90 }}
-          animate={{ rotate: expanded ? 140 : 310 }}
-          className="absolute right-[6px] top-[6px]"
-        >
-          <FaChevronRight />
-        </motion.div>
-      </motion.div> */}
     </div>
   );
 };
