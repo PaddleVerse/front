@@ -18,7 +18,7 @@ const MemberList = ({
   exec,
   channel,
 }: {
-  participant: participants;
+  participant: participants & { user: user };
   exec: participants;
   channel: channel;
 }) => {
@@ -57,8 +57,8 @@ const MemberList = ({
         roomName: channel.name,
         user: user,
       });
-      router.push("/Dashboard/");
-    })
+      // router.push("/Dashboard/");
+    });
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -76,16 +76,19 @@ const MemberList = ({
       executor: exec.user_id,
     };
     axios
-      .delete(`http://localhost:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
+      .delete(
+        `http://localhost:8080/participants/kick?target=${
+          participant.user_id
+        }&user=${exec.user_id}&channel=${channel!.id}`
+      )
       .then((res) => {
         state?.socket?.emit("leaveUpdate", {
           roomName: channel.name,
           user: user,
         });
-        router.push("/Dashboard/");
+        // router.push("/Dashboard/");
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const handlePromoteDemote = (
@@ -115,8 +118,7 @@ const MemberList = ({
           user: user,
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const handleMuteUnMute = (
@@ -146,8 +148,7 @@ const MemberList = ({
           user: user,
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   return (

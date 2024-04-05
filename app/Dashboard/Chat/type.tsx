@@ -65,3 +65,5 @@ export type user = {
   twoFaSecret: string;
   conversations: conversation;
 };
+
+export type participantWithUser = participants & { user: user };
