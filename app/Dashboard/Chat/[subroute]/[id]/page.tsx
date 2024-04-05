@@ -20,7 +20,6 @@ import { channel, user } from "../../type";
 
 const fetchTargetUser = async (parameters: any) => {
   if (parameters.subroute === "dm") {
-    console.log("getting user: " + parameters.id)
     const user = await axios.get(
       `http://localhost:8080/user/${parameters?.id!}`
     );
@@ -30,7 +29,6 @@ const fetchTargetUser = async (parameters: any) => {
 };
 const fetchTargetChannel = async (parameters: any) => {
   if (parameters.subroute === "channel") {
-    console.log("getting channel: " + parameters.id)
     const channel = await axios.get(
       `http://localhost:8080/channels/${parameters!.id!}`
     );

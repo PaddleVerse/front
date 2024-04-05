@@ -33,7 +33,6 @@ const fetchChatList = async (userId: string) => {
       }
     })
   );
-  // console.log("the data with messages is: ", dataWithMessages);
   return dataWithMessages;
 };
 

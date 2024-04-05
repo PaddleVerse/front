@@ -13,14 +13,6 @@ const FetchMessages = async (p: any, userId: string) => {
     const mes = await axios.get(
       `http://localhost:8080/channels/messages/${p?.id!}?uid=${userId}`
     );
-    console.log("the unsorted data: ", mes.data);
-
-    const sortedMessages = mes.data.sort((a: message, b: message) => {
-      a?.id! - b?.id!;
-    });
-
-    console.log("the sorted data: ", sortedMessages);
-
     return mes.data;
   } else {
     const mes = await axios.get(
