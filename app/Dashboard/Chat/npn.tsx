@@ -10,10 +10,7 @@ import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import Image from "next/image";
 import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 import toast from "react-hot-toast";
-import {
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -76,40 +73,41 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
+      console.log(data);
       if (data.type === "banned") {
         toast.error("You have been banned from this channel");
         clt.invalidateQueries({
-        queryKey: ['chatList']
-        })
+          queryKey: ["chatList"],
+        });
         router.push("/Dashboard/Chat");
         return;
       }
       if (data.type === "kicked") {
         toast.error("You have been kicked from this channel");
         clt.invalidateQueries({
-        queryKey: ['chatList']
-        })
+          queryKey: ["chatList"],
+        });
         router.push("/Dashboard/Chat");
         return;
       }
       clt.invalidateQueries({
-        queryKey: ['chatList']
+        queryKey: ["chatList"],
       });
       clt.invalidateQueries({
-        queryKey: ['messages']
+        queryKey: ["messages"],
       });
-    })
+    });
     socket?.on("ok", (data: any) => {
       if (data === null) return;
       clt.invalidateQueries({
-        queryKey: ['chatList']
+        queryKey: ["chatList"],
       });
     });
     socket?.emit("refresh");
     return () => {
       socket?.off("ok");
-      socket?.off("update")
-    }
+      socket?.off("update");
+    };
   }, [socket, clt]);
 
   const handleClick = () => {

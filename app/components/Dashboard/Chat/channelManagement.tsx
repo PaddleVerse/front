@@ -4,7 +4,12 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/ui/newinput";
 import MemberList from "./MemberList";
 import { useForm } from "react-hook-form";
-import { channel, participants, participantWithUser, user } from "@/app/Dashboard/Chat/type";
+import {
+  channel,
+  participants,
+  participantWithUser,
+  user,
+} from "@/app/Dashboard/Chat/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -47,7 +52,6 @@ const ChannelManagement = ({
   user: user;
   update: (arg0: boolean) => void;
 }) => {
-
   const clt = useQueryClient();
   const { state, dispatch } = useGlobalState();
   const { user: u, socket } = state;
@@ -70,6 +74,13 @@ const ChannelManagement = ({
     queryKey: ["priviliged"],
     queryFn: async () => FetchPriviliged(channel, user),
   });
+
+  useEffect(() => {
+    socket?.on("update", (data: any) => {
+      // console.log("update in channel management");
+      clt.invalidateQueries({ queryKey: ["participants"] });
+    });
+  }, [socket]);
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
