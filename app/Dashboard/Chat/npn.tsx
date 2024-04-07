@@ -14,6 +14,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 const fetchChatList = async (userId: string) => {
@@ -42,6 +43,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const { user, socket } = state;
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
+  const router = useRouter();
   const { show } = state;
   const {
     data: chatList,
@@ -74,7 +76,22 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
-      console.log("hello from update use Effect")
+      if (data.type === "banned") {
+        toast.error("You have been banned from this channel");
+        clt.invalidateQueries({
+        queryKey: ['chatList']
+        })
+        router.push("/Dashboard/Chat");
+        return;
+      }
+      if (data.type === "kicked") {
+        toast.error("You have been kicked from this channel");
+        clt.invalidateQueries({
+        queryKey: ['chatList']
+        })
+        router.push("/Dashboard/Chat");
+        return;
+      }
       clt.invalidateQueries({
         queryKey: ['chatList']
       });

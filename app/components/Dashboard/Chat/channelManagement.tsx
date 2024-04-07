@@ -16,10 +16,18 @@ const fetchParticipants = async (channel: channel, user: user) => {
   const participants = await axios.get(
     `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
-  return participants.data;
+  const ret = await Promise.all(
+    participants.data.map(async (participant: participants) => {
+      const user = await axios.get(
+        `http://localhost:8080/user/${participant.user_id}`
+      );
+      return { ...participant, user: user.data };
+    })
+  );
+  return ret;
 };
 
-const FetchPriviliged= async (channel: channel, user: user) => {
+const FetchPriviliged = async (channel: channel, user: user) => {
   const participants = await axios.get(
     `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
@@ -39,7 +47,6 @@ const ChannelManagement = ({
   user: user;
   update: (arg0: boolean) => void;
 }) => {
-  // const [participants, setParticipants] = useState<participants[]>([]);
 
   const clt = useQueryClient();
   const { state, dispatch } = useGlobalState();
@@ -51,7 +58,11 @@ const ChannelManagement = ({
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState("");
-  const {data: participants, error, isLoading} = useQuery<participants[]>({
+  const {
+    data: participants,
+    error,
+    isLoading,
+  } = useQuery<participants[]>({
     queryKey: ["participants"],
     queryFn: async () => fetchParticipants(channel, user),
   });
@@ -248,16 +259,17 @@ const ChannelManagement = ({
       </div>
       <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
         <div className="mt-10  flex flex-col gap-4 items-center">
-          {participants && participants.map((participant, index) => {
-            return (
-              <MemberList
-                key={index}
-                participant={participant}
-                exec={priviliged!}
-                channel={channel}
-              />
-            );
-          })}
+          {participants &&
+            participants.map((participant, index) => {
+              return (
+                <MemberList
+                  key={index}
+                  participant={participant}
+                  exec={priviliged!}
+                  channel={channel}
+                />
+              );
+            })}
         </div>
       </div>
     </motion.div>

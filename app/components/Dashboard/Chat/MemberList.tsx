@@ -53,11 +53,10 @@ const MemberList = ({
       uid: participant.user_id,
     };
     axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
-      state?.socket?.emit("leaveUpdate", {
+      state?.socket?.emit("ban", {
         roomName: channel.name,
         user: user,
       });
-      router.push("/Dashboard/");
     })
   };
 
@@ -78,11 +77,10 @@ const MemberList = ({
     axios
       .delete(`http://localhost:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
       .then((res) => {
-        state?.socket?.emit("leaveUpdate", {
+        state?.socket?.emit("kick", {
           roomName: channel.name,
           user: user,
         });
-        router.push("/Dashboard/");
       })
       .catch((err) => {
       });
