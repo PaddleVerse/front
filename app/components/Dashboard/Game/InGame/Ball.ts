@@ -22,7 +22,7 @@ class Ball extends THREE.Mesh {
 
   constructor(
     radius: number = 1,
-    position: Position = { x: 0, y: 15, z: 0 },
+    position: Position = { x: 0, y: 0, z: 0 },
     velocity: Velocity = { x: 0, y: 0, z: 0 },
     texture: string = '/Game/textures/ball.jpg',
   ) {

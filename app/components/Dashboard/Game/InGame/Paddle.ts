@@ -8,7 +8,7 @@ interface Position {
   z: number;
 }
 
-class PaddleModule {
+class Paddle {
   scene: THREE.Scene;
   position: Position;
   object: THREE.Object3D;
@@ -86,4 +86,4 @@ class PaddleModule {
   }
 }
 
-export { PaddleModule };
+export { Paddle as Paddle };
