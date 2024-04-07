@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/ui/newinput";
 import MemberList from "./MemberList";
 import { useForm } from "react-hook-form";
-import { channel, participants, user } from "@/app/Dashboard/Chat/type";
+import { channel, participants, participantWithUser, user } from "@/app/Dashboard/Chat/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -62,7 +62,7 @@ const ChannelManagement = ({
     data: participants,
     error,
     isLoading,
-  } = useQuery<participants[]>({
+  } = useQuery<participantWithUser[]>({
     queryKey: ["participants"],
     queryFn: async () => fetchParticipants(channel, user),
   });

@@ -161,7 +161,6 @@ const Page = (props: any) => {
           </div>
           <div
             className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
-            // ref={containerRef}
           >
             {targetUser ? (
               <ChatComponent

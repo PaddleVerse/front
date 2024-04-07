@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { channel, participants, user } from "@/app/Dashboard/Chat/type";
+import { channel, participants, participantWithUser, user } from "@/app/Dashboard/Chat/type";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -18,24 +18,24 @@ const MemberList = ({
   exec,
   channel,
 }: {
-  participant: participants;
+  participant: participantWithUser;
   exec: participants;
   channel: channel;
 }) => {
-  const [user, setUser] = useState<user>();
+  // const [user, setUser] = useState<user>();
   const router = useRouter();
   const { state, dispatch } = useGlobalState();
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:8080/user/${participant.user_id}`)
-      .then((res) => {
-        setUser(res.data);
-      });
-  }, [participant]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:8080/user/${participant.user_id}`)
+  //     .then((res) => {
+  //       setUser(res.data);
+  //     });
+  // }, [participant]);
 
   const handleClick = () => {
-    router.push(`/Dashboard/Profile?id=${user?.id}`);
+    router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
   };
 
   const handleBan = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -55,7 +55,7 @@ const MemberList = ({
     axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
-        user: user,
+        user: participant.user,
       });
     })
   };
@@ -79,7 +79,7 @@ const MemberList = ({
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel.name,
-          user: user,
+          user: participant.user,
         });
       })
       .catch((err) => {
@@ -110,7 +110,7 @@ const MemberList = ({
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
-          user: user,
+          user: participant.user,
         });
       })
       .catch((err) => {
@@ -141,7 +141,7 @@ const MemberList = ({
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
-          user: user,
+          user: participant.user,
         });
       })
       .catch((err) => {
@@ -156,7 +156,7 @@ const MemberList = ({
       <div className="flex items-center gap-2">
         <Image
           src={
-            user?.picture! ||
+            participant.user?.picture! ||
             "http:localhost:8080/images/1709559281974-wallpaperflare.com_wallpaper.png"
           }
           width={40}
@@ -168,8 +168,8 @@ const MemberList = ({
           className="rounded-full aspect-square"
         />
         <div className="flex flex-col 2xl:text-md text-xs">
-          <span>{user?.name}</span>
-          <span className="2xl:text-md text-[10px]">@{user?.nickname}</span>
+          <span>{participant.user?.name}</span>
+          <span className="2xl:text-md text-[10px]">@{participant.user?.nickname}</span>
         </div>
       </div>
       <span>{participant.role.toLowerCase()}</span>
