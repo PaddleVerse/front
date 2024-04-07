@@ -73,7 +73,6 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
-      console.log(data);
       if (data.type === "banned") {
         toast.error("You have been banned from this channel");
         clt.invalidateQueries({

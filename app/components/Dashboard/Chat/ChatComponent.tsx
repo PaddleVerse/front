@@ -46,10 +46,6 @@ const ChatComponent = ({
     queryKey: ["messages"],
   });
   const containerRef = useRef(null);
-  // const { data: messages } = useQuery<message[]>({
-  //   queryKey: ["messages"],
-  //   queryFn: () => FetchMessages(p, user?.id),
-  // });
 
   useEffect(() => {
     const container: any = containerRef.current;

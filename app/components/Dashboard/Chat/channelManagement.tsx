@@ -77,7 +77,6 @@ const ChannelManagement = ({
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
-      // console.log("update in channel management");
       clt.invalidateQueries({ queryKey: ["participants"] });
     });
   }, [socket]);
@@ -288,5 +287,3 @@ const ChannelManagement = ({
 };
 
 export default ChannelManagement;
-
-// still need form validation and submit logic depending on the selected option, and the participants management is to be added later
