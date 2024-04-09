@@ -14,6 +14,7 @@ const GameCanvas = () => {
   const paddlePositionRef = useRef<{ x: number; y: number; z: number } | null>(null);
   const lastEmittedPositionRef = useRef<{ x: number; y: number; z: number } | null>(null);
   const paddle2Ref = useRef<Paddle | null>(null);
+  const ballRef = useRef<Ball | null>(null);
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   
@@ -31,7 +32,12 @@ const GameCanvas = () => {
           paddle2Ref.current.position.z = paddlePosition.paddle.z;
         }
       });
-      
+      socket.on("moveBall", (ballPosition: any) => {
+        if (ballRef.current) {
+          ballRef.current.moveToPosition(ballPosition);
+        }
+      }
+      );
     }
     if (!mountRef.current) return;
     const scene = new THREE.Scene();
@@ -55,7 +61,9 @@ const GameCanvas = () => {
     scene.add(new Lighting(0xffffff, 0.8, { x: 20, y: 20, z: 0 }));
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
-
+    let ball = new Ball(0.5, { x: 0, y: 15, z: 0 });
+    scene.add(ball);
+    ballRef.current = ball;
     const plane = new Plane(500, 500, { x: 0, y: 0, z: 0 }, -Math.PI / 2);
     scene.add(plane);
 
@@ -97,18 +105,24 @@ const GameCanvas = () => {
 
         camera.position.y = mouseY * 2 + 15;
         camera.position.z = -(mouseX * 2);
-
-        // socket.emit('paddle',data);
-
       }
     };
+    // if the key h is pressed, the ball will move
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'h') {
+        ball.moveToPosition({ x: 0, y: 20, z: 0 });
+      }
+      if (e.key === 'g') {
+        ball.position.y = 0;
+      }
+    });
     mountRef.current?.addEventListener('mousemove', handleMouseMove);
 
     function animate() {
 
       paddle.update();
       paddle2.update();
-
+      ball.update();
       renderer.render(scene, camera);
 
       camera.lookAt(new THREE.Vector3(0, 10, 0));

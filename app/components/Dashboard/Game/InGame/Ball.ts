@@ -19,7 +19,7 @@ class Ball extends THREE.Mesh {
   boundingBox: THREE.Box3;
   min: Position;
   max: Position;
-
+  targetPosition: Position | null = null;
   constructor(
     radius: number = 1,
     position: Position = { x: 0, y: 0, z: 0 },
@@ -62,6 +62,7 @@ class Ball extends THREE.Mesh {
   }
 
   update() {
+    this.updatePosition(0.05);
     this.min = {
       x: this.position.x - this.radius,
       y: this.position.y - this.radius,
@@ -74,7 +75,26 @@ class Ball extends THREE.Mesh {
     };
     this.boundingBox.setFromObject(this);
   }
+  // Call this method in your animation loop or similar periodic update function.
+  updatePosition(speed: number) {
+    if (!this.targetPosition) return; // No target position set, do nothing.
 
+    // Calculate the next position using LERP for smooth transition.
+    this.position.x += (this.targetPosition.x - this.position.x) * speed;
+    this.position.y += (this.targetPosition.y - this.position.y) * speed;
+    this.position.z += (this.targetPosition.z - this.position.z) * speed;
+
+    // Optionally, you can set a threshold to clear the target position when close enough.
+    const distance = this.position.distanceTo(new THREE.Vector3(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z));
+    if (distance < 0.01) {
+      this.targetPosition = null; // Arrived at target position, clear it.
+    }
+  }
+  moveToPosition(targetPosition: Position, speed: number = 0.05) {
+    this.targetPosition = targetPosition;
+    // Speed can be adjusted according to your needs.
+    this.updatePosition(speed);
+  }
   applyGravity(GRAVITY: number = 0.01) {
     this.velocity.y -= GRAVITY;
   }
