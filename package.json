@@ -46,6 +46,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/socket.io-client": "^3.0.0",
     "@types/three": "^0.163.0",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
