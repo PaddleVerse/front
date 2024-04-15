@@ -22,11 +22,6 @@ const BigCard = ({ infos, handleClick, selected }: BigCardProps) => {
   useEffect(() => {
     console.log(selected);
   }, []);
-  const imageUrls = {
-    first: `/${selected}/first.png`,
-    second: `/${selected}/second.png`,
-    third: `/${selected}/third.png`,
-  };
   return (
     <div
       className={cn(
@@ -37,13 +32,7 @@ const BigCard = ({ infos, handleClick, selected }: BigCardProps) => {
       onMouseOut={() => setHover(false)}
     >
       <Image
-        src={`${
-          infos.image === "first"
-            ? imageUrls.first
-            : infos.image === "second"
-            ? imageUrls.second
-            : imageUrls.third
-        }`}
+        src={`${infos.image}`}
         alt="shop"
         fill
         sizes="h-auto w-auto"

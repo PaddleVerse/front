@@ -48,7 +48,6 @@ const Page = (props: any) => {
   const [update, setUpdate] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const inputMessage = useRef<HTMLInputElement | null>(null);
-
   const { data: targetChannel } = useQuery<channel | null>({
     queryKey: ["targetChannel"],
     queryFn: () => fetchTargetChannel(param),
@@ -57,6 +56,7 @@ const Page = (props: any) => {
     queryKey: ["targetUser"],
     queryFn: () => fetchTargetUser(param),
   });
+ 
 
   useEffect(() => {
     socket?.on("ok", (data: any) => {
@@ -127,7 +127,7 @@ const Page = (props: any) => {
   return (
     <>
       {targetChannel || targetUser ? (
-        <section className="flex flex-col flex-auto border-l border-gray-800">
+        <section className="flex flex-col flex-auto border-l border-gray-800" {...handlers}>
           <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div className="flex">
               <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">

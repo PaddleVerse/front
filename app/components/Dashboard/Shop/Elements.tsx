@@ -5,36 +5,15 @@ import BigCard from "./Cards/BigCard";
 import SmallCard from "./Cards/SmallCard";
 import Header from "./Header";
 import Modlar from "./Stuff/Modlar";
-import { Infos } from "./types";
 import cardsData from "./CardData";
-const infos = [
-  {
-    title: "Galactic Spinner",
-    description:
-      "Unlock the mysteries of the universe with the Galactic Spinner! This celestial paddle will have you serving stars and striking with the force of a comet",
-    image: "first",
-  },
-  {
-    title: "Ocean whisper",
-    description:
-      "Bring the serene power of the sea to your game with Ocean's Whisper. Its calming waves and fluid motion are perfect for strategic players who value grace and control.",
-    image: "second",
-  },
-  {
-    title: "Dragon Breath",
-    description:
-      "Unleash the power of the mythical beast with Dragon's Breath. Dominate the table with fiery precision and scare your opponents with its fierce design.",
-    image: "third",
-  },
-];
+
 
 const Elements = () => {
   const handleClick = (e: any | null) => {
-    console.log(e);
     setModelarInfos(e);
     setModelarOpen(!modelarOpen);
   };
-  const [BigCardinfos, setBigCardInfos] = useState<Infos[]>(infos);
+  const [BigCardinfos, setBigCardInfos] = useState<any>(cardsData.Paddle.bigCard);
   const [selected, setSelected] = useState<string>("Paddle");
   const [modelarOpen, setModelarOpen] = React.useState(false);
   const [modelarInfos, setModelarInfos] = React.useState({
@@ -43,10 +22,8 @@ const Elements = () => {
     description: "",
   });
   const handleHeaderSelect = (element: string) => {
-    console.log(element);
     setSelected(element);
-    const selectedElement = cardsData[element as keyof typeof cardsData];
-    const bigCardInfos = Object.values(selectedElement.bigCard);
+    const bigCardInfos = cardsData[element as keyof typeof cardsData].bigCard;
     setBigCardInfos(bigCardInfos);
   };
   return (
@@ -63,17 +40,17 @@ const Elements = () => {
           <div className="flex flex-col w-full h-full relative 2xl:px-[65px] xl:px-[35px] sm:px-[20px] px-[10px]">
             <div className="w-full grid grid-flow-col-1 gap-7 md:grid-cols-3 place-items-center mt-6">
               <BigCard
-                infos={BigCardinfos[0]}
+                infos={BigCardinfos.first}
                 handleClick={handleClick}
                 selected={selected}
               />
               <BigCard
-                infos={BigCardinfos[1]}
+                infos={BigCardinfos.second}
                 handleClick={handleClick}
                 selected={selected}
               />
               <BigCard
-                infos={BigCardinfos[2]}
+                infos={BigCardinfos.third}
                 handleClick={handleClick}
                 selected={selected}
               />
