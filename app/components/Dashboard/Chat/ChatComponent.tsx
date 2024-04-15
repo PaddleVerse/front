@@ -83,7 +83,7 @@ const ChatComponent = ({
 
   return (
     <div
-      className="w-full h-full overflow-y-scroll no-scrollbar"
+      className="w-full h-full overflow-y-scroll no-scrollbar "
       {...handlers}
       ref={containerRef}
     >
