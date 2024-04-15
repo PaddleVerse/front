@@ -138,7 +138,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
           <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">
               <motion.section
-                className={` flex flex-col flex-none overflow-auto ${
+                className={` b flex flex-col flex-none overflow-auto ${
                   showMessage && tablet ? "invisible" : "visible"
                 } group lg:max-w-[300px] md:w-2/5 no-scrollbar`}
                 initial={{ display: "flex", width: "100%", opacity: 1 }}
