@@ -8,8 +8,6 @@ import { rajdhani } from "@/app/utils/fontConfig";
 import Coin from "./Coin";
 import { cn } from "@/components/cn";
 
-
-
 const Modlar = ({
   infos,
   selected,
@@ -19,11 +17,6 @@ const Modlar = ({
   handleClick: (infos: null) => void;
   selected: string;
 }) => {
-  const imageUrls = {
-    first: `/${selected}/first.png`,
-    second: `/${selected}/second.png`,
-    third: `/${selected}/third.png`,
-  };
   return (
     <motion.div className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50">
       <motion.div
@@ -48,13 +41,7 @@ const Modlar = ({
       >
         <div className="relative">
           <Image
-            src={`${
-              infos.image === "first"
-                ? imageUrls.first
-                : infos.image === "second"
-                ? imageUrls.second
-                : imageUrls.third
-            }`}
+            src={`${infos.image}`}
             alt="shop"
             sizes="width:auto height:auto"
             width={0}
