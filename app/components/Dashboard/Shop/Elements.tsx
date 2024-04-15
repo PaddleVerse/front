@@ -7,26 +7,7 @@ import Header from "./Header";
 import Modlar from "./Stuff/Modlar";
 import { Infos } from "./types";
 import cardsData from "./CardData";
-const infos = [
-  {
-    title: "Galactic Spinner",
-    description:
-      "Unlock the mysteries of the universe with the Galactic Spinner! This celestial paddle will have you serving stars and striking with the force of a comet",
-    image: "first",
-  },
-  {
-    title: "Ocean whisper",
-    description:
-      "Bring the serene power of the sea to your game with Ocean's Whisper. Its calming waves and fluid motion are perfect for strategic players who value grace and control.",
-    image: "second",
-  },
-  {
-    title: "Dragon Breath",
-    description:
-      "Unleash the power of the mythical beast with Dragon's Breath. Dominate the table with fiery precision and scare your opponents with its fierce design.",
-    image: "third",
-  },
-];
+
 
 const Elements = () => {
   const handleClick = (e: any | null) => {
