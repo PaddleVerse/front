@@ -5,13 +5,11 @@ import BigCard from "./Cards/BigCard";
 import SmallCard from "./Cards/SmallCard";
 import Header from "./Header";
 import Modlar from "./Stuff/Modlar";
-import { Infos } from "./types";
 import cardsData from "./CardData";
 
 
 const Elements = () => {
   const handleClick = (e: any | null) => {
-    console.log(e);
     setModelarInfos(e);
     setModelarOpen(!modelarOpen);
   };

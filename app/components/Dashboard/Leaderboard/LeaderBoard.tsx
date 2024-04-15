@@ -16,7 +16,6 @@ const LeaderBoard = () => {
             className={cn(
               'text-white sm:text-[40px] text-[31px] font-semibold',
               rajdhani.className
-            
             )}
           >
             Pong Leaderboard

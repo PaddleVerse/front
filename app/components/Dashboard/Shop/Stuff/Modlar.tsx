@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+'use client'
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
@@ -17,6 +18,17 @@ const Modlar = ({
   handleClick: (infos: null) => void;
   selected: string;
 }) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClick(null);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleClick]);
   return (
     <motion.div className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50">
       <motion.div
