@@ -1,9 +1,6 @@
 'use client';
 import React from "react";
-import UserProfile from "./UserProfile/UserProfile";
-import MatchHistory from "./MatchHistory/MatchHistory";
 import Standing from "./Standing/Standing";
-import Graph from "./Graph/Graph";
 import UserProfileSecond from "./UserProfileSecond/UserProfileSecond";
 import Achievements from "./Achievements/Achievements";
 import Items from "./Items/Items";

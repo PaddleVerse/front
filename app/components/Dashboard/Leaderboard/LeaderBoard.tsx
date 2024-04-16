@@ -2,6 +2,7 @@ import React from "react";
 import PlacingElement from "./PlacingElement";
 import LeaderTable from "./LeaderTable";
 import { Rajdhani } from "next/font/google";
+import { cn } from "@/components/cn";
 const rajdhani = Rajdhani({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -12,7 +13,10 @@ const LeaderBoard = () => {
       <div className=" rounded-xl h-full w-full bg-[#0E141D]">
         <div className="w-[95%] mx-auto flex mt-10 flex-col gap-10 ">
           <h1
-            className={`${rajdhani.className} text-white sm:text-[40px] text-[31px] font-semibold`}
+            className={cn(
+              'text-white sm:text-[40px] text-[31px] font-semibold',
+              rajdhani.className
+            )}
           >
             Pong Leaderboard
           </h1>

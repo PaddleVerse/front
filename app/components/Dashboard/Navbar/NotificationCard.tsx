@@ -1,6 +1,4 @@
-import React from 'react'
 import { useRouter } from 'next/navigation';
-import { set } from 'react-hook-form';
 import Image from 'next/image';
 
 const NotificationCard = (props : any) => {

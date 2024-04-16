@@ -1,11 +1,10 @@
 "use client";
-import React from "react";
 
-import {motion} from 'framer-motion'
-import FormElement from "./FormElement";
-import { useGlobalState } from "../../Sign/GlobalState";
-import { useRouter } from "next/navigation";
+import { motion } from 'framer-motion';
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useGlobalState } from "../../Sign/GlobalState";
+import { cn } from '@/components/cn';
 interface Props {
   user: any;
   index: number;
@@ -22,9 +21,10 @@ const LeaderRow = ({ user, index }: Props) => {
   };
   return (
     <motion.tr
-      className={`${
-        user.id % 2 === 0 ? "bg-[#101823]" : "bg-[#161F2F]"
-      } text-white sm:text-[12px] text-[10px] cursor-pointer`}
+      className={cn(
+        'text-white sm:text-[12px] text-[10px] cursor-pointer',
+        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]'
+      )}
       onClick={handleClick}
       initial={{ opacity: 0, y:-20 }}
       animate={{ opacity: 1, y:0 }}
@@ -80,13 +80,6 @@ const LeaderRow = ({ user, index }: Props) => {
       <td className=" sm:py-[7px] pl-2 text-[#15E5B4] text-[14px]">3</td>
       <td className=" sm:py-[7px] pl-2 text-[14px]">5</td>
       <td className="  sm:py-[7px] pl-4 text-[14px]">2.2</td>
-      {/* <td className=" pr-[10px]">
-        <div className="flex justify-between">
-          {Array.from({ length: 10 }, (_, index) => (
-            <FormElement key={index} />
-          ))}
-        </div>
-      </td> */}
     </motion.tr>
   );
 };

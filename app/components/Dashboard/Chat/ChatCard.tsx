@@ -3,51 +3,27 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { message } from "@/app/Dashboard/Chat/page";
-import { getTime } from "@/app/utils";
 import Image from "next/image";
+import { getShortDate, getTime } from "@/app/utils";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ChatCard = (props: any) => {
-  const [msg, setMessage] = useState<message[] | null>();
-  useEffect(() => {
-    if (props.value.user) {
-      axios
-        .get(
-          `http://localhost:8080/conversations?uid1=${props.value.id}&uid2=${props.self.id}`
-        )
-        .then((res) => {
-          setMessage(res.data.messages);
-        });
-    } else {
-      axios
-        .get(
-          `http://localhost:8080/channels/messages/${props.value.id}?uid=${props.self.id}`
-        )
-        .then((res) => {
-          setMessage(res.data);
-        });
-    }
-  }, [props.value.id, props.self.id, props.value.user, props.update]);
-
-
-  if (!msg) {
-    return <div>Loading...</div>;
-  }
-
+  const router = useRouter();
+  const clt = useQueryClient();
 
   return (
     <motion.div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative sm:w-auto w-full cursor-pointer transition-all duration-300 ease-in-out hover:shadow-lg"
       onClick={(e) => {
-        if (props.value.user === false) {
-          props.setTargetChannel(props.value);
-          props.setTargetUser(null);
-        } else {
-          props.setTargetUser(props.value);
-          props.setTargetChannel(null);
-        }
-        props.setUpdate(true);
-        props.handleClick();
         e.preventDefault();
+        if (props.value.user === false) {
+          router.push(`/Dashboard/Chat/channel/${props?.value?.id}`);
+        } else {
+          router.push(`/Dashboard/Chat/dm/${props.value.id}`);
+        }
+        clt.invalidateQueries({queryKey: ["targetChannel", "targetUser"]})
+        props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -63,7 +39,7 @@ export const ChatCard = (props: any) => {
             }
             width={40}
             height={40}
-            alt="User2"
+            alt="picture"
           />
           <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
             {props.value.user &&
@@ -80,12 +56,11 @@ export const ChatCard = (props: any) => {
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
                 <p className="">
-                  {
-                    (msg && msg.length > 0 && msg[msg.length - 1]?.content.length >= 10) ?
-                    msg[msg.length - 1]?.content.slice(0, 10) + "..."
-                    : (msg && msg.length > 0) ? msg[msg.length - 1]?.content
-                    : null
-                  }
+                  {props.msg && props.msg?.content?.length >= 10
+                    ? props.msg?.content.slice(0, 10) + "..."
+                    : props.msg
+                    ? props.msg?.content
+                    : null}
                 </p>
               </div>
             </div>
@@ -94,7 +69,10 @@ export const ChatCard = (props: any) => {
       </div>
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm ">
-          {msg && msg.length > 0 && getTime(msg[msg.length - 1]?.createdAt)}
+          {props.msg && getTime(props.msg.createdAt)}
+        </p>
+        <p className="ml-2 whitespace-no-wrap text-center text-gray-600 text-sm sm:relative ">
+          {props.msg && getShortDate(new Date(props.msg.createdAt))}
         </p>
       </div>
     </motion.div>

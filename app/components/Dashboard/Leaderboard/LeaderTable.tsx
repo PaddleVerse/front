@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import StandingRow from "./LeaderRow";
 import axios from "axios";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { cn } from "@/components/cn";
+import LeaderRow from "./LeaderRow";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,8 +27,11 @@ const LeaderTable = () => {
     <div className="">
       <div className="relative ">
         <table
-          className={`${inter.className}  w-full rounded-lg  text-left text-white font-light`}
-          // rules="none" 
+          className={cn(
+            `w-full rounded-lg text-left text-white font-light`,
+            inter.className
+          
+          )}
         >
           <thead className="bg-[#462121] text-xs sm:text-sm text-white">
             <tr>
@@ -48,15 +53,12 @@ const LeaderTable = () => {
               <th scope="col" className="p-[5px]  sm:w-[5%] sm:pl-[17px] pl-[14px] rounded-r-[8px]">
                 W/L
               </th>
-              {/* <th scope="col" className="p-[5px] font-[300] xl:w-[31%] rounded-r-lg lg:w-[50%] md:w-[30%] w-[40%]">
-                Form
-              </th> */}
             </tr>
           </thead>
           <tbody className="">
               { users && users.map((user : any , index : number) =>
                 {
-                  return <StandingRow key={index} user={user} index={index} />
+                  return <LeaderRow key={index} user={user} index={index} />
                 }
               )}
           </tbody>

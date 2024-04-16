@@ -19,3 +19,8 @@ export const getTime = (datetime: any): string  => {
 
     return `${formattedHours}:${formattedMinutes}`;
 }
+
+export const getShortDate = (date: Date | null) => {
+  if (!date) return "";
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+};

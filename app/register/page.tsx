@@ -1,19 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Label } from "../../components/ui/newlabel";
-import { Input } from "../../components/ui/newinput";
-import { cn } from "../../components/cn";
 import axios from "axios";
-import { useRouter } from 'next/navigation';
-import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { cn } from "../../components/cn";
+import { Input } from "../../components/ui/newinput";
+import { Label } from "../../components/ui/newlabel";
+// import { BgWrapper } from "../page";
 
+import BottomGradient from "@/components/ui/bottomGradiant";
 import {
-  IconBrandGithub,
-  IconBrandGoogle,
+  IconBrandGoogle
 } from "@tabler/icons-react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 
 export default function SignupFormDemo() {
@@ -49,7 +50,7 @@ export default function SignupFormDemo() {
 
   function onSubmit(values : any) {
     setIs(isValidValues(values));
-    console.log(values);
+    // console.log(values);
     axios.post("http://localhost:8080/auth/signup", {
       name: values.name,
       nickname: values.nickname,
@@ -155,15 +156,6 @@ export default function SignupFormDemo() {
     // </BgWrapper>
   );
 }
-
-const BottomGradient = () => {
-  return (
-    <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-    </>
-  );
-};
 
 const LabelInputContainer = ({
   children,

@@ -1,22 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+'use client'
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-
-import { Rajdhani } from "next/font/google";
+import { Infos } from "../types";
+import { rajdhani } from "@/app/utils/fontConfig";
 import Coin from "./Coin";
-
-const rajdhani = Rajdhani({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-interface Infos {
-  title: string;
-  image: string;
-  description: string;
-}
+import { cn } from "@/components/cn";
 
 const Modlar = ({
   infos,
@@ -27,15 +18,19 @@ const Modlar = ({
   handleClick: (infos: null) => void;
   selected: string;
 }) => {
-  const imageUrls = {
-    first: `/${selected}/first.png`,
-    second: `/${selected}/second.png`,
-    third: `/${selected}/third.png`,
-  };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClick(null);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleClick]);
   return (
-    <motion.div
-      className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50"
-      >
+    <motion.div className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50">
       <motion.div
         className="bg-black rounded-lg flex justify-center p-[50px] text-white gap-8  relative"
         initial={{ opacity: 0, scale: 0.75 }}
@@ -55,27 +50,21 @@ const Modlar = ({
             duration: 0.15,
           },
         }}
-        // style={{ minWidth: 0, maxWidth: "80vw", maxHeight: "80vh" }}
       >
         <div className="relative">
           <Image
-            src={`${
-              infos.image === "first"
-                ? imageUrls.first
-                : infos.image === "second"
-                ? imageUrls.second
-                : imageUrls.third
-            }`}
+            src={`${infos.image}`}
             alt="shop"
             sizes="width:auto height:auto"
             width={0}
             height={0}
             priority
             className="object-cover object-center 2xl:w-[750px] 2xl:h-[750px] lg:w-[450px] lg:h-[450px] w-[250px] h-[250px]"
-            // sizes="(max-width: 100px) 100vw, 33vw"
           />
         </div>
-        <div className={`flex flex-col ${rajdhani.className}  justify-between`}>
+        <div
+          className={cn("flex flex-col justify-between", rajdhani.className)}
+        >
           <div>
             <h1 className="xl:text-[31px] text-[18px] font-[600]">
               {infos.title}

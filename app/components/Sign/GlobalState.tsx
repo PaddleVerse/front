@@ -6,17 +6,20 @@ interface GlobalState {
   // Your global state properties go here
   user: any;
   socket: any;
+  show: boolean;
 }
 
 // Define action types
 type Action =
   | { type: 'UPDATE_USER'; payload: any }
-  | { type: 'UPDATE_SOCKET'; payload: any };
+  | { type: 'UPDATE_SOCKET'; payload: any }
+  | { type: 'UPDATE_SHOW'; payload: boolean };
 
 // Define initial state
 const initialState: GlobalState = {
   user: null,
-  socket: null
+  socket: null,
+  show: true,
 };
 
 // Create context
@@ -29,6 +32,8 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
       return { ...state, user: action.payload };
     case 'UPDATE_SOCKET':
       return { ...state, socket: action.payload };
+    case 'UPDATE_SHOW':
+      return { ...state, show: action.payload };
     default:
       return state;
   }
