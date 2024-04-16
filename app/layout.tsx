@@ -22,7 +22,7 @@ export default function RootLayout({
         {/* <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
           <Boxes />
         </div> */}
-        {/* <GridBackground></GridBackground> */}
+        <GridBackground></GridBackground>
         {children}
       </body>
     </html>

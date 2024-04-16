@@ -3,6 +3,11 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form';
 import { useGlobalState } from '../../Sign/GlobalState';
+
+import { cn } from "@/components/cn";
+import { Label } from "@/components/ui/newlabel";
+import { Input } from "@/components/ui/newinput";
+
 import axios from 'axios';
 
 const EditProfile = () => {
@@ -33,8 +38,6 @@ const EditProfile = () => {
         refreshUser();
         reset();
       }
-      else
-        alert('Error');
     })
     .catch((error) => {
       console.error('Error updating user', error);
@@ -115,22 +118,16 @@ const EditProfile = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex justify-between items-end gap-20 mt-10'>
             <div className='flex flex-col gap-2 w-1/3'>
-              <label className='text-white font-light'>Name</label>
-              <input
-                type='text'
-                placeholder='Name'
-                className='bg-[#7d7d7d9b] px-4 py-2 rounded-2xl text-white font-light w-full focus:outline-none focus:ring-red-400/[0.5]'
-                {...register('name')}
-              />
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" placeholder="Enter your name" type="text" {...register('name')}/>
+              </LabelInputContainer>
             </div>
             <div className='flex flex-col gap-2 w-1/3'>
-              <label className='text-white font-light'>Nickname</label>
-              <input
-                type='text'
-                placeholder='Nickname'
-                className='bg-[#7d7d7d9b] px-4 py-2 rounded-2xl text-white font-light w-full focus:outline-none focus:ring-red-400/[0.5]'
-                {...register('nickname')}
-              />
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="nickname">Nickname</Label>
+                <Input id="nickname" placeholder="Enter your nickname" type="text" {...register('nickname')}/>
+              </LabelInputContainer>
             </div>
           </div>
           <div className='flex flex-col mt-10 w-1/6'>
@@ -143,3 +140,17 @@ const EditProfile = () => {
 }
 
 export default EditProfile
+
+const LabelInputContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("flex flex-col space-y-2 w-full", className)}>
+      {children}
+    </div>
+  );
+};

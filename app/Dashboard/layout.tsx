@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ContentWrapper from "./ContentWrapper";
+import { Toaster } from "react-hot-toast";
+import Popup from "../components/Dashboard/Settings/Popup";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +18,12 @@ export default function RootLayout({
 }) {
   return (
       <section
-        className={`${inter.className} w-screen h-screen bg-Dark bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
+        className={`${inter.className} w-screen h-screen bg-[#15202E] bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
       >
         <ContentWrapper>
-          {children}
+        <Popup />
+        {children}
+        <Toaster position="top-right"/>
         </ContentWrapper>
       </section>
   );

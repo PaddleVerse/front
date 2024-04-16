@@ -80,6 +80,7 @@
   font-family: "fontt"; /*a name to be used later*/
   src: url("../public/DINCondensed-Bold.ttf"); /*URL to font*/
 }
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -107,8 +108,7 @@ select:-webkit-autofill:focus {
   width: 5px;
 }
 
-
-tr td:first-child {
+/* tr td:first-child {
   -moz-border-radius-topleft: 8px;
   -moz-border-radius-bottomleft: 8px;
   -webkit-border-top-left-radius: 8px;
@@ -121,7 +121,31 @@ tr td:last-child {
   -moz-border-radius-bottomright: 8px;
   -webkit-border-top-right-radius: 8px;
   -webkit-border-bottom-right-radius: 8px;
+} */
+
+table tbody tr:first-child td:first-child {
+  border-top-left-radius: 5px;
 }
+
+table tbody tr:first-child td:last-child {
+  border-top-right-radius: 5px;
+}
+
+table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 5px;
+}
+
+table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 5px;
+}
+
+tbody:before {
+  content:"@";
+  display:block;
+  line-height:10px;
+  text-indent:-99999px;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -205,4 +229,31 @@ tr td:last-child {
 
 .no-visible-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-container::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  z-index: 0;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover::after {
+  visibility: visible;
+  opacity: 1;
 }

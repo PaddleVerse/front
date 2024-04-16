@@ -42,7 +42,7 @@ function ContentWrapper({ children }: Props) {
               'Authorization': `Bearer ${accessToken}`
           }
           })
-          .then(response => { return response.json();})
+          .then(response => { return response.json(); })
           .then(data => {
             if (!data || data?.error === "Unauthorized" || data?.message === "Unauthorized")
               router.push('/');
