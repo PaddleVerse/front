@@ -62,38 +62,39 @@ class Ball extends THREE.Mesh {
   }
 
   update() {
-    this.updatePosition(0.05);
-    this.min = {
-      x: this.position.x - this.radius,
-      y: this.position.y - this.radius,
-      z: this.position.z - this.radius,
-    };
-    this.max = {
-      x: this.position.x + this.radius,
-      y: this.position.y + this.radius,
-      z: this.position.z + this.radius,
-    };
-    this.boundingBox.setFromObject(this);
+    this.applyRotation();
+    // this.updatePosition();
+    // this.min = {
+    //   x: this.position.x - this.radius,
+    //   y: this.position.y - this.radius,
+    //   z: this.position.z - this.radius,
+    // };
+    // this.max = {
+    //   x: this.position.x + this.radius,
+    //   y: this.position.y + this.radius,
+    //   z: this.position.z + this.radius,
+    // };
+    // this.boundingBox.setFromObject(this);
   }
   // Call this method in your animation loop or similar periodic update function.
-  updatePosition(speed: number) {
+  updatePosition() {
     if (!this.targetPosition) return; // No target position set, do nothing.
 
-    // Calculate the next position using LERP for smooth transition.
-    this.position.x += (this.targetPosition.x - this.position.x) * speed;
-    this.position.y += (this.targetPosition.y - this.position.y) * speed;
-    this.position.z += (this.targetPosition.z - this.position.z) * speed;
-
+    // Calculate the next position using LERP for smooth transition while using velocity.
+    this.position.x += (this.targetPosition.x - this.position.x) * this.velocity.x;
+    this.position.y += (this.targetPosition.y - this.position.y) * this.velocity.y;
+    this.position.z += (this.targetPosition.z - this.position.z) * this.velocity.z;
+    
     // Optionally, you can set a threshold to clear the target position when close enough.
     const distance = this.position.distanceTo(new THREE.Vector3(this.targetPosition.x, this.targetPosition.y, this.targetPosition.z));
     if (distance < 0.01) {
       this.targetPosition = null; // Arrived at target position, clear it.
     }
   }
-  moveToPosition(targetPosition: Position, speed: number = 0.05) {
+  moveToPosition(targetPosition: Position) {
     this.targetPosition = targetPosition;
     // Speed can be adjusted according to your needs.
-    this.updatePosition(speed);
+    this.updatePosition();
   }
   applyGravity(GRAVITY: number = 0.01) {
     this.velocity.y -= GRAVITY;

@@ -58,9 +58,15 @@ const GameCanvas = () => {
           }
         }
       });
-      socket.on("moveBall", (ballPosition: any) => {
+      socket.on("moveBall", (ball: any) => {
+        // console.log(ball);
         if (ballRef.current) {
-          ballRef.current.moveToPosition(ballPosition);
+          // const ballPosition = { x: ball.position.x, y: ball.position.y, z: ball.position.z };
+          // const ballVelocity = { x: ball.velocity.x, y: ball.velocity.y, z: ball.velocity.z };
+          // ballRef.current.velocity = new THREE.Vector3(ballVelocity.x, ballVelocity.y, ballVelocity.z);
+          // ballRef.current.moveToPosition(ballPosition);
+          ballRef.current.position.set(ball.position.x, ball.position.y, ball.position.z);
+          ballRef.current.rotation.set(ball.rotation.x, ball.rotation.y, ball.rotation.z);
         }
       }
       );
@@ -85,7 +91,7 @@ const GameCanvas = () => {
     scene.add(new Lighting(0xffffff, 0.8, { x: 20, y: 20, z: 0 }));
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
-    let ball = new Ball(0.5, { x: 0, y: 15, z: 0 });
+    let ball = new Ball(0.3, { x: 0, y: 15, z: 0 });
     scene.add(ball);
     ballRef.current = ball;
     const plane = new Plane(500, 500, { x: 0, y: 0, z: 0 }, -Math.PI / 2);
@@ -116,9 +122,9 @@ const GameCanvas = () => {
           lastEmittedPositionRef.current = { ...currentPosition };
         }
       }
-    }, 1000 / 30);
+    }, 1000 / 20);
     const handleMouseMove = (event: MouseEvent) => {
-      if (mountRef.current) {
+      if (mountRef.current && userID !== 'spec') {
         const { left, top, width, height } = mountRef.current.getBoundingClientRect();
         const mouseX = ((event.clientX - left) / width) * 2 - 1;
         const mouseY = -((event.clientY - top) / height) * 2 + 1;
@@ -142,7 +148,8 @@ const GameCanvas = () => {
     // if the key h is pressed, the ball will move
     window.addEventListener('keydown', (e) => {
       if (e.key === 'h') {
-        ball.moveToPosition({ x: 0, y: 20, z: 0 });
+        console.log('h')
+        if(socket) socket.emit("resetBall", { room: 'lMa0J3z3' });
       }
       if (e.key === 'g') {
         ball.position.y = 0;
