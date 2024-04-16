@@ -22,17 +22,8 @@ const MemberList = ({
   exec: participants;
   channel: channel;
 }) => {
-  // const [user, setUser] = useState<user>();
   const router = useRouter();
   const { state, dispatch } = useGlobalState();
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:8080/user/${participant.user_id}`)
-  //     .then((res) => {
-  //       setUser(res.data);
-  //     });
-  // }, [participant]);
 
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
