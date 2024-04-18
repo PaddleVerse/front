@@ -60,7 +60,7 @@ const GameCanvas = () => {
       });
       socket.on("moveBall", (ball: any) => {
         // console.log(ball);
-        if (ballRef.current) {
+        if (ballRef.current && ball) {
           // const ballPosition = { x: ball.position.x, y: ball.position.y, z: ball.position.z };
           // const ballVelocity = { x: ball.velocity.x, y: ball.velocity.y, z: ball.velocity.z };
           // ballRef.current.velocity = new THREE.Vector3(ballVelocity.x, ballVelocity.y, ballVelocity.z);
@@ -87,7 +87,7 @@ const GameCanvas = () => {
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
+    scene.fog = new THREE.Fog( 0x0, 0.015, 100 ); // color, near, far
     scene.add(new Lighting(0xffffff, 0.8, { x: 20, y: 20, z: 0 }));
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
@@ -118,11 +118,10 @@ const GameCanvas = () => {
             room: 'lMa0J3z3',
             paddle: currentPosition,
           });
-
           lastEmittedPositionRef.current = { ...currentPosition };
         }
       }
-    }, 1000 / 20);
+    }, 1000 / 30);
     const handleMouseMove = (event: MouseEvent) => {
       if (mountRef.current && userID !== 'spec') {
         const { left, top, width, height } = mountRef.current.getBoundingClientRect();

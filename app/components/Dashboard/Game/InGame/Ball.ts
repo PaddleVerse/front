@@ -99,14 +99,14 @@ class Ball extends THREE.Mesh {
   applyGravity(GRAVITY: number = 0.01) {
     this.velocity.y -= GRAVITY;
   }
+  applyRotation(): void {
+		// rotation of the ball depending on the velocity and the direction
+		if (this.velocity.x === 0 && this.velocity.z === 0) return;
+		this.rotation.x += this.velocity.z;
+		this.rotation.y += this.velocity.x;
+		this.rotation.z += this.velocity.y;
+	}
 
-  applyRotation() {
-    if (Math.abs(this.velocity.x) > Math.abs(this.velocity.z)) {
-      this.rotation.z += this.velocity.x * 2;
-    } else {
-      this.rotation.x += this.velocity.z * 2;
-    }
-  }
 
   speedLimit() {
     this.velocity.x = Math.min(this.velocity.x, 0.5);
