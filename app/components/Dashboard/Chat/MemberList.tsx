@@ -1,7 +1,12 @@
 "use client";
 import React, { FC, useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { channel, participants, participantWithUser, user } from "@/app/Dashboard/Chat/type";
+import {
+  channel,
+  participants,
+  participantWithUser,
+  user,
+} from "@/app/Dashboard/Chat/type";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -12,6 +17,7 @@ import { FaChessKing } from "react-icons/fa6";
 import { FaChessPawn } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { AnimatePresence, motion } from "framer-motion";
 
 const MemberList = ({
   participant,
@@ -47,7 +53,7 @@ const MemberList = ({
         roomName: channel.name,
         user: participant.user,
       });
-    })
+    });
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -65,15 +71,18 @@ const MemberList = ({
       executor: exec.user_id,
     };
     axios
-      .delete(`http://localhost:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
+      .delete(
+        `http://localhost:8080/participants/kick?target=${
+          participant.user_id
+        }&user=${exec.user_id}&channel=${channel!.id}`
+      )
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel.name,
           user: participant.user,
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const handlePromoteDemote = (
@@ -103,8 +112,7 @@ const MemberList = ({
           user: participant.user,
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const handleMuteUnMute = (
@@ -134,60 +142,67 @@ const MemberList = ({
           user: participant.user,
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   return (
-    <div
-      id="participant"
-      className="text-white w-[70%] flex items-center justify-between"
-    >
-      <div className="flex items-center gap-2">
-        <Image
-          src={
-            participant.user?.picture! ||
-            "http:localhost:8080/images/1709559281974-wallpaperflare.com_wallpaper.png"
-          }
-          width={40}
-          height={40}
-          alt="image"
-          onClick={() => {
-            handleClick();
-          }}
-          className="rounded-full aspect-square"
-        />
-        <div className="flex flex-col 2xl:text-md text-xs">
-          <span>{participant.user?.name}</span>
-          <span className="2xl:text-md text-[10px]">
-            @{participant.user?.nickname}
-          </span>
+    <AnimatePresence>
+      <motion.div
+        id="participant"
+        className="text-white w-[70%] flex items-center justify-between"
+        initial={{ opacity: 0, y: -120 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+      >
+        <div className="flex items-center gap-2">
+          <Image
+            src={
+              participant.user?.picture! ||
+              "http:localhost:8080/images/1709559281974-wallpaperflare.com_wallpaper.png"
+            }
+            width={40}
+            height={40}
+            alt="image"
+            onClick={() => {
+              handleClick();
+            }}
+            className="rounded-full aspect-square"
+          />
+          <div className="flex flex-col 2xl:text-md text-xs">
+            <span>{participant.user?.name}</span>
+            <span className="2xl:text-md text-[10px]">
+              @{participant.user?.nickname}
+            </span>
+          </div>
         </div>
-      </div>
-      <span>{participant.role.toLowerCase()}</span>
-      <div className="flex gap-1 2xl:text-md text-xs">
-        <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
-          {participant.mute ? (
-            <FaMicrophoneSlash className="w-[20px] h-[20px]" />
-          ) : (
-            <FaMicrophone className="w-[20px] h-[20px]" />
-          )}
+        <span>{participant.role.toLowerCase()}</span>
+        <div className="flex gap-1 2xl:text-md text-xs">
+          <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
+            {participant.mute ? (
+              <FaMicrophoneSlash className="w-[20px] h-[20px]" />
+            ) : (
+              <FaMicrophone className="w-[20px] h-[20px]" />
+            )}
+          </div>
+          <div onClick={handleBan} aria-disabled={exec ? false : true}>
+            <Image src={"/Chat/ban.svg"} width={20} height={20} alt={"ban"} />
+          </div>
+          <div onClick={handleKick} aria-disabled={exec ? false : true}>
+            <Image src={"/Chat/kick.svg"} width={20} height={20} alt={"kick"} />
+          </div>
+          <div
+            onClick={handlePromoteDemote}
+            aria-disabled={exec ? false : true}
+          >
+            {participant.role === "ADMIN" || participant.role === "MOD" ? (
+              <FaChessPawn className="w-[20px] h-[20px]" />
+            ) : (
+              <FaChessKing className="w-[20px] h-[20px]" />
+            )}
+          </div>
         </div>
-        <div onClick={handleBan} aria-disabled={exec ? false : true}>
-          <Image src={"/Chat/ban.svg"} width={20} height={20} alt={"ban"} />
-        </div>
-        <div onClick={handleKick} aria-disabled={exec ? false : true}>
-          <Image src={"/Chat/kick.svg"} width={20} height={20} alt={"kick"} />
-        </div>
-        <div onClick={handlePromoteDemote} aria-disabled={exec ? false : true}>
-          {participant.role === "ADMIN" || participant.role === "MOD" ? (
-            <FaChessPawn className="w-[20px] h-[20px]" />
-          ) : (
-            <FaChessKing className="w-[20px] h-[20px]" />
-          )}
-        </div>
-      </div>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

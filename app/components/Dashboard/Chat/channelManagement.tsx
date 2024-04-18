@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Input } from "@/components/ui/newinput";
 import MemberList from "./MemberList";
 import { useForm } from "react-hook-form";
@@ -16,6 +16,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import JoinChannel from "./JoinChannel";
+import InviteCard from "./InviteCard";
+import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 
 const fetchParticipants = async (channel: channel, user: user) => {
   const participants = await axios.get(
@@ -54,6 +58,7 @@ const ChannelManagement = ({
 }) => {
   const clt = useQueryClient();
   const { state, dispatch } = useGlobalState();
+  const [modlar, setModlar] = useState(false);
   const { user: u, socket } = state;
   const router = useRouter();
   const [picture, setPicture] = useState<File>();
@@ -62,11 +67,15 @@ const ChannelManagement = ({
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState(channel?.state);
-  const {
-    data: participants,
-    error,
-    isLoading,
-  } = useQuery<participantWithUser[]>({
+  const rotateVariants = {
+    initial: {
+      rotate: 0,
+    },
+    rotated: {
+      rotate: 90,
+    },
+  };
+  const { data: participants } = useQuery<participantWithUser[]>({
     queryKey: ["participants"],
     queryFn: async () => fetchParticipants(channel, user),
   });
@@ -101,7 +110,7 @@ const ChannelManagement = ({
     e.preventDefault();
     if (selectedOption === "public" && keyInput.current?.value) {
       toast.error("you need to select the protected option to set a password.");
-      return
+      return;
     }
     const obj = {
       channel: {
@@ -206,9 +215,7 @@ const ChannelManagement = ({
             })}
             ref={keyInput}
             className="rounded-lg "
-            disabled={
-              priviliged ? false : true
-            }
+            disabled={priviliged ? false : true}
           />
           <fieldset
             className="flex gap-2 items-center flex-wrap"
@@ -271,9 +278,25 @@ const ChannelManagement = ({
           leave channel
         </button>
       </div>
-      <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll ">
-        <div className="mt-10  flex flex-col gap-4 items-center">
-          {participants &&
+      <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll">
+        <div className="flex flex-row mt-5 items-center justify-around">
+          <div>
+            <p className="text-2xl font-bold">
+              {!modlar ? "Members" : "invite list"}
+            </p>
+          </div>
+          <div onClick={() => setModlar(!modlar)}>
+            <motion.div
+              animate={modlar ? "rotated" : "initial"}
+              variants={rotateVariants}
+            >
+              {!modlar ? <FaPlus className="text-2xl cursor-pointer" /> : <FaXmark className="text-3xl cursor-pointer" />}
+            </motion.div>
+          </div>
+        </div>
+        <div className="mt-10 flex flex-col gap-4 items-center">
+          {!modlar ? (
+            participants &&
             participants.map((participant, index) => {
               return (
                 <MemberList
@@ -283,7 +306,10 @@ const ChannelManagement = ({
                   channel={channel}
                 />
               );
-            })}
+            })
+          ) : (
+            <InviteCard channel={channel} user={user} />
+          )}
         </div>
       </div>
     </motion.div>
