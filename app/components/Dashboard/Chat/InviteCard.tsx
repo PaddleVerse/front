@@ -7,21 +7,27 @@ import { Socket } from "socket.io-client";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
+import { useParams } from "next/navigation";
 
-const InviteCard = ({
-  channel,
-  //   handleClick,
-  user,
-}: {
-  channel: channel;
-  user: user;
-  //   handleClick: () => void;
-}) => {
-  const [unlock, setUnlock] = useState(false);
+const GetUsers = async (param: any) => {
+  const users = await axios.get(
+    `http://localhost:8080/channels/inviteList/${param?.id}`
+  );
+  return users.data;
+};
+
+const InviteCard = ({ channel, user }: { channel: channel; user: user }) => {
+  const param = useParams();
   const { state, dispatch } = useGlobalState();
+  const { data: users } = useQuery<user[]>({
+    queryKey: ["inviteList"],
+    queryFn: async () => GetUsers(param),
+  });
   const clt = useQueryClient();
+
+
   return (
     <AnimatePresence>
       <motion.div
@@ -32,9 +38,18 @@ const InviteCard = ({
         initial={{ opacity: 0, y: -120 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-      >
-        here is the code to the thing
-      </motion.div>
+		  >
+			  {users && users.map((u: user, key: any) => {
+				  return (
+            <div key={key}>
+              <div className="text-white w-[70%] flex items-center justify-between border">
+                this is a user
+              </div>
+            </div>
+          );
+			  })
+			  }
+	  </motion.div>
     </AnimatePresence>
   );
 };

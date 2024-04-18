@@ -94,6 +94,15 @@ const ChannelManagement = ({
     setSelectedOption(event.target.value);
   };
 
+  useEffect(() => {
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        setModlar(false);
+      }
+    })
+    return ()=> removeEventListener("keydown",()=>{});
+  },[])
+
   const handleLeave = () => {
     axios
       .delete(
@@ -285,7 +294,9 @@ const ChannelManagement = ({
               {!modlar ? "Members" : "invite list"}
             </p>
           </div>
-          <div onClick={() => setModlar(!modlar)}>
+          <div onClick={() => setModlar(!modlar)} onKeyDown={(e) => {
+            if (e.key === "Escape") setModlar(false);
+          }}>
             <motion.div
               animate={modlar ? "rotated" : "initial"}
               variants={rotateVariants}
