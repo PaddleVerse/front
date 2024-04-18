@@ -61,7 +61,7 @@ const ChannelManagement = ({
   const topicInput = useRef<HTMLInputElement | null>(null);
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState(channel?.state);
   const {
     data: participants,
     error,
@@ -99,6 +99,10 @@ const ChannelManagement = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (selectedOption === "public" && keyInput.current?.value) {
+      toast.error("you need to select the protected option to set a password.");
+      return
+    }
     const obj = {
       channel: {
         name: channelNameInput.current?.value! || channel.name,
@@ -203,7 +207,7 @@ const ChannelManagement = ({
             ref={keyInput}
             className="rounded-lg "
             disabled={
-              priviliged ? false : true && selectedOption === "protected"
+              priviliged ? false : true
             }
           />
           <fieldset

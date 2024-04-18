@@ -22,18 +22,8 @@ const MemberList = ({
   exec: participants;
   channel: channel;
 }) => {
-  // const [user, setUser] = useState<user>();
   const router = useRouter();
   const { state, dispatch } = useGlobalState();
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:8080/user/${participant.user_id}`)
-  //     .then((res) => {
-  //       setUser(res.data);
-  //     });
-  // }, [participant]);
-
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
   };
@@ -169,12 +159,14 @@ const MemberList = ({
         />
         <div className="flex flex-col 2xl:text-md text-xs">
           <span>{participant.user?.name}</span>
-          <span className="2xl:text-md text-[10px]">@{participant.user?.nickname}</span>
+          <span className="2xl:text-md text-[10px]">
+            @{participant.user?.nickname}
+          </span>
         </div>
       </div>
       <span>{participant.role.toLowerCase()}</span>
       <div className="flex gap-1 2xl:text-md text-xs">
-        <div onClick={handleMuteUnMute}>
+        <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
           {participant.mute ? (
             <FaMicrophoneSlash className="w-[20px] h-[20px]" />
           ) : (
@@ -184,7 +176,7 @@ const MemberList = ({
         <div onClick={handleBan} aria-disabled={exec ? false : true}>
           <Image src={"/Chat/ban.svg"} width={20} height={20} alt={"ban"} />
         </div>
-        <div onClick={handleKick}>
+        <div onClick={handleKick} aria-disabled={exec ? false : true}>
           <Image src={"/Chat/kick.svg"} width={20} height={20} alt={"kick"} />
         </div>
         <div onClick={handlePromoteDemote} aria-disabled={exec ? false : true}>
