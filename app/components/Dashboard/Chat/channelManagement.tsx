@@ -40,11 +40,12 @@ const FetchPriviliged = async (channel: channel, user: user) => {
   const participants = await axios.get(
     `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
+  console.log("at fetch privivliged user")
   return participants.data.filter(
     (participant: participants) =>
       (participant.role === "ADMIN" || participant.role === "MOD") &&
       participant.user_id === user.id
-  )[0];
+  )[0] || null;
 };
 
 const ChannelManagement = ({
@@ -87,7 +88,9 @@ const ChannelManagement = ({
   useEffect(() => {
     socket?.on("update", (data: any) => {
       clt.invalidateQueries({ queryKey: ["participants"] });
+      clt.invalidateQueries({ queryKey: ["priviliged"] });
     });
+    
   }, [socket]);
 
   const handleOptionChange = (event: any) => {
@@ -117,6 +120,10 @@ const ChannelManagement = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!priviliged || priviliged === undefined) {
+      toast.error("you are not priviliged to change the channel info!!!")
+      return;
+    }
     if (selectedOption === "public" && keyInput.current?.value) {
       toast.error("you need to select the protected option to set a password.");
       return;
