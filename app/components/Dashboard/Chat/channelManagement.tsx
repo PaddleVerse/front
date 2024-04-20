@@ -40,7 +40,6 @@ const FetchPriviliged = async (channel: channel, user: user) => {
   const participants = await axios.get(
     `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
-  console.log("at fetch privivliged user");
   return (
     participants.data.filter(
       (participant: participants) =>
@@ -93,7 +92,6 @@ const ChannelManagement = ({
       clt.invalidateQueries({ queryKey: ["priviliged"] });
     });
   }, [socket]);
-
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };

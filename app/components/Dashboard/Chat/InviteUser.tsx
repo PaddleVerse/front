@@ -22,7 +22,6 @@ const KidnapUserToChannel = async (
     user: user,
     channel: channel,
   };
-  console.log(obj);
   try {
     const res = await axios.post(`http://localhost:8080/participants`, obj);
     socket?.emit("joinRoom", {
