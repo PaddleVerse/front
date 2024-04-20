@@ -40,12 +40,14 @@ const FetchPriviliged = async (channel: channel, user: user) => {
   const participants = await axios.get(
     `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
-  console.log("at fetch privivliged user")
-  return participants.data.filter(
-    (participant: participants) =>
-      (participant.role === "ADMIN" || participant.role === "MOD") &&
-      participant.user_id === user.id
-  )[0] || null;
+  console.log("at fetch privivliged user");
+  return (
+    participants.data.filter(
+      (participant: participants) =>
+        (participant.role === "ADMIN" || participant.role === "MOD") &&
+        participant.user_id === user.id
+    )[0] || null
+  );
 };
 
 const ChannelManagement = ({
@@ -90,7 +92,6 @@ const ChannelManagement = ({
       clt.invalidateQueries({ queryKey: ["participants"] });
       clt.invalidateQueries({ queryKey: ["priviliged"] });
     });
-    
   }, [socket]);
 
   const handleOptionChange = (event: any) => {
@@ -102,9 +103,9 @@ const ChannelManagement = ({
       if (e.key === "Escape") {
         setModlar(false);
       }
-    })
-    return ()=> removeEventListener("keydown",()=>{});
-  },[])
+    });
+    return () => removeEventListener("keydown", () => {});
+  }, []);
 
   const handleLeave = () => {
     axios
@@ -121,7 +122,7 @@ const ChannelManagement = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!priviliged || priviliged === undefined) {
-      toast.error("you are not priviliged to change the channel info!!!")
+      toast.error("you are not priviliged to change the channel info!!!");
       return;
     }
     if (selectedOption === "public" && keyInput.current?.value) {
@@ -301,14 +302,21 @@ const ChannelManagement = ({
               {!modlar ? "Members" : "invite list"}
             </p>
           </div>
-          <div onClick={() => setModlar(!modlar)} onKeyDown={(e) => {
-            if (e.key === "Escape") setModlar(false);
-          }}>
+          <div
+            onClick={() => setModlar(!modlar)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setModlar(false);
+            }}
+          >
             <motion.div
               animate={modlar ? "rotated" : "initial"}
               variants={rotateVariants}
             >
-              {!modlar ? <FaPlus className="text-2xl cursor-pointer" /> : <FaXmark className="text-3xl cursor-pointer" />}
+              {!modlar ? (
+                <FaPlus className="text-2xl cursor-pointer" />
+              ) : (
+                <FaXmark className="text-3xl cursor-pointer" />
+              )}
             </motion.div>
           </div>
         </div>

@@ -100,6 +100,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
       state?.socket.emit("joinRoom", {
         roomName: ret?.data?.name,
         user: state?.user,
+        type: "self",
       });
     } catch (error) {
       toast.error("error in creating channel");

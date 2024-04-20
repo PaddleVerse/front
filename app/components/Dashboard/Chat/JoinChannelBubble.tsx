@@ -40,7 +40,11 @@ const JoinChannelBubble = ({
       try {
         const res = await axios.post(`http://localhost:8080/participants`, obj);
         toast.success(`you have joined ${channel.name}`);
-        state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
+        state?.socket?.emit("joinRoom", {
+          user: user,
+          roomName: channel.name,
+          type: "self",
+        });
         clt?.invalidateQueries({ queryKey: ["chatList"] });
       } catch (error) {
         toast.error("failed to join channel");
@@ -58,7 +62,11 @@ const JoinChannelBubble = ({
         const res = await axios.post(`http://localhost:8080/participants`, obj);
         toast.success(`you have joined ${channel.name}`);
         clt?.invalidateQueries({ queryKey: ["chatList"] });
-        state?.socket?.emit("joinRoom", { user: user, roomName: channel.name });
+        state?.socket?.emit("joinRoom", {
+          user: user,
+          roomName: channel.name,
+          type: "self",
+        });
       } catch (error) {
         toast.error("failed to join channel");
       }
