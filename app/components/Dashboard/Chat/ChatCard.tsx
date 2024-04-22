@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getShortDate, getTime } from "@/app/utils";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useGlobalState } from "../../Sign/GlobalState";
+import { channel, user } from "@/app/Dashboard/Chat/type";
+
+
 
 export const ChatCard = (props: any) => {
   const router = useRouter();
+  const { state } = useGlobalState();
+  const { user, socket } = state;
   const clt = useQueryClient();
+  // const { data: typing } = useQuery({
+  //   queryKey: ["typing"],
+  //   queryFn: () => ConfigureTyping(props.istyping, user, props.value),
+  // });
+
+  // useEffect(() => {
+  //   clt.invalidateQueries({ queryKey: ["typing"] });
+  // }, [props]);
+
+  console.log("props", props);
 
   return (
     <motion.div
@@ -18,7 +34,7 @@ export const ChatCard = (props: any) => {
         } else {
           router.push(`/Dashboard/Chat/dm/${props.value.id}`);
         }
-        clt.invalidateQueries({queryKey: ["targetChannel", "targetUser"]})
+        clt.invalidateQueries({ queryKey: ["targetChannel", "targetUser"] });
         props.handleClick();
       }}
       initial={{ opacity: 0, y: -20 }}
@@ -46,13 +62,21 @@ export const ChatCard = (props: any) => {
           <div className="flex-auto min-w-0 ml-4 mr-6  md:block group-hover:block">
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
-                <p className="">
-                  {props.msg && props.msg?.content?.length >= 10
-                    ? props.msg?.content.slice(0, 10) + "..."
-                    : props.msg
-                    ? props.msg?.content
-                    : null}
-                </p>
+                {props.istyping ? (
+                  props.value.user ? (
+                    <p className="text-white">is typing ...</p>
+                  ) : (
+                    <p className="text-white">someone is typing ...</p>
+                  )
+                ) : (
+                  <p className="">
+                    {props.msg && props.msg?.content?.length >= 10
+                      ? props.msg?.content.slice(0, 10) + "..."
+                      : props.msg
+                      ? props.msg?.content
+                      : null}
+                  </p>
+                )}
               </div>
             </div>
           </div>

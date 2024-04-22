@@ -78,6 +78,16 @@ const Page = (props: any) => {
     },
   });
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    socket?.emit("typing", {
+      reciever: targetUser,
+      sender: user,
+      roomName: targetChannel?.name,
+      roomId: targetChannel?.id,
+      type: targetUser ? "dm" : "channel",
+    });
+  }; 
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (targetChannel) {
@@ -204,6 +214,7 @@ const Page = (props: any) => {
                     ref={inputMessage}
                     placeholder="Aa"
                     {...(register("inputMessage"), { required: true })}
+                    onChange={(e)=> handleChange(e)}
                   />
                   <button
                     type="submit"

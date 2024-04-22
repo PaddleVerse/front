@@ -12,6 +12,8 @@ import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { set } from "react-hook-form";
+import { user } from "./type";
 const inter = Inter({ subsets: ["latin"] });
 
 const fetchChatList = async (userId: string) => {
@@ -36,6 +38,8 @@ const fetchChatList = async (userId: string) => {
 
 const Page = ({ children }: { children: React.ReactNode }) => {
   const [showMessage, setShowMessage] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [typingobject, setTypingObject] = useState<any>();
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [modlar, setModlar] = useState(false);
@@ -88,6 +92,14 @@ const Page = ({ children }: { children: React.ReactNode }) => {
         });
         router.push("/Dashboard/Chat");
         return;
+      }
+      if (data.type === "typing") {
+        setTypingObject(data);
+        setTyping(true);
+        setTimeout(() => {
+          setTyping(false);
+          setTypingObject(null);
+        }, 2000);
       }
       clt.invalidateQueries({
         queryKey: ["chatList"],
@@ -221,6 +233,13 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                       return (
                         <ChatCard
                           key={key}
+                          istyping={
+                            typing
+                              ? typingobject.target === "dm" && value.user
+                                ? value.id === typingobject.sender.id
+                                : value.id === typingobject.id && typingobject.sender.id !== user.id
+                              : false
+                          }
                           swipe={setShowMessage}
                           index={key}
                           value={value}
