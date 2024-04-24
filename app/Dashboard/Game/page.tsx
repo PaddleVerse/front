@@ -1,12 +1,12 @@
 import React from 'react'
-import GameOptions from '@/app/components/Dashboard/Overview/Game/GameOptions'
-
-const page = () => {
+import GameOptions from '@/app/components/Dashboard/Game/PreGame/GameOptions'
+import Game from '@/app/components/Dashboard/Game/InGame/Game'
+const Page = () => {
   return (
-    <div className='w-full flex justify-center mt-[50px]'>
-      <GameOptions /> 
+    <div className='w-full h-screen flex justify-center items-center overflow-hidden'>
+      <Game />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
