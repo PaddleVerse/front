@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import EnterCode from "../Dashboard/Settings/otp";
 import axios from "axios";
 import { useState } from "react";
+import { ipAdress } from "@/app/utils";
 
 
 export default function V2fa({setIsAuth, userId} : any) {
@@ -28,7 +29,7 @@ export default function V2fa({setIsAuth, userId} : any) {
  const onSubmit = (data:any) => {
     if (userId === -1 || typeof window === "undefined") return;
 
-    axios.post("http://localhost:8080/auth/v2fa", {
+    axios.post(`http://${ipAdress}:8080/auth/v2fa`, {
       token : data?.code,
       userId : userId
     }, {

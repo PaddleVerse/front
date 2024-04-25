@@ -12,6 +12,7 @@ import { FaChessKing } from "react-icons/fa6";
 import { FaChessPawn } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { ipAdress } from "@/app/utils";
 
 const MemberList = ({
   participant,
@@ -43,7 +44,7 @@ const MemberList = ({
       cid: exec.channel_id,
       uid: participant.user_id,
     };
-    axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
+    axios.post(`http://${ipAdress}:8080/ban/`, obj).then((res) => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
         user: participant.user,
@@ -66,7 +67,7 @@ const MemberList = ({
       executor: exec.user_id,
     };
     axios
-      .delete(`http://localhost:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
+      .delete(`http://${ipAdress}:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel.name,
@@ -97,7 +98,7 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://localhost:8080/participants/${participant.user_id}`, obj)
+      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
@@ -128,7 +129,7 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://localhost:8080/participants/${participant.user_id}`, obj)
+      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
@@ -146,10 +147,7 @@ const MemberList = ({
     >
       <div className="flex items-center gap-2">
         <Image
-          src={
-            participant.user?.picture! ||
-            "http:localhost:8080/images/1709559281974-wallpaperflare.com_wallpaper.png"
-          }
+          src={ participant.user?.picture ? participant.user?.picture : "/badge1.png"}
           width={40}
           height={40}
           alt="image"

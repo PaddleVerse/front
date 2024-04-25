@@ -1,4 +1,5 @@
 
+import os from 'os';
 
 
 export const getDate = (dateString: any): string  => {
@@ -40,3 +41,8 @@ export const getShortDate = (date: Date | null) => {
   if (!date) return "";
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
+
+
+// Find the IPv4 address
+export const ipAdress = os.hostname();
+

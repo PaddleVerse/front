@@ -5,6 +5,7 @@ import SearchBarPop from '../../components/Dashboard/Search/SearchBarPop';
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import axios from 'axios';
 import { useGlobalState } from '@/app/components/Sign/GlobalState';
+import { ipAdress } from '@/app/utils';
 
 
 const Search = () => {
@@ -18,7 +19,7 @@ const Search = () => {
   useEffect(() => {
     if (user)
     {
-      axios.get('http://localhost:8080/user')
+      axios.get(`http://${ipAdress}:8080/user`)
         .then(res => {
           const filteredUsers = res.data.filter((item:any) => item.id !== user.id);
           setUsers(filteredUsers);

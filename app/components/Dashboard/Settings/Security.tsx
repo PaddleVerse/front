@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/newinput";
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import EnterCode from './otp'
+import { ipAdress } from '@/app/utils'
 
 const Security = () => {
   const [qrcode, setQrcode] = useState('');
@@ -42,7 +43,7 @@ const Security = () => {
 
   const enable = () => {
     setShowPopup(true);
-    axios.post("http://localhost:8080/auth/2fa", {
+    axios.post(`http://${ipAdress}:8080/auth/2fa`, {
         userId : user?.id
     }, {
       headers: {
@@ -65,7 +66,7 @@ const Security = () => {
   const onSubmit = (data : any) => {
 
     if (isBlurred) return;
-    axios.post("http://localhost:8080/auth/v2fa", {
+    axios.post(`http://${ipAdress}:8080/auth/v2fa`, {
       token : data?.code,
       userId : user?.id
     }, {
@@ -82,7 +83,7 @@ const Security = () => {
   }
 
   const disable = () => {
-    axios.post("http://localhost:8080/auth/disable2fa", {
+    axios.post(`http://${ipAdress}:8080/auth/disable2fa`, {
       userId : user?.id
     }, {
       headers: {
@@ -96,7 +97,7 @@ const Security = () => {
   
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://localhost:8080/user/${user?.id}`);
+      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {

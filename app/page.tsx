@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Boxes } from "@/components/ui/background-boxes";
-
+import { ipAdress } from "@/app/utils"
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -48,7 +48,7 @@ export default function SignupFormDemo() {
     setIs(isValidValues(values));
     axios
       .post(
-        "http://localhost:8080/auth/login",
+        `http://${ipAdress}:8080/auth/login`,
         {
           username: values.username,
           password: values.password,
@@ -70,7 +70,7 @@ export default function SignupFormDemo() {
         if (accessToken) {
           // Access token is present, make a request to the protected endpoint
           axios
-            .get("http://localhost:8080/auth/protected", {
+            .get(`http://${ipAdress}:8080/auth/protected`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },
@@ -91,11 +91,11 @@ export default function SignupFormDemo() {
   };
 
   const handleGoogle = () => {
-    router.push("http://localhost:8080/auth/google");
+    router.push(`http://${ipAdress}:8080/auth/google`);
   };
 
   const handle42 = () => {
-    router.push("http://localhost:8080/auth/42");
+    router.push(`http://${ipAdress}:8080/auth/42`);
   };
 
   return (

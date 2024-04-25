@@ -13,7 +13,9 @@ const GameOptions = () => {
 
   useEffect(() => {
     socket?.on('start', () => {
-      setStart(true)
+      setTimeout(() => {
+        setStart(true)
+      } , 1500);
     })
   } , [socket])
 

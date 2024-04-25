@@ -10,6 +10,7 @@ import Userstatus from "./Userstatus";
 import { rajdhani } from "@/app/utils/fontConfig";
 import LinkedFriend from "./LinkedFriend";
 import { cn } from "@/components/cn";
+import { ipAdress } from "@/app/utils";
 
 const people = [
   {
@@ -78,7 +79,7 @@ const UserProfile = ({ target }: any) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/user/linked/${user?.id}/${target?.id}`)
+      .get(`http://${ipAdress}:8080/user/linked/${user?.id}/${target?.id}`)
       .then((res) => {
         setLinkedFriends(res.data);
       })
@@ -89,7 +90,7 @@ const UserProfile = ({ target }: any) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/friendship/status/${user?.id}/${target?.id}`)
+      .get(`http://${ipAdress}:8080/friendship/status/${user?.id}/${target?.id}`)
       .then((res) => {
         if (res.data?.status === "PENDING" && res.data?.request === "SEND")
           setStatus(res.data?.status);
@@ -102,7 +103,7 @@ const UserProfile = ({ target }: any) => {
         console.log(err);
       });
     axios
-      .get(`http://localhost:8080/friendship/status/${target?.id}/${user?.id}`)
+      .get(`http://${ipAdress}:8080/friendship/status/${target?.id}/${user?.id}`)
       .then((res) => {
         if (res.data?.status === "PENDING" && res.data?.request !== "RECIVED")
           setRecv(res.data?.status);

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { cn } from "../../components/cn";
 import { Input } from "../../components/ui/newinput";
 import { Label } from "../../components/ui/newlabel";
-// import { BgWrapper } from "../page";
+import { ipAdress } from "@/app/utils";
 
 import BottomGradient from "@/components/ui/bottomGradiant";
 import {
@@ -51,7 +51,7 @@ export default function SignupFormDemo() {
   function onSubmit(values : any) {
     setIs(isValidValues(values));
     // console.log(values);
-    axios.post("http://localhost:8080/auth/signup", {
+    axios.post(`http://${ipAdress}:8080/auth/signup`, {
       name: values.name,
       nickname: values.nickname,
       username: values.username,
@@ -72,11 +72,11 @@ export default function SignupFormDemo() {
 
 
   const handleGoogle = () => {
-    router.push('http://localhost:8080/auth/google');
+    router.push(`http://${ipAdress}:8080/auth/google`);
   }
 
   const handle42 = () => {
-      router.push('http://localhost:8080/auth/42');
+      router.push(`http://${ipAdress}:8080/auth/42`);
   }
 
   return (

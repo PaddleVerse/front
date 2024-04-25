@@ -7,6 +7,7 @@ import { cn } from "@/components/cn";
 import { Input } from "@/components/ui/newinput";
 import { useGlobalState } from '../../Sign/GlobalState';
 import axios from 'axios';
+import { ipAdress } from '@/app/utils';
 
 const Popup = ()  => {
 
@@ -19,7 +20,7 @@ const Popup = ()  => {
   
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://localhost:8080/user/${user?.id}`);
+      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
@@ -54,7 +55,7 @@ const Popup = ()  => {
     }
   
     const imgUpdatePromise : Promise<any> = selectedFile
-      ? axios.put(`http://localhost:8080/user/img/${user?.id}`, formData, {
+      ? axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
       : Promise.resolve();
@@ -62,7 +63,7 @@ const Popup = ()  => {
     axios
       .all([
         imgUpdatePromise,
-        axios.put(`http://localhost:8080/user/${user?.id}`, data),
+        axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data),
       ])
       .then(axios.spread((resImg, resUser) => {
         if (!selectedFile || (resImg && resImg?.data !== '')) 
@@ -71,7 +72,7 @@ const Popup = ()  => {
           refreshUser();
           reset();
         }
-        axios.put(`http://localhost:8080/user/visible/${user?.id}`, {first_time: false})
+        axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, {first_time: false})
         .then((res) => { if (res.data !== '') refreshUser();})
       }))
   };

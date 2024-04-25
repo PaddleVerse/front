@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { useRouter } from "next/navigation";
+import { ipAdress } from "@/app/utils";
 
 import React,{useState,useEffect} from "react";
 import axios from "axios";
@@ -13,7 +14,7 @@ const PlacingElement = () => {
   const router = useRouter();
 
   useEffect(() => {
-      axios.get(`http://localhost:8080/user/top`).then((res) => {
+      axios.get(`http://${ipAdress}:8080/user/top`).then((res) => {
         setUsers(res.data);
       })
   } ,[]);

@@ -46,7 +46,7 @@ const Caroussel = () => {
 
         >
           {/* <BigCard gameMode={'1'}/> */}
-          <BigCard gameMode={'2'} turnOn={() => setMatchMaking(true)} />
+          <BigCard gameMode={'2'} turnOn={() => setMatchMaking(true)}/>
           {/* <BigCard gameMode={'3'}/>
           <BigCard gameMode={'2'}/> */}
         </Carousel>

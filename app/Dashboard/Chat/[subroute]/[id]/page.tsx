@@ -17,11 +17,12 @@ import { useSwipeable } from "react-swipeable";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { channel, user } from "../../type";
+import { ipAdress } from "@/app/utils";
 
 const fetchTargetUser = async (parameters: any) => {
   if (parameters.subroute === "dm") {
     const user = await axios.get(
-      `http://localhost:8080/user/${parameters?.id!}`
+      `http://${ipAdress}:8080/user/${parameters?.id!}`
     );
     return user.data;
   }
@@ -30,7 +31,7 @@ const fetchTargetUser = async (parameters: any) => {
 const fetchTargetChannel = async (parameters: any) => {
   if (parameters.subroute === "channel") {
     const channel = await axios.get(
-      `http://localhost:8080/channels/${parameters!.id!}`
+      `http://${ipAdress}:8080/channels/${parameters!.id!}`
     );
     return channel.data;
   }
@@ -92,7 +93,7 @@ const Page = (props: any) => {
           channel: { name: targetChannel.name },
           user1: state.user.id,
         };
-        const res = await axios.post(`http://localhost:8080/message`, message);
+        const res = await axios.post(`http://${ipAdress}:8080/message`, message);
         socket?.emit("channelmessage", {
           roomName: targetChannel.name,
           user: state?.user,
@@ -102,7 +103,7 @@ const Page = (props: any) => {
       }
     } else if (targetUser) {
       try {
-        const res = await axios.post(`http://localhost:8080/message`, {
+        const res = await axios.post(`http://${ipAdress}:8080/message`, {
           message: {
             content: inputMessage.current!.value,
             content_type: "text",

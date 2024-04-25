@@ -30,7 +30,7 @@ function PlayerCard({ name , img }: { name: string, img: any }) {
                     </div>
                 }
                 <h1 className='text-white text-xl font-mono'>
-                    {name}
+                    {name ? name : 'Loading...'}
                 </h1>
             </div>
         </div>

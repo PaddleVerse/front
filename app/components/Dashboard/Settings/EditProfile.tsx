@@ -7,6 +7,7 @@ import { useGlobalState } from '../../Sign/GlobalState';
 import { cn } from "@/components/cn";
 import { Label } from "@/components/ui/newlabel";
 import { Input } from "@/components/ui/newinput";
+import { ipAdress } from '@/app/utils';
 
 import axios from 'axios';
 
@@ -21,7 +22,7 @@ const EditProfile = () => {
   
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://localhost:8080/user/${user?.id}`);
+      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
@@ -30,7 +31,7 @@ const EditProfile = () => {
   }
   
   const onSubmit = (data : any) => { 
-    axios.put(`http://localhost:8080/user/${user?.id}`, data)
+    axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data)
     .then((res) => {
 
       if (res.data !== '')
@@ -73,7 +74,7 @@ const EditProfile = () => {
       const formData = new FormData();
       formData.append('image', selectedFile);
       
-      await axios.put(`http://localhost:8080/user/img/${user?.id}`, formData, {
+      await axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       refreshUser();

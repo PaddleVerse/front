@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useGlobalState } from '../../Sign/GlobalState';
 import { debounce } from 'lodash';
+import { ipAdress } from '@/app/utils';
 
 const SearchBarPop = () => {
     const router = useRouter();
@@ -28,7 +29,7 @@ const SearchBarPop = () => {
     const filterUsers = (inputValue : string) => {
       setTimeout(() => {
         if (user?.id === undefined) return;
-        axios.get(`http://localhost:8080/search/${inputValue}/${user?.id}`)
+        axios.get(`http://${ipAdress}:8080/search/${inputValue}/${user?.id}`)
         .then(res => {
           setFilteredUsers(res.data);
         })
@@ -48,7 +49,7 @@ const SearchBarPop = () => {
     } , [inputValue])
 
     useEffect(() => {
-      axios.get('http://localhost:8080/search/searchedUsers')
+      axios.get(`http://${ipAdress}:8080/search/searchedUsers`)
       .then(res => {
         setSearchedUsers(res.data);
         setFilteredUsers(res.data);
@@ -56,14 +57,14 @@ const SearchBarPop = () => {
     }, [users, is])
 
     useEffect(() => {
-        axios.get('http://localhost:8080/user')
+        axios.get(`http://${ipAdress}:8080/user`)
           .then(res => {
             setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
           })
     } , [user?.id])
 
     const handleclick = (id : any) => {
-      axios.post('http://localhost:8080/search', {
+      axios.post(`http://${ipAdress}:8080/search`, {
         userId: id
       }).catch();
       router.push(`/Dashboard/Profile?id=${id}`);

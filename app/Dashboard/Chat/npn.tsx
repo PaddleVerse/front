@@ -13,19 +13,20 @@ import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
+import { ipAdress } from "@/app/utils";
 
 const fetchChatList = async (userId: string) => {
-  const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
+  const res = await axios.get(`http://${ipAdress}:8080/chat/chatlist/${userId}`);
   const dataWithMessages = await Promise.all(
     res.data.map(async (value: any) => {
       if (value.user) {
         const messageRes = await axios.get(
-          `http://localhost:8080/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`
+          `http://${ipAdress}:8080/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`
         );
         return { ...value, msg: messageRes.data };
       } else {
         const channelRes = await axios.get(
-          `http://localhost:8080/channels/messages/lastMessage/${value.id}?uid=${userId}`
+          `http://${ipAdress}:8080/channels/messages/lastMessage/${value.id}?uid=${userId}`
         );
         return { ...value, msg: channelRes.data };
       }
