@@ -6,23 +6,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { channel, user } from "@/app/Dashboard/Chat/type";
 
-
-
 export const ChatCard = (props: any) => {
   const router = useRouter();
   const { state } = useGlobalState();
   const { user, socket } = state;
   const clt = useQueryClient();
-  // const { data: typing } = useQuery({
-  //   queryKey: ["typing"],
-  //   queryFn: () => ConfigureTyping(props.istyping, user, props.value),
-  // });
-
-  // useEffect(() => {
-  //   clt.invalidateQueries({ queryKey: ["typing"] });
-  // }, [props]);
-
-  console.log("props", props);
 
   return (
     <motion.div
@@ -68,6 +56,8 @@ export const ChatCard = (props: any) => {
                   ) : (
                     <p className="text-white">someone is typing ...</p>
                   )
+                ) : props?.msg?.content_type === "image" ? (
+                  <p>sent a picture</p>
                 ) : (
                   <p className="">
                     {props.msg && props.msg?.content?.length >= 10

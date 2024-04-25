@@ -20,6 +20,65 @@ import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { channel, user } from "../../type";
 import { Socket } from "socket.io-client";
 
+const sendpicture = async (
+  file: File,
+  channel: channel | null,
+  user1: user,
+  user2: user | null,
+  Socket: Socket
+) => {
+  if (!file) {
+    return;
+  }
+  if (file) {
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image picture.");
+      return;
+    }
+  }
+  if (channel) {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const pic = await axios.post(
+        `http://localhost:8080/message/image?channel=${channel?.id}&sender=${user1.id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      Socket?.emit("channelmessage", {
+        roomName: channel.name,
+        user: user1,
+      });
+    } catch (error) {
+      toast.error("error in uploading image.");
+    }
+    return;
+  }
+  if (user2) {
+    console.log("here at sending a picture");
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const pic = await axios.post(
+        `http://localhost:8080/message/image?sender=${user1.id}&reciever=${user2.id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      Socket?.emit("dmmessage", {
+        reciever: user2?.id!,
+        sender: user1?.id!,
+      });
+    } catch (error) {
+      toast.error("error in uploading image");
+    }
+    return;
+  }
+};
+
 const fetchTargetUser = async (parameters: any) => {
   if (parameters.subroute === "dm") {
     const user = await axios.get(
@@ -44,7 +103,7 @@ const SendInvite = (self: user, target: user, socket: Socket) => {
     sender: self,
     reciever: target,
   });
-}
+};
 
 const Page = (props: any) => {
   const clt = useQueryClient();
@@ -54,6 +113,7 @@ const Page = (props: any) => {
   const [channelManagement, setChannelManagement] = useState(false);
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
+  const [file, setFile] = useState<File>();
   const [update, setUpdate] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const inputMessage = useRef<HTMLInputElement | null>(null);
@@ -209,12 +269,29 @@ const Page = (props: any) => {
             }`}
           >
             <div className="flex flex-row items-center p-4">
-              <button
-                type="button"
-                className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6 "
-              >
-                <CiCirclePlus className="w-full h-full" />
-              </button>
+              <div className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6 relative ">
+                <input
+                  type="file"
+                  className="w-6 h-6 overflow-hidden  opacity-0 z-30"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      if (e.target.files[0].size > 25000) {
+                        toast.error("file size too large");
+                        return;
+                      }
+                      setFile(e.target.files[0]);
+                      sendpicture(
+                        e.target.files[0],
+                        targetChannel!,
+                        user!,
+                        targetUser!,
+                        socket
+                      );
+                    }
+                  }}
+                />
+                <CiCirclePlus className="w-full h-full absolute z-20" />
+              </div>
               {targetUser && (
                 <button
                   type="button"
