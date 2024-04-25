@@ -1,9 +1,25 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Caroussel from './Caroussel'
 import Header from './Header'
+import { useGlobalState } from '@/app/components/Sign/GlobalState'
+import Game from '@/app/components/Dashboard/Game/InGame/Game'
 
 
 const GameOptions = () => {
+  const [start, setStart] = useState(false)
+  const { state } = useGlobalState();
+  const { socket } = state;
+
+  useEffect(() => {
+    socket?.on('start', () => {
+      setStart(true)
+    })
+  } , [socket])
+
+  if(start) {
+    return <Game />
+  }
   return (
     <div className='w-[94%] bg-[#101823]  py-[45px] px-[20px] sm:px-[150px] rounded-lg'>
       <Header />

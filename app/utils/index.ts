@@ -9,6 +9,22 @@ export const getDate = (dateString: any): string  => {
   return `${year}-${month}-${day}`;
 }
 
+export type user = {
+  id: number;
+  googleId: string;
+  fortytwoId: number;
+  nickname: string;
+  name: string;
+  password: string;
+  picture: string;
+  banner_picture: string;
+  status: string;
+  level: number;
+  createdAt: Date;
+  twoFa: boolean;
+  twoFaSecret: string;
+};
+
 export const getTime = (datetime: any): string  => {
     const dateObj = new Date(datetime);
     const hours = dateObj.getHours();
