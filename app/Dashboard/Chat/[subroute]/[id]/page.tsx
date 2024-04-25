@@ -11,12 +11,14 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import ChatComponent from "@/app/components/Dashboard/Chat/ChatComponent";
 import ChannelManagement from "@/app/components/Dashboard/Chat/channelManagement";
 import { CiCirclePlus } from "react-icons/ci";
+import { FaGamepad } from "react-icons/fa6";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useSwipeable } from "react-swipeable";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { channel, user } from "../../type";
+import { Socket } from "socket.io-client";
 
 const fetchTargetUser = async (parameters: any) => {
   if (parameters.subroute === "dm") {
@@ -37,6 +39,13 @@ const fetchTargetChannel = async (parameters: any) => {
   return null;
 };
 
+const SendInvite = (self: user, target: user, socket: Socket) => {
+  socket.emit("GameInvite", {
+    sender: self,
+    reciever: target,
+  });
+}
+
 const Page = (props: any) => {
   const clt = useQueryClient();
   const router = useRouter();
@@ -56,7 +65,6 @@ const Page = (props: any) => {
     queryKey: ["targetUser"],
     queryFn: () => fetchTargetUser(param),
   });
- 
 
   useEffect(() => {
     socket?.on("ok", (data: any) => {
@@ -86,7 +94,7 @@ const Page = (props: any) => {
       roomId: targetChannel?.id,
       type: targetUser ? "dm" : "channel",
     });
-  }; 
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -137,7 +145,10 @@ const Page = (props: any) => {
   return (
     <>
       {targetChannel || targetUser ? (
-        <section className="flex flex-col flex-auto border-l border-gray-800" {...handlers}>
+        <section
+          className="flex flex-col flex-auto border-l border-gray-800"
+          {...handlers}
+        >
           <div className=" px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div className="flex">
               <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
@@ -169,9 +180,7 @@ const Page = (props: any) => {
               </div>
             </div>
           </div>
-          <div
-            className=" p-4 flex-1 overflow-y-scroll no-scrollbar "
-          >
+          <div className=" p-4 flex-1 overflow-y-scroll no-scrollbar ">
             {targetUser ? (
               <ChatComponent
                 handlers={handlers}
@@ -206,6 +215,17 @@ const Page = (props: any) => {
               >
                 <CiCirclePlus className="w-full h-full" />
               </button>
+              {targetUser && (
+                <button
+                  type="button"
+                  className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6"
+                  onClick={(e) => {
+                    SendInvite(user!, targetUser!, socket!);
+                  }}
+                >
+                  <FaGamepad className="w-full h-full" />
+                </button>
+              )}
               <div className="relative flex-grow">
                 <form onSubmit={(e) => handleSubmit(e)}>
                   <input
@@ -214,7 +234,7 @@ const Page = (props: any) => {
                     ref={inputMessage}
                     placeholder="Aa"
                     {...(register("inputMessage"), { required: true })}
-                    onChange={(e)=> handleChange(e)}
+                    onChange={(e) => handleChange(e)}
                   />
                   <button
                     type="submit"
@@ -235,5 +255,3 @@ const Page = (props: any) => {
 };
 
 export default Page;
-
-// nneed to change somehting in terms of sockets and how it responds to new data or events

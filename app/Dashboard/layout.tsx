@@ -9,10 +9,11 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "react-query";
+import { useEffect, useState } from "react";
+import GameInvite from "../components/Dashboard/Chat/GameInvite/GameInvite";
+import InviteComponent from "../components/Dashboard/Chat/GameInvite/InviteComponent";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// const queryClient = new QueryClient();
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,17 +24,17 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+  }) {
+  
   return (
     <section
       className={`${inter.className} w-screen h-screen bg-[#15202E] bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
     >
-      {/* <QueryClientProvider client={queryClient}> */}
-        <ContentWrapper>
-          {children}
-          <Toaster position="top-right" />
-        </ContentWrapper>
-      {/* </QueryClientProvider> */}
+      <ContentWrapper>
+        <InviteComponent />
+        {children}
+        <Toaster position="top-right" />
+      </ContentWrapper>
     </section>
   );
 }
