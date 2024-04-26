@@ -8,7 +8,6 @@ import { Ball } from "./Ball";
 import { TableModule } from "./Table";
 import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 interface GameCanvasProps {
   roomId: string;  // Adding a roomId prop
@@ -69,7 +68,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       socket.on("moveBall", (ball: any) => {
         if (ballRef.current) {
           ballRef.current.position.set(ball.position.x, ball.position.y, ball.position.z);
-          ballRef.current.rotation.set(ball.rotation.x, ball.rotation.y, ball.rotation.z);
+          ballRef.current.velocity.set(ball.velocity.x, ball.velocity.y, ball.velocity.z);
+            
         }
       });
     }

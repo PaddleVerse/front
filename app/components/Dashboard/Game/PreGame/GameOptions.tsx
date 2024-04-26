@@ -10,11 +10,12 @@ const GameOptions = () => {
   const [start, setStart] = useState(false)
   const { state } = useGlobalState();
   const { socket } = state;
-
+  const [roomId, setRoomId] = useState('')
   useEffect(() => {
-    socket?.on('start', () => {
+    socket?.on('start', (data : any) => {
       setTimeout(() => {
         setStart(true)
+        setRoomId(data.room)
       } , 1500);
     })
 
@@ -29,7 +30,7 @@ const GameOptions = () => {
   } , [socket])
 
   if(start) {
-    return <Game roomId='21'/>
+    return <Game roomId={roomId} />
   }
   return (
     <div className='w-[94%] bg-[#101823]  py-[45px] px-[20px] sm:px-[150px] rounded-lg'>

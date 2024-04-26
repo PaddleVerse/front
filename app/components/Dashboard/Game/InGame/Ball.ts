@@ -63,18 +63,6 @@ class Ball extends THREE.Mesh {
 
   update() {
     this.applyRotation();
-    // this.updatePosition();
-    // this.min = {
-    //   x: this.position.x - this.radius,
-    //   y: this.position.y - this.radius,
-    //   z: this.position.z - this.radius,
-    // };
-    // this.max = {
-    //   x: this.position.x + this.radius,
-    //   y: this.position.y + this.radius,
-    //   z: this.position.z + this.radius,
-    // };
-    // this.boundingBox.setFromObject(this);
   }
   // Call this method in your animation loop or similar periodic update function.
   updatePosition() {
