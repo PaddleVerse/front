@@ -19,7 +19,6 @@ const GameOptions = () => {
     })
 
     socket?.on("leftRoom", () => {
-      console.log('left room')
       setStart(false)
     });
 
