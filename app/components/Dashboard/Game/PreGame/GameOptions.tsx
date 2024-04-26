@@ -17,6 +17,16 @@ const GameOptions = () => {
         setStart(true)
       } , 1500);
     })
+
+    socket?.on("leftRoom", () => {
+      console.log('left room')
+      setStart(false)
+    });
+
+    return () => {
+      socket?.off('start');
+      socket?.off('leftRoom');
+    }
   } , [socket])
 
   if(start) {

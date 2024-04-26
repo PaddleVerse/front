@@ -215,6 +215,7 @@ const GameCanvas = () => {
         socket.off("movePaddle");
         socket.off("role");
         socket.off("moveBall");
+        socket.emit("leaveRoom", { id: user.id, room: "lMa0J3z3" });
       }
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);

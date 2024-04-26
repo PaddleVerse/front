@@ -45,8 +45,6 @@ function ContentWrapper({ children }: Props) {
           })
           .then(response => { return response.json(); })
           .then(data => {
-
-            console.log("--->",data);
             
             if (!data || data?.error === "Unauthorized" || data?.message === "Unauthorized")
               router.push('/');
