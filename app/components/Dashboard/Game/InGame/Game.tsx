@@ -197,13 +197,23 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
     animate();
 
+    const emitLeaveRoom = () => {
+      if (socket) {
+        socket.emit("leaveRoom", { room: roomId });
+      }
+    };
+
+    window.addEventListener('beforeunload', emitLeaveRoom);
+
     return () => {
       if (socket) {
         socket.off("paddlePositionUpdate");
         socket.off("movePaddle");
         socket.off("role");
         socket.off("moveBall");
+        socket.emit("leaveRoom", { room: roomId });
       }
+      window.removeEventListener("beforeunload", emitLeaveRoom);
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
         mountRef.current.removeEventListener("mousemove", handleMouseMove);
