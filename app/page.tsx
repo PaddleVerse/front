@@ -52,25 +52,24 @@ const page = () => {
               router.push("/Signin");
             }}
           >
-            
             <svg
               width="100%"
               height="82"
               viewBox="0 0 310 82"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              onMouseOver={(e) => {
-                //@ts-ignore
-                e.target.style.fill = "#2a1515";
-              }}
-              onMouseOut={(e) => {
-                //@ts-ignore
-                e.target.style.fill = "#181818";
-              }}
             >
               <path
                 d="M9 1.09375H72L77.5 5.59375H308.5V70.5938L299 80.0938H9H1.5V69.5938L3.5 67.5938V49.5938L1.5 48.0938V1.09375H9Z"
                 fill="#181818"
+                onMouseOver={(e) => {
+                  //@ts-ignore
+                  e.target.style.fill = "#2a1515";
+                }}
+                onMouseOut={(e) => {
+                  //@ts-ignore
+                  e.target.style.fill = "#181818";
+                }}
               />
               <path
                 d="M9 1.09375H72L77.5 5.59375H308.5V70.5938L299 80.0938H9M9 1.09375V80.0938M9 1.09375H1.5V48.0938L3.5 49.5938V67.5938L1.5 69.5938V80.0938H9"
@@ -83,15 +82,6 @@ const page = () => {
               />
             </svg>
           </div>
-          {/* <Image
-            src="/Button.svg"
-            width={0}
-            height={0}
-            alt={"image"}
-            sizes="100vh 100vw"
-            className="  hover:text-red-500"
-            onClick={() => {router.push("/Signin")}}
-          /> */}
         </motion.div>
       </div>
       <div className="">
