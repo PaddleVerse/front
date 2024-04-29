@@ -45,7 +45,7 @@ const GameInvite = ({ sender }: { sender: user | null }) => {
     // Clean up the interval when the component unmounts
     return () => clearInterval(countdownInterval);
   }, []);
-
+  let roomID = "adsasdajs";
   return (
     <div
       className={`fixed inset-0 sm:flex ${modlar ? "block" : ""} ${
