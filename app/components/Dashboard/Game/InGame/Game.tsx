@@ -8,6 +8,8 @@ import { Ball } from "./Ball";
 import { TableModule } from "./Table";
 import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import { rajdhani } from "@/app/utils/fontConfig";
+import { cn } from "@/components/cn";
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
@@ -29,7 +31,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [score, setScore] = useState({ player1: 0, player2: 0 });
-
 
   useEffect(() => {
     let userID: string | null = null;
@@ -235,21 +236,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   return (
     <>
       {/* make a white text on top in the middle of the game that displays the score */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          color: "white",
-          fontSize: "2rem",
-          font: "rajdhani",
-        }}
-      >
-        Score: {score.player1} - {score.player2}
-      </div>
 
-      
       <div
         ref={mountRef}
         style={{
@@ -260,7 +247,21 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           alignItems: "center",
           cursor: `none`,
         }}
-      />
+        className="flex "
+      >
+        <div
+          style={{
+            transform: "translateX(-50%)",
+          }}
+          className={cn(
+            "bg-red-600 px-4 py-2 rounded-br-lg rounded-bl-lg absolute text-white text-xl mx-auto top-[55px] ml-[118px] font-[500]",
+            rajdhani.className,
+
+          )}
+        >
+          {score.player1} - {score.player2}
+        </div>
+      </div>
     </>
   );
 };
