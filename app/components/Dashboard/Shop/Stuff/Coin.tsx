@@ -3,21 +3,55 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { inter } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
+import axios from "axios";
+import { ipAdress } from "@/app/utils";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import { Infos } from "../types";
+import toast from "react-hot-toast";
 
-const Coin = ({ size }: { size: string }) => {
+const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
   const [hover, setHover] = React.useState(false);
   const [owned, setOwned] = React.useState(false);
   const [equipped, setEquipped] = React.useState(false);
+  const {state, dispatch} = useGlobalState();
+  const {user} = state;
+
+  const refreshUser = async () => {
+    try {
+      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const usr = response.data;
+      dispatch({type: 'UPDATE_USER', payload: usr});
+    } catch (error) {
+      console.error('Error fetching user', error);
+    }
+  }
 
   const handleClick = () => {
     if (owned && equipped) {
+      console.log("1");
       setEquipped(false);
     } else if (owned) {
+      console.log("2");
       setEquipped(true);
     } else {
+      axios.post(`http://${ipAdress}:8080/shop/paddle`, {
+        image: infos.image,
+        color: infos.color,
+        user_id: user?.id,
+        price : 10
+      }).then(
+        (res) => {
+          if (res.data.status === "success")
+          {
+            refreshUser();
+            toast.success(res.data.message);
+          }
+          else if (res.data.status === "error")
+            toast.error(res.data.message);
+        }
+      )}
       setOwned(true);
     }
-  };
 
   return (
     <motion.div
@@ -44,7 +78,7 @@ const Coin = ({ size }: { size: string }) => {
           }}
           exit={{ opacity: 0 }}
         >
-          {owned ? (equipped ? "EQUIPPED" : "OWNED") : "512"}
+          {owned ? (equipped ? "EQUIPPED" : "OWNED") : (infos && infos?.price)}
         </motion.span>
         <motion.span
           className={cn(

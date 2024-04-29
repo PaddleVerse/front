@@ -33,7 +33,7 @@ const GameOptions = () => {
     }
   } , [socket])
 
-  if(start) {
+  if (start) {
     return <Game roomId={roomId} />
   }
   return (

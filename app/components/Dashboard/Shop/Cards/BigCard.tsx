@@ -52,7 +52,7 @@ const BigCard = ({ infos, handleClick, selected }: BigCardProps) => {
           <p className="text-[12px]">{infos.description}</p>
         </div>
         <div className="absolute bottom-4 right-4">
-          <Coin size={"big"} />
+          <Coin size={"big"} infos={infos} />
         </div>
       </motion.div>
     </div>
