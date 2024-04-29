@@ -13,7 +13,7 @@ const GameOptions = () => {
   const [roomId, setRoomId] = useState('')
   const [canPlay, setCanPlay] = useState(false)
   const [selected, setSelected] = useState("");
-  console.log(canPlay)
+
   useEffect(() => {
     socket?.on('start', (data : any) => {
       setTimeout(() => {
@@ -23,7 +23,7 @@ const GameOptions = () => {
     })
 
     socket?.on("leftRoom", () => {
-      console.log('left room')
+      setCanPlay(false)
       setStart(false)
     });
 
@@ -36,7 +36,6 @@ const GameOptions = () => {
   if(start) {
     return <Game roomId={roomId} />
   }
-  console.log(selected)
   return (
     <div className='w-[94%] bg-[#101823]  py-[45px] px-[20px] sm:px-[150px] rounded-lg'>
       <Header selected={selected} setCanPlay={setCanPlay}/>

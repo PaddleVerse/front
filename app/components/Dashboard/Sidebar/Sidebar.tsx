@@ -105,7 +105,7 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        "flex relative lg:h-[fit-content] h-auto z-40",
+        "flex relative lg:h-[fit-content] h-auto z-50",
         oswald.className
       )}
       {...handlers}

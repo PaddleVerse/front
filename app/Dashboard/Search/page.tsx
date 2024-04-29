@@ -55,9 +55,6 @@ const Search = () => {
       <div className='mt-20'>
         <h1 className='text-3xl text-white mt-10 font-mono'>RECOMMENDED</h1>
         <div className="flex flex-col bg-inherit relative">
-        {/* <button className="hidden sm:flex absolute justify-center items-center left-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_1(-100)}>
-            <FaCaretLeft className='text-2xl'/>
-          </button> */}
           <div className="flex overflow-x-scroll py-10 no-scrollbar w-full" ref={containerRef_1} style={{ scrollBehavior: 'smooth' }}>
             <div className="flex flex-nowrap gap-3">
               {users?.map((item, index) => (
@@ -67,17 +64,11 @@ const Search = () => {
               ))}
             </div>
           </div>
-          {/* <button className="hidden sm:flex absolute justify-center items-center right-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_1(100)}>
-            <FaCaretRight className='text-2xl' />
-          </button> */}
         </div>
       </div>
       <div className='mt-10'>
         <h1 className='text-3xl text-white font-mono'>RECENTLY PLAYED WITH</h1>
         <div className="flex flex-col bg-inherit relative">
-          {/* <button className="hidden sm:flex absolute justify-center items-center left-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_2(-100)}>
-            <FaCaretLeft className='text-2xl' />
-          </button> */}
           <div className="flex overflow-x-scroll py-10 no-scrollbar w-full" ref={containerRef_2} style={{ scrollBehavior: 'smooth' }}>
             <div className="flex flex-nowrap gap-3">
               {users?.map((item, index) => (
@@ -87,9 +78,6 @@ const Search = () => {
               ))}
             </div>
           </div>
-          {/* <button className="hidden sm:flex absolute justify-center items-center right-0 top-0 h-full backdrop-blur-md text-white py-2 px-2 z-10" onClick={() => handleScroll_2(100)}>
-            <FaCaretRight className='text-2xl' />
-          </button> */}
         </div>
 
       </div>
