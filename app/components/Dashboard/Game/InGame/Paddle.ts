@@ -16,7 +16,7 @@ class Paddle {
   boundingBox: BoundingBox;
   rotationX: number;
 
-  constructor(scene: THREE.Scene, position: Position) {
+  constructor(scene: THREE.Scene, position: Position, rotationX: number = Math.PI / 2) {
     this.scene = scene;
     this.position = position;
     this.object = new THREE.Object3D(); // Create a new object
@@ -26,7 +26,7 @@ class Paddle {
       this.update();
     });
     this.boundingBox = this.createBoundingBox();
-    this.rotationX = Math.PI / 2;
+    this.rotationX = rotationX;
   }
 
   async load(): Promise<THREE.Object3D> {
