@@ -31,7 +31,21 @@ const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
       console.log("1");
       setEquipped(false);
     } else if (owned) {
-      console.log("2");
+      axios.post(`http://${ipAdress}:8080/shop/paddle/enable`, {
+        user_id: user?.id,
+        color: infos.color
+      }).then(
+        (res) => {
+          console.log(res.data);
+          if (res.data.status === "success")
+          {
+            refreshUser();
+            toast.success(res.data.message);
+          }
+          else if (res.data.status === "error")
+            toast.error(res.data.message);
+        }
+      )
       setEquipped(true);
     } else {
       axios.post(`http://${ipAdress}:8080/shop/paddle`, {
