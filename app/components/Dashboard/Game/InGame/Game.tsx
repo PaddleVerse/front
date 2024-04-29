@@ -108,7 +108,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     tableModule.createNet();
     let paddle: Paddle;
     let paddle2: Paddle;
-    paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 });
+    paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2);
     paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 });
     paddleRef.current = paddle;
     paddle2Ref.current = paddle2;
@@ -174,7 +174,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     // if the key h is pressed, the ball will move
     window.addEventListener("keydown", (e) => {
       if (e.key === "h") {
-        console.log("h");
         if (socket) socket.emit("resetBall", { room: roomId });
       }
       if (e.key === "g") {
@@ -199,6 +198,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
     return () => {
       if (socket) {
+        socket.emit("leftRoom", { id: user.id, room: roomId });
         socket.off("paddlePositionUpdate");
         socket.off("movePaddle");
         socket.off("role");

@@ -45,7 +45,7 @@ const Caroussel = () => {
           infinite={true}
 
         >
-          {/* <BigCard gameMode={'1'}/> */}
+          <BigCard gameMode={'1'} turnOn={() => setMatchMaking(true)}/>
           <BigCard gameMode={'2'} turnOn={() => setMatchMaking(true)}/>
           {/* <BigCard gameMode={'3'}/>
           <BigCard gameMode={'2'}/> */}
