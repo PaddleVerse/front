@@ -41,7 +41,7 @@ const Caroussel = () => {
           swipeable={true}
           draggable={true}
           centerMode={false}
-          showDots={true}
+          // showDots={true}
           infinite={true}
 
         >

@@ -20,7 +20,7 @@ function PlayerCard({ name , img }: { name: string, img: any }) {
                         src={img}
                         height="1000"
                         width="1000"
-                        className="h-60 w-60 object-cover rounded-xl group-hover/card:shadow-xl"
+                        className="h-60  2xl:w-60  w-[150px] object-cover rounded-xl group-hover/card:shadow-xl"
                         alt="thumbnail"
                     />
                     :
@@ -31,7 +31,7 @@ function PlayerCard({ name , img }: { name: string, img: any }) {
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                     
-                    className="flex items-center justify-center h-60 w-60 bg-gray-400 rounded  animate-pulse">
+                    className="flex items-center justify-center 2xl:w-60 h-60 w-[150px] bg-gray-400 rounded  animate-pulse">
                         <svg
                             className="w-10 h-10 text-gray-300"
                             aria-hidden="true"

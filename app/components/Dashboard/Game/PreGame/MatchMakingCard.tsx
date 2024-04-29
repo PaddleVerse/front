@@ -43,7 +43,8 @@ const MatchMakingCard = ({
             duration: 0.15,
           },
         }}
-        className="relative bg-[#ffffff37] backdrop-blur w-[40%] h-[40%] rounded-xl p-4"
+        exit={{ opacity: 0, scale: 0.75 }}
+        className="relative bg-[#ffffff37] backdrop-blur 2xl:w-[25%] w-[450px] h-[40%] rounded-xl p-4 z-50"
       >
         <button
           onClick={turnOff}
