@@ -17,6 +17,7 @@ import { FaChessKing } from "react-icons/fa6";
 import { FaChessPawn } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
+import { ipAdress } from "@/app/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
 const MemberList = ({
@@ -30,6 +31,15 @@ const MemberList = ({
 }) => {
   const router = useRouter();
   const { state, dispatch } = useGlobalState();
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:8080/user/${participant.user_id}`)
+  //     .then((res) => {
+  //       setUser(res.data);
+  //     });
+  // }, [participant]);
+
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
   };
@@ -48,7 +58,7 @@ const MemberList = ({
       cid: exec.channel_id,
       uid: participant.user_id,
     };
-    axios.post(`http://localhost:8080/ban/`, obj).then((res) => {
+    axios.post(`http://${ipAdress}:8080/ban/`, obj).then((res) => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
         user: participant.user,
@@ -71,11 +81,7 @@ const MemberList = ({
       executor: exec.user_id,
     };
     axios
-      .delete(
-        `http://localhost:8080/participants/kick?target=${
-          participant.user_id
-        }&user=${exec.user_id}&channel=${channel!.id}`
-      )
+      .delete(`http://${ipAdress}:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel.name,
@@ -105,7 +111,7 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://localhost:8080/participants/${participant.user_id}`, obj)
+      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
@@ -135,7 +141,7 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://localhost:8080/participants/${participant.user_id}`, obj)
+      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,

@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { useQueryClient } from "@tanstack/react-query";
+import { ipAdress } from "@/app/utils";
 
 const JoinChannelBubble = ({
   lock,
@@ -38,7 +39,7 @@ const JoinChannelBubble = ({
         channel: channel,
       };
       try {
-        const res = await axios.post(`http://localhost:8080/participants`, obj);
+        const res = await axios.post(`http://${ipAdress}:8080/participants`, obj);
         toast.success(`you have joined ${channel.name}`);
         state?.socket?.emit("joinRoom", {
           user: user,
@@ -59,7 +60,7 @@ const JoinChannelBubble = ({
         channel: channel,
       };
       try {
-        const res = await axios.post(`http://localhost:8080/participants`, obj);
+        const res = await axios.post(`http://${ipAdress}:8080/participants`, obj);
         toast.success(`you have joined ${channel.name}`);
         clt?.invalidateQueries({ queryKey: ["chatList"] });
         state?.socket?.emit("joinRoom", {
@@ -85,10 +86,12 @@ const JoinChannelBubble = ({
         }
       }}
     >
-      <img
-        src={channel.picture}
+      <Image
+        src="/badge1.png"
         alt="image"
-        className="lg:w-[47px] lg:h-[47px] md:w-[31px] md:h-[31px] rounded-full"
+        className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
+        width={100}
+        height={100}
       />
       <div className="flex flex-col gap-1">
         <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">

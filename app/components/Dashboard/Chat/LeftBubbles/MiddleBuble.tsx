@@ -7,10 +7,12 @@ const MiddleBuble = (props: any) => {
     <div className="flex items-center group">
       <div className="w-8 h-8 relative flex flex-shrink-0 mr-4">
         {props.showProfilePic && (
-          <img
+          <Image
             className="shadow-md rounded-full w-full h-full object-cover"
             src={props?.picture}
             alt=""
+            width={100}
+            height={100}
           />
         )}
       </div>

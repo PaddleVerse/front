@@ -20,15 +20,16 @@ import JoinChannel from "./JoinChannel";
 import InviteCard from "./InviteCard";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
+import { ipAdress } from "@/app/utils";
 
 const fetchParticipants = async (channel: channel, user: user) => {
   const participants = await axios.get(
-    `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
+    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
   const ret = await Promise.all(
     participants.data.map(async (participant: participants) => {
       const user = await axios.get(
-        `http://localhost:8080/user/${participant.user_id}`
+        `http://${ipAdress}:8080/user/${participant.user_id}`
       );
       return { ...participant, user: user.data };
     })
@@ -38,7 +39,7 @@ const fetchParticipants = async (channel: channel, user: user) => {
 
 const FetchPriviliged = async (channel: channel, user: user) => {
   const participants = await axios.get(
-    `http://localhost:8080/channels/participants/${channel.id}?uid=${user.id}`
+    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`
   );
   return (
     participants.data.filter(
@@ -108,7 +109,7 @@ const ChannelManagement = ({
   const handleLeave = () => {
     axios
       .delete(
-        `http://localhost:8080/participants/leave?channel=${channel.id}&user=${user.id}`
+        `http://${ipAdress}:8080/participants/leave?channel=${channel.id}&user=${user.id}`
       )
       .then((res) => {
         socket.emit("leaveRoom", { user: user, roomName: channel.name });
@@ -145,7 +146,7 @@ const ChannelManagement = ({
           }
         }
         const res = await axios.put(
-          `http://localhost:8080/channels/${channel.id}`,
+          `http://${ipAdress}:8080/channels/${channel.id}`,
           obj
         );
         if (picture) {
@@ -153,7 +154,7 @@ const ChannelManagement = ({
             const formData = new FormData();
             formData.append("image", picture);
             const pic = await axios.post(
-              `http://localhost:8080/channels/image?channel=${channel.id}&user=${user.id}`,
+              `http://${ipAdress}:8080/channels/image?channel=${channel.id}&user=${user.id}`,
               formData,
               {
                 headers: { "Content-Type": "multipart/form-data" },

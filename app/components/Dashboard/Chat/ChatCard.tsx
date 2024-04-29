@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { message } from "@/app/Dashboard/Chat/page";
+import Image from "next/image";
 import { getShortDate, getTime } from "@/app/utils";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,9 +35,14 @@ export const ChatCard = (props: any) => {
     >
       <div className="flex gap-4 w-full">
         <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">
-          <img
+          <Image
             className="shadow-md rounded-full w-10 h-10 object-cover"
-            src={props.value?.picture}
+            src={
+              props.value?.picture ||
+              "https://randomuser.me/api/portraits/women/87.jpg"
+            }
+            width={40}
+            height={40}
             alt="picture"
           />
           <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">

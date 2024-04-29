@@ -18,16 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en">
+      <html lang="en" className="bg-primaryColor">
         <body
           className={`${inter.className} w-screen h-screen bg-Dark  bg-fixed bg-center bg-no-repeat bg-cover no-scrollbar`}
         >
           {/* <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
           <Boxes />
         </div> */}
-          {/* <GridBackground></GridBackground> */}
-          {children}
-        </body>
-      </html>
+        <GridBackground></GridBackground>
+        {children}
+      </body>
+    </html>
   );
 }

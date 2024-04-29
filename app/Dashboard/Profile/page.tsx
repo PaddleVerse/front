@@ -5,6 +5,7 @@ import UserProfile from '@/app/components/Dashboard/Profile/UserProfile';
 import axios from 'axios';
 import { useGlobalState } from '@/app/components/Sign/GlobalState';
 import { useRouter } from 'next/navigation';
+import { ipAdress } from '@/app/utils';
 
 const Profile = () => {
   const searchParams = useSearchParams()
@@ -25,7 +26,7 @@ const Profile = () => {
   } , [socket])
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/user/${id}`).then((res) => {
+    axios.get(`http://${ipAdress}:8080/user/${id}`).then((res) => {
       setTargetUser(res.data)
     })
     .catch(() => {})
@@ -38,7 +39,7 @@ const Profile = () => {
             <div className="w-[100%] mt-[50px] flex flex-col gap-10 items-center">
               <div className="xl:flex-row w-[94%] flex flex-col gap-7">
               <div className="flex flex-col w-full gap-8">
-                {targetUser && <UserProfile target={targetUser}/>}
+                <UserProfile target={targetUser}/>
             </div>
           </div>
             </div>

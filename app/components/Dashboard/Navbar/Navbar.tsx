@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { useGlobalState } from "../../Sign/GlobalState";
 import NotificationCard from "./NotificationCard";
+import { ipAdress } from "@/app/utils";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -15,13 +16,9 @@ const Navbar = () => {
   const { user, socket } = state;
 
   const handleClick = () => {
-    // user?.notifications.splice(0, user?.notifications.length);
-    // axios.delete(`http://localhost:8080/notifications/${user?.id}`, {}).then((res) => {
-    //   console.log(res);
-    // }).catch((err) => {
-    //   console.log(err);
-    // });
-
+    if (socket) {
+      socket.emit('!notified', {'userId': user?.id} );
+    }
     setOpen(!open);
     setNotifed(false);
   };
@@ -39,23 +36,27 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!user || !socket) return;
-    socket?.on("notification", () => {
+    console.log(user?.notified);
+    if (user?.notified === true) setNotifed(true);
+    socket?.on('notification', () => {
       setNotifed(true);
     });
-  }, [socket]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, user]);
 
   useEffect(() => {
     if (!socket || !user) return;
     socket?.on("notification", (data: any) => {
       if (data?.ok === 0) return;
       axios
-        .get(`http://localhost:8080/user/${user?.id}`)
+        .get(`http://${ipAdress}:8080/user/${user?.id}`)
         .then((res) => {
           dispatch && dispatch({ type: "UPDATE_USER", payload: res.data });
         })
         .catch(() => {});
     });
-  }, [socket]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  } , [socket]);
 
   const getCookie = (name: string) => {
     const value = `; ${document.cookie}`;
@@ -74,7 +75,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     axios
       .post(
-        "http://localhost:8080/auth/logout",
+        `http://${ipAdress}:8080/auth/logout`,
         {},
         {
           headers: {

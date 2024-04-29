@@ -5,6 +5,7 @@ import Navbar from "../components/Dashboard/Navbar/Navbar";
 import { useRouter } from 'next/navigation';
 import {GlobalStateProvider} from "../components/Sign/GlobalState";
 import V2fa from '../components/V2fa/V2fa';
+import { ipAdress } from '@/app/utils';
 
 interface Props {children: React.ReactNode;}
 
@@ -36,7 +37,7 @@ function ContentWrapper({ children }: Props) {
       // alert(accessToken);
       if (accessToken)
       {
-          fetch("http://localhost:8080/auth/protected", {
+          fetch(`http://${ipAdress}:8080/auth/protected`, {
           method: 'GET',
           headers: {
               'Authorization': `Bearer ${accessToken}`
@@ -44,6 +45,7 @@ function ContentWrapper({ children }: Props) {
           })
           .then(response => { return response.json(); })
           .then(data => {
+            
             if (!data || data?.error === "Unauthorized" || data?.message === "Unauthorized")
               router.push('/');
             else

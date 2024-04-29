@@ -9,17 +9,19 @@ import { useGlobalState } from "../../Sign/GlobalState";
 import { io } from "socket.io-client";
 import { oswald } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
+import { ipAdress } from "@/app/utils";
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 
-interface User {
-  username: string;
-  name: string;
-  picture: string;
-  banner_picture: string;
-  status: string;
-  level: Number;
-  createdAt: Date;
+
+interface User{
+  username    : string,
+  name      : string,
+  picture   :string,
+  banner_picture :string 
+  status    :string,
+  level    : Number
+  createdAt : Date,
 }
 
 function useWindowSize() {
@@ -66,12 +68,14 @@ const Sidebar = () => {
     if (typeof window === "undefined") {
       return;
     }
-
+    if (dispatch === undefined || state === undefined)
+      return;
+    
     // get the access token from the cookie
     const accessToken = getCookie("access_token");
     let socket: any = null;
     if (accessToken) {
-      fetch("http://localhost:8080/auth/protected", {
+      fetch(`http://${ipAdress}:8080/auth/protected`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -82,7 +86,7 @@ const Sidebar = () => {
         })
         .then((data) => {
           if (data || data.message !== "Unauthorized") {
-            socket = io("http://localhost:8080", {
+            socket = io(`http://${ipAdress}:8080`, {
               query: { userId: data?.id },
             });
             dispatch({ type: "UPDATE_SOCKET", payload: socket });
@@ -101,7 +105,7 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        "flex relative lg:h-[fit-content] h-auto z-40",
+        "flex relative lg:h-[fit-content] h-auto z-50",
         oswald.className
       )}
       {...handlers}

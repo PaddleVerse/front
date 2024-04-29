@@ -18,7 +18,7 @@ const InviteComponent = () => {
       }, 10000);
       setSender(data.sender);
       setModlar(true);
-	});
+    });
 	  return () => {
 		socket?.off("invited");  	
 	  }

@@ -6,6 +6,7 @@ import axios from "axios";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { cn } from "@/components/cn";
 import LeaderRow from "./LeaderRow";
+import { ipAdress } from "@/app/utils";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +18,7 @@ const LeaderTable = () => {
   const user : any= state.user;
   useEffect(() => {
     if (user) {
-      axios.get(`http://localhost:8080/user/range/${user.id}`).then((res) => {
+      axios.get(`http://${ipAdress}:8080/user/range/${user.id}`).then((res) => {
         setUsers(res.data);
       })
     }

@@ -12,6 +12,7 @@ const nextConfig = {
         'preview.redd.it',
         'img.pikbest.com',
         'randomuser.me',
+        'res.cloudinary.com',
         ],
       },
       compiler: {

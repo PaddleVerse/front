@@ -15,19 +15,20 @@ import { useRouter } from "next/navigation";
 import { set } from "react-hook-form";
 import { user } from "./type";
 const inter = Inter({ subsets: ["latin"] });
+import { ipAdress } from "@/app/utils";
 
 const fetchChatList = async (userId: string) => {
-  const res = await axios.get(`http://localhost:8080/chat/chatlist/${userId}`);
+  const res = await axios.get(`http://${ipAdress}:8080/chat/chatlist/${userId}`);
   const dataWithMessages = await Promise.all(
     res.data.map(async (value: any) => {
       if (value.user) {
         const messageRes = await axios.get(
-          `http://localhost:8080/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`
+          `http://${ipAdress}:8080/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`
         );
         return { ...value, msg: messageRes.data };
       } else {
         const channelRes = await axios.get(
-          `http://localhost:8080/channels/messages/lastMessage/${value.id}?uid=${userId}`
+          `http://${ipAdress}:8080/channels/messages/lastMessage/${value.id}?uid=${userId}`
         );
         return { ...value, msg: channelRes.data };
       }
@@ -152,7 +153,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
           <CreateChannel handleClick={() => setCreateModlar(false)} />
         ) : null}
       </AnimatePresence>
-      <div className="lg:max-h-[95%] lg:w-[91%] w-full h-full ">
+      <div className="lg:max-h-[95%]  lg:w-[91%] w-full h-full ">
         <div
           className={`h-full w-full flex antialiased text-gray-200 bg-primaryColor rounded-xl ${inter.className}`}
           style={{
@@ -163,7 +164,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
           <div className="flex-1 flex flex-col ">
             <main className="flex-grow flex flex-row min-h-0">
               <motion.section
-                className={` b flex flex-col flex-none overflow-auto ${
+                className={` b flex flex-col flex-none overflow-auto  ${
                   showMessage && tablet ? "invisible" : "visible"
                 } group lg:max-w-[300px] md:w-2/5 no-scrollbar`}
                 initial={{ display: "flex", width: "100%", opacity: 1 }}
@@ -223,7 +224,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                   </div>
                 </div>
                 <div
-                  className="contacts p-2 flex-1 overflow-y-scroll"
+                  className="contacts p-2 flex-1 overflow-y-scroll no-scrollbar"
                   onClick={(e) => {
                     e.preventDefault();
                   }}

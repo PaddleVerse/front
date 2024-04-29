@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/moving-border";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import BottomGradient from "@/components/ui/bottomGradiant";
+import { ipAdress } from "@/app/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -79,7 +80,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         }
       }
       const ret = await axios.post(
-        "http://localhost:8080/channels",
+        `http://${ipAdress}:8080/channels`,
         channelObject
       );
       if (file) {
@@ -87,7 +88,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         formData.append("image", file);
         try {
           const picture = await axios.post(
-            `http://localhost:8080/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
+            `http://${ipAdress}:8080/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
             formData,
             {
               headers: { "Content-Type": "multipart/form-data" },

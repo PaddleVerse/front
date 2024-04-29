@@ -7,6 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
 import { user } from "@/app/Dashboard/Chat/type";
 import { useForm } from "react-hook-form";
+import { ipAdress } from "@/app/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -42,7 +43,7 @@ const JoinChannel = ({
   useEffect(() => {
     const fetchChannels = async () => {
       const res = await axios
-        .get("http://localhost:8080/channels")
+        .get(`http://${ipAdress}:8080/channels`)
         .then((data) => {
           setChannels(data.data);
           setFilteredChannels(data.data);

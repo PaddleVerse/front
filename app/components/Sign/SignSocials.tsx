@@ -1,8 +1,10 @@
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Montserrat } from 'next/font/google';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import { ipAdress } from '@/app/utils';
+
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -12,11 +14,11 @@ const SignSocials = () => {
   const router = useRouter();
 
   const handleGoogle = () => {
-      router.push('http://localhost:8080/auth/google');
+      router.push(`http://${ipAdress}:8080/auth/google`);
   }
 
   const handle42 = () => {
-      router.push('http://localhost:8080/auth/42');
+      router.push(`http://${ipAdress}:8080/auth/42`);
   }
   return (
     <div
