@@ -16,7 +16,7 @@ const Popup = ()  => {
   const {register, handleSubmit, reset} = useForm();
   const {state, dispatch} = useGlobalState();
   const {user} = state;
-  // if (!user || (user && user?.first_time === false)) return null;
+  if (!user || (user && user?.first_time === false)) return null;
   
   const refreshUser = async () => {
     try {
