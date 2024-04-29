@@ -30,7 +30,15 @@ const modalVariants = {
   },
 };
 
-const GameInvite = ({ sender }: { sender: user | null }) => {
+const GameInvite = ({
+  sender,
+  onDecline,
+  onAccept,
+}: {
+  sender: user | null;
+  onDecline: () => void;
+  onAccept: () => void;
+}) => {
   const [modlar, setModlar] = useState(false);
   const { state, dispatch } = useGlobalState();
   const [count, setCount] = useState(10);
@@ -44,7 +52,7 @@ const GameInvite = ({ sender }: { sender: user | null }) => {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(countdownInterval);
-  }, []);
+  }, [modlar]);
   let roomID = "adsasdajs";
   return (
     <div
@@ -82,7 +90,12 @@ const GameInvite = ({ sender }: { sender: user | null }) => {
           </p>
         </div>
         <div className="flex flex-row gap-8 w-full justify-center items-center">
-          <div className="w-[45%] flex justify-center items-center">
+          <div
+            className="w-[45%] flex justify-center items-center"
+            onClick={() => {
+              onAccept();
+            }}
+          >
             <Button
               borderRadius="10px"
               borderClassName=" bg-[radial-gradient(var(--green-500)_40%,transparent_60%)]"
@@ -91,7 +104,12 @@ const GameInvite = ({ sender }: { sender: user | null }) => {
               accept
             </Button>
           </div>
-          <div className="w-[45%] flex justify-center items-center">
+          <div
+            className="w-[45%] flex justify-center items-center"
+            onClick={() => {
+              onDecline();
+            }}
+          >
             <Button
               borderRadius="10px"
               borderClassName=" bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
