@@ -34,7 +34,9 @@ const Caroussel = () => {
   
   return (
     <>
-      <div className="mt-[75px] 2xl:mb-4 xl:mb-[175px] mb-[50px]  2xl:max-w-[1800px] xl:max-w-[950px] mx-auto 2xl:pl-4">
+      <div className="mt-[75px] 2xl:mb-4 xl:mb-[175px] mb-[50px]  2xl:max-w-[1800px] xl:max-w-[950px] mx-auto 2xl:pl-4"
+      style={{zIndex: 0}}
+      >
         <Carousel
           responsive={responsive}
           autoPlay={false}
@@ -43,6 +45,7 @@ const Caroussel = () => {
           centerMode={false}
           // showDots={true}
           infinite={true}
+          removeArrowOnDeviceType={["tablet", "mobile"]}
 
         >
           <BigCard gameMode={'1'} turnOn={() => setMatchMaking(true)}/>
