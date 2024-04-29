@@ -86,7 +86,7 @@ const page = () => {
       </div>
       <div className="">
         <Image
-          src="/paddles.svg"
+          src="/low-level.png"
           width={0}
           height={0}
           alt={"image"}
