@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import { Plane } from "./Plane";
@@ -10,12 +10,14 @@ import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 
 interface GameCanvasProps {
-  roomId: string;  // Adding a roomId prop
+  roomId: string; // Adding a roomId prop
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const paddlePositionRef = useRef<{ x: number; y: number; z: number } | null>(null);
+  const paddlePositionRef = useRef<{ x: number; y: number; z: number } | null>(
+    null
+  );
   const lastEmittedPositionRef = useRef<{
     x: number;
     y: number;
@@ -26,6 +28,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const ballRef = useRef<Ball | null>(null);
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
+  const [score, setScore] = useState({ player1: 0, player2: 0 });
+
 
   useEffect(() => {
     let userID: string | null = null;
@@ -43,9 +47,18 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         } else {
           cameraPosition = { x: 0, y: 14, z: 20.11 };
         }
-        camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+        camera.position.set(
+          cameraPosition.x,
+          cameraPosition.y,
+          cameraPosition.z
+        );
       });
-
+      socket.on("updateScore", (newScore: any) => {
+        setScore({
+          player1: newScore.score[0].score,
+          player2: newScore.score[1].score,
+        });
+      });
       socket.on("paddlePositionUpdate", (paddlePosition: any) => {
         if (paddle2Ref.current && paddleRef.current && userID) {
           if (userID === "player1") {
@@ -54,7 +67,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
               y: paddlePosition.paddle.y,
               z: paddlePosition.paddle.z,
             };
-
           } else if (userID === "player2") {
             paddleRef.current.position = {
               x: paddlePosition.paddle.x,
@@ -67,9 +79,16 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
       socket.on("moveBall", (ball: any) => {
         if (ballRef.current) {
-          ballRef.current.position.set(ball.position.x, ball.position.y, ball.position.z);
-          ballRef.current.velocity.set(ball.velocity.x, ball.velocity.y, ball.velocity.z);
-            
+          ballRef.current.position.set(
+            ball.position.x,
+            ball.position.y,
+            ball.position.z
+          );
+          ballRef.current.velocity.set(
+            ball.velocity.x,
+            ball.velocity.y,
+            ball.velocity.z
+          );
         }
       });
     }
@@ -127,9 +146,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         ) {
           // Calculate velocity
           let velocity = {
-            x: (currentPosition.x - (lastPosition?.x || 0)),
-            y: (currentPosition.y - (lastPosition?.y || 0)),
-            z: (currentPosition.z - (lastPosition?.z || 0)),
+            x: currentPosition.x - (lastPosition?.x || 0),
+            y: currentPosition.y - (lastPosition?.y || 0),
+            z: currentPosition.z - (lastPosition?.z || 0),
           };
 
           // If the position has changed, emit the new position and update the last emitted position
@@ -214,17 +233,35 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   }, [socket, user]);
 
   return (
-    <div
-      ref={mountRef}
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: `none`,
-      }}
-    />
+    <>
+      {/* make a white text on top in the middle of the game that displays the score */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          color: "white",
+          fontSize: "2rem",
+          font: "rajdhani",
+        }}
+      >
+        Score: {score.player1} - {score.player2}
+      </div>
+
+      
+      <div
+        ref={mountRef}
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: `none`,
+        }}
+      />
+    </>
   );
 };
 
