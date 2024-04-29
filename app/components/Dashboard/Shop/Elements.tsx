@@ -20,6 +20,8 @@ const Elements = () => {
     title: "",
     image: "",
     description: "",
+    color: "",
+    price: 0,
   });
   const handleHeaderSelect = (element: string) => {
     setSelected(element);
@@ -51,7 +53,7 @@ const Elements = () => {
             </div>
             <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-5 place-items-center mt-6">
               {Array.from({ length: 8 }, (_, index) => (
-                <SmallCard key={index} />
+                <SmallCard key={index} infos={modelarInfos} />
               ))}
             </div>
           </div>

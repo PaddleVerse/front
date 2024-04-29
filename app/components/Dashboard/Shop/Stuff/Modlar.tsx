@@ -74,7 +74,7 @@ const Modlar = ({
             </p>
           </div>
           <div className="mt-[45px] self-end">
-            <Coin size="big" />
+            <Coin size="big" infos={infos} />
           </div>
         </div>
         <div
