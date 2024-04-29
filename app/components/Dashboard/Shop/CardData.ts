@@ -36,7 +36,7 @@ const cardsData = {
           "Play with the Galactic Orb, a ball that travels through space and time. Its unpredictable movements will keep your opponents on their toes.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398460/tmz6myrxi0hii2anoqgk.png',
         color : 'orange',
-        price : 500
+        price : 300
       },
       second: {
         title: "Crystal Sphere",
@@ -44,7 +44,7 @@ const cardsData = {
           "Experience the elegance of the Crystal Sphere in your game. Its transparent beauty adds a touch of sophistication to every match.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398586/zx26zo2mmfgq9nokdkgd.png',
         color : 'blue',
-        price : 500
+        price : 300
       },
       third: {
         title: "Inferno Blaze Ball",
@@ -52,7 +52,7 @@ const cardsData = {
           "Ignite the competition with the Inferno Blaze Ball. Its fiery design and blazing speed will turn your matches into epic battles of skill and strategy.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398666/dzzjhg09ykwpblyivins.png',
         color : 'red',
-        price : 500
+        price : 300
       },
     },
     smallCard: {},
@@ -63,19 +63,25 @@ const cardsData = {
         title: "Cosmic Arena",
         description:
           "Enter the Cosmic Arena with the Table. This futuristic playing surface enhances your gaming experience, creating an atmosphere of excitement and challenge.",
-        image:'/Table/first.png'
+        image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714422147/nc4m5di0pi22djcop65v.png',
+        color : "blue",
+        price : 500
       },
       second: {
         title: "Enchanted Field",
         description:
           "Immerse yourself in an Enchanted Field with the Table. The magical surroundings add a touch of fantasy to your games, making each match unforgettable.",
-        image:'/Table/second.png'
+        image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714422186/wltpkkw2wjhwxopihpci.png',
+        color : "green",
+        price : 500
       },
       third: {
         title: "Neon Cityscape",
         description:
           "Play on the Neon Cityscape table and feel the energy of the urban landscape. The vibrant colors and dynamic design create a futuristic and electrifying gaming atmosphere.",
-        image:'/Table/third.png'
+        image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714422230/uem7zjzn5gzebx5xmrh3.png',
+        color : "pink",
+        price : 500
       },
     },
     smallCard: {},

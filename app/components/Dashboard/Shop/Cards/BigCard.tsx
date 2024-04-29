@@ -3,7 +3,9 @@
 import React, { useEffect } from "react";
 import { inter } from "@/app/utils/fontConfig";
 import Image from "next/image";
-import Coin from "../Stuff/Coin";
+import PaddleCoin from "../Stuff/PaddleCoin";
+import BallCoin from "../Stuff/BallCoin";
+import TableCoin from "../Stuff/TableCoin";
 import { motion } from "framer-motion";
 import { cn } from "@/components/cn";
 import { Infos } from "../types";
@@ -19,9 +21,7 @@ const BigCard = ({ infos, handleClick, selected }: BigCardProps) => {
     handleClick(infos);
   };
   const [hover, setHover] = React.useState(false);
-  useEffect(() => {
-    console.log(selected);
-  }, []);
+ 
   return (
     <div
       className={cn(
@@ -52,7 +52,15 @@ const BigCard = ({ infos, handleClick, selected }: BigCardProps) => {
           <p className="text-[12px]">{infos.description}</p>
         </div>
         <div className="absolute bottom-4 right-4">
-          <Coin size={"big"} infos={infos} />
+          {
+            selected === "Paddle" ? (
+              <PaddleCoin size={"small"} infos={infos} />
+            ) : selected === "Ball" ? (
+              <BallCoin size={"small"} infos={infos} />
+            ) : selected === "Table" ? (
+              <TableCoin size={"small"} infos={infos} />
+            ) : null
+          }
         </div>
       </motion.div>
     </div>

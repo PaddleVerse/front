@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Coin from "../Stuff/Coin";
 import { Infos } from "../types";
 const SmallCard = ({infos} : {infos : Infos}) => {
   return (
@@ -13,7 +12,6 @@ const SmallCard = ({infos} : {infos : Infos}) => {
         className="object-cover rounded-lg"
       />
       <div className="absolute bottom-2 right-2 ">
-        <Coin size={"small"} infos={infos} />
       </div>
     </div>
   );

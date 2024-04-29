@@ -4,10 +4,12 @@ import { rajdhani } from "@/app/utils/fontConfig";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import { useRouter } from "next/navigation";
 
 const Items = () => {
   const { state } =  useGlobalState();
   const { user } : any = state;
+  const router = useRouter();
 
   return (
     <div className="lg:w-[50%] w-full h-full bg-primaryColor rounded-md overflow-y-auto no-scrollbar">
@@ -28,7 +30,8 @@ const Items = () => {
             alt={"image"}
             key={index}
             sizes="100vh 100vw"
-            className="w-[100px] h-[100px] mt-2 rounded-full object-cover"
+            className="w-[100px] h-[100px] mt-2 rounded-full object-cover cursor-pointer"
+            onClick={() => router.push("/Dashboard/Shop")}
           />
         ))}
         {user && user?.balls.map((item: any, index: number) => (
@@ -39,7 +42,20 @@ const Items = () => {
             alt={"image"}
             key={index}
             sizes="100vh 100vw"
-            className="w-[100px] h-[100px] mt-2 rounded-full object-cover"
+            className="w-[100px] h-[100px] mt-2 rounded-full object-cover cursor-pointer"
+            onClick={() => router.push("/Dashboard/Shop")}
+          />
+        ))}
+        {user && user?.tables.map((item: any, index: number) => (
+          <Image
+            src={item?.image || "/badge2_c.png"}
+            width={0}
+            height={0}
+            alt={"image"}
+            key={index}
+            sizes="100vh 100vw"
+            className="w-[100px] h-[100px] mt-2 rounded-full object-cover cursor-pointer"
+            onClick={() => router.push("/Dashboard/Shop")}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { inter } from "@/app/utils/fontConfig";
@@ -9,7 +9,7 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Infos } from "../types";
 import toast from "react-hot-toast";
 
-const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
+const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
   const [hover, setHover] = React.useState(false);
   const [owned, setOwned] = React.useState(false);
   const [equipped, setEquipped] = React.useState(false);
@@ -28,17 +28,14 @@ const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
 
   const handleClick = () => {
     if (owned && equipped) {
-      console.log("1");
-      setEquipped(false);
-    } else if (owned) {
-      axios.post(`http://${ipAdress}:8080/shop/paddle/enable`, {
+      axios.post(`http://${ipAdress}:8080/shop/paddle/disable`, {
         user_id: user?.id,
         color: infos.color
       }).then(
         (res) => {
-          console.log(res.data);
           if (res.data.status === "success")
           {
+            setEquipped(false);
             refreshUser();
             toast.success(res.data.message);
           }
@@ -46,17 +43,33 @@ const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res.data.message);
         }
       )
-      setEquipped(true);
-    } else {
-      axios.post(`http://${ipAdress}:8080/shop/paddle`, {
-        image: infos.image,
-        color: infos.color,
+    } else if (owned) {
+      axios.post(`http://${ipAdress}:8080/shop/paddle/enable`, {
         user_id: user?.id,
-        price : 10
+        color: infos.color
       }).then(
         (res) => {
           if (res.data.status === "success")
           {
+            setEquipped(true);
+            refreshUser();
+            toast.success(res.data.message);
+          }
+          else if (res.data.status === "error")
+            toast.error(res.data.message);
+        }
+      )
+    } else {
+      axios.post(`http://${ipAdress}:8080/shop/paddle`, {
+        image: infos?.image,
+        color: infos?.color,
+        user_id: user?.id,
+        price : infos?.price
+      }).then(
+        (res) => {
+          if (res.data.status === "success")
+          {
+            setOwned(true);
             refreshUser();
             toast.success(res.data.message);
           }
@@ -64,8 +77,21 @@ const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res.data.message);
         }
       )}
-      setOwned(true);
     }
+
+    useEffect(() => {
+      if (user?.paddles) {
+        user.paddles.forEach((item: any) => {
+          if (item.color === infos.color + user?.id) {
+            setOwned(true);
+            if (item.enabled)
+              setEquipped(true);
+            else
+              setEquipped(false);
+          }
+        });
+      }
+    } , [user]);
 
   return (
     <motion.div
@@ -131,4 +157,4 @@ const Coin = ({ size , infos}: { size: string , infos: Infos}) => {
   );
 };
 
-export default Coin;
+export default PaddleCoin;

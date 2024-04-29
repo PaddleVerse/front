@@ -6,7 +6,7 @@ import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import { Infos } from "../types";
 import { rajdhani } from "@/app/utils/fontConfig";
-import Coin from "./Coin";
+import Coin from "./PaddleCoin";
 import { cn } from "@/components/cn";
 
 const Modlar = ({
