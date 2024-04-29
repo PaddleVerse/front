@@ -52,6 +52,7 @@ const page = () => {
               router.push("/Signin");
             }}
           >
+            
             <svg
               width="100%"
               height="82"
@@ -59,9 +60,11 @@ const page = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               onMouseOver={(e) => {
+                //@ts-ignore
                 e.target.style.fill = "#2a1515";
               }}
               onMouseOut={(e) => {
+                //@ts-ignore
                 e.target.style.fill = "#181818";
               }}
             >
