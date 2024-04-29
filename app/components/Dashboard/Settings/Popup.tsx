@@ -16,7 +16,7 @@ const Popup = ()  => {
   const {register, handleSubmit, reset} = useForm();
   const {state, dispatch} = useGlobalState();
   const {user} = state;
-  if (!user || (user && user?.first_time === false)) return null;
+  // if (!user || (user && user?.first_time === false)) return null;
   
   const refreshUser = async () => {
     try {
@@ -78,10 +78,10 @@ const Popup = ()  => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-[#151e2b] bg-opacity-80"></div>
-      <div className="relative z-10 w-[20%]">
-        <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#151e2b] ring-[0.2px] ring-red-500 z-10">
+    <div className="fixed inset-0 z-50  flex items-center justify-center">
+      <div className="absolute  inset-0 bg-[#151e2b] bg-opacity-80"></div>
+      <div className="relative z-10 w-[350px]">
+        <div className="max-w-md lg:w-full w-[80%]  mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#151e2b] ring-[0.2px] ring-red-500 z-10">
           <div className='flex flex-col items-center justify-center w-full py-8 px-4'>
             <div className='flex items-center'>
              {user ? 
