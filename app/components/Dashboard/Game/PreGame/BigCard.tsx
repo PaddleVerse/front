@@ -12,9 +12,9 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
-const BigCard = ({ gameMode, turnOn }: { gameMode: string , turnOn: () => void}) => {
+const BigCard = ({ gameMode }: { gameMode: string}) => {
   return (
-    <div onClick={turnOn} className=" 2xl:h-[850px] xl:h-[550px] h-[600px] sm:h-[700px] sm:w-[95%] w-[87%] overflow-hidden cursor-pointer rounded-lg relative">
+    <div  className=" 2xl:h-[850px] xl:h-[550px] h-[600px] sm:h-[700px] sm:w-[95%] w-[87%] overflow-hidden cursor-pointer rounded-lg relative">
       <motion.img
         src={`${
           gameMode === "1"

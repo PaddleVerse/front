@@ -9,10 +9,12 @@ import { AiOutlineClose } from "react-icons/ai";
 
 const MatchMakingCard = ({
   gameMode,
-  turnOff,
+  setCanPlay,
+  setSelected
 }: {
   gameMode: string;
-  turnOff: () => void;
+  setCanPlay: (s:boolean) => void;
+  setSelected: (s:string) => void;
 }) => {
   const { state } = useGlobalState();
   const { user, socket } = state;
@@ -47,12 +49,16 @@ const MatchMakingCard = ({
         className="relative bg-[#ffffff37] backdrop-blur 2xl:w-[25%] w-[450px] h-[450px] rounded-xl p-4 z-50"
       >
         <button
-          onClick={turnOff}
+          onClick={()=> {
+            setCanPlay(false);
+            setSelected('')
+          }
+          }
           className="absolute top-2 right-4 text-xl text-white"
         >
-           <AiOutlineClose size={30} />
+        <AiOutlineClose size={30} />
         </button>
-        <div className="flex justify-center items-center w-full h-full gap-4">
+        <div className="flex  justify-center items-center w-full h-full gap-4">
           <PlayerCard name={user?.name} img={user?.picture} />
           <h1 className="text-3xl text-white">VS</h1>
 

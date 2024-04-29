@@ -1,4 +1,5 @@
 import React from "react";
+import {motion} from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { Inter, Rajdhani } from "next/font/google";
@@ -10,7 +11,7 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
-const Header = () => {
+const Header = ({selected, setCanPlay}:{selected:string, setCanPlay:any}) => {
   return (
     <div
       className={cn(
@@ -33,17 +34,34 @@ const Header = () => {
       </div>
       <button
         className={cn(
-          "flex items-center justify-center",
+          "flex items-center justify-between",
           rajdhani.className,
-          "sm:py-3 sm:px-[65px] py-2 bg- px-5 rounded-md gap-2 border border-red-500"
+          "sm:py-3 sm:px-[65px] py-2  px-5 rounded-md gap-2 border border-red-500 flex items-center",
+          selected === "1" || selected === "2" ? "bg-red-500" : "bg-[#101823]"
         )}
+        onClick={
+          () => {
+            console.log("i clicked")
+            selected === "1" || selected === "2" ? setCanPlay(true) : setCanPlay(false)
+          }
+        
+        }
       >
         <span className="font-[500]">Play</span>
+        <motion.span
+          initial={{width:0, opacity:0}}
+          animate={{width: selected === "1" || selected === "2" ? "auto" : 0, opacity: selected === "1" || selected === "2" ? 1 : 0}}
+          transition={{duration:0.25}}
+
+          
+        >{selected === "1" ? "PVP" : selected === "2" ? "AI":""}</motion.span>
         <Image
-          src={"/nextPlay.svg"}
+          src={"/game-controller.svg"}
           width={20}
           height={20}
           alt="next to play image"
+          className="text-white"
+          // style={{ color: "white"}}
         />
       </button>
     </div>
