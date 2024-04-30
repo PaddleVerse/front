@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { useRouter } from "next/router";
 
 import { Plane } from "./Plane";
 import { Lighting, AmbientLighting } from "./lighting";
@@ -31,6 +32,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [score, setScore] = useState({ player1: 0, player2: 0 });
+  const [winnerText, setWinnerText] = useState("");
 
   useEffect(() => {
     let userID: string | null = null;
@@ -59,6 +61,14 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           player1: newScore.score[0].score,
           player2: newScore.score[1].score,
         });
+      });
+      socket.on("endGame", (winner: any) => {
+        if (winner.winner === userID) {
+          alert("You won!");
+        } else {
+          alert("You lost!");
+        }
+        setWinnerText(winner.winner === userID ? "won" : "lost");
       });
       socket.on("paddlePositionUpdate", (paddlePosition: any) => {
         if (paddle2Ref.current && paddleRef.current && userID) {
