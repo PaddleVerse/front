@@ -31,8 +31,14 @@ const MatchMakingCard = ({
         })
         .catch(() => {});
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
+  const onClose = () => {
+    if (socket) {
+      socket.emit("cancelMatchMaking");
+    }
+  }
   return (
     <div className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50">
       <motion.div
@@ -56,7 +62,7 @@ const MatchMakingCard = ({
           }
           className="absolute top-2 right-4 text-xl text-white"
         >
-        <AiOutlineClose size={30} />
+        { !otherPlayer && <AiOutlineClose size={30} onClick={onClose} /> }
         </button>
         <div className="flex  justify-center items-center w-full h-full gap-4">
           <PlayerCard name={user?.name} img={user?.picture} />

@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { message } from "@/app/Dashboard/Chat/page";
 import Image from "next/image";
 import { getShortDate, getTime } from "@/app/utils";
 import { useRouter } from "next/navigation";

@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import Coin from "../Stuff/Coin";
-
-const SmallCard = () => {
+import { Infos } from "../types";
+const SmallCard = ({infos} : {infos : Infos}) => {
   return (
     <div className="w-full h-[365px]  relative text-white cursor-pointer rounded-lg">
       <Image
@@ -13,7 +12,6 @@ const SmallCard = () => {
         className="object-cover rounded-lg"
       />
       <div className="absolute bottom-2 right-2 ">
-        <Coin size={"small"} />
       </div>
     </div>
   );

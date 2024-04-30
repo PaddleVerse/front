@@ -11,7 +11,7 @@ const Helder = () => {
       title: "My profile",
       value: "My profile",
       content: (
-        <div className="w-full overflow-hidden relative h-full rounded-2xl p-10 bg-black">
+        <div className="w-full overflow-hidden relative h-full rounded-2xl p-10 bg-[#192536]">
           <EditProfile />
         </div>
       ),

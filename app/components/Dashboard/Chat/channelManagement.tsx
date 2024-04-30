@@ -92,6 +92,7 @@ const ChannelManagement = ({
       clt.invalidateQueries({ queryKey: ["participants"] });
       clt.invalidateQueries({ queryKey: ["priviliged"] });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -200,7 +201,7 @@ const ChannelManagement = ({
               disabled={priviliged ? false : true}
             />
             <Image
-              src={channel.picture}
+              src={channel.picture || "/a.png"}
               width={200}
               height={200}
               alt="channel picture"

@@ -63,7 +63,7 @@ export default function SignupFormDemo() {
     })
     .then(response => {
       form.reset();
-      router.push("/");
+      router.push("/Signin");
     })
     .catch(error => {
         alert("Username already taken");
