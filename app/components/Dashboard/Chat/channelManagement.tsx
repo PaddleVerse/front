@@ -173,7 +173,7 @@ const ChannelManagement = ({
               disabled={priviliged ? false : true}
             />
             <Image
-              src={channel.picture}
+              src={channel.picture || "/a.png"}
               width={200}
               height={200}
               alt="channel picture"

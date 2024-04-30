@@ -22,7 +22,7 @@ const Items = () => {
         </div>
       </div>
       <div className="grid p-4 2xl:grid-cols-8 place-items-center md:grid-cols-7 lg:grid-cols-5 grid-cols-4 mt-2">
-      {user && user?.paddles.map((item: any, index: number) => (
+      {user && user?.paddles?.map((item: any, index: number) => (
           <Image
             src={item?.image || "/badge2_c.png"}
             width={0}
@@ -34,7 +34,7 @@ const Items = () => {
             onClick={() => router.push("/Dashboard/Shop")}
           />
         ))}
-        {user && user?.balls.map((item: any, index: number) => (
+        {user && user?.balls?.map((item: any, index: number) => (
           <Image
             src={item?.image || "/badge2_c.png"}
             width={0}
@@ -46,7 +46,7 @@ const Items = () => {
             onClick={() => router.push("/Dashboard/Shop")}
           />
         ))}
-        {user && user?.tables.map((item: any, index: number) => (
+        {user && user?.tables?.map((item: any, index: number) => (
           <Image
             src={item?.image || "/badge2_c.png"}
             width={0}

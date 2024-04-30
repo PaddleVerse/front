@@ -137,7 +137,7 @@ const Page = (props: any) => {
                   className="shadow-md rounded-full w-full h-full object-cover"
                   height={100}
                   width={100}
-                  src={targetUser?.picture! || targetChannel?.picture!}
+                  src={targetUser?.picture! || targetChannel?.picture! || "/a.png"}
                   alt="user or channel picture"
                 />
               </div>
