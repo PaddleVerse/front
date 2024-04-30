@@ -45,7 +45,6 @@ const GameInvite = ({
   const { socket, user } = state;
 
   useEffect(() => {
-    // Start the countdown
     const countdownInterval = setInterval(() => {
       setCount((prevCount) => prevCount - 1);
     }, 1000);
@@ -53,7 +52,7 @@ const GameInvite = ({
     // Clean up the interval when the component unmounts
     return () => clearInterval(countdownInterval);
   }, [modlar]);
-  let roomID = "adsasdajs";
+
   return (
     <div
       className={`fixed inset-0 sm:flex ${modlar ? "block" : ""} ${
