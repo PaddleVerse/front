@@ -80,6 +80,7 @@ const ChannelManagement = ({
     socket?.on("update", (data: any) => {
       clt.invalidateQueries({ queryKey: ["participants"] });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const handleOptionChange = (event: any) => {

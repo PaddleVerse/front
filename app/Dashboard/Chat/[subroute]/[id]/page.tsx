@@ -68,6 +68,7 @@ const Page = (props: any) => {
     return () => {
       socket?.off("ok");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.socket]);
 
   const handlers = useSwipeable({

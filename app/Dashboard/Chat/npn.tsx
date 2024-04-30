@@ -108,6 +108,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       socket?.off("ok");
       socket?.off("update");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, clt]);
 
   const handleClick = () => {

@@ -4,10 +4,6 @@ import {Bar} from 'react-chartjs-2'
 import {Line} from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
   PointElement,
   LineElement,
 } from "chart.js";

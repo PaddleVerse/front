@@ -31,6 +31,7 @@ const MatchMakingCard = ({
         })
         .catch(() => {});
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const onClose = () => {

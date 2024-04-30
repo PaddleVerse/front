@@ -91,6 +91,7 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
           }
         });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     } , [user]);
 
   return (

@@ -224,6 +224,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
     animate();
 
+    const currentMountRef = mountRef.current;
     return () => {
       if (socket) {
         socket.emit("leftRoom", { id: user.id, room: roomId });
@@ -233,13 +234,14 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         socket.off("moveBall");
       }
       window.removeEventListener("beforeunload", emitLeaveRoom);
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-        mountRef.current.removeEventListener("mousemove", handleMouseMove);
+      if (currentMountRef) {
+        currentMountRef.removeChild(renderer.domElement);
+        currentMountRef.removeEventListener("mousemove", handleMouseMove);
         clearInterval(intervalId);
       }
       scene.clear();
-    };
+    };    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, user]);
 
   return (
