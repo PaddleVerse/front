@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import { Plane } from "./Plane";
 import { Lighting, AmbientLighting } from "./lighting";
@@ -33,11 +33,12 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const { user, socket } = state;
   const [score, setScore] = useState({ player1: 0, player2: 0 });
   const [winnerText, setWinnerText] = useState("");
+  const router = useRouter();
+  const [end, setEnd] = useState(false);
 
   useEffect(() => {
     let userID: string | null = null;
     let cameraPosition: { x: number; y: number; z: number };
-
     if (socket && user) {
       // Use the dynamic roomId for joining the game
       socket.emit("joinGame", { senderId: user.id, room: roomId });
@@ -63,12 +64,10 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         });
       });
       socket.on("endGame", (winner: any) => {
-        if (winner.winner === userID) {
-          alert("You won!");
-        } else {
-          alert("You lost!");
-        }
-        setWinnerText(winner.winner === userID ? "won" : "lost");
+        setEnd(true);
+        setWinnerText(winner.winner === userID ? "win" : "lost");
+        dispatch({type: "UPDATE_GAMESTATUS", payload: winner.winner === userID ? "win" : "lose"});
+        router.push("/Dashboard");
       });
       socket.on("paddlePositionUpdate", (paddlePosition: any) => {
         if (paddle2Ref.current && paddleRef.current && userID) {
@@ -89,6 +88,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       });
 
       socket.on("moveBall", (ball: any) => {
+        if (!ballRef.current || !ball) return;
         if (ballRef.current) {
           ballRef.current.position.set(
             ball.position.x,
@@ -230,7 +230,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       }
     };
 
-    window.addEventListener('beforeunload', emitLeaveRoom);
+    window.addEventListener("beforeunload", emitLeaveRoom);
 
     animate();
 
@@ -250,7 +250,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         clearInterval(intervalId);
       }
       scene.clear();
-    };    
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, user]);
 
@@ -258,31 +258,32 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     <>
       {/* make a white text on top in the middle of the game that displays the score */}
 
-      <div
-        ref={mountRef}
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          cursor: `none`,
-        }}
-        className="flex "
-      >
+      {!end && (
         <div
+          ref={mountRef}
           style={{
-            transform: "translateX(-50%)",
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: `none`,
           }}
-          className={cn(
-            "bg-red-600 px-4 py-2 rounded-br-lg rounded-bl-lg absolute text-white text-xl mx-auto top-[55px] ml-[118px] font-[500]",
-            rajdhani.className,
-
-          )}
+          className="flex "
         >
-          {score.player1} - {score.player2}
+          <div
+            style={{
+              transform: "translateX(-50%)",
+            }}
+            className={cn(
+              "bg-red-600 px-4 py-2 rounded-br-lg rounded-bl-lg absolute text-white text-xl mx-auto top-[55px] ml-[118px] font-[500]",
+              rajdhani.className
+            )}
+          >
+            {score.player1} - {score.player2}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
