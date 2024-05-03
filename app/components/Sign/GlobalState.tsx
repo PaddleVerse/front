@@ -7,19 +7,22 @@ interface GlobalState {
   user: any;
   socket: any;
   show: boolean;
+  GameStatus: string | null;
 }
 
 // Define action types
 type Action =
   | { type: 'UPDATE_USER'; payload: any }
   | { type: 'UPDATE_SOCKET'; payload: any }
-  | { type: 'UPDATE_SHOW'; payload: boolean };
+  | { type: 'UPDATE_SHOW'; payload: boolean }
+  | { type: 'UPDATE_GAMESTATUS'; payload: string | null };
 
 // Define initial state
 const initialState: GlobalState = {
   user: null,
   socket: null,
   show: true,
+  GameStatus:'win',
 };
 
 // Create context
@@ -34,6 +37,8 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
       return { ...state, socket: action.payload };
     case 'UPDATE_SHOW':
       return { ...state, show: action.payload };
+    case 'UPDATE_GAMESTATUS':
+      return { ...state, GameStatus: action.payload };
     default:
       return state;
   }

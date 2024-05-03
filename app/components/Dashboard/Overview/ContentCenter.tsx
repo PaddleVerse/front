@@ -7,6 +7,7 @@ import Items from "./Items/Items";
 import { useGlobalState } from "../../Sign/GlobalState";
 import MatchHistory_2 from "./MatchHistory/MatchHistory_2";
 import BarChart from "./Chart/BarChart";
+import GameStatus from "./GameStatus";
 
 const ContentCenter = () => {
   const { state } = useGlobalState();
@@ -14,6 +15,7 @@ const ContentCenter = () => {
 
   return (
     <div className="w-[100%] mt-[50px] flex flex-col gap-10 items-center">
+        <GameStatus />
       <div className="xl:flex-row w-[94%] flex flex-col gap-7">
         <div className="flex flex-col w-full gap-8 sm:pb-[150px]">
           <UserProfileSecond user={user} />
