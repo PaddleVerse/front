@@ -3,21 +3,22 @@ import React from 'react'
 
 import { inter, rubik } from '@/app/utils/fontConfig'
 import { cn } from '@/components/cn'
-const Friends = () => {
+import { user } from '@/app/utils'
+const Friends = ({friend, i}:{friend:user,i:number}) => {
   return (
     <div className='flex justify-between items-center'>
         <div className='flex gap-4 items-center'>
-            <Image src='/b.png' alt='profile' width={50} height={50} className='rounded-full' />
+            <Image src={friend?.picture! || "/b.png"} alt='profile' width={50} height={50} className='rounded-full' />
             <div 
             className={cn('flex flex-col', inter.className)}
             >
-                <span className='2xl:text-[17px]'>Abdelmottalib</span>
-                <p className='text-[11px]'>@konami</p>
+                <span className='2xl:text-[17px]'>{friend?.name?.split(' ')[0]}</span>
+                <p className='text-[11px]'>@{friend.nickname}</p>
             </div>
         </div>
         <div 
         className={cn(`w-[25px] h-[25px] flex items-center justify-center text-white text-[11px] font-[400] rounded-full bg-[#BD3944]`, rubik.className)}
-        >#1</div>
+        >#{i + 1}</div>
     </div>
   )
 }

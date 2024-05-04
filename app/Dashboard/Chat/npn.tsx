@@ -42,11 +42,11 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const [typing, setTyping] = useState(false);
   const [typingobject, setTypingObject] = useState<any>();
   const { state, dispatch } = useGlobalState();
+  const { show } = state;
   const { user, socket } = state;
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
   const router = useRouter();
-  const { show } = state;
   const {
     data: chatList,
     isLoading: listLoading,

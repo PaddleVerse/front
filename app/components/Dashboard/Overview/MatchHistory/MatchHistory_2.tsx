@@ -16,7 +16,7 @@ const MatchHistory_2 = () => {
       .get(`http://${ipAdress}:8080/match/history/${user?.id}`)
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
+        console.log("data: ", res.data);
         console.log("user: ", user?.id);
       });
   }, [state]);
@@ -66,11 +66,11 @@ const MatchHistory_2 = () => {
               status={item.winner === user.id ? "win" : "lose"}
               marginOfVictory={marginOfVictory}
               averageScore={averageScore}
-              winnerStreak={1}
+              winnerStreak={item.winner_streak}
               loserStreak={1}
               key={index}
               item={item}
-              user={user}
+              // user={user}
               enemyData={enemyData}
             />
           );

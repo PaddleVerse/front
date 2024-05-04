@@ -180,7 +180,7 @@ const Sidebar = () => {
               <Option label={"Shop"} expanded={expanded} />
               <Option label={"Search"} expanded={expanded} />
             </motion.div>
-            <div className="text-buttonGray mt-10 flex justify-between pl-4">
+            {/* <div className="text-buttonGray mt-10 flex justify-between pl-4">
               <motion.span
                 className="text-[12px]"
                 initial={{ marginLeft: "14px" }}
@@ -195,8 +195,8 @@ const Sidebar = () => {
               >
                 <FaPlus />
               </motion.div>
-            </div>
-            <div className="pl-7">
+            </div> */}
+            {/* <div className="pl-7">
               <ProfileUser
                 image={image}
                 name="abdelmottalib"
@@ -212,7 +212,7 @@ const Sidebar = () => {
                 name="abdelmottalib"
                 expanded={expanded}
               />
-            </div>
+            </div> */}
           </div>
         </motion.div>
       </motion.div>

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { PinContainer } from "@/components/ui/3d-pin";
@@ -7,7 +8,37 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import axios from "axios";
+import { ipAdress } from "@/app/utils";
 const UserProfileSecond = ({ user }: any) => {
+  const [level, setLevel] = useState<number>(1);
+  const [topTopFriends, setTopTopFriends] = useState<any[]>([]);
+  const [perc, setPerc] = useState<number>(0);
+  const [expToNextLevel, setExpToNextLevel] = useState<number>(0);
+  const { state, dispatch } = useGlobalState();
+  const { GameStatus } = state;
+  useEffect(() => {
+    if (user) {
+      if (user.xp !== 0 && user.xp !== undefined) {
+        const currentLevel = Math.floor(user.xp / 100) + 1;
+        const xpTowardsNextLevel = user.xp % 100;
+        const xpNeededForNextLevel = 100 - xpTowardsNextLevel;
+        setExpToNextLevel(xpTowardsNextLevel);
+        const percentageToNextLevel = (xpTowardsNextLevel / 100) * 100;
+        setPerc(percentageToNextLevel);
+        setLevel(currentLevel);
+      }
+    }
+  }, [user, GameStatus]);
+  useEffect(() => {
+    const data = axios
+      .get(`http://${ipAdress}:8080/friendship/top?userid=${user?.id}`)
+      .then((res) => {
+        setTopTopFriends(res.data);
+        console.log("friends: ", res.data);
+      });
+  }, [user]);
   return (
     <div className=" p-4 bg-primaryColor rounded-md ">
       <div className=" w-full h-full relative flex flex-col 2xl:gap-[80px] gap-12 rounded-md">
@@ -105,24 +136,24 @@ const UserProfileSecond = ({ user }: any) => {
                 <div className="flex flex-col 2xl:w-[100%] w-[420px] ">
                   <div className="flex items-center justify-between text-white">
                     <h1 className="ml-1 2xl:text-[17px] xl:text-[14px] font-[500] sm:text-[11px] text-[14px]">
-                      LVL 2
+                      LVL {level}
                     </h1>
                     <span className="2xl:text-xs text-[8px] text-white 2xl:mr-3 sm:mr-7 mr-7">
-                      250/1000
+                      {expToNextLevel} / 100
                     </span>
                   </div>
-                  <div className="sm:w-[95%] w-[91%] 2xl:w-[98%] b bg-[#D6D6D6] rounded-full">
+                  <div className="sm:w-[95%] w-[91%] 2xl:w-[98%]  bg-[#D6D6D6] rounded-full">
                     <motion.div
-                      className="bg-mainRedColor p-2 sm:h-2.5 h-2 rounded-full relative w-[45%]"
+                      className={`bg-mainRedColor p-2 sm:h-2.5 h-2 rounded-full relative w-[${perc}%]`}
                       initial={{ width: "0%" }}
-                      animate={{ width: "45%" }}
+                      animate={{ width: `${perc}%` }}
                       transition={{ duration: 1 }}
                     >
                       <div className="relative">
                         <div className="absolute 2xl:w-4 2xl:h-4 w-3 h-3  bg-[#FF4656] 2xl:-right-[13px] -right-[11px] top-[16px]  transform rotate-45"></div>
                       </div>
                       <div className="absolute bg-[#FF4656] w-10 h-6 rounded-sm -right-4 -bottom-[34px] text-white flex items-center justify-center text-[12px] text-center">
-                        45%
+                        {perc}%
                       </div>
                     </motion.div>
                   </div>
@@ -141,9 +172,9 @@ const UserProfileSecond = ({ user }: any) => {
               TOP 3 FRIENDS
             </h1>
             <div className="flex flex-col gap-1">
-              <Friends />
-              <Friends />
-              <Friends />
+              {topTopFriends.map((friend, index) => {
+                return <Friends key={index} friend={friend} i={index} />;
+              })}
             </div>
           </div>
           <div

@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+'use client'
+import React, { use, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
+import { ipAdress } from "@/app/utils";
+import axios from "axios";
+import { set } from "lodash";
 
 const OneGame_2 = ({
   status,
@@ -10,7 +15,6 @@ const OneGame_2 = ({
   averageScore,
   winnerStreak,
   loserStreak,
-  user,
   enemyData
 }: {
   status: string;
@@ -19,7 +23,6 @@ const OneGame_2 = ({
   averageScore: number;
   winnerStreak: number;
   loserStreak: number;
-  user: any;
   enemyData: any;
 }) => {
 // useEffect(() => {
@@ -30,6 +33,25 @@ const OneGame_2 = ({
 // const formattedDate = date.toLocaleDateString('en-US', options);
 
 // },[])
+const { state, dispatch } = useGlobalState();
+const { user, socket } = state;
+const [userC, setUserC] = useState<any>(null);
+useEffect(() => {
+  const userId = user?.id;
+  axios.get(`http://${ipAdress}:8080/user/${userId}`).then((res) => {
+    setUserC(res.data);
+  console.log(res.data);
+  });
+  console.log("item: ", item);
+  console.log("user: ", user);
+},[status])
+// useEffect(() => {
+//     const userId = user?.id;
+//     axios.get(`http://${ipAdress}:8080/user/${userId}`).then((res) => {
+//       setUser(res.data);
+//     console.log(res.data);
+//     });
+// }, [status]);
   return (
     <motion.div
       className="rounded-md w-full md:h-[70px] bg-gradient-to-r bg-secondaryColor flex items-center justify-between px-4"
@@ -69,7 +91,7 @@ const OneGame_2 = ({
                 : "text-mainRedColor"
             )}
           >
-            {status === "win" ? marginOfVictory : -marginOfVictory}KD
+            {status === "win" ? marginOfVictory : -marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] md:text-[11px] text-[8px]">
             Ratio
@@ -100,7 +122,7 @@ const OneGame_2 = ({
           >
             {
               status === "win"
-              ? winnerStreak: loserStreak
+              ? winnerStreak: ""
             }
             {
               status === "win"
@@ -129,7 +151,7 @@ const OneGame_2 = ({
           >
             {
               status === "lose"
-              ? winnerStreak: loserStreak
+              ? user?.winner_streak: ""
             }
             {
               status === "lose"
@@ -162,7 +184,7 @@ const OneGame_2 = ({
                 : "text-mathHistoryGreenColor"
             )}
           >
-            {status === "lose" ? marginOfVictory : -marginOfVictory}KD
+            {status === "lose" ? marginOfVictory : -marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] text-[11px]">
             15 / 25 / 3
