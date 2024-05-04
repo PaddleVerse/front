@@ -22,7 +22,7 @@ const Navbar = () => {
     setOpen(!open);
     setNotifed(false);
   };
-
+  
   const cleanCookie = () => {
     const cookies = document.cookie.split(";");
 
