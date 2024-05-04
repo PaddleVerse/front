@@ -62,6 +62,7 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
     } else {
       axios.post(`http://${ipAdress}:8080/shop/ball`, {
         image: infos?.image,
+        
         color: infos?.color,
         user_id: user?.id,
         price : infos?.price

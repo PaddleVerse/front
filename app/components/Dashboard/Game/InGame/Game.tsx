@@ -127,7 +127,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     scene.add(new Lighting(0xffffff, 0.8, { x: 20, y: 20, z: 0 }));
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
-    let ball = new Ball(0.3, { x: 0, y: 15, z: 0 });
+    let ball = new Ball(0.3, { x: 0, y: 15, z: 0 }, { x: 0, y: 0, z: 0 }, "/Game/textures/default.jpg");
     scene.add(ball);
     ballRef.current = ball;
     const plane = new Plane(500, 500, { x: 0, y: 0, z: 0 }, -Math.PI / 2);

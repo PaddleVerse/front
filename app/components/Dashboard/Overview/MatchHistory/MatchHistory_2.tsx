@@ -11,11 +11,10 @@ const MatchHistory_2 = () => {
   const {user, socket} = state;
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
-    const data = axios.get(`http://${ipAdress}:8080/match/history/${user?.id}`).then((res)=>{
-      console.log(res.data);
+      const data = axios.get(`http://${ipAdress}:8080/match/history/${user?.id}`).then((res)=>{
       setData(res.data);
     })
-  }, []);
+  }, [state]);
   return (
     <div className="w-full rounded-md bg-primaryColor no-scrollbar overflow-y-auto h-[700px] text-white flex flex-col overflow-x-hidden">
       <div className="w-full p-6 sticky top-0 bg-primaryColor z-30">
