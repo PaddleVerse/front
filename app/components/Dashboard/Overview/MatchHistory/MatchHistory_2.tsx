@@ -44,6 +44,11 @@ const MatchHistory_2 = () => {
         </h1>
       </div>
       <div className="w-full h-full px-6 flex flex-col gap-[12px] ml-1">
+        {data.length === 0 && (
+          <div className="w-full h-full flex justify-center items-center">
+            <h1 className="text-2xl">No matches yet</h1>
+            </div>
+            )}
         {data.map((item, index) => {
           const marginOfVictory = item.winner_score - item.loser_score;
           const averageScore = (item.winner_score + item.loser_score) / 2;

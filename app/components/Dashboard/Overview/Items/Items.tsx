@@ -21,7 +21,13 @@ const Items = () => {
           </h1>
         </div>
       </div>
-      <div className="grid p-4 2xl:grid-cols-8 place-items-center md:grid-cols-7 lg:grid-cols-5 grid-cols-4 mt-2">
+      <div className="grid p-4 2xl:grid-cols-8 text-white place-items-center md:grid-cols-7 lg:grid-cols-5 grid-cols-4 mt-2 relative">
+        {/* {user ? user?.paddles?.length === 0 && user?.balls?.length === 0 && user?.tables?.length === 0 && (
+          
+          <div className="w-full h-full flex justify-center items-center border">
+            <h1 className="text-2xl">No items yet</h1>
+            </div>
+            ) : null} */}
       {user && user?.paddles?.map((item: any, index: number) => (
           <Image
             src={item?.image || "/badge2_c.png"}
