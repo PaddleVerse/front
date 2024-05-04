@@ -240,7 +240,7 @@ const UserProfileSecond = ({ user }: any) => {
                   />
                 </div>
                 <div className="flex flex-col text-[17px]">
-                  <span className="text-sm">Gambati</span>
+                  <span className="text-sm">gambari</span>
                   <span className="text-sm">To 100 Games</span>
                 </div>
               </div>
