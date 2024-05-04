@@ -44,13 +44,15 @@ export default function SignupFormDemo() {
       setError("Username must be at least 3 characters long.");
     else if (is === 4)
       setError("Password must be at least 6 characters long.");
+    else if (is === 5)
+      setError("Username already exist.");
     else
       setError("");
   }, [is]);
 
   function onSubmit(values : any) {
     setIs(isValidValues(values));
-    // console.log(values);
+
     axios.post(`http://${ipAdress}:8080/auth/signup`, {
       name: values.name,
       nickname: values.nickname,
@@ -61,13 +63,15 @@ export default function SignupFormDemo() {
         'Content-Type': 'application/json'
       }
     })
-    .then(response => {
-      form.reset();
-      router.push("/Signin");
+    .then(res => {
+      if (res.data.status === 'success')
+      {
+        form.reset();
+        router.push("/Signin");
+      }else if (res.data.status === 'error_')
+        setIs(5);
     })
-    .catch(error => {
-        alert("Username already taken");
-    });
+    .catch();
   }
 
 
@@ -80,7 +84,6 @@ export default function SignupFormDemo() {
   }
 
   return (
-    // <BgWrapper>
       <div className="w-full h-full flex items-center justify-center">
         <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#101823] ring-[0.2px] ring-red-500 z-10">
           <motion.h1
@@ -105,6 +108,7 @@ export default function SignupFormDemo() {
               <Label htmlFor="username">Username</Label>
               <Input id="username" placeholder="Tyler_durden" type="text" {...form.register('username')}/>
               {is === 3 && <p className="text-red-500 text-sm my-4">{error}</p>}
+              {is === 5 && <p className="text-red-500 text-sm my-4">{error}</p>}
             </LabelInputContainer>
             <LabelInputContainer className="mb-4">
               <Label htmlFor="password">Password</Label>
@@ -149,11 +153,10 @@ export default function SignupFormDemo() {
           <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
           <div className="w-full flex justify-between">
             <Label className="text-gray-300 text-sm" >Already have an account?</Label>
-            <Link href='/' className="text-gray-300 text-sm" >Sign In &rarr;</Link>
+            <Link href='/Signin' className="text-gray-300 text-sm" >Sign In &rarr;</Link>
           </div>
         </div>
       </div>
-    // </BgWrapper>
   );
 }
 
