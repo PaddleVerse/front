@@ -120,7 +120,6 @@ const UserProfileSecond = ({ user }: any) => {
                   <span className="xl:text-[10px] text-[7px]">
                     @{user.username}
                   </span>
-                  <span className="xl:text-[10px] text-[7px]">400,000</span>
                 </div>
               ) : (
                 <div className="w-[80%] animate-pulse">
