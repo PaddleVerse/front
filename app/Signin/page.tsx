@@ -25,6 +25,7 @@ const BgWrapper = ({ children }: { children: React.ReactNode }) => {
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
   const [error, setError] = useState("");
+  const [error_, setError_] = useState("");
   const form = useForm();
   const router = useRouter();
 
@@ -35,17 +36,24 @@ export default function SignupFormDemo() {
   };
 
   useEffect(() => {
-    if (is === 3) {
-      setError("Username must be at least 3 characters long.");
-    } else if (is === 4) {
-      setError("Password must be at least 6 characters long.");
-    } else {
-      setError("");
-    }
+    switch (is) {
+      case 3:
+        setError("Username must be at least 3 characters long.");
+        break;
+      case 4:
+        setError("Password must be at least 6 characters long.");
+        break;
+      default:
+        setError("");
+        break;
+    }    
   }, [is]);
 
   const onSubmit = (values: any) => {
-    setIs(isValidValues(values));
+    const is = isValidValues(values);
+    setIs(is);
+    if (is !== 0) return;
+
     axios
       .post(
         `http://${ipAdress}:8080/auth/login`,
@@ -61,7 +69,11 @@ export default function SignupFormDemo() {
       )
       .then((response) => {
         const data = response.data;
-
+        if (data.status === "error") {
+          setError_("* " + data.message);
+          setIs(5);
+          return;
+        }
         const accessToken = data.access_token;
 
         document.cookie = `access_token=${data.access_token}; path=/;`;
@@ -69,13 +81,13 @@ export default function SignupFormDemo() {
         // Check if access_token is present
         if (accessToken) {
           // Access token is present, make a request to the protected endpoint
-          axios
-            .get(`http://${ipAdress}:8080/auth/protected`, {
+          axios.get(`http://${ipAdress}:8080/auth/protected`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },
             })
             .then((response) => {
+
               if (response.status === 200) router.push("/Dashboard");
               else
                 console.log("Failed to authenticate with protected endpoint");
@@ -84,10 +96,7 @@ export default function SignupFormDemo() {
               console.log("Error during protected endpoint request", error);
             });
         }
-      })
-      .catch((error) => {
-        console.log("Error during login request", error);
-      });
+      }).catch();
   };
 
   const handleGoogle = () => {
@@ -126,6 +135,7 @@ export default function SignupFormDemo() {
               />
               {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
             </LabelInputContainer>
+            {is === 5 && <p className="text-red-500 text-sm my-4">{error_}</p>}
             <button
               className="bg-gradient-to-br relative group/btn bg-[#192536] block w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
               type="submit"
