@@ -35,7 +35,7 @@ const cardsData = {
         description:
           "Play with the Galactic Orb, a ball that travels through space and time. Its unpredictable movements will keep your opponents on their toes.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398460/tmz6myrxi0hii2anoqgk.png',
-        texture: '/Game/textures/balls/ball_fire.jpg',
+        texture: '/Game/textures/balls/ball_galactic.jpg',
         color : 'orange',
         price : 300
       },
@@ -44,7 +44,7 @@ const cardsData = {
         description:
           "Experience the elegance of the Crystal Sphere in your game. Its transparent beauty adds a touch of sophistication to every match.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398586/zx26zo2mmfgq9nokdkgd.png',
-        texture: 'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398460/tmz6myrxi0hii2anoqgk.png',
+        texture: '/Game/textures/balls/ball_ice.jpg',
         color : 'blue',
         price : 300
       },
@@ -53,7 +53,7 @@ const cardsData = {
         description:
           "Ignite the competition with the Inferno Blaze Ball. Its fiery design and blazing speed will turn your matches into epic battles of skill and strategy.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398666/dzzjhg09ykwpblyivins.png',
-        texture: 'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714398460/tmz6myrxi0hii2anoqgk.png',
+        texture: '/Game/textures/balls/ball_fire.jpg',
         color : 'red',
         price : 300
       },
