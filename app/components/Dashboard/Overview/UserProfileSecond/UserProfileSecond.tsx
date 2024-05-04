@@ -17,9 +17,13 @@ const UserProfileSecond = ({ user }: any) => {
   const [perc, setPerc] = useState<number>(0);
   const [expToNextLevel, setExpToNextLevel] = useState<number>(0);
   const { state, dispatch } = useGlobalState();
+  const [GameStatusToLvl50, setGameStatusTolvl50] = useState<number>(0);
+  const [expNeededToLvl50, setExpNeededToLvl50] = useState<number>(0);
+  const [gamePlayed, setGamePlayed] = useState<number>(0);
   const { GameStatus } = state;
   useEffect(() => {
     if (user) {
+      
       if (user.xp !== 0 && user.xp !== undefined) {
         const currentLevel = Math.floor(user.xp / 100) + 1;
         const xpTowardsNextLevel = user.xp % 100;
@@ -28,6 +32,16 @@ const UserProfileSecond = ({ user }: any) => {
         const percentageToNextLevel = (xpTowardsNextLevel / 100) * 100;
         setPerc(percentageToNextLevel);
         setLevel(currentLevel);
+        const maxLevel = 50;
+        const maxExperience = maxLevel * 100;
+        const experienceNeededForMaxLevel = maxExperience - user.xp;
+        setExpNeededToLvl50(experienceNeededForMaxLevel);
+        // console.log("what is needed: ", experienceNeededForMaxLevel);
+        const percentageToMaxLevel =
+          ((maxExperience - experienceNeededForMaxLevel) / maxExperience) * 100;
+        setGameStatusTolvl50(percentageToMaxLevel);
+        const numberOfGames = user.xp / 10;
+        setGamePlayed(numberOfGames);
       }
     }
   }, [user, GameStatus]);
@@ -188,8 +202,8 @@ const UserProfileSecond = ({ user }: any) => {
               <div className="flex gap-4 items-center">
                 <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
                   <CircularProgressbar
-                    value={66}
-                    text={`${66}%`}
+                    value={GameStatusToLvl50}
+                    text={`${GameStatusToLvl50}%`}
                     strokeWidth={16}
                     styles={{
                       path: {
@@ -203,16 +217,16 @@ const UserProfileSecond = ({ user }: any) => {
                   />
                 </div>
                 <div className="flex flex-col text-[17px]">
-                  <span className="text-sm">1.65</span>
-                  <span className="text-sm">KDE/Ratio</span>
-                  <span className="text-sm">Top 2.5%</span>
+                  <span className="text-sm">-{expNeededToLvl50}</span>
+                  <span className="text-sm">To Lvl / 50</span>
+                  {/* <span className="text-sm">Top 2.5%</span> */}
                 </div>
               </div>
               <div className="flex gap-4 items-center">
                 <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
                   <CircularProgressbar
-                    value={66}
-                    text={`${66}%`}
+                    value={gamePlayed}
+                    text={`${gamePlayed}%`}
                     strokeWidth={16}
                     styles={{
                       path: {
@@ -226,9 +240,8 @@ const UserProfileSecond = ({ user }: any) => {
                   />
                 </div>
                 <div className="flex flex-col text-[17px]">
-                  <span className="text-sm">1.65</span>
-                  <span className="text-sm">KDE/Ratio</span>
-                  <span className="text-sm">Top 2.5%</span>
+                  <span className="text-sm">Gambati</span>
+                  <span className="text-sm">To 100 Games</span>
                 </div>
               </div>
             </div>
