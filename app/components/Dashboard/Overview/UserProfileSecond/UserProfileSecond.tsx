@@ -12,14 +12,13 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import axios from "axios";
 import { ipAdress } from "@/app/utils";
 const UserProfileSecond = ({ user }: any) => {
-  const [level, setLevel] = useState<number>(1);
   const [topTopFriends, setTopTopFriends] = useState<any[]>([]);
+  const [level, setLevel] = useState<number>(1);
   const [perc, setPerc] = useState<number>(0);
   const [expToNextLevel, setExpToNextLevel] = useState<number>(0);
   const { state, dispatch } = useGlobalState();
   const { GameStatus } = state;
   useEffect(() => {
-    console.log("----->: ", user);
     if (user) {
       if (user.xp !== 0 && user.xp !== undefined) {
         const currentLevel = Math.floor(user.xp / 100) + 1;
