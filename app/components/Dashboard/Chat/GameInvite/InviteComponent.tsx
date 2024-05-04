@@ -18,7 +18,6 @@ const InviteComponent = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("InviteComponent", accept);
     socket?.on("acceptedGameInvite", (data: any) => {
       setAccept(true);
       setRoomId(data.roomId);

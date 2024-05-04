@@ -42,8 +42,6 @@ useEffect(() => {
     setUserC(res.data);
   console.log(res.data);
   });
-  console.log("item: ", item);
-  console.log("user: ", user);
 },[status])
 // useEffect(() => {
 //     const userId = user?.id;

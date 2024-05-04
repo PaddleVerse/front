@@ -70,7 +70,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         });
       });
       socket.on("endGame", (winner: any) => {
-        console.log("winner", winner);
         setEnd(true);
         setWinnerText(winner.winner === userID ? "win" : "lost");
         dispatch({
@@ -156,7 +155,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
             res.data.texture
           );
         }
-        console.log("ball", ball.texture);
         scene.add(ball);
         ballRef.current = ball;
       });

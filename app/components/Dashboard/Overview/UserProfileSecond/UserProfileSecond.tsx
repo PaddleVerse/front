@@ -19,6 +19,7 @@ const UserProfileSecond = ({ user }: any) => {
   const { state, dispatch } = useGlobalState();
   const { GameStatus } = state;
   useEffect(() => {
+    console.log("----->: ", user);
     if (user) {
       if (user.xp !== 0 && user.xp !== undefined) {
         const currentLevel = Math.floor(user.xp / 100) + 1;
