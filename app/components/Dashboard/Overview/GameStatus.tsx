@@ -1,22 +1,36 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { AnimatePresence } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { useGlobalState } from "../../Sign/GlobalState";
+import axios from "axios";
+import { ipAdress } from "@/app/utils"
+
 
 const GameStatus = () => {
-  // const[status, setStatus] = useState("lose")
+
   const { state, dispatch } = useGlobalState();
-  const { GameStatus } = state;
-  // dispatch({ type: "UPDATE_GAMESTATUS", payload: "win" });
+  const { GameStatus, user } = state;
+  const refreshUser = async () => {
+    try {
+      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const usr = response.data;
+      dispatch({type: 'UPDATE_USER', payload: usr});
+    } catch (error) {
+      console.error('Error fetching user', error);
+    }
+  }
+
   useEffect(() => {
+    refreshUser();
     setTimeout(() => {
       dispatch({ type: "UPDATE_GAMESTATUS", payload: null });
     }, 5000);
   }, []);
+
+
   return (
     GameStatus && (
       <motion.div className="fixed inset-0 sm:flex hidden items-center justify-center bg-black bg-opacity-50 z-50">
