@@ -20,11 +20,12 @@ class Ball extends THREE.Mesh {
   min: Position;
   max: Position;
   targetPosition: Position | null = null;
+  texture: string;
   constructor(
     radius: number = 1,
     position: Position = { x: 0, y: 0, z: 0 },
     velocity: Velocity = { x: 0, y: 0, z: 0 },
-    texture: string = '/Game/textures/ball.jpg',
+    texture: string,
   ) {
     const geometry = new THREE.SphereGeometry(radius, 32, 32);
     const material = new THREE.MeshStandardMaterial({
@@ -32,7 +33,7 @@ class Ball extends THREE.Mesh {
     });
 
     super(geometry, material);
-
+    this.texture = texture;
     this.position.set(position.x, position.y, position.z);
     this.castShadow = true;
     this.velocity = new THREE.Vector3(velocity.x, velocity.y, velocity.z);

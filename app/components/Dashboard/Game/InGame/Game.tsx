@@ -11,9 +11,15 @@ import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
+import axios from "axios";
+import { ipAdress } from "@/app/utils";
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
+}
+
+async function getUserBallSkin(id: number) {
+  return await axios.get(`http://${ipAdress}:8080/game/getUserBallSkin/${id}`);
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
@@ -35,7 +41,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const [winnerText, setWinnerText] = useState("");
   const router = useRouter();
   const [end, setEnd] = useState(false);
-
+  const [ballSkin, setBallSkin] = useState("/Game/textures/balls/default.jpg");
   useEffect(() => {
     let userID: string | null = null;
     let cameraPosition: { x: number; y: number; z: number };
@@ -64,9 +70,13 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         });
       });
       socket.on("endGame", (winner: any) => {
+        console.log("winner", winner);
         setEnd(true);
         setWinnerText(winner.winner === userID ? "win" : "lost");
-        dispatch({type: "UPDATE_GAMESTATUS", payload: winner.winner === userID ? "win" : "lose"});
+        dispatch({
+          type: "UPDATE_GAMESTATUS",
+          payload: winner.winner === userID ? "win" : "lose",
+        });
         router.push("/Dashboard");
       });
       socket.on("paddlePositionUpdate", (paddlePosition: any) => {
@@ -127,9 +137,30 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     scene.add(new Lighting(0xffffff, 0.8, { x: 20, y: 20, z: 0 }));
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
-    let ball = new Ball(0.3, { x: 0, y: 15, z: 0 }, { x: 0, y: 0, z: 0 }, "/Game/textures/default.jpg");
-    scene.add(ball);
-    ballRef.current = ball;
+    let ball: Ball | null = null;
+    const res = axios
+      .get(`http://${ipAdress}:8080/game/getUserBallSkin/${user?.id}`)
+      .then((res) => {
+        if (!res.data) {
+          ball = new Ball(
+            0.3,
+            { x: 0, y: 15, z: 0 },
+            { x: 0, y: 0, z: 0 },
+            "/Game/textures/balls/default.jpg"
+          );
+        } else {
+          ball = new Ball(
+            0.3,
+            { x: 0, y: 15, z: 0 },
+            { x: 0, y: 0, z: 0 },
+            res.data.texture
+          );
+        }
+        console.log("ball", ball.texture);
+        scene.add(ball);
+        ballRef.current = ball;
+      });
+
     const plane = new Plane(500, 500, { x: 0, y: 0, z: 0 }, -Math.PI / 2);
     scene.add(plane);
 
@@ -206,9 +237,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       if (e.key === "h") {
         if (socket) socket.emit("resetBall", { room: roomId });
       }
-      if (e.key === "g") {
-        ball.position.y = 0;
-      }
     });
     mountRef.current?.addEventListener("mousemove", handleMouseMove);
     // add orbit controls
@@ -217,7 +245,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     function animate() {
       paddle.update();
       paddle2.update();
-      ball.update();
+      ball?.update();
       renderer.render(scene, camera);
 
       camera.lookAt(new THREE.Vector3(0, 10, 0));
