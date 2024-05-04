@@ -17,10 +17,12 @@ const GameOptions = () => {
   const search = useSearchParams()
 
   useEffect(() => {
-
     setRoomId(search.get('room'))
   }, [search])
+
+  
   useEffect(() => {
+    if (!socket) return ;
     socket?.on  ('start', (data : any) => {
       setTimeout(() => {
         setStart(true)

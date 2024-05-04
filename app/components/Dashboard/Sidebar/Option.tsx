@@ -16,26 +16,15 @@ const gameNames = ["Overview", "Leaderboard", "Settings"];
 
 const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
   const [showElements, setShowElements] = useState(false);
-  const [notifed, setNotifed] = useState(false);
   const pathname = usePathname();
   const lastSegment = pathname.split("/").pop();
   const router = useRouter();
-  const { state } = useGlobalState();
-  const { socket } = state;
-  useEffect(() => {
-    if (socket) {
-      socket.on("update", () => {
-        setNotifed(true);
-      });
-    }
-  }, [socket]);
 
   const handleDashboardClick = () => {
     if (label === "Dashboard") {
       setShowElements(!showElements);
     }
     if (label === "Chat") {
-      setNotifed(false);
       router.push("/Dashboard/Chat");
     }
     if (label === "Shop") {
@@ -59,14 +48,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
           {label === "Dashboard" ? (
             <RxDashboard className="hover:bg-[#34202A]" />
           ) : label === "Chat" ? (
-            <div className="relative">
               <PiChatCircleTextLight className="hover:bg-[#34202A]" />
-              {notifed && (
-                <div className="absolute bg-[#34202A] p-1 rounded-full top-0 right-0">
-                  <div className="bg-red-500 rounded-full w-[6px] h-[6px]"></div>
-                </div>
-              )}
-            </div>
           ) : label === "Shop" ? (
             <LiaShoppingCartSolid className="hover:bg-[#34202A]" />
           ) : label === "Search" ? (

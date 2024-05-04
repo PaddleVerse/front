@@ -3,6 +3,7 @@ import {motion} from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { Inter, Rajdhani } from "next/font/google";
+
 const rajdhani = Rajdhani({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -11,6 +12,8 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
+
+
 const Header = ({selected, setCanPlay}:{selected:string, setCanPlay:any}) => {
   return (
     <div
@@ -61,7 +64,6 @@ const Header = ({selected, setCanPlay}:{selected:string, setCanPlay:any}) => {
           height={20}
           alt="next to play image"
           className="text-white"
-          // style={{ color: "white"}}
         />
       </button>
     </div>
