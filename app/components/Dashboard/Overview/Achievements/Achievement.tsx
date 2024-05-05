@@ -2,22 +2,24 @@ import Image from "next/image";
 import { rajdhani } from "@/app/utils/fontConfig";
 import React from "react";
 import { cn } from "@/components/cn";
+import achievements from "./Data";
 
-const Achievement = () => {
+
+const Achievement = ({data} : any) => {
   return (
     <div className=" w-full text-white flex items-center gap-2 p-2">
       <Image
-        src={"/badge2_c.png"}
+        src={data?.image || "/achievements/first_win.png"}
         width={40}
         height={40}
         alt="badge"
-        className="w-auto h-auto"
+        className="w-auto h-auto rounded-full object-cover"
       ></Image>
       <div className="flex flex-col w-full">
         <h1 className={cn("text-[14px] font-[500]", rajdhani.className)}>
-          FIRST WIN
+          {data?.title || ""}
         </h1>
-        <p className="text-[10px] text-buttonGray">a good way to start</p>
+        <p className="text-[10px] text-buttonGray">{data?.description || ""}</p>
       </div>
     </div>
   );

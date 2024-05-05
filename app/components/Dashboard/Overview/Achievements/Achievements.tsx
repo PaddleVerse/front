@@ -3,6 +3,7 @@ import { rajdhani } from "@/app/utils/fontConfig";
 import Image from "next/image";
 import Achievement from "./Achievement";
 import { cn } from "@/components/cn";
+import achievements from "./Data";
 
 const Achievements = () => {
   return (
@@ -24,9 +25,11 @@ const Achievements = () => {
           ACHIEVEMENTS
         </h1>
       </div>
-      {Array.from({ length: 10 }, (_, index) => (
-        <Achievement key={index} />
-      ))}
+      {
+        achievements && achievements.map((data, index) => (
+          <Achievement key={index} data={data} />
+        ))
+      }
     </div>
   );
 };
