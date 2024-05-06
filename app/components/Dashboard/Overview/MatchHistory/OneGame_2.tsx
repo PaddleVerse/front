@@ -63,7 +63,7 @@ useEffect(() => {
             alt="img"
             sizes="w-auto h-auto"
             className={cn(
-              "rounded-full ring-[2px]",
+              "rounded-full ring-[2px] object-cover",
               status === "lose"
                 ? "ring-[#FF4656]"
                 : "ring-mathHistoryGreenColor"
@@ -208,7 +208,7 @@ useEffect(() => {
             alt="img"
             sizes="w-auto h-auto"
             className={cn(
-              "rounded-full ring-[2px]",
+              "rounded-full ring-[2px] object-cover",
               status === "win"
                 ? "ring-mathHistoryGreenColor"
                 : "ring-mainRedColor"

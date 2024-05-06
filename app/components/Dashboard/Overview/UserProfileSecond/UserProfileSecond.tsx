@@ -185,7 +185,7 @@ const UserProfileSecond = ({ user }: any) => {
               TOP 3 FRIENDS
             </h1>
             <div className="flex flex-col gap-1">
-              {topTopFriends.length === 0 && 
+              {topTopFriends.length === 0 &&
                 <div className="flex justify-center items-center w-full h-[100px] bg-transparent rounded-md">
                   <p className="text-white">No friends</p>
                 </div>
