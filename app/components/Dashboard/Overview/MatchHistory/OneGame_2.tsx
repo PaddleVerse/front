@@ -89,7 +89,7 @@ useEffect(() => {
                 : "text-mainRedColor"
             )}
           >
-            {status === "win" ? marginOfVictory : marginOfVictory}
+            {status === "win" ? marginOfVictory : -marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] md:text-[11px] text-[8px]">
             Ratio
@@ -183,7 +183,7 @@ useEffect(() => {
                 : "text-mathHistoryGreenColor"
             )}
           >
-            {status === "lose" ? marginOfVictory : marginOfVictory}
+            {status === "lose" ? marginOfVictory : -marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] text-[11px]">
             Ratio
