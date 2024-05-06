@@ -52,7 +52,7 @@ useEffect(() => {
 // }, [status]);
   return (
     <motion.div
-      className="rounded-md w-full md:h-[70px] bg-gradient-to-r bg-secondaryColor flex items-center justify-between px-4"
+      className="rounded-md w-full md:h-[70px] bg-gradient-to-r bg-secondaryColor flex items-center justify-between sm:px-4"
       whileHover={{ x: -5 }}
     >
       <div className="flex items-center justify-between 2xl:w-[42%] md:w-[80%] w-[88%]">
@@ -70,17 +70,17 @@ useEffect(() => {
             )}
           />
         </div>
-        <div className="flex flex-col  items-center justify-center md:leading-5 leading-2">
+        <div className="flex flex-col  items-center justify-center md:leading-5 leading-2 sm:min-w-[100px] text-center">
           <span className="xl:text-[18px] md:text-[15px] text-[11px] font-semibold tracking-widest">
             {status === "win" ? item.winner_score : item.loser_score}
           </span>
           <span
-            className={`text-[#647087] ml-[10px] text-[10px] md:text-clip truncate w-[50px] xl:text-[14px] md:text-[11px] font-semibold`}
+            className={`text-[#647087] text-[10px] md:text-clip truncate w-[50px] xl:text-[14px] md:text-[11px] font-semibold`}
           >
             Score
           </span>
         </div>
-        <div className="flex flex-col items-center justify-center md:leading-5 leading-2">
+        <div className="flex flex-col items-center justify-center md:leading-5 leading-2  sm:min-w-[100px] min-w-[50px]">
           <span
             className={cn(
               "font-semibold xl:text-[20px] md:text-[17px] text-[12px] tracking-tighter",
@@ -89,13 +89,13 @@ useEffect(() => {
                 : "text-mainRedColor"
             )}
           >
-            {status === "win" ? marginOfVictory : -marginOfVictory}
+            {status === "win" ? marginOfVictory : marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] md:text-[11px] text-[8px]">
             Ratio
           </span>
         </div>
-        <div className="flex flex-col items-center md:leading-5 leading-2">
+        <div className="flex flex-col items-center md:leading-5 leading-2 sm:min-w-[120px] ">
           <span
             className={cn(
               "font-semibold xl:text-[20px] md:text-[17px] text-[12px] tracking-tighter",
@@ -110,12 +110,13 @@ useEffect(() => {
             Average Score
           </span>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col  sm:min-w-[100px] flex items-center min-w-[70px]">
           <span className={cn(
             "text-white font-semibold xl:text-[20px] text-[12px] md:text-[17px] tracking-tight",
             status === "win"
               ? "text-mathHistoryGreenColor"
-              : "text-mainRedColor"
+              : "text-mainRedColor",
+              
           )}
           >
             {
@@ -124,7 +125,7 @@ useEffect(() => {
             }
             {
               status === "win"
-              ? " Wining streak": "Lost"
+              ? "W": "L"
             }
           </span>
           {/* <span className="text-[#EBAD40] font-[500] text-[8px] xl:text-[14px] md:text-[11px] tracking-tight">
@@ -132,13 +133,13 @@ useEffect(() => {
           </span> */}
         </div>
       </div>
-      <div className="flex items-center md:w-auto w-[25px] justify-center py-1 md:px-[11px] md:text-[15px] text-[11px] tracking-tight font-semibold rounded-md md:bg-[#202B43]">
+      <div className="flex min-w-[50px] items-center md:w-auto w-[25px] justify-center py-1 md:px-[11px] md:text-[15px] text-[11px] tracking-tight font-semibold rounded-md md:bg-[#202B43]">
         {
           item.start_time = new Date(item.start_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
         }
       </div>
       <div className="items-center justify-between w-[42%] hidden 2xl:flex">
-        <div className="flex flex-col">
+        <div className="flex flex-col sm:min-w-[100px] flex items-center">
           <span className="text-white font-semibold xl:text-[20px] md:text-[17px] tracking-tight">
           <span className={cn(
             "text-white font-semibold xl:text-[20px] text-[12px] md:text-[17px] tracking-tight",
@@ -149,16 +150,16 @@ useEffect(() => {
           >
             {
               status === "lose"
-              ? user?.winner_streak: ""
+              ? winnerStreak: ""
             }
             {
               status === "lose"
-              ? " Wining streak": "Lost"
+              ? "W": "L"
             }
           </span>
           </span>
         </div>
-        <div className="flex flex-col items-center leading-5">
+        <div className="flex flex-col items-center leading-5 sm:min-w-[120px]">
           <span
             className={cn(
               "font-semibold xl:text-[20px] md:text-[17px] text-[12px] tracking-tighter",
@@ -173,22 +174,22 @@ useEffect(() => {
             Average Score
           </span>
         </div>
-        <div className="flex flex-col items-center justify-center leading-5">
+        <div className="flex flex-col items-center justify-center md:leading-5 leading-2  sm:min-w-[100px] text-center">
           <span
             className={cn(
-              "font-semibold xl:text-[20px] md:text-[17px] text-[12px] tracking-tighter",
+              "font-semibold xl:text-[20px] md:text-[17px] text-[12px] tracking-tighter sm:min-w-[100px]",
               status === "win"
                 ? "text-mainRedColor"
                 : "text-mathHistoryGreenColor"
             )}
           >
-            {status === "lose" ? marginOfVictory : -marginOfVictory}
+            {status === "lose" ? marginOfVictory : marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] text-[11px]">
             Ratio
           </span>
         </div>
-        <div className="flex flex-col items-center justify-center leading-5">
+        <div className="flex flex-col items-center justify-center leading-5 2xl:sm:min-w-[100px]">
           <span className="xl:text-[18px] md:text-[15px] font-semibold tracking-widest">
             
             {status === "lose" ? item.winner_score : item.loser_score}
