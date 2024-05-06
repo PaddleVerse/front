@@ -8,7 +8,7 @@ const Friends = ({friend, i}:{friend:user,i:number}) => {
   return (
     <div className='flex justify-between items-center'>
         <div className='flex gap-4 items-center'>
-            <Image src={friend?.picture! || "/b.png"} alt='profile' width={50} height={50} className='rounded-full' />
+            <Image src={friend?.picture! || "/b.png"} alt='profile' width={100} height={100} className='rounded-full object-cover w-12 h-12' />
             <div 
             className={cn('flex flex-col', inter.className)}
             >
