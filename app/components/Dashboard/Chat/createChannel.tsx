@@ -114,7 +114,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
       className={`fixed inset-0 sm:flex hidden ${inter.className} items-center justify-center bg-black bg-opacity-50 z-50 text-white`}
     >
       <motion.div
-        className="overflow-y-auto scroll border border-red-500/[0.3] h-[60%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] flex flex-col bg-transparent rounded-xl p-[150px] gap-5"
+        className="overflow-y-auto scroll border border-red-500/[0.3] h-[60%] 2xl:w-[35%] xl:w-[55%] sm:w-[70%] flex flex-col bg-transparent rounded-xl px-[150px] py-[60px] gap-5"
         initial="closed"
         animate="open"
         exit="closed"
@@ -131,13 +131,19 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         </p>
         <div>
           <label
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-white text-sm font-medium text-gray-900 dark:text-white"
             typeof="file_input"
           >
             Upload file
           </label>
           <input
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            className="w-full text-sm text-white outline-none p-1 rounded-md bg-slate-800
+            file:mr-5 file:py-1 file:px-3 file:border-[1px]
+            file:text-xs file:font-medium
+            file:bg-white file:text-stone-700
+            file:rounded-sm
+            hover:file:cursor-pointer hover:file:bg-blue-50
+            hover:file:text-blue-700"
             type="file"
             accept="image/*"
             onChange={(e) => {
