@@ -1,11 +1,16 @@
+'use client';
 import React from "react";
 import { rajdhani } from "@/app/utils/fontConfig";
 import Image from "next/image";
 import Achievement from "./Achievement";
 import { cn } from "@/components/cn";
 import achievements from "./Data";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
 
 const Achievements = () => {
+  const { state } = useGlobalState();
+  const { user } = state;
+
   return (
     <div className=" w-full  rounded-md p-3 h-auto bg-primaryColor">
       <div className="w-full text-white flex gap-2  items-center">
@@ -27,7 +32,7 @@ const Achievements = () => {
       </div>
       {
         achievements && achievements.map((data, index) => (
-          <Achievement key={index} data={data} />
+          <Achievement key={index} data={data} owned={user?.achievements?.some((item : any) => item.name === data.name)}  />
         ))
       }
     </div>
