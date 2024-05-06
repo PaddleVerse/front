@@ -124,7 +124,7 @@ useEffect(() => {
             }
             {
               status === "win"
-              ? " Wining streak": " Losing streak"
+              ? " Wining streak": "Lost"
             }
           </span>
           {/* <span className="text-[#EBAD40] font-[500] text-[8px] xl:text-[14px] md:text-[11px] tracking-tight">
@@ -153,7 +153,7 @@ useEffect(() => {
             }
             {
               status === "lose"
-              ? " Wining streak": " Losing streak"
+              ? " Wining streak": "Lost"
             }
           </span>
           </span>

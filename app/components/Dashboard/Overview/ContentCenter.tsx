@@ -29,7 +29,7 @@ const ContentCenter = () => {
         </div>
         <div className="flex flex-col xl:w-[20%] gap-7">
           <Achievements />
-          <Standing />
+          {/* <Standing /> */}
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ const UserProfileSecond = ({ user }: any) => {
   const [expToNextLevel, setExpToNextLevel] = useState<number>(0);
   const { state, dispatch } = useGlobalState();
   const [GameStatusToLvl50, setGameStatusTolvl50] = useState<number>(0);
-  const [expNeededToLvl50, setExpNeededToLvl50] = useState<number>(0);
+  const [expNeededToLvl50, setExpNeededToLvl50] = useState<number>(5000);
   const [gamePlayed, setGamePlayed] = useState<number>(0);
   const { GameStatus } = state;
   useEffect(() => {
