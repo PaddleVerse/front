@@ -7,7 +7,11 @@ import achievements from "./Data";
 
 const Achievement = ({data} : any) => {
   return (
-    <div className=" w-full text-white flex items-center gap-2 p-2">
+    <div className={
+      cn(
+        "w-full text-white flex items-center gap-2 p-2 border rounded-lg",
+      )
+      }>
       <Image
         src={data?.image || "/achievements/first_win.png"}
         width={40}
