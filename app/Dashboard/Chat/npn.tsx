@@ -216,10 +216,12 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                   <div>
                     <span className="" onClick={() => setCreateModlar(true)}>
                       <Image
-                        width={24}
-                        height={24}
+                        width={0}
+                        height={0}
+                        sizes="height:100vh width:100vw"
                         src="/Chat/vector.svg"
                         alt="create svg"
+                        className="w-[24px]"
                       />
                     </span>
                   </div>

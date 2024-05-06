@@ -142,11 +142,11 @@ const UserProfile = ({ target }: any) => {
   };
 
   return (
-    <div className=" p-4 bg-primaryColor rounded-md ">
+    <div className=" p-4 bg-primaryColor rounded-md relative">
       <div className=" w-full h-full relative flex flex-col 2xl:gap-[80px] gap-12 rounded-md">
         <div className="w-full  h-[290px] relative">
           <PinContainer title="Overview" href="https://twitter.com/mannupaaji">
-            <div className="overflow-hidden h-[290px] w-full">
+            <div className="overflow-hidden h-[290px] w-full realtive">
               {target ? (
                 <Image
                   src={
@@ -154,15 +154,15 @@ const UserProfile = ({ target }: any) => {
                       ? target?.banner_picture
                       : "/car1.jpg"
                   }
-                  fill
                   priority
-                  style={{ objectFit: "cover" }}
+                  width={0}
+                  height={0}
                   alt="bg"
-                  sizes="auto"
-                  className="z-[-1] rounded-2xl"
+                  sizes="height: 100% width: 100%"
+                  className="z-[-1] rounded-2xl object-cover w-full h-full"
                 />
               ) : (
-                <div className="flex items-center justify-center w-full h-full bg-gray-400 rounded  animate-pulse">
+                <div className="flex relative items-center justify-center w-full h-full bg-gray-400 rounded  animate-pulse">
                   <svg
                     className="w-10 h-10 text-gray-300"
                     aria-hidden="true"

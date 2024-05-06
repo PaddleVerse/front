@@ -139,7 +139,7 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
         <motion.div
           className={cn(
             "absolute",
-            size === "big" ? "right-8 top-[14px]" : "right-4 top-[11px]"
+            size === "big" ? "right-8 top-[14px]" : "right-3 top-[10px]"
           )}
           animate={{
             opacity: hover || owned ? 0 : 1,

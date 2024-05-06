@@ -98,6 +98,7 @@ const UserProfile = () => {
                   <Image
                     src={"/badge2.png"}
                     width={170}
+                    priority
                     height={170}
                     alt="badge"
                     className="2xl:w-[180px] sm:-right-[20px] right-[0px] bottom-[25px] sm:bottom-[45px] xl:w-[120px]  2xl:right-[10px] 2xl:bottom-[100px] xl:-right-[15px] xl:bottom-[95px]"
