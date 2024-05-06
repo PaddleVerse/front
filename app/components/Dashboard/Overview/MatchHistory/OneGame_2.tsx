@@ -170,7 +170,7 @@ useEffect(() => {
             {averageScore}%
           </span>
           <span className="text-[#647087] xl:text-[13px] text-[11px]">
-            Average_Score
+            Average Score
           </span>
         </div>
         <div className="flex flex-col items-center justify-center leading-5">
@@ -185,7 +185,7 @@ useEffect(() => {
             {status === "lose" ? marginOfVictory : -marginOfVictory}
           </span>
           <span className="text-[#647087] xl:text-[13px] text-[11px]">
-            15 / 25 / 3
+            Ratio
           </span>
         </div>
         <div className="flex flex-col items-center justify-center leading-5">
