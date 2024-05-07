@@ -51,7 +51,11 @@ export default function SignupFormDemo() {
   }, [is]);
 
   function onSubmit(values : any) {
-    setIs(isValidValues(values));
+    if (isValidValues(values) !== 0)
+    {
+      setIs(isValidValues(values));
+      return;
+    }
 
     axios.post(`http://${ipAdress}:8080/auth/signup`, {
       name: values.name,
