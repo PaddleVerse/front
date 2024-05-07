@@ -64,7 +64,7 @@ const OneGame_2 = ({
   // }, [status]);
   return (
     <motion.div
-      className="rounded-md w-full md:h-[70px] bg-gradient-to-r bg-secondaryColor flex items-center justify-between sm:px-4"
+      className="rounded-md w-full md:h-[70px] py-1 bg-gradient-to-r bg-secondaryColor flex items-center justify-between sm:px-4"
       whileHover={{ x: -5 }}
     >
       <div className="flex items-center justify-between 2xl:w-[42%] md:w-[80%] w-[88%]">

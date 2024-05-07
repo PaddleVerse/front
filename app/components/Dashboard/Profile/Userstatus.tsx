@@ -106,7 +106,7 @@ const Userstatus = ({
           status === "BLOCKED" ? null : (
           <Button
             onClick={handleSender}
-            containerClassName="h-full"
+            containerClassName="sm:h-[20%] h-full"
             borderRadius="10px"
             borderClassName={
               status === "ACCEPTED"
@@ -114,7 +114,7 @@ const Userstatus = ({
                 : ""
             }
             className={cn(
-              "text-white border-slate-800 w-full sm:mt-0 mt-4",
+              "text-white border-slate-800 w-full",
               status === "PENDING"
                 ? "bg-slate-600"
                 : status === "ACCEPTED"
