@@ -35,7 +35,7 @@ const LeaderTable = () => {
             inter.className
           )}
         >
-          <thead className="bg-[#462121] text-xs sm:text-sm text-white">
+          <thead className="bg-[#462121] text-xs sm:text-sm text-white sticky top-0">
             <tr>
               <th
                 scope="col"
