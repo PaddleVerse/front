@@ -42,10 +42,12 @@ const InviteComponent = () => {
     };
   }, [socket]);
 
-  if (accept) {
-    router.push(`/Dashboard/Game?room=${roomId}`);
-  }
-
+  useEffect(() => {
+    if (accept) {
+      router.push(`/Dashboard/Game?room=${roomId}`);
+    }
+  }, [accept, roomId]);
+  
   return (
     <div>
       {modlar && (
