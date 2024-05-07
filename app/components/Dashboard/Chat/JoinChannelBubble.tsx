@@ -76,7 +76,7 @@ const JoinChannelBubble = ({
   };
   return (
     <div
-      className="flex gap-2 items-center col-start text-inherit relative py-3"
+      className="flex gap-2 items-center col-start text-inherit relative py-3  rounded-lg hover:bg-red-900 hover:bg-opacity-10 cursor-pointer"
       onClick={(e) => {
         e.preventDefault();
         if (lock) {

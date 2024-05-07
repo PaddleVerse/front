@@ -26,7 +26,7 @@ const MiddleBuble = (props: any) => {
             alt="image"
           />
         ) : (
-          <p className="text-[14px] mt-2">{props.message.content}</p>
+          <p className="text-[14px] mt-2" style={{ overflowWrap: 'break-word' }}>{props.message.content}</p>
         )}
         <p className="text-[10px] text-gray-500 mb-[2px]">
           {getTime(props.message.createdAt)}
