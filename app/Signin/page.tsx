@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Boxes } from "@/components/ui/background-boxes";
-import { ipAdress } from "@/app/utils"
+import { ipAdress } from "@/app/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -46,7 +46,7 @@ export default function SignupFormDemo() {
       default:
         setError("");
         break;
-    }    
+    }
   }, [is]);
 
   const onSubmit = (values: any) => {
@@ -81,22 +81,23 @@ export default function SignupFormDemo() {
         // Check if access_token is present
         if (accessToken) {
           // Access token is present, make a request to the protected endpoint
-          axios.get(`http://${ipAdress}:8080/auth/protected`, {
+          axios
+            .get(`http://${ipAdress}:8080/auth/protected`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },
             })
             .then((response) => {
-
               if (response.status === 200) router.push("/Dashboard");
               else
-                
+                console.log("Failed to authenticate with protected endpoint");
             })
             .catch((error) => {
-              
+              console.log("Error during protected endpoint request", error);
             });
         }
-      }).catch();
+      })
+      .catch();
   };
 
   const handleGoogle = () => {
@@ -108,82 +109,82 @@ export default function SignupFormDemo() {
   };
 
   return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-primaryColor ring-[0.2px] ring-red-500 z-10">
-          <motion.h1 className="text-red-500 lg:text-4xl md:text-3xl text-2xl font-semibold mb-2 sm:mb-0 text-center">
-            Login
-          </motion.h1>
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-primaryColor ring-[0.2px] ring-red-500 z-10">
+        <motion.h1 className="text-red-500 lg:text-4xl md:text-3xl text-2xl font-semibold mb-2 sm:mb-0 text-center">
+          Login
+        </motion.h1>
 
-          <form className="my-8" onSubmit={form.handleSubmit(onSubmit)}>
-            <LabelInputContainer className="mb-4">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                placeholder="Enter your username"
-                type="text"
-                {...form.register("username")}
-              />
-              {is === 3 && <p className="text-red-500 text-sm my-4">{error}</p>}
-            </LabelInputContainer>
-            <LabelInputContainer className="mb-4">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                placeholder="••••••••"
-                type="password"
-                {...form.register("password")}
-              />
-              {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
-            </LabelInputContainer>
-            {is === 5 && <p className="text-red-500 text-sm my-4">{error_}</p>}
+        <form className="my-8" onSubmit={form.handleSubmit(onSubmit)}>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              placeholder="Enter your username"
+              type="text"
+              {...form.register("username")}
+            />
+            {is === 3 && <p className="text-red-500 text-sm my-4">{error}</p>}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              {...form.register("password")}
+            />
+            {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
+          </LabelInputContainer>
+          {is === 5 && <p className="text-red-500 text-sm my-4">{error_}</p>}
+          <button
+            className="bg-gradient-to-br relative group/btn bg-[#192536] block w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            type="submit"
+          >
+            Sign In &rarr;
+            <BottomGradient />
+          </button>
+
+          <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+
+          <div className="flex flex-col space-y-4">
             <button
-              className="bg-gradient-to-br relative group/btn bg-[#192536] block w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-              type="submit"
+              className=" relative group/btn bg-[#192536] flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input "
+              type="button"
+              onClick={handle42}
             >
-              Sign In &rarr;
+              <Image
+                src="/Apple Logo.svg"
+                className="w-5"
+                alt="42"
+                width={100}
+                height={100}
+              />
+              <span className="text-neutral-300 text-sm">Intra 42</span>
               <BottomGradient />
             </button>
-
-            <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-
-            <div className="flex flex-col space-y-4">
-              <button
-                className=" relative group/btn bg-[#192536] flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input "
-                type="button"
-                onClick={handle42}
-              >
-                <Image
-                  src="/Apple Logo.svg"
-                  className="w-5"
-                  alt="42"
-                  width={100}
-                  height={100}
-                />
-                <span className="text-neutral-300 text-sm">Intra 42</span>
-                <BottomGradient />
-              </button>
-              <button
-                className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full  rounded-md h-10 font-medium shadow-input bg-[#192536]"
-                type="button"
-                onClick={handleGoogle}
-              >
-                <IconBrandGoogle className="h-4 w-4 text-neutral-300" />
-                <span className="text-neutral-300 text-sm">Google</span>
-                <BottomGradient />
-              </button>
-            </div>
-          </form>
-          <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-          <div className="w-full flex justify-between">
-            <Label className="text-gray-300 text-sm">
-              Don&apos;t have an account?
-            </Label>
-            <Link href="/register" className="text-gray-300 text-sm">
-              Sign Up &rarr;
-            </Link>
+            <button
+              className=" relative group/btn flex space-x-2 items-center justify-center px-4 w-full  rounded-md h-10 font-medium shadow-input bg-[#192536]"
+              type="button"
+              onClick={handleGoogle}
+            >
+              <IconBrandGoogle className="h-4 w-4 text-neutral-300" />
+              <span className="text-neutral-300 text-sm">Google</span>
+              <BottomGradient />
+            </button>
           </div>
+        </form>
+        <div className="bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+        <div className="w-full flex justify-between">
+          <Label className="text-gray-300 text-sm">
+            Don&apos;t have an account?
+          </Label>
+          <Link href="/register" className="text-gray-300 text-sm">
+            Sign Up &rarr;
+          </Link>
         </div>
       </div>
+    </div>
   );
 }
 
