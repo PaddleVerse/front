@@ -90,10 +90,10 @@ export default function SignupFormDemo() {
 
               if (response.status === 200) router.push("/Dashboard");
               else
-                console.log("Failed to authenticate with protected endpoint");
+                
             })
             .catch((error) => {
-              console.log("Error during protected endpoint request", error);
+              
             });
         }
       }).catch();

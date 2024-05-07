@@ -6,7 +6,7 @@ import Achievements from "./Achievements/Achievements";
 import Items from "./Items/Items";
 import { useGlobalState } from "../../Sign/GlobalState";
 import MatchHistory_2 from "./MatchHistory/MatchHistory_2";
-import BarChart from "./Chart/BarChart";
+import LineChart from "./Chart/LineChart";
 import GameStatus from "./GameStatus";
 
 const ContentCenter = () => {
@@ -23,7 +23,7 @@ const ContentCenter = () => {
           <div className="w-full h-[450px] flex gap-4 lg:flex-row flex-col border-red-500 ">
             <Items />
             <div className="flex bg-primaryColor lg:w-[50%] w-full h-full text-white text-4xl rounded-md">
-              <BarChart />
+              <LineChart />
             </div>
           </div>
         </div>

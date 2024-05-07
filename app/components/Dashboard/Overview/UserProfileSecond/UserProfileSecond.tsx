@@ -21,9 +21,10 @@ const UserProfileSecond = ({ user }: any) => {
   const [expNeededToLvl50, setExpNeededToLvl50] = useState<number>(5000);
   const [gamePlayed, setGamePlayed] = useState<number>(0);
   const { GameStatus } = state;
+  const [data, setData] = useState<any[]>([]);
+  const [WinStat, setWinStat] = useState<number>(0);
   useEffect(() => {
     if (user) {
-      
       if (user.xp !== 0 && user.xp !== undefined) {
         const currentLevel = Math.floor(user.xp / 100) + 1;
         const xpTowardsNextLevel = user.xp % 100;
@@ -36,7 +37,7 @@ const UserProfileSecond = ({ user }: any) => {
         const maxExperience = maxLevel * 100;
         const experienceNeededForMaxLevel = maxExperience - user.xp;
         setExpNeededToLvl50(experienceNeededForMaxLevel);
-        // console.log("what is needed: ", experienceNeededForMaxLevel);
+        //
         const percentageToMaxLevel =
           ((maxExperience - experienceNeededForMaxLevel) / maxExperience) * 100;
         setGameStatusTolvl50(percentageToMaxLevel);
@@ -50,9 +51,43 @@ const UserProfileSecond = ({ user }: any) => {
       .get(`http://${ipAdress}:8080/friendship/top?userid=${user?.id}`)
       .then((res) => {
         setTopTopFriends(res.data);
-        console.log("friends: ", res.data);
       });
   }, [user]);
+  useEffect(() => {
+    const data = axios
+      .get(`http://${ipAdress}:8080/match/history/${user?.id}`)
+      .then((res) => {
+        setData(res.data);
+        
+        
+      });
+  }, [state]);
+  useEffect(() => {
+    const userWins:number[] = []
+    if (data && data.length > 0) {
+      const reversedData = data.reverse();
+      reversedData.reduce((acc, curr) => {
+        if (curr.winner === user.id) {
+          userWins.push(1);
+        } else {
+          userWins.push(-1);
+        }
+      }, 0);
+      console.log(userWins)
+      const totalWins = userWins.filter(value => value > 0).length;
+      console.log("totalWins: ", totalWins)
+      const total = userWins.length;
+      if (total === 0) {
+        setWinStat(0);
+      }
+      else {
+        const winPercentage = (totalWins / userWins.length) * 100;
+        console.log("total games: ", userWins.length)
+        console.log("winPercentage: ", winPercentage)
+        setWinStat(parseFloat(winPercentage.toFixed(2)));
+      }
+    }
+  }, [data]);
   return (
     <div className=" p-4 bg-primaryColor rounded-md ">
       <div className=" w-full h-full relative flex flex-col 2xl:gap-[80px] gap-12 rounded-md">
@@ -185,11 +220,11 @@ const UserProfileSecond = ({ user }: any) => {
               TOP 3 FRIENDS
             </h1>
             <div className="flex flex-col gap-1">
-              {topTopFriends.length === 0 &&
+              {topTopFriends.length === 0 && (
                 <div className="flex justify-center items-center w-full h-[100px] bg-transparent rounded-md">
                   <p className="text-white">No friends</p>
                 </div>
-              }
+              )}
               {topTopFriends.map((friend, index) => {
                 return <Friends key={index} friend={friend} i={index} />;
               })}
@@ -221,7 +256,7 @@ const UserProfileSecond = ({ user }: any) => {
                   />
                 </div>
                 <div className="flex flex-col text-[17px]">
-                  <span className="text-sm">-{expNeededToLvl50}</span>
+                  <span className="text-sm">-{expNeededToLvl50}xp</span>
                   <span className="text-sm">To Lvl / 50</span>
                   {/* <span className="text-sm">Top 2.5%</span> */}
                 </div>
@@ -229,8 +264,8 @@ const UserProfileSecond = ({ user }: any) => {
               <div className="flex gap-4 items-center">
                 <div className="sm:w-32 sm:h-32 w-20 h-20 fill-black">
                   <CircularProgressbar
-                    value={gamePlayed}
-                    text={`${gamePlayed}%`}
+                    value={WinStat}
+                    text={`${WinStat}%`}
                     strokeWidth={16}
                     styles={{
                       path: {
@@ -244,8 +279,8 @@ const UserProfileSecond = ({ user }: any) => {
                   />
                 </div>
                 <div className="flex flex-col text-[17px]">
-                  <span className="text-sm">gambari</span>
-                  <span className="text-sm">To 100 Games</span>
+                  <span className="text-sm">Win</span>
+                  <span className="text-sm">Rate</span>
                 </div>
               </div>
             </div>

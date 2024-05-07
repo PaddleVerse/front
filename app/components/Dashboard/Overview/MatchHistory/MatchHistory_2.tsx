@@ -11,15 +11,17 @@ const MatchHistory_2 = () => {
   const { user, socket } = state;
   const [data, setData] = useState<any[]>([]);
   const [enemyData, setEnemyData] = useState<any[]>([]);
+  const [stats, setStats] = useState<number>(0);
   useEffect(() => {
     const data = axios
       .get(`http://${ipAdress}:8080/match/history/${user?.id}`)
       .then((res) => {
         setData(res.data);
-        console.log("data: ", res.data);
-        console.log("user: ", user?.id);
+        
+        
       });
   }, [state]);
+  
   // Calculate winner and loser streaks
   useEffect(() => {
     if (data && data.length > 0) {
@@ -27,7 +29,7 @@ const MatchHistory_2 = () => {
         data[0].winner === user.id ? data[0].loser : data[0].winner;
       axios.get(`http://${ipAdress}:8080/user/${enemyId}`).then((res) => {
         setEnemyData(res.data);
-        console.log(res.data);
+        
       });
     }
   }, [data]);

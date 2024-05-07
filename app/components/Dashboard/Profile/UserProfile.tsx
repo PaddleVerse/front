@@ -54,9 +54,7 @@ const UserProfile = ({ target }: any) => {
       .then((res) => {
         setLinkedFriends(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [user, target]);
 
   useEffect(() => {
@@ -72,9 +70,7 @@ const UserProfile = ({ target }: any) => {
           setStatus(res.data?.status);
         else setStatus("");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     axios
       .get(
         `http://${ipAdress}:8080/friendship/status/${target?.id}/${user?.id}`
@@ -90,9 +86,7 @@ const UserProfile = ({ target }: any) => {
           setRecv(res.data?.status);
         else setRecv("");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [target?.id, user?.id, is]);
 
   const handleSender = () => {

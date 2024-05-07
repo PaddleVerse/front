@@ -57,7 +57,6 @@ const sendpicture = async (
     return;
   }
   if (user2) {
-    console.log("here at sending a picture");
     try {
       const formData = new FormData();
       formData.append("image", file);
@@ -172,7 +171,10 @@ const Page = (props: any) => {
           channel: { name: targetChannel.name },
           user1: state.user.id,
         };
-        const res = await axios.post(`http://${ipAdress}:8080/message`, message);
+        const res = await axios.post(
+          `http://${ipAdress}:8080/message`,
+          message
+        );
         socket?.emit("channelmessage", {
           roomName: targetChannel.name,
           user: state?.user,
@@ -218,7 +220,9 @@ const Page = (props: any) => {
                   className="shadow-md rounded-full w-full h-full object-cover"
                   height={100}
                   width={100}
-                  src={targetUser?.picture! || targetChannel?.picture! || "/a.png"}
+                  src={
+                    targetUser?.picture! || targetChannel?.picture! || "/a.png"
+                  }
                   alt="user or channel picture"
                 />
               </div>

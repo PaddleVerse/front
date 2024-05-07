@@ -1,7 +1,7 @@
 export const PlayerData = [
     {
         name: 'Player 1',
-        win: 1,
+        win: -1,
     },
     {
         name: 'Player 1',

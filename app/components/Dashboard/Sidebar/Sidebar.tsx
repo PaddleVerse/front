@@ -13,15 +13,14 @@ import { ipAdress } from "@/app/utils";
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 
-
-interface User{
-  username    : string,
-  name      : string,
-  picture   :string,
-  banner_picture :string 
-  status    :string,
-  level    : Number
-  createdAt : Date,
+interface User {
+  username: string;
+  name: string;
+  picture: string;
+  banner_picture: string;
+  status: string;
+  level: Number;
+  createdAt: Date;
 }
 
 function useWindowSize() {
@@ -68,9 +67,8 @@ const Sidebar = () => {
     if (typeof window === "undefined") {
       return;
     }
-    if (dispatch === undefined || state === undefined)
-      return;
-    
+    if (dispatch === undefined || state === undefined) return;
+
     // get the access token from the cookie
     const accessToken = getCookie("access_token");
     let socket: any = null;
@@ -93,9 +91,7 @@ const Sidebar = () => {
             dispatch({ type: "UPDATE_USER", payload: data });
           }
         })
-        .catch((error) => {
-          console.log("Error during protected endpoint request", error);
-        });
+        .catch((error) => {});
     }
     return () => {
       socket?.disconnect();

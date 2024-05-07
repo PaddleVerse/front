@@ -12,7 +12,7 @@ const Items = () => {
   const router = useRouter();
 
   return (
-    <div className="lg:w-[50%] w-full h-full bg-primaryColor rounded-md overflow-y-auto no-scrollbar">
+    <div className="w-full h-full bg-primaryColor rounded-md overflow-y-auto no-scrollbar">
       <div className="bg-primaryColor sticky top-0 z-10">
         <div className="flex items-center text-white  p-4 pb-2 ">
           <Image src="/itemsMenu.svg" width={40} height={40} alt={"image"} />
