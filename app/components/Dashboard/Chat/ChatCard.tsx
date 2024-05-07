@@ -52,7 +52,7 @@ export const ChatCard = (props: any) => {
           </div>
         </div>
         <div className="flex flex-col justify-between w-full">
-          <p className="text-white">{props.value.name}</p>
+          <p className="text-white max-w-[80%]">{props.value.name}</p>
           <div className="flex-auto min-w-0 ml-4 mr-6  md:block group-hover:block">
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
