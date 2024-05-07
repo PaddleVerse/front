@@ -52,7 +52,7 @@ const MatchMakingCard = ({
           },
         }}
         exit={{ opacity: 0, scale: 0.75 }}
-        className="relative bg-[#ffffff37] backdrop-blur 2xl:w-[25%] w-[450px] h-[450px] rounded-xl p-4 z-50"
+        className="relative bg-[#101823a6] backdrop-blur 2xl:w-[35%] w-[450px] h-[450px] rounded-xl p-4 z-50 ring-[1px] ring-sidebarRedColor"
       >
         <button
           onClick={()=> {
@@ -60,13 +60,17 @@ const MatchMakingCard = ({
             setSelected('')
           }
           }
-          className="absolute top-2 right-4 text-xl text-white"
+          className="absolute top-2 right-4 text-xl text-sidebarRedColor"
         >
         { !otherPlayer && <AiOutlineClose size={30} onClick={onClose} /> }
         </button>
         <div className="flex  justify-center items-center w-full h-full gap-4">
           <PlayerCard name={user?.name} img={user?.picture} />
-          <h1 className="text-3xl text-white">VS</h1>
+          <div className="h-full flex flex-col justify-center items-center">
+            <div className="w-[1.5px] h-1/2 bg-sidebarRedColor"></div>
+              <h1 className="text-3xl text-sidebarRedColor">VS</h1>
+            <div className="w-[1.5px] h-1/2 bg-sidebarRedColor"></div>
+          </div>
 
           <PlayerCard name={otherPlayer?.name} img={otherPlayer?.picture} />
 
