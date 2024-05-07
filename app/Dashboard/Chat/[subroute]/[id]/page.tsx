@@ -246,7 +246,7 @@ const Page = (props: any) => {
               </div>
             </div>
           </div>
-          <div className=" p-4 flex-1 overflow-y-scroll no-scrollbar ">
+          <div className=" p-4 flex-1 overflow-y-scroll no-scrollbar">
             {targetUser ? (
               <ChatComponent
                 handlers={handlers}
@@ -270,7 +270,7 @@ const Page = (props: any) => {
             )}
           </div>
           <div
-            className={`chat-footer flex-none ${
+            className={`chat-footer flex-none${
               channelManagement && targetChannel ? "hidden" : ""
             }`}
           >

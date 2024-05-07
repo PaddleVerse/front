@@ -205,7 +205,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
             className="rounded-lg"
           />
           <label htmlFor="Password" className="mt-5">
-            Passowrd (optional)
+            Password (optional)
           </label>
           <Input
             type="text"

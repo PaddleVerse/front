@@ -214,16 +214,17 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                     Group Chat
                   </p>
                   <div>
-                    <span className="" onClick={() => setCreateModlar(true)}>
+                    <motion.span className="" onClick={() => setCreateModlar(true)}
+                    >
                       <Image
                         width={0}
                         height={0}
                         sizes="height:100vh width:100vw"
                         src="/Chat/vector.svg"
                         alt="create svg"
-                        className="w-[24px]"
+                        className="w-[24px] cursor-pointer"
                       />
-                    </span>
+                    </motion.span>
                   </div>
                 </div>
                 <div
