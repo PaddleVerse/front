@@ -94,11 +94,11 @@ const EditProfile = () => {
         <div className='flex items-center'>
           {user && <Image priority src={preview || user?.picture} alt='profile' width={200} height={200} className="object-cover h-[120px] w-[120px] rounded-full" />}
           <div className='flex flex-col gap-1 ml-10'>
-            <h1 className='text-md text-white font-light'>Profile Picture</h1>
-            <p className='text-[#c2c2c2] text-sm font-light'>PNG, JPEG under 15MB</p>
+            <h1 className='sm:text-md text-sm text-white font-light sm:flex hidden'>Profile Picture</h1>
+            <p className='text-[#c2c2c2] text-sm font-light sm:flex hidden'>PNG, JPEG under 15MB</p>
           </div>
         </div>
-        <div className=' flex gap-3'>
+        <div className=' flex gap-3 sm:flex-row flex-col'>
           <label htmlFor="uploadFile1"
             className="bg-white hover:bg-gray-200 text-[#000000] text-sm px-4 py-2.5 outline-none rounded w-max cursor-pointer mx-auto block font-[sans-serif]">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 mr-2 fill-[#000000] inline" viewBox="0 0 32 32">
@@ -132,7 +132,7 @@ const EditProfile = () => {
             </div>
           </div>
           <div className='flex flex-col mt-10 w-1/6'>
-            <button type='submit' className='text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl'>Submit</button>
+            <button type='submit' className='text-[#000000] font-light bg-white p-2 sm:w-[80%] rounded-xl w-[100px]'>Submit</button>
           </div>
         </form>
       </div>

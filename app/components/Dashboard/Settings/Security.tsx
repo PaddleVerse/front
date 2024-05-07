@@ -134,7 +134,7 @@ const Security = () => {
             </div>
           </div>
           <div className='flex flex-col mt-10 w-1/6'>
-            <button type='submit' className='text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl'>Submit</button>
+            <button type='submit' className='text-[#000000] font-light bg-white p-2 sm:w-[80%] w-[100px] rounded-xl'>Submit</button>
           </div>
         </form>
       </div>
@@ -145,22 +145,22 @@ const Security = () => {
         </div>
         <div className='w-full'>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='flex justify-between items-start gap-20'>
+            <div className='flex justify-between items-start'>
               <div className='flex flex-col justify-start items-start gap-2 w-1/2 mt-10'>
-                <p className='text-[#c2c2c2] text-sm font-light'>Use a phone app like google Authenticator, Authy, LastPass Authenticator, or Microsoft Authenticator, etc.<br/> to get 2FA codes when prompted during sign-in.</p>
+                <p className='text-[#c2c2c2] text-sm font-light line-clamp-4 sm:line-clamp-none'>Use a phone app like google Authenticator, Authy, LastPass Authenticator, or Microsoft Authenticator, etc.<br/> to get 2FA codes when prompted during sign-in.</p>
                 <label className='text-white font-light'>Verify the code from the app.</label>
 
                 <EnterCode register={register} isError={isCodeCorrect} reset={isReset}/>
 
                 <div className='flex flex-row mt-10 w-1/2'>
                   <button type='submit'
-                  className={`text-[#000000] font-light bg-white p-2 w-[80%] rounded-xl ${isBlurred ? 'blur' : ''}`}
+                  className={`text-[#000000] font-light bg-white p-2 w-[80%] min-w-[100px] rounded-xl ${isBlurred ? 'blur' : ''}`}
                   disabled={isBlurred}
                   >
                     Submit
                   </button>
                   <button type='button'
-                  className={`text-[#000000] font-light bg-red-600 p-2 w-[40%] ml-8 rounded-xl ${!isBlurred ? 'blur' : ''}`} 
+                  className={`text-[#000000] font-light bg-red-600 p-2 w-[40%] ml-8 rounded-xl min-w-[100px] ${!isBlurred ? 'blur' : ''}`} 
                   onClick={isBlurred ? disable : undefined} 
                   disabled={!isBlurred}
                   >
@@ -173,9 +173,10 @@ const Security = () => {
                 qrcode ? <Image
                   src={qrcode && qrcode}
                   alt='qrcode'
-                  width={400}
-                  height={400}
-                  className={`object-cover rounded-lg h-[240px] w-[240px] mt-10 ${isBlurred ? 'blur' : ''}`}
+                  width={0}
+                  height={0}
+                  sizes='wwight:100vh height:100vh'
+                  className={`object-cover rounded-lg sm:w-[220px] sm:h-[220px] w-[220px] h-[120px] mt-10 ${isBlurred ? 'blur' : ''}`}
                 />
                 : <Image
                   src={tmp_qrcode}
