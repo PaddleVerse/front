@@ -16,7 +16,7 @@ const Userstatus = ({
   return (
     <div
       className={cn(
-        "2xl:w-[30%] sm:w-[40%]  border-orange-500 bg-secondaryColor  py-2 flex  h-[250px]  px-2 rounded-md",
+        "2xl:w-[30%] sm:w-[40%]   border-orange-500 bg-secondaryColor  py-2 flex  h-[250px]  px-2 rounded-md",
         rajdhani.className
       )}
     >
@@ -82,7 +82,7 @@ const Userstatus = ({
               borderClassName=" bg-[radial-gradient(var(--green-500)_40%,transparent_60%)]"
               className={`text-white border-slate-800 w-full sm:mt-0 mt-4 bg-green-500/[0.5]`}
             >
-              ACCEPTE
+              ACCEPT
             </Button>
             <Button
               onClick={() => friendReq("rejectFriendRequest")}
@@ -90,7 +90,7 @@ const Userstatus = ({
               borderClassName=" bg-[radial-gradient(var(--red-500)_40%,transparent_60%)]"
               className={`text-white border-slate-800 w-full sm:mt-0 mt-4  bg-mainRedColor/[0.6]`}
             >
-              REJECTE
+              REJECT
             </Button>
           </div>
         ) : recv && recv === "ACCEPTED" ? (
@@ -106,6 +106,7 @@ const Userstatus = ({
           status === "BLOCKED" ? null : (
           <Button
             onClick={handleSender}
+            containerClassName="h-full"
             borderRadius="10px"
             borderClassName={
               status === "ACCEPTED"
