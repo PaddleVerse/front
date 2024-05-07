@@ -10,7 +10,6 @@ import {
   Tooltip,
 } from "chart.js";
 import { PointElement, LineElement } from "chart.js";
-import { PlayerData } from "./Data";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import axios from "axios";
 import { ipAdress } from "@/app/utils";
