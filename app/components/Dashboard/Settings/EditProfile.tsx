@@ -117,14 +117,14 @@ const EditProfile = () => {
       </div>
       <div className='w-full'>
       <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex justify-between items-end gap-20 mt-10'>
-            <div className='flex flex-col gap-2 w-1/3'>
+          <div className='flex sm:flex-row flex-col justify-between sm:items-end sm:gap-20 mt-10'>
+            <div className='flex flex-col gap-2 sm:w-1/3 w-full'>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" placeholder="Enter your name" type="text" {...register('name')}/>
               </LabelInputContainer>
             </div>
-            <div className='flex flex-col gap-2 w-1/3'>
+            <div className='flex flex-col gap-2 sm:w-1/3 w-full'>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="nickname">Nickname</Label>
                 <Input id="nickname" placeholder="Enter your nickname" type="text" {...register('nickname')}/>

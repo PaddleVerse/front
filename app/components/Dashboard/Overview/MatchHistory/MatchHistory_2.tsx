@@ -10,7 +10,6 @@ const MatchHistory_2 = () => {
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [data, setData] = useState<any[]>([]);
-  const [enemyData, setEnemyData] = useState<any[]>([]);
   const [stats, setStats] = useState<number>(0);
   useEffect(() => {
     const data = axios
@@ -23,16 +22,6 @@ const MatchHistory_2 = () => {
   }, [state]);
   
   // Calculate winner and loser streaks
-  useEffect(() => {
-    if (data && data.length > 0) {
-      const enemyId =
-        data[0].winner === user.id ? data[0].loser : data[0].winner;
-      axios.get(`http://${ipAdress}:8080/user/${enemyId}`).then((res) => {
-        setEnemyData(res.data);
-        
-      });
-    }
-  }, [data]);
   return (
     <div className="w-full rounded-md bg-primaryColor no-scrollbar overflow-y-auto h-[700px] text-white flex flex-col overflow-x-hidden">
       <div className="w-full p-6 sticky top-0 bg-primaryColor z-30">
@@ -78,7 +67,6 @@ const MatchHistory_2 = () => {
               key={index}
               item={item}
               // user={user}
-              enemyData={enemyData}
             />
           );
         })}
