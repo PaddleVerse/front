@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form';
 import { useGlobalState } from '../../Sign/GlobalState';
-
+import toast from "react-hot-toast";
 import { cn } from "@/components/cn";
 import { Label } from "@/components/ui/newlabel";
 import { Input } from "@/components/ui/newinput";
@@ -19,15 +19,14 @@ const EditProfile = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   
   const refreshUser = async () => {
     try {
       const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
-    } catch (error) {
-      console.error('Error fetching user', error);
-    }
+    } catch (error) {}
   }
   
   const onSubmit = (data : any) => { 
@@ -36,12 +35,13 @@ const EditProfile = () => {
 
       if (res.data !== '')
       {
+        toast.success('User updated successfully');
         refreshUser();
         reset();
       }
     })
-    .catch((error) => {
-      console.error('Error updating user', error);
+    .catch(() => {
+      toast.error('Error updating user');
     });
   };
 
@@ -52,12 +52,12 @@ const EditProfile = () => {
 
     // Validate file type and size
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file.');
+      toast.error('Invalid file type. Please select a valid image file.');
       return;
     }
 
     if (file.size > 15 * 1024 * 1024) { // 15MB
-      alert('Image size must be less than 15MB.');
+      toast.error('File is too large. Please select an image under 15MB.');
       return;
     }
 
@@ -71,15 +71,21 @@ const EditProfile = () => {
     if (!selectedFile) return;
 
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append('image', selectedFile);
       
       await axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      toast.success('Profile picture updated successfully');
       refreshUser();
       setSelectedFile(null);
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Error updating profile picture');
+    } finally { 
+      setLoading(false);
+    }
   };
 
 
@@ -112,7 +118,9 @@ const EditProfile = () => {
               Upload an image
             <input type="file" accept="image/*" id='uploadFile1' className="hidden" onChange={handleFileChange}/>
           </label>
-          <button className='text-[#000000] font-light bg-[#eeeeeecd] p-2 rounded-lg' onClick={handleUpload}>Save</button>
+          <button className='text-[#000000] flex justify-center items-center font-light bg-[#eeeeeecd] p-2 rounded-lg w-20' onClick={handleUpload}>
+            {loading ? <div className="loader_"></div> : "Save"}
+          </button> 
         </div>
       </div>
       <div className='w-full'>
