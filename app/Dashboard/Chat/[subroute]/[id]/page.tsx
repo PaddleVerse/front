@@ -78,6 +78,7 @@ const sendpicture = async (
   }
 };
 import { ipAdress } from "@/app/utils";
+import { cn } from "@/components/cn";
 
 const fetchTargetUser = async (parameters: any) => {
   if (parameters.subroute === "dm") {
@@ -242,7 +243,11 @@ const Page = (props: any) => {
                   setChannelManagement(!channelManagement);
                 }}
               >
-                <IoIosInformationCircleOutline className="w-full h-full text-white" />
+                <IoIosInformationCircleOutline className={cn(
+                  "w-full h-full text-white",
+
+                )}
+                />
               </div>
             </div>
           </div>

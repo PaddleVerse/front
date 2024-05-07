@@ -15,15 +15,15 @@ const OneGame_2 = ({
   averageScore,
   winnerStreak,
   loserStreak,
-  enemyData,
-}: {
+}: // enemyData,
+{
   status: string;
   item: any;
   marginOfVictory: number;
   averageScore: number;
   winnerStreak: number;
   loserStreak: number;
-  enemyData: any;
+  // enemyData: any;
 }) => {
   // useEffect(() => {
   //   const dateString = "2024-05-04T09:11:45.269Z";
@@ -36,12 +36,25 @@ const OneGame_2 = ({
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [userC, setUserC] = useState<any>(null);
+  const [enemyData, setEnemyData] = useState<any>(null);
   useEffect(() => {
     const userId = user?.id;
     axios.get(`http://${ipAdress}:8080/user/${userId}`).then((res) => {
       setUserC(res.data);
     });
   }, [status]);
+  useEffect(() => {
+    if (
+      item?.winner !== 0 ||
+      item?.winner !== null ||
+      item?.winner !== undefined
+    ) {
+      const enemyId = item.winner === user.id ? item.loser : item.winner;
+      axios.get(`http://${ipAdress}:8080/user/${enemyId}`).then((res) => {
+        setEnemyData(res.data);
+      });
+    }
+  }, [item]);
   // useEffect(() => {
   //     const userId = user?.id;
   //     axios.get(`http://${ipAdress}:8080/user/${userId}`).then((res) => {
