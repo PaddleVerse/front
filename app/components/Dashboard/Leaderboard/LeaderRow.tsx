@@ -5,25 +5,47 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { cn } from '@/components/cn';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { ipAdress } from '@/app/utils';
 interface Props {
   user: any;
+  length: number;
   index: number;
 }
 
-const LeaderRow = ({ user, index }: Props) => {
+const LeaderRow = ({ user, length, index }: Props) => {
   const router = useRouter();
   const { state } = useGlobalState();
   const User: any = state.user;
-
+  const [wins, setWins] = useState(0);
+  const [loses, setLoses] = useState(0);
 
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${user.id}`);
   };
+
+  useEffect(() => {
+    axios
+      .get(`http://${ipAdress}:8080/match/history/wins/${user?.id}`)
+      .then((res) => {
+        setWins(res.data);
+      });
+      const history = axios.get(`http://${ipAdress}:8080/match/history/${user?.id}`).then((res) => {
+        console.log("history: ",res.data);
+    })
+    axios
+      .get(`http://${ipAdress}:8080/match/history/losses/${user?.id}`)
+      .then((res) => {
+        setLoses(res.data);
+      });
+  }, [state]);
   return (
     <motion.tr
       className={cn(
         'text-white sm:text-[12px] text-[10px] cursor-pointer',
-        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]'
+        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]',
+        user.id === state?.user?.id ? 'bg-yellow-700' : ''
       )}
       onClick={handleClick}
       initial={{ opacity: 0, y:-20 }}
@@ -31,7 +53,7 @@ const LeaderRow = ({ user, index }: Props) => {
       transition={{ delay: 0.25 * index }}
     >
       <td scope="row" className=" sm:py-[7px] font-medium text-[14px]">
-        {user.id === 1 ? (
+        {index + 1 === 1 ? (
           <div className="flex items-center justify-center">
             <Image
               width={28}
@@ -40,7 +62,7 @@ const LeaderRow = ({ user, index }: Props) => {
               alt="image"
             />
           </div>
-        ) : user.id === 2 ? (
+        ) : index + 1 === 2 ? (
           <div className="flex items-center justify-center">
             <Image
               width={28}
@@ -49,7 +71,7 @@ const LeaderRow = ({ user, index }: Props) => {
               alt="image"
             />
           </div>
-        ) : user.id === 3 ? (
+        ) : index + 1 === 3 ? (
           <div className="flex items-center justify-center">
           <Image
             width={28}
@@ -60,7 +82,7 @@ const LeaderRow = ({ user, index }: Props) => {
             />
         </div>
         ) : (
-          <span className="flex items-center justify-center text-[17px] font-semibold">{user.id}</span>
+          <span className="flex items-center justify-center text-[17px] font-semibold">{index + 1}</span>
           
         )}
       </td>
@@ -76,10 +98,10 @@ const LeaderRow = ({ user, index }: Props) => {
           {user.name}
         </span>
       </td>
-      <td className=" sm:py-[7px] pl-2 text-[14px]">67pts</td>
-      <td className=" sm:py-[7px] pl-2 text-[#15E5B4] text-[14px]">3</td>
-      <td className=" sm:py-[7px] pl-2 text-[14px]">5</td>
-      <td className="  sm:py-[7px] pl-4 text-[14px]">2.2</td>
+      <td className=" sm:py-[7px] pl-2 text-[14px]">{Math.floor(user.xp / 100) + 1}</td>
+      <td className=" sm:py-[7px] pl-2 text-[#15E5B4] text-[14px]">{wins}</td>
+      <td className=" sm:py-[7px] pl-2 text-[14px]">{loses}</td>
+      <td className="  sm:py-[7px] pl-4 text-[14px]">{(wins / length).toFixed(1)}</td>
     </motion.tr>
   );
 };

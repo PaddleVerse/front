@@ -14,33 +14,17 @@ const inter = Inter({
 });
 const LeaderTable = () => {
   const [allusers, setAllUsers] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<any>([]);
   const { state } = useGlobalState();
   const user: any = state.user;
   useEffect(() => {
     if (user) {
       axios.get(`http://${ipAdress}:8080/user/range/${user.id}`).then((res) => {
+        console.log("res: ", res.data);
         setUsers(res.data);
       });
     }
   }, [user]);
-  useEffect(() => {
-    axios.get(`http://${ipAdress}:8080/user`).then((res) => {
-      const allUsers = res.data;
-      allUsers.sort((a: any, b: any) => b.xp - a.xp);
-      const currentUserIndex = allUsers.findIndex(
-        //@ts-ignore
-        (user) => user.id === state.user?.id
-      );
-      const start = Math.max(0, currentUserIndex - 5);
-      const end = Math.min(allUsers.length - 1, currentUserIndex + 5);
-      const nearbyUsers = allUsers.slice(start, end + 1);
-
-      setAllUsers(nearbyUsers);
-      console.log(nearbyUsers);
-      setAllUsers(res.data);
-    });
-  }, []);
 
   return (
     <div className="">
@@ -62,8 +46,8 @@ const LeaderTable = () => {
               <th scope="col" className="p-[5px] w-auto  ">
                 Player
               </th>
-              <th scope="col" className="p-[5px]  sm:w-[5%] sm:pl-[17px] pl-4">
-                PL
+              <th scope="col" className="p-[5px]  sm:w-[5%] pl-[1px]">
+                LVL
               </th>
               <th
                 scope="col"
@@ -88,7 +72,7 @@ const LeaderTable = () => {
           <tbody className="">
             {users &&
               users.map((user: any, index: number) => {
-                return <LeaderRow key={index} user={user} index={index} />;
+                return <LeaderRow key={index} user={user} index={index} length={users.length}/>;
               })}
           </tbody>
         </table>
