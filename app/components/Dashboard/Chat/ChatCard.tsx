@@ -26,9 +26,9 @@ export const ChatCard = (props: any) => {
         clt.invalidateQueries({ queryKey: ["targetChannel", "targetUser"] });
         props.handleClick();
       }}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.25 * props.index }}
+      initial={{ opacity: 0, y: -25, x:-20 }}
+      animate={{ opacity: 1, y: 0,x:0  }}
+      transition={{ delay: 0.20 * props.index}}
     >
       <div className="flex gap-4 w-full">
         <div className="sm:w-10 sm:h-12 h-10 w-10 relative flex flex-shrink-0 items-center">

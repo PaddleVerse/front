@@ -162,7 +162,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
             backgroundColor: "rgba(13, 9, 10, 0.4)",
           }}
         >
-          <div className="flex-1 flex flex-col ">
+          <div className="flex-1 flex flex-col">
             <main className="flex-grow flex flex-row min-h-0">
               <motion.section
                 className={` b flex flex-col flex-none overflow-auto  ${
