@@ -2,11 +2,17 @@ import Image from "next/image";
 import { rajdhani } from "@/app/utils/fontConfig";
 import React from "react";
 import { cn } from "@/components/cn";
+import {motion} from "framer-motion";
 
-
-const Achievement = ({data, owned} : any) => {
+const Achievement = ({data, owned, index} : any) => {
   return (
-    <div className={
+
+    <motion.div 
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{delay: index * 0.25}}
+    exit={{ opacity: 0, y: -20 }}
+    className={
       cn(
         "w-full text-white flex items-center gap-2 p-2",
         owned ? "" : "blur"
@@ -25,7 +31,7 @@ const Achievement = ({data, owned} : any) => {
         </h1>
         <p className="text-[10px] text-buttonGray">{data?.description || ""}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

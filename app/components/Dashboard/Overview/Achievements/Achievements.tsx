@@ -32,7 +32,7 @@ const Achievements = () => {
       </div>
       {
         achievements && achievements.map((data, index) => (
-          <Achievement key={index} data={data} owned={user?.achievements?.some((item : any) => item.name === data.name)}  />
+          <Achievement key={index} data={data} index={index} owned={user?.achievements?.some((item : any) => item.name === data.name)}  />
         ))
       }
     </div>

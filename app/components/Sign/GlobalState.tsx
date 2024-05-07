@@ -22,7 +22,7 @@ const initialState: GlobalState = {
   user: null,
   socket: null,
   show: true,
-  GameStatus:null,
+  GameStatus: null,
 };
 
 // Create context
