@@ -41,8 +41,9 @@ const UserProfileSecond = ({ user }: any) => {
         setExpNeededToLvl50(experienceNeededForMaxLevel);
         //
         const percentageToMaxLevel =
-          ((maxExperience - experienceNeededForMaxLevel) / maxExperience) * 100;
-        setGameStatusTolvl50(percentageToMaxLevel);
+        ((maxExperience - experienceNeededForMaxLevel) / maxExperience) * 100;
+        setGameStatusTolvl50(parseFloat(percentageToMaxLevel.toFixed(1)));
+        // console.log("experienceNeededForMaxLevel: ", percentageToMaxLevel);
         const numberOfGames = user.xp / 10;
         setGamePlayed(numberOfGames);
       }
@@ -222,7 +223,7 @@ const UserProfileSecond = ({ user }: any) => {
                   </div>
                   <div className="sm:w-[95%] w-[91%] 2xl:w-[98%]  bg-[#D6D6D6] rounded-full">
                     <motion.div
-                      className={`bg-mainRedColor p-2 sm:h-2.5 h-2 rounded-full relative w-[${perc}%]`}
+                      className={`bg-mainRedColor p-2 sm:h-2.5 h-2 rounded-full relative w-[${perc.toFixed(2)}%]`}
                       initial={{ width: "0%" }}
                       animate={{ width: `${perc}%` }}
                       transition={{ duration: 1 }}
