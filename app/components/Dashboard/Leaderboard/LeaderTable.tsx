@@ -28,7 +28,7 @@ const LeaderTable = () => {
 
   return (
     <div className="">
-      <div className="relative ">
+      <div className="relative">
         <table
           className={cn(
             `w-full rounded-lg text-left text-white font-light`,
