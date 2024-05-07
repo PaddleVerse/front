@@ -274,3 +274,25 @@ tbody:before {
   animation: l3 1s infinite linear;
 }
 @keyframes l3 {to{transform: rotate(1turn)}}
+
+
+.loader__ {
+  width: 100%;
+  height: 100%;
+  border: 5px solid #172234;
+  border-radius: 0.75rem;
+  padding: 0 8px;
+  box-sizing: border-box;
+  background:
+    linear-gradient(#fff 0 0) 0    0/10px 30px,
+    linear-gradient(#fff 0 0) 100% 0/10px 30px,
+    radial-gradient(farthest-side,#FF4654 90%,#172234) 0 10px/8px 10px content-box,
+    #172234;
+  background-repeat: no-repeat; 
+  animation: l3 2s infinite linear;
+}
+@keyframes l3{
+  25% {background-position: 0 0   ,100% 100%,100% calc(100% - 5px)}
+  50% {background-position: 0 100%,100% 100%,0    calc(100% - 5px)}
+  75% {background-position: 0 100%,100%    0,100% 5px}
+}
