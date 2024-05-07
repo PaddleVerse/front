@@ -44,7 +44,8 @@ const LeaderRow = ({ user, length, index }: Props) => {
     <motion.tr
       className={cn(
         'text-white sm:text-[12px] text-[10px] cursor-pointer',
-        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]'
+        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]',
+        user.id === state?.user?.id ? 'bg-yellow-700' : ''
       )}
       onClick={handleClick}
       initial={{ opacity: 0, y:-20 }}
