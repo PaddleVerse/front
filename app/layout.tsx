@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en" className="">
+      <html lang="en" className="bg-primaryColor">
         <body
           className={`${inter.className} w-screen h-screen bg-Dark bg-fixed bg-center bg-no-repeat bg-cover no-scrollbar`}
         >

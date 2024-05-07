@@ -125,13 +125,14 @@ useEffect(() => {
             }
             {
               status === "win"
-              ? "W": "L"
+              ? "WS": "L"
             }
           </span>
           {/* <span className="text-[#EBAD40] font-[500] text-[8px] xl:text-[14px] md:text-[11px] tracking-tight">
             MVP
           </span> */}
         </div>
+        
       </div>
       <div className="flex min-w-[50px] items-center md:w-auto w-[25px] justify-center py-1 md:px-[11px] md:text-[15px] text-[11px] tracking-tight font-semibold rounded-md md:bg-[#202B43]">
         {
@@ -139,7 +140,7 @@ useEffect(() => {
         }
       </div>
       <div className="items-center justify-between w-[42%] hidden 2xl:flex">
-        <div className="flex flex-col sm:min-w-[100px] flex items-center">
+        <div className=" flex-col sm:min-w-[100px] flex items-center">
           <span className="text-white font-semibold xl:text-[20px] md:text-[17px] tracking-tight">
           <span className={cn(
             "text-white font-semibold xl:text-[20px] text-[12px] md:text-[17px] tracking-tight",
