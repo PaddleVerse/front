@@ -160,6 +160,14 @@ const Page = (props: any) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (inputMessage.current!.value.length > 2000) {
+      toast.error("message is too long");
+      return;
+    }
+    if (inputMessage.current!.value.trim() === "") {
+      toast.error("message is empty");
+      return;
+    }
     if (targetChannel) {
       try {
         const message = {
