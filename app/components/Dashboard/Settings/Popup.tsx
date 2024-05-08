@@ -7,9 +7,10 @@ import { cn } from "@/components/cn";
 import { Input } from "@/components/ui/newinput";
 import { useGlobalState } from '../../Sign/GlobalState';
 import axios from 'axios';
-import { ipAdress } from '@/app/utils';
+import { fetchData, ipAdress, getCookie } from '@/app/utils';
 import { toast } from "react-hot-toast";
 
+const accessToken = getCookie("access_token");
 
 const Popup = ()  => {
 
@@ -22,7 +23,8 @@ const Popup = ()  => {
   
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const response : any = await fetchData(`/user/${user?.id}`, 'GET', null);
+      if (!response) return;
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
@@ -51,6 +53,7 @@ const Popup = ()  => {
   };
 
   const onSubmit = (data: any) => {
+    if (!accessToken) return;
     const formData = new FormData();
     if (selectedFile) {
       formData.append('image', selectedFile);
@@ -58,14 +61,19 @@ const Popup = ()  => {
   
     const imgUpdatePromise : Promise<any> = selectedFile
       ? axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { 
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${accessToken}`
+          },
         })
       : Promise.resolve();
   
     axios
       .all([
         imgUpdatePromise,
-        axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data),
+        axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data,
+          { headers: {'Authorization': `Bearer ${accessToken}` }}
+        ),
       ])
       .then(axios.spread((resImg, resUser) => {
         if (!selectedFile || (resImg && resImg?.data !== '')) 
@@ -74,7 +82,8 @@ const Popup = ()  => {
           refreshUser();
           reset();
         }
-        axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, {first_time: false})
+        axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, {first_time: false},
+          { headers: {'Authorization': `Bearer ${accessToken}` }})
         .then((res) => { if (res.data !== '') refreshUser();})
         .catch((error) => {
           console.log('Error updating user', error)

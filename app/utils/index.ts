@@ -60,8 +60,9 @@ export const getShortDate = (date: Date | null) => {
 
 export const fetchData = async (url: string, method: string, body : any) => {
   const accessToken = getCookie("access_token");
-  url = `http://${ipAdress}:8080${url}`;
   if (!accessToken) return null;
+  url = `http://${ipAdress}:8080${url}`;
+  
   switch (method) {
     case "GET":
       const res = await axios.get(url, {
@@ -72,7 +73,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch((err) => {console.log(err)});
+      .catch(() => { return null; });
       return res;
     case "POST":
       const resPost = await axios.post(url, body,
@@ -84,7 +85,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch((err) => {console.log(err)});
+      .catch(() => { return null; });
       return resPost;
     case "PUT":
       const resPut = await axios.put(url, body,
@@ -96,7 +97,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch((err) => {console.log(err)});
+      .catch(() => { return null; });
       return resPut;
     case "DELETE":
       const resDelete = await axios.delete(url,
@@ -108,7 +109,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch((err) => {console.log(err)});
+      .catch(() => { return null; });
       return resDelete;
 
     default:

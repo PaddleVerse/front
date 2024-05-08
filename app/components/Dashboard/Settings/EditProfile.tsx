@@ -7,9 +7,11 @@ import toast from "react-hot-toast";
 import { cn } from "@/components/cn";
 import { Label } from "@/components/ui/newlabel";
 import { Input } from "@/components/ui/newinput";
-import { fetchData, ipAdress } from '@/app/utils';
+import { fetchData, ipAdress, getCookie } from '@/app/utils';
 
 import axios from 'axios';
+
+const accessToken = getCookie("access_token");
 
 const EditProfile = () => {
   const { state, dispatch } = useGlobalState();
@@ -73,16 +75,20 @@ const EditProfile = () => {
 
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !accessToken) return;
 
     try {
       setLoading(true);
       const formData = new FormData();
       formData.append('image', selectedFile);
       
-      await axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      // await axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
+      //   headers: { 
+      //     'Content-Type': 'multipart/form-data',
+      //     'Authorization': `Bearer ${accessToken}`
+      //   },
+      // });
+      await fetchData(`/user/img/${user?.id}`, 'PUT', formData);
       toast.success('Profile picture updated successfully');
       refreshUser();
       setSelectedFile(null);
