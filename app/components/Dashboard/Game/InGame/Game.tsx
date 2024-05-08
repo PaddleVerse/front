@@ -13,6 +13,7 @@ import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
 import axios from "axios";
 import { fetchData, ipAdress } from "@/app/utils";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
@@ -171,10 +172,20 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     tableModule.createNet();
     let paddle: Paddle;
     let paddle2: Paddle;
-    paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2);
-    paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 });
-    paddleRef.current = paddle;
-    paddle2Ref.current = paddle2;
+    const res1 = fetchData(`/game/getUserPaddleSkin/${user?.id}`, "GET", null)
+    .then((res) => {
+      console.log("color" + res?.data.color);
+      if (!res?.data) {
+        paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2);
+        paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2);
+      } else {
+        paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2, res.data.color);
+        paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2, res.data.color);
+      }
+      paddleRef.current = paddle;
+      paddle2Ref.current = paddle2;
+    });
+
     // Update the interval function
     const intervalId = setInterval(() => {
       if (paddlePositionRef.current && socket) {
@@ -245,8 +256,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     // const controls = new OrbitControls(camera, renderer.domElement);
 
     function animate() {
-      paddle.update();
-      paddle2.update();
+      paddle?.update();
+      paddle2?.update();
       ball?.update();
       renderer.render(scene, camera);
 

@@ -20,6 +20,7 @@ const Elements = () => {
     title: "",
     image: "",
     description: "",
+    texture: "",
     color: "",
     price: 0,
   });

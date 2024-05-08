@@ -6,7 +6,7 @@ const cardsData = {
         description:
           "Unlock the mysteries of the universe with the Galactic Spinner! This celestial paddle will have you serving stars and striking with the force of a comet",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714404516/fobyb5dfitcaa9y6k1si.png',
-        color : 'dark',
+        color : 'black',
         price : 500
       },
       second: {
@@ -22,7 +22,7 @@ const cardsData = {
         description:
           "Unleash the power of the mythical beast with Dragon's Breath. Dominate the table with fiery precision and scare your opponents with its fierce design.",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714404656/kuatcjpx9vbp37l5tsbf.png',
-        color : 'red',
+        color : 'orange',
         price : 500
       },
     },

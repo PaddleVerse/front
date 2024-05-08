@@ -16,12 +16,6 @@
 		{
 			"mesh":0,
 			"name":"paddle.json",
-			"rotation":[
-				0,
-				-0.9992343187332153,
-				0,
-				0.03912561386823654
-			],
 			"translation":[
 				0,
 				13.472494125366211,
@@ -34,9 +28,9 @@
 			"name":"Color_D03",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.5,
-					0.5,
-					0.5,
+					1,
+					0.8470588326454163,
+					0.3921568691730499,
 					1
 				],
 				"metallicFactor":0.5,
@@ -48,8 +42,8 @@
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0,
-					0.08936841040849686,
-					0.8000000715255737,
+					0,
+					0,
 					1
 				],
 				"metallicFactor":0.5,
