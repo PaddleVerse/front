@@ -15,8 +15,14 @@ class Paddle {
   velocity: THREE.Vector3;
   boundingBox: BoundingBox;
   rotationX: number;
+  color: string;
 
-  constructor(scene: THREE.Scene, position: Position, rotationX: number = Math.PI / 2) {
+  constructor(
+    scene: THREE.Scene,
+    position: Position,
+    rotationX: number = Math.PI / 2,
+    color?: string
+  ) {
     this.scene = scene;
     this.position = position;
     this.object = new THREE.Object3D(); // Create a new object
@@ -27,13 +33,29 @@ class Paddle {
     });
     this.boundingBox = this.createBoundingBox();
     this.rotationX = rotationX;
+    this.color = color ? color : "red";
   }
 
   async load(): Promise<THREE.Object3D> {
     const loader = new GLTFLoader();
-    const loadedData = await loader.loadAsync("/Game/models/paddle.gltf");
+    const loadedData = await loader.loadAsync("/Game/models/untitled.gltf");
     loadedData.scene.scale.set(0.1, 0.1, 0.1);
-    loadedData.scene.position.set(this.position.x, this.position.y, this.position.z);
+    const associationsMap = loadedData.parser.associations;
+    const keysIterator = associationsMap.keys();
+    //@ts-ignore
+    for (const key of keysIterator) {
+      if (key.name === "Color_A06") {
+        const c = this.getRGBColor(this.color);
+        key.color.r = c.r;
+        key.color.g = c.g;
+        key.color.b = c.b;
+      }
+    }
+    loadedData.scene.position.set(
+      this.position.x,
+      this.position.y,
+      this.position.z
+    );
     loadedData.scene.rotation.set(0, this.rotationX, 0);
 
     loadedData.scene.traverse((child: THREE.Object3D) => {
@@ -49,7 +71,11 @@ class Paddle {
 
   update(): void {
     this.object.position.set(this.position.x, this.position.y, this.position.z);
-    this.boundingBox.position.set(this.position.x, this.position.y + 1, this.position.z);
+    this.boundingBox.position.set(
+      this.position.x,
+      this.position.y + 1,
+      this.position.z
+    );
     this.boundingBox.update();
   }
 
@@ -83,6 +109,25 @@ class Paddle {
 
   getBackPaddle(): number {
     return this.boundingBox.min.x;
+  }
+
+  getRGBColor(color : string): {
+    r: number;
+    g: number;
+    b: number;
+  } {
+    const colors : any = {
+      "red": { r: 1, g: 0, b: 0 },
+      "green": { r: 0, g: 1, b: 0 },
+      "blue": { r: 0, g: 0, b: 1 },
+      "yellow": { r: 1, g: 1, b: 0 },
+      "orange": { r: 1, g: 0.5, b: 0 },
+      "purple": { r: 0.5, g: 0, b: 1 },
+      "white": { r: 1, g: 1, b: 1 },
+      "black": { r: 0, g: 0, b: 0 },
+      "gray": { r: 0.5, g: 0.5, b: 0.5 },
+    };
+    return colors[color];
   }
 }
 
