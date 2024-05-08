@@ -74,7 +74,9 @@ const Popup = ()  => {
         }
         axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, {first_time: false})
         .then((res) => { if (res.data !== '') refreshUser();})
+        .catch((error) => console.log('Error updating user', error));
       }))
+      .catch((error) => console.log('Error updating user', error));
   };
 
   return (
@@ -119,8 +121,8 @@ const Popup = ()  => {
                     </div>
                     <div className='flex flex-col gap-2 w-full'>
                       <LabelInputContainer className="mb-4">
-                        <Label htmlFor="nickname">Nickname</Label>
-                        <Input id="nickname" placeholder="Enter your nickname" type="text" {...register('nickname')}/>
+                        <Label htmlFor="middlename">middlename</Label>
+                        <Input id="middlename" placeholder="Enter your middlename" type="text" {...register('middlename')}/>
                       </LabelInputContainer>
                     </div>
                   </div>

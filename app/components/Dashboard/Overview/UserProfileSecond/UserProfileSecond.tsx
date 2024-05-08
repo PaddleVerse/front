@@ -184,7 +184,7 @@ const UserProfileSecond = ({ user }: any) => {
                     {user.name}
                   </h2>
                   <span className="xl:text-[10px] text-[7px]">
-                    @{user.username}
+                    @{user.nickname}
                   </span>
                 </div>
               ) : (

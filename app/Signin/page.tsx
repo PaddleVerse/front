@@ -30,7 +30,7 @@ export default function SignupFormDemo() {
   const router = useRouter();
 
   const isValidValues = (value: any) => {
-    if (value.username.length < 3) return 3;
+    if (value.nickname.length < 3) return 3;
     else if (value.password.length < 6) return 4;
     return 0;
   };
@@ -38,7 +38,7 @@ export default function SignupFormDemo() {
   useEffect(() => {
     switch (is) {
       case 3:
-        setError("Username must be at least 3 characters long.");
+        setError("nickname must be at least 3 characters long.");
         break;
       case 4:
         setError("Password must be at least 6 characters long.");
@@ -58,7 +58,7 @@ export default function SignupFormDemo() {
       .post(
         `http://${ipAdress}:8080/auth/login`,
         {
-          username: values.username,
+          nickname: values.nickname,
           password: values.password,
         },
         {
@@ -117,12 +117,12 @@ export default function SignupFormDemo() {
 
         <form className="my-8" onSubmit={form.handleSubmit(onSubmit)}>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="nickname">nickname</Label>
             <Input
-              id="username"
-              placeholder="Enter your username"
+              id="nickname"
+              placeholder="Enter your nickname"
               type="text"
-              {...form.register("username")}
+              {...form.register("nickname")}
             />
             {is === 3 && <p className="text-red-500 text-sm my-4">{error}</p>}
           </LabelInputContainer>

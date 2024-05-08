@@ -210,7 +210,7 @@ const UserProfile = ({ target }: any) => {
                     {target?.name}
                   </h2>
                   <span className="xl:text-[10px] text-[7px]">
-                    @{target?.username}
+                    @{target?.nickname}
                   </span>
                   <span className="xl:text-[10px] text-[7px]">400,000</span>
                 </div>

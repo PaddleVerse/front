@@ -20,17 +20,25 @@ import JoinChannel from "./JoinChannel";
 import InviteCard from "./InviteCard";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import { ipAdress } from "@/app/utils";
+import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
+const accessToken = getCookie("access_token");
 const fetchParticipants = async (channel: channel, user: user) => {
-  const participants = await axios.get(
-    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`
+  if (!accessToken) return;
+  const participants = await fetchData(
+    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`,
+    "GET",
+    null
   );
+  if (!participants) return;
   const ret = await Promise.all(
     participants.data.map(async (participant: participants) => {
-      const user = await axios.get(
-        `http://${ipAdress}:8080/user/${participant.user_id}`
+      const user = await fetchData(
+        `http://${ipAdress}:8080/user/${participant.user_id}`,
+        "GET",
+        null
       );
+      if (!user) return;
       return { ...participant, user: user.data };
     })
   );
@@ -38,8 +46,12 @@ const fetchParticipants = async (channel: channel, user: user) => {
 };
 
 const FetchPriviliged = async (channel: channel, user: user) => {
+  if (!accessToken) return;
   const participants = await axios.get(
-    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`
+    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`,
+    { headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }}
   );
   return (
     participants.data.filter(
@@ -108,9 +120,13 @@ const ChannelManagement = ({
   }, []);
 
   const handleLeave = () => {
+    if (!accessToken) return;
     axios
       .delete(
-        `http://${ipAdress}:8080/participants/leave?channel=${channel.id}&user=${user.id}`
+        `http://${ipAdress}:8080/participants/leave?channel=${channel.id}&user=${user.id}`,
+        { headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }}
       )
       .then((res) => {
         socket.emit("leaveRoom", { user: user, roomName: channel.name });
@@ -148,7 +164,12 @@ const ChannelManagement = ({
         }
         const res = await axios.put(
           `http://${ipAdress}:8080/channels/${channel.id}`,
-          obj
+          obj,
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          }
         );
         if (picture) {
           try {
@@ -158,7 +179,10 @@ const ChannelManagement = ({
               `http://${ipAdress}:8080/channels/image?channel=${channel.id}&user=${user.id}`,
               formData,
               {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  'Authorization': `Bearer ${accessToken}`,
+                  },
               }
             );
           } catch (error) {

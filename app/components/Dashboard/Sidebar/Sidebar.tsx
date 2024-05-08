@@ -14,7 +14,7 @@ const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 
 interface User {
-  username: string;
+  nickname: string;
   name: string;
   picture: string;
   banner_picture: string;

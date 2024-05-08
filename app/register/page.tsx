@@ -26,9 +26,9 @@ export default function SignupFormDemo() {
   const isValidValues = (value: any) => {
     if (value.name.length < 3)
       return 1;
-    else if (value.nickname.length < 3)
+    else if (value.middlename.length < 3)
       return 2;
-    else if (value.username.length < 3)
+    else if (value.nickname.length < 3)
       return 3;
     else if (value.password.length < 6)
       return 4;
@@ -39,13 +39,13 @@ export default function SignupFormDemo() {
     if (is === 1)
       setError("Name must be at least 3 characters long.");
     else if (is === 2)
-      setError("Nickname must be at least 3 characters long.");
+      setError("middlename must be at least 3 characters long.");
     else if (is === 3)
-      setError("Username must be at least 3 characters long.");
+      setError("nickname must be at least 3 characters long.");
     else if (is === 4)
       setError("Password must be at least 6 characters long.");
     else if (is === 5)
-      setError("Username already exist.");
+      setError("nickname already exist.");
     else
       setError("");
   }, [is]);
@@ -59,8 +59,8 @@ export default function SignupFormDemo() {
 
     axios.post(`http://${ipAdress}:8080/auth/signup`, {
       name: values.name,
+      middlename: values.middlename,
       nickname: values.nickname,
-      username: values.username,
       password: values.password
     }, {
       headers: {
@@ -75,7 +75,9 @@ export default function SignupFormDemo() {
       }else if (res.data.status === 'error_')
         setIs(5);
     })
-    .catch();
+    .catch(err => {
+      console.error(err);
+    });
   }
 
 
@@ -103,14 +105,14 @@ export default function SignupFormDemo() {
                 <Input id="firstname" placeholder="Tyler" type="text" {...form.register('name')}/>
               </LabelInputContainer>
               <LabelInputContainer>
-                <Label htmlFor="lastname">Nickname</Label>
-                <Input id="lastname" placeholder="Durden" type="text" {...form.register('nickname')}/>
+                <Label htmlFor="lastname">middlename</Label>
+                <Input id="lastname" placeholder="Durden" type="text" {...form.register('middlename')}/>
               </LabelInputContainer>
             </div>
               {(is === 1 || is === 2) && <p className="text-red-500 text-sm my-4">{error}</p>}
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Tyler_durden" type="text" {...form.register('username')}/>
+              <Label htmlFor="nickname">nickname</Label>
+              <Input id="nickname" placeholder="Tyler_durden" type="text" {...form.register('nickname')}/>
               {is === 3 && <p className="text-red-500 text-sm my-4">{error}</p>}
               {is === 5 && <p className="text-red-500 text-sm my-4">{error}</p>}
             </LabelInputContainer>

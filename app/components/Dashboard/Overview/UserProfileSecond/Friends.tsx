@@ -13,7 +13,7 @@ const Friends = ({friend, i}:{friend:user,i:number}) => {
             className={cn('flex flex-col', inter.className)}
             >
                 <span className='2xl:text-[17px]'>{friend?.name?.split(' ')[0]}</span>
-                <p className='text-[11px]'>@{friend.nickname}</p>
+                <p className='text-[11px]'>@{friend.middlename}</p>
             </div>
         </div>
         <div 

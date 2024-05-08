@@ -27,7 +27,9 @@ const EditProfile = () => {
       const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Error updating user');
+    }
   }
   
   const onSubmit = (data : any) => { 
@@ -166,8 +168,8 @@ const EditProfile = () => {
             </div>
             <div className='flex flex-col gap-2 sm:w-1/3 w-full'>
               <LabelInputContainer className="mb-4">
-                <Label htmlFor="nickname">Nickname</Label>
-                <Input id="nickname" placeholder="Enter your nickname" type="text" {...register('nickname')}/>
+                <Label htmlFor="middlename">middlename</Label>
+                <Input id="middlename" placeholder="Enter your middlename" type="text" {...register('middlename')}/>
               </LabelInputContainer>
             </div>
           </div>

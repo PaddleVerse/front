@@ -12,7 +12,9 @@ import { Button } from "@/components/ui/moving-border";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import BottomGradient from "@/components/ui/bottomGradiant";
-import { ipAdress } from "@/app/utils";
+import { ipAdress, getCookie } from "@/app/utils";
+
+const accessToken = getCookie("access_token");
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -59,7 +61,8 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
   };
 
   const handleCreateChannel = async () => {
-    if (!validateForm()) return;
+
+    if (!validateForm() || !accessToken) return;
     const channelObject = {
       channel: {
         name: name.current!.value,
@@ -81,7 +84,12 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
       }
       const ret = await axios.post(
         `http://${ipAdress}:8080/channels`,
-        channelObject
+        channelObject,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
       );
       if (file) {
         const formData = new FormData();
@@ -91,7 +99,10 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
             `http://${ipAdress}:8080/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
             formData,
             {
-              headers: { "Content-Type": "multipart/form-data" },
+              headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${accessToken}`
+              },
             }
           );
         } catch (error) {

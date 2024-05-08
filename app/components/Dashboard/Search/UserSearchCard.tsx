@@ -16,7 +16,7 @@ const UserSearchCard = ({user, handleClick} : any) => {
         <div className='ml-2'>
             <h1 className='text-md'>{user?.name}</h1>
             <div className='flex'>
-                <p className='text-[10px] w-[35%] overflow-hidden'>@{user?.username}</p>
+                <p className='text-[10px] w-[35%] overflow-hidden'>@{user?.nickname}</p>
                 <div className="flex items-center ml-2">
                     <span className="2xl:text-xs xl:text-[10px] sm:text-[8px] text-[10px] text-gray-400">
                       1k friends

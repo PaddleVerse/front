@@ -31,6 +31,7 @@ export default function RootLayout({
       className={`${inter.className} w-screen h-screen bg-[#15202E] bg-fixed bg-center bg-no-repeat bg-cover overflow-y-hidden`}
     >
       <ContentWrapper>
+        <div></div>
         <InviteComponent />
         <Popup />
         {children}

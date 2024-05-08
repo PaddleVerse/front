@@ -54,7 +54,7 @@ const InviteUser = ({ user, channel }: { user: user; channel: channel }) => {
         />
         <div className="flex flex-col 2xl:text-md text-xs">
           <span>{user?.name}</span>
-          <span className="2xl:text-md text-[10px]">@{user?.nickname}</span>
+          <span className="2xl:text-md text-[10px]">@{user?.middlename}</span>
         </div>
       </div>
       <div

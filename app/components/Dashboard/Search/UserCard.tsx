@@ -58,7 +58,7 @@ const UserCard = ({ user }: Props) => {
               as="div"
               className="px-4 py-2 rounded-xl bg-[#34202A] text-sidebarRedColor text-xs font-bold"
             >
-              @{user?.username || "loading..."}
+              @{user?.nickname || "loading..."}
             </CardItem>
           </div>
         </CardBody>

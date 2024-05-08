@@ -53,7 +53,7 @@ export type user = {
   id: number;
   googleId: string;
   fortytwoId: number;
-  nickname: string;
+  middlename: string;
   name: string;
   password: string;
   picture: string;

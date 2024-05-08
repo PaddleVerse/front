@@ -21,7 +21,7 @@ const LinkedFriend = (props: any) => {
         />
         <div className={`flex flex-col ${inter.className}`}>
           <span className="2xl:text-[17px]">{props.user?.name}</span>
-          <p className="text-[11px]">@{props.user?.username}</p>
+          <p className="text-[11px]">@{props.user?.nickname}</p>
         </div>
       </div>
       <div

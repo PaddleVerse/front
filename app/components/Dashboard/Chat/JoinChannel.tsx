@@ -7,7 +7,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
 import { user } from "@/app/Dashboard/Chat/type";
 import { useForm } from "react-hook-form";
-import { ipAdress } from "@/app/utils";
+import { ipAdress, getCookie } from "@/app/utils";
+
+const accessToken = getCookie("access_token");
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -41,9 +43,16 @@ const JoinChannel = ({
   const search = useRef<HTMLInputElement>(null);
   const { register } = useForm();
   useEffect(() => {
+    if (!accessToken) return;
     const fetchChannels = async () => {
       const res = await axios
-        .get(`http://${ipAdress}:8080/channels`)
+        .get(`http://${ipAdress}:8080/channels`, 
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+        )
         .then((data) => {
           setChannels(data.data);
           setFilteredChannels(data.data);

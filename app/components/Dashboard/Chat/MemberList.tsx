@@ -17,8 +17,10 @@ import { FaChessKing } from "react-icons/fa6";
 import { FaChessPawn } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { ipAdress } from "@/app/utils";
+import { ipAdress, getCookie } from "@/app/utils";
 import { AnimatePresence, motion } from "framer-motion";
+
+const accessToken = getCookie("access_token");
 
 const MemberList = ({
   participant,
@@ -45,6 +47,7 @@ const MemberList = ({
   };
 
   const handleBan = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!accessToken) return;
     e.preventDefault();
     if (!exec) {
       toast.error("You cannot take privilage from yourself");
@@ -58,7 +61,14 @@ const MemberList = ({
       cid: exec.channel_id,
       uid: participant.user_id,
     };
-    axios.post(`http://${ipAdress}:8080/ban/`, obj).then((res) => {
+    axios.post(`http://${ipAdress}:8080/ban/`, 
+    obj,
+    {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+    ).then((res) => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
         user: participant.user,
@@ -67,6 +77,7 @@ const MemberList = ({
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!accessToken) return;
     e.preventDefault();
     if (!exec) {
       toast.error("You do not have privilage to kick");
@@ -81,7 +92,12 @@ const MemberList = ({
       executor: exec.user_id,
     };
     axios
-      .delete(`http://${ipAdress}:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`)
+      .delete(`http://${ipAdress}:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel.name,
@@ -95,6 +111,7 @@ const MemberList = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
+    if (!accessToken) return;
     if (!exec) {
       toast.error("you do not have privilage to promote/demote");
       return;
@@ -111,7 +128,12 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj)
+      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
@@ -125,6 +147,7 @@ const MemberList = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
+    if (!accessToken) return;
     if (!exec) {
       toast.error("You do not have privilage to mute/unmute");
       return;
@@ -141,7 +164,12 @@ const MemberList = ({
       },
     };
     axios
-      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj)
+      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
@@ -177,7 +205,7 @@ const MemberList = ({
           <div className="flex flex-col 2xl:text-md text-xs">
             <span>{participant.user?.name}</span>
             <span className="2xl:text-md text-[10px]">
-              @{participant.user?.nickname}
+              @{participant.user?.middlename}
             </span>
           </div>
         </div>
