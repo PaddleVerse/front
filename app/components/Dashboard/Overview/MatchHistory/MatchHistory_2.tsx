@@ -3,21 +3,22 @@ import { rajdhani } from "@/app/utils/fontConfig";
 import OneGame_2 from "./OneGame_2";
 import { cn } from "@/components/cn";
 import axios from "axios";
-import { ipAdress } from "@/app/utils/index";
+import { fetchData, ipAdress } from "@/app/utils/index";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 
 const MatchHistory_2 = () => {
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
   const [data, setData] = useState<any[]>([]);
-  const [stats, setStats] = useState<number>(0);
+
   useEffect(() => {
-    const data = axios
-      .get(`http://${ipAdress}:8080/match/history/${user?.id}`)
-      .then((res) => {
-        setData(res.data);
-        
-        
+    fetchData(`/match/history/${user?.id}`, "GET", null)
+      .then((res: any) => {
+        if (!res) return;
+        setData(res?.data?.reverse());
+      })
+      .catch((error) => {
+        console.error("Error fetching user", error);
       });
   }, [state]);
   
@@ -43,20 +44,6 @@ const MatchHistory_2 = () => {
         {data.map((item, index) => {
           const marginOfVictory = item.winner_score - item.loser_score;
           const averageScore = (item.winner_score + item.loser_score) / 2;
-
-          //   let winner_streak = 1;
-          //   let loser_streak = 1;
-          //   if (index > 0) {
-          //     console.log("data: ", data[index - 1])
-          //     if (item.winner === data[index - 1].winner) {
-          //       setWinnerStreak(data[index - 1].winnerStreak + 1);
-          //       winner_streak = winnerStreak + 1;
-          //     }
-          //     if (item.loser === data[index - 1].loser) {
-          //       setLoserStreak(data[index - 1].loserStreak + 1);
-          //       loser_streak = loserStreak + 1;
-          //     }
-          //   }
           return (
             <OneGame_2
               status={item.winner === user.id ? "win" : "lose"}
@@ -66,20 +53,9 @@ const MatchHistory_2 = () => {
               loserStreak={1}
               key={index}
               item={item}
-              // user={user}
             />
           );
         })}
-        {/* <OneGame_2 status={"win"} />
-        <OneGame_2 status={"lose"} />
-        <OneGame_2 status={"win"} />
-        <OneGame_2 status={"lose"} />
-        <OneGame_2 status={"win"} />
-        <OneGame_2 status={"lose"} />
-        <OneGame_2 status={"win"} />
-        <OneGame_2 status={"lose"} />
-        <OneGame_2 status={"win"} />
-        <OneGame_2 status={"lose"} /> */}
       </div>
     </div>
   );

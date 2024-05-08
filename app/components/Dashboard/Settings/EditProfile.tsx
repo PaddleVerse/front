@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { cn } from "@/components/cn";
 import { Label } from "@/components/ui/newlabel";
 import { Input } from "@/components/ui/newinput";
-import { ipAdress } from '@/app/utils';
+import { fetchData, ipAdress } from '@/app/utils';
 
 import axios from 'axios';
 
@@ -24,7 +24,8 @@ const EditProfile = () => {
   
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const response : any = await fetchData(`/user/${user?.id}`, 'GET', null);
+      if (!response) return;
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
@@ -33,10 +34,11 @@ const EditProfile = () => {
   }
   
   const onSubmit = (data : any) => { 
-    axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data)
-    .then((res) => {
 
-      if (res.data !== '')
+    fetchData(`/user/${user?.id}`, 'PUT', data)
+    .then((res: any) => {
+      if (!res) return;
+      if (res?.data !== '')
       {
         toast.success('User updated successfully');
         refreshUser();

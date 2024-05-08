@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/moving-border";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import BottomGradient from "@/components/ui/bottomGradiant";
-import { ipAdress, getCookie } from "@/app/utils";
+import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
 const accessToken = getCookie("access_token");
 
@@ -82,28 +82,20 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
           return;
         }
       }
-      const ret = await axios.post(
-        `http://${ipAdress}:8080/channels`,
-        channelObject,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        }
+      const ret = await fetchData(
+        `/channels`,
+        "POST",
+        channelObject
       );
+      if (!ret) return;
       if (file) {
         const formData = new FormData();
         formData.append("image", file);
         try {
-          const picture = await axios.post(
-            `http://${ipAdress}:8080/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                'Authorization': `Bearer ${accessToken}`
-              },
-            }
+          const picture = await fetchData(
+            `/channels/${ret?.data?.name}/picture`,
+            "POST",
+            formData
           );
         } catch (error) {
           toast.error("error in uploading image, using the default image");

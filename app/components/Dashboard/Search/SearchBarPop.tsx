@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useGlobalState } from '../../Sign/GlobalState';
 import { debounce } from 'lodash';
-import { ipAdress } from '@/app/utils';
+import { fetchData, ipAdress } from '@/app/utils';
 
 const SearchBarPop = () => {
     const router = useRouter();
@@ -29,8 +29,9 @@ const SearchBarPop = () => {
     const filterUsers = (inputValue : string) => {
       setTimeout(() => {
         if (user?.id === undefined) return;
-        axios.get(`http://${ipAdress}:8080/search/${inputValue}/${user?.id}`)
-        .then(res => {
+        fetchData(`/search/${inputValue}/${user?.id}`, 'GET', null)
+        .then((res: any) => {
+          if (!res) return;
           setFilteredUsers(res.data);
         })
       }, 100);
@@ -49,24 +50,26 @@ const SearchBarPop = () => {
     } , [inputValue])
 
     useEffect(() => {
-      axios.get(`http://${ipAdress}:8080/search/searchedUsers`)
-      .then(res => {
+      fetchData(`/search/searchedUsers`, 'GET', null)
+      .then((res: any) => {
+        if (!res) return;
         setSearchedUsers(res.data);
         setFilteredUsers(res.data);
       })
     }, [users, is])
 
     useEffect(() => {
-        axios.get(`http://${ipAdress}:8080/user`)
-          .then(res => {
-            setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
-          })
+        fetchData('/user', 'GET', null)
+        .then((res: any) => {
+          if (!res) return;
+          setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
+        })
     } , [user?.id])
 
     const handleclick = (id : any) => {
-      axios.post(`http://${ipAdress}:8080/search`, {
-        userId: id
-      }).catch();
+      
+      fetchData(`/search/${id}`, 'POST', { userId: id })
+      .catch((err) => console.log(err));
       router.push(`/Dashboard/Profile?id=${id}`);
     }
 

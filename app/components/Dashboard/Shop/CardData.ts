@@ -60,35 +60,6 @@ const cardsData = {
     },
     smallCard: {},
   },
-  Table: {
-    bigCard: {
-      first: {
-        title: "Cosmic Arena",
-        description:
-          "Enter the Cosmic Arena with the Table. This futuristic playing surface enhances your gaming experience, creating an atmosphere of excitement and challenge.",
-        image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714422147/nc4m5di0pi22djcop65v.png',
-        color : "blue",
-        price : 500
-      },
-      second: {
-        title: "Enchanted Field",
-        description:
-          "Immerse yourself in an Enchanted Field with the Table. The magical surroundings add a touch of fantasy to your games, making each match unforgettable.",
-        image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714422186/wltpkkw2wjhwxopihpci.png',
-        color : "green",
-        price : 500
-      },
-      third: {
-        title: "Neon Cityscape",
-        description:
-          "Play on the Neon Cityscape table and feel the energy of the urban landscape. The vibrant colors and dynamic design create a futuristic and electrifying gaming atmosphere.",
-        image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714422230/uem7zjzn5gzebx5xmrh3.png',
-        color : "pink",
-        price : 500
-      },
-    },
-    smallCard: {},
-  },
 };
 
 export default cardsData;

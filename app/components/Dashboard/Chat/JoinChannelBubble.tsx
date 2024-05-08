@@ -8,9 +8,7 @@ import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { useQueryClient } from "@tanstack/react-query";
-import { ipAdress, getCookie } from "@/app/utils";
-
-const accessToken = getCookie("access_token");
+import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
 const JoinChannelBubble = ({
   lock,
@@ -29,7 +27,7 @@ const JoinChannelBubble = ({
   const { state, dispatch } = useGlobalState();
   const clt = useQueryClient();
   const handleSubmit = async (e: any) => {
-    if (!accessToken) return;
+
     e.preventDefault();
     if (lock) {
       channel.key = lockRef.current?.value as string;
@@ -42,14 +40,12 @@ const JoinChannelBubble = ({
         channel: channel,
       };
       try {
-        const res = await axios.post(`http://${ipAdress}:8080/participants`, 
-        obj,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        }
+        const res = await fetchData(
+          `/participants`,
+          "POST",
+          obj
         );
+        if (!res) throw new Error("failed to join channel");
         toast.success(`you have joined ${channel.name}`);
         state?.socket?.emit("joinRoom", {
           user: user,
@@ -70,13 +66,12 @@ const JoinChannelBubble = ({
         channel: channel,
       };
       try {
-        const res = await axios.post(`http://${ipAdress}:8080/participants`,
-        obj,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        });
+        const res = await fetchData(
+          `/participants`,
+          "POST",
+          obj
+        );
+        if (!res) throw new Error("failed to join channel");
         toast.success(`you have joined ${channel.name}`);
         clt?.invalidateQueries({ queryKey: ["chatList"] });
         state?.socket?.emit("joinRoom", {

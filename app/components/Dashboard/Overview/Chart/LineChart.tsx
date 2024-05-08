@@ -12,7 +12,7 @@ import {
 import { PointElement, LineElement } from "chart.js";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import axios from "axios";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import { set } from "lodash";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -39,19 +39,17 @@ const LineChart = () => {
       borderWidth: 2,
     }],
   });
+  
   useEffect(() => {
-    const data = axios
-      .get(`http://${ipAdress}:8080/match/history/${user?.id}`)
-      .then((res) => {
-        setData(res.data.reverse());
-        // console.log("data: ", res.data);
-        // console.log("user: ", user?.id);
+    fetchData(`/match/history/${user?.id}`, "GET", null)
+      .then((res:any) => {
+        if (!res) return;
+        setData(res.data?.reverse());
       }).catch((error) => {
         console.error('Error fetching user', error);
-      }
-      );
-
+      });
   }, [state]);
+
   useEffect(() => {
     const userWins:number[] = [0]
     if (data && data.length > 0) {
@@ -73,9 +71,6 @@ const LineChart = () => {
       });
     })
     setStats(container);
-    // console.log("container: ", container);
-
-    // console.log("userWins: ", userWins);
   }, [data]);
 
   useEffect(() => {

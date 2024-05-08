@@ -77,23 +77,21 @@ const sendpicture = async (
     return;
   }
 };
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import { cn } from "@/components/cn";
 
 const fetchTargetUser = async (parameters: any) => {
   if (parameters.subroute === "dm") {
-    const user = await axios.get(
-      `http://${ipAdress}:8080/user/${parameters?.id!}`
-    );
-    return user.data;
+    const user = await fetchData(`/user/${parameters!.id}`, "GET", null);
+    if (!user) return;
+    return user?.data;
   }
   return null;
 };
 const fetchTargetChannel = async (parameters: any) => {
   if (parameters.subroute === "channel") {
-    const channel = await axios.get(
-      `http://${ipAdress}:8080/channels/${parameters!.id!}`
-    );
+    const channel = await fetchData(`/channel/${parameters!.id}`, "GET", null);
+    if (!channel) return;
     return channel.data;
   }
   return null;
@@ -180,10 +178,7 @@ const Page = (props: any) => {
           channel: { name: targetChannel.name },
           user1: state.user.id,
         };
-        const res = await axios.post(
-          `http://${ipAdress}:8080/message`,
-          message
-        );
+        await fetchData(`/message`, "POST", message);
         socket?.emit("channelmessage", {
           roomName: targetChannel.name,
           user: state?.user,
@@ -193,7 +188,7 @@ const Page = (props: any) => {
       }
     } else if (targetUser) {
       try {
-        const res = await axios.post(`http://${ipAdress}:8080/message`, {
+        await fetchData(`/message`, "POST", {
           message: {
             content: inputMessage.current!.value,
             content_type: "text",

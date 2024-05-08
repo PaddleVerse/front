@@ -10,7 +10,7 @@ import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import axios from "axios";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 const UserProfileSecond = ({ user }: any) => {
   const [LoadingImg, setLoadingImg] = useState(false);
   const [LoadingBi, setLoadingBi] = useState(false);
@@ -43,28 +43,28 @@ const UserProfileSecond = ({ user }: any) => {
         const percentageToMaxLevel =
         ((maxExperience - experienceNeededForMaxLevel) / maxExperience) * 100;
         setGameStatusTolvl50(parseFloat(percentageToMaxLevel.toFixed(1)));
-        // console.log("experienceNeededForMaxLevel: ", percentageToMaxLevel);
         const numberOfGames = user.xp / 10;
         setGamePlayed(numberOfGames);
       }
     }
   }, [user, GameStatus]);
+
   useEffect(() => {
-    const data = axios
-      .get(`http://${ipAdress}:8080/friendship/top?userid=${user?.id}`)
-      .then((res) => {
-        setTopTopFriends(res.data);
-      });
+    fetchData(`/friendship/top?userid=${user?.id}`, "GET", null)
+    .then((res: any) => {
+      if (!res) return;
+      setTopTopFriends(res.data);
+    });
   }, [user]);
+
   useEffect(() => {
-    const data = axios
-      .get(`http://${ipAdress}:8080/match/history/${user?.id}`)
-      .then((res) => {
-        setData(res.data);
-        
-        
-      });
+    fetchData(`/match/history/${user?.id}`, "GET", null)
+    .then((res: any) => {
+      if (!res) return;
+      setData(res.data);
+    });
   }, [state]);
+  
   useEffect(() => {
     const userWins:number[] = []
     if (data && data.length > 0) {
@@ -76,17 +76,13 @@ const UserProfileSecond = ({ user }: any) => {
           userWins.push(-1);
         }
       }, 0);
-      console.log(userWins)
       const totalWins = userWins.filter(value => value > 0).length;
-      console.log("totalWins: ", totalWins)
       const total = userWins.length;
       if (total === 0) {
         setWinStat(0);
       }
       else {
         const winPercentage = (totalWins / userWins.length) * 100;
-        console.log("total games: ", userWins.length)
-        console.log("winPercentage: ", winPercentage)
         setWinStat(parseFloat(winPercentage.toFixed(2)));
       }
     }

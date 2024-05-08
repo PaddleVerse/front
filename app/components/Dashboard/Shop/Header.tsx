@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
-const menuItems = ["Paddle", "Ball", "Table"];
+const menuItems = ["Paddle", "Ball"];
 const Header = ({ onSelect }: { onSelect: (e: string) => void }) => {
   const [selected, setSelected] = useState<number>(0);
   const handleItemClick = (index: number) => {

@@ -12,14 +12,10 @@ import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
 import axios from "axios";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
-}
-
-async function getUserBallSkin(id: number) {
-  return await axios.get(`http://${ipAdress}:8080/game/getUserBallSkin/${id}`);
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
@@ -72,7 +68,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       socket.on("endGame", (winner: any) => {
         setEnd(true);
         setWinnerText(winner.winner === userID ? "win" : "lost");
-        dispatch({
+        dispatch && dispatch({
           type: "UPDATE_GAMESTATUS",
           payload: winner.winner === userID ? "win" : "lose",
         });
@@ -137,10 +133,18 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
     let ball: Ball | null = null;
-    const res = axios
-      .get(`http://${ipAdress}:8080/game/getUserBallSkin/${user?.id}`)
-      .then((res) => {
-        if (!res.data) {
+    const res = fetchData(`/game/getUserBallSkin/${user?.id}`, "GET", null)
+      .then((res:any) => {
+        if (!res)
+        {
+          ball = new Ball(
+            0.3,
+            { x: 0, y: 15, z: 0 },
+            { x: 0, y: 0, z: 0 },
+            "/Game/textures/balls/default.jpg"
+          );
+        }
+        if (!res?.data) {
           ball = new Ball(
             0.3,
             { x: 0, y: 15, z: 0 },

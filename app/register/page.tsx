@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { cn } from "../../components/cn";
 import { Input } from "../../components/ui/newinput";
 import { Label } from "../../components/ui/newlabel";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 
 import BottomGradient from "@/components/ui/bottomGradiant";
 import {
@@ -56,23 +56,18 @@ export default function SignupFormDemo() {
       setIs(isValidValues(values));
       return;
     }
-
-    axios.post(`http://${ipAdress}:8080/auth/signup`, {
+    fetchData(`/auth/signup`, "POST", {
       name: values.name,
       middlename: values.middlename,
       nickname: values.nickname,
       password: values.password
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => {
-      if (res.data.status === 'success')
+    }).then((res) => {
+      if (!res) return;
+      if (res?.data?.status === 'success')
       {
         form.reset();
         router.push("/Signin");
-      }else if (res.data.status === 'error_')
+      }else if (res?.data?.status === 'error_')
         setIs(5);
     })
     .catch(err => {

@@ -7,7 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
 import { user } from "@/app/Dashboard/Chat/type";
 import { useForm } from "react-hook-form";
-import { ipAdress, getCookie } from "@/app/utils";
+import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
 const accessToken = getCookie("access_token");
 
@@ -45,18 +45,20 @@ const JoinChannel = ({
   useEffect(() => {
     if (!accessToken) return;
     const fetchChannels = async () => {
-      const res = await axios
-        .get(`http://${ipAdress}:8080/channels`, 
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        }
-        )
-        .then((data) => {
-          setChannels(data.data);
-          setFilteredChannels(data.data);
-        });
+
+      const res = await fetchData(
+        `/channels`,
+        "GET",
+        null
+      )
+      .then((data : any) => {
+        if (!data) return;
+        setChannels(data.data);
+        setFilteredChannels(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     };
     fetchChannels();
   }, []);

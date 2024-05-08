@@ -15,22 +15,20 @@ import { useRouter } from "next/navigation";
 import { set } from "react-hook-form";
 import { user } from "./type";
 const inter = Inter({ subsets: ["latin"] });
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 
 const fetchChatList = async (userId: string) => {
-  const res = await axios.get(`http://${ipAdress}:8080/chat/chatlist/${userId}`);
+  const res : any = await fetchData(`/chat/chatlist/${userId}`, "GET", null);
   const dataWithMessages = await Promise.all(
     res.data.map(async (value: any) => {
       if (value.user) {
-        const messageRes = await axios.get(
-          `http://${ipAdress}:8080/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`
-        );
-        return { ...value, msg: messageRes.data };
+        const messageRes = await fetchData(`/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`, "GET", null);
+        if (!messageRes) return { ...value, msg: {} };
+        return { ...value, msg: messageRes?.data };
       } else {
-        const channelRes = await axios.get(
-          `http://${ipAdress}:8080/channels/messages/lastMessage/${value.id}?uid=${userId}`
-        );
-        return { ...value, msg: channelRes.data };
+        const channelRes = await fetchData(`/channels/messages/lastMessage/${value.id}?uid=${userId}`, "GET", null);
+        if (!channelRes) return { ...value, msg: {} };
+        return { ...value, msg: channelRes?.data };
       }
     })
   );

@@ -8,7 +8,7 @@ import { cn } from "@/components/cn";
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import EnterCode from './otp'
-import { ipAdress } from '@/app/utils'
+import { fetchData, ipAdress } from '@/app/utils'
 
 const Security = () => {
   const [qrcode, setQrcode] = useState('');
@@ -38,15 +38,12 @@ const Security = () => {
   const accessToken = getCookie("access_token");
 
   const enable = () => {
-
-    axios.post(`http://${ipAdress}:8080/auth/2fa`, {
-        userId : user?.id
-    }, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
+    fetchData(`/auth/2fa`, "POST", {userId : user?.id})
+    .then(res => { 
+      if (!res) return;
+      setQrcode(res?.data?.Qr);
+      setIsBlurred(false); 
     })
-    .then(res => { setQrcode(res?.data?.Qr) ; setIsBlurred(false); })
     .catch(err => console.log(err))
   }
   
@@ -62,34 +59,20 @@ const Security = () => {
   const onSubmit = (data : any) => {
 
     if (isBlurred) return;
-    axios.post(`http://${ipAdress}:8080/auth/v2fa`, {
-      token : data?.code,
-      userId : user?.id
-    }, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    })
-    .then(res => {
-      if (res?.data?.ok) { 
+    fetchData(`/auth/v2fa`, "POST", {token : data?.code, userId : user?.id})
+    .then((res:any) => {
+      if (!res) return;
+      if (res?.ok) { 
         setIs(!is); setIsCodeCorrect(false); setIsReset(true);
         toast.success('2FA enabled successfully');
       }
       else {setIsCodeCorrect(true); setIsReset(false);}
     })
     .catch(() => toast.error('Error enabling 2FA'))
-    .finally(() => reset());
-    
   }
 
   const disable = () => {
-    axios.post(`http://${ipAdress}:8080/auth/disable2fa`, {
-      userId : user?.id
-    }, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    })
+    fetchData(`/auth/disable2fa`, "POST", {userId : user?.id})
     .then(() => {
       setIs(!is);
       toast.success('2FA disabled successfully');
@@ -100,7 +83,8 @@ const Security = () => {
   
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const response : any = await fetchData(`/user/${user?.id}`, "GET", null);
+      if (!response) return;
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {

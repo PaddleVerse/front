@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import PlayerCard from "./PlayerCard";
 import axios from "axios";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import { AiOutlineClose } from "react-icons/ai";
 
 const MatchMakingCard = ({
@@ -24,12 +24,12 @@ const MatchMakingCard = ({
     socket?.emit("matchMaking", { id: user?.id });
 
     socket?.on("start", (data: any) => {
-      axios
-        .get(`http://${ipAdress}:8080/user/${data?.id}`)
-        .then((res) => {
-          setOtherPlayer(res.data);
-        })
-        .catch(() => {});
+      fetchData(`/user/${data?.id}`, "GET", null)
+      .then((res) => {
+        if (!res) return;
+        setOtherPlayer(res?.data);
+      })
+      .catch(() => {});
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);

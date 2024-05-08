@@ -4,7 +4,7 @@ import Image from "next/image";
 import { inter } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
 import axios from "axios";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Infos } from "../types";
 import toast from "react-hot-toast";
@@ -18,7 +18,8 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
 
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const response : any = await fetchData(`/user/${user?.id}`, "GET", null);
+      if (!response) return;
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
@@ -28,72 +29,76 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
 
   const handleClick = () => {
     if (owned && equipped) {
-      axios.post(`http://${ipAdress}:8080/shop/ball/disable`, {
+      fetchData(`/shop/ball/disable`, "POST", {
         user_id: user?.id,
         color: infos.color
       }).then(
-        (res) => {
-          if (res.data.status === "success")
+        (res:any) => {
+          if (!res) return;
+          if (res?.data?.status === "success")
           {
             setEquipped(false);
             refreshUser();
-            toast.success(res.data.message);
+            toast.success(res?.data?.message);
           }
-          else if (res.data.status === "error")
-            toast.error(res.data.message);
+          else if (res?.data.status === "error")
+            toast.error(res?.data.message);
         }
       )
     } else if (owned) {
-      axios.post(`http://${ipAdress}:8080/shop/ball/enable`, {
+      fetchData(`/shop/ball/enable`, "POST", {
         user_id: user?.id,
         color: infos.color
       }).then(
-        (res) => {
-          if (res.data.status === "success")
+        (res:any) => {
+          if (!res) return;
+          if (res?.data?.status === "success")
           {
             setEquipped(true);
             refreshUser();
-            toast.success(res.data.message);
+            toast.success(res?.data?.message);
           }
-          else if (res.data.status === "error")
-            toast.error(res.data.message);
+          else if (res?.data.status === "error")
+            toast.error(res?.data.message);
         }
       )
     } else {
-      axios.post(`http://${ipAdress}:8080/shop/ball`, {
+      fetchData(`/shop/ball`, "POST", {
         image: infos?.image,
         texture: infos?.texture,
         color: infos?.color,
         user_id: user?.id,
         price : infos?.price
-      }).then(
-        (res) => {
-          if (res.data.status === "success")
+      })
+      .then((res:any) => {
+          if (!res) return;
+          if (res?.data?.status === "success")
           {
             setOwned(true);
             refreshUser();
-            toast.success(res.data.message);
+            toast.success(res?.data?.message);
           }
-          else if (res.data.status === "error")
-            toast.error(res.data.message);
+          else if (res?.data.status === "error")
+            toast.error(res?.data.message);
         }
-      )}
+      )
     }
+  }
 
-    useEffect(() => {
-      if (user && user?.balls) {
-        user.balls.forEach((item: any) => {
-          if (item.color === infos.color + user?.id) {
-            setOwned(true);
-            if (item.enabled)
-              setEquipped(true);
-            else
-              setEquipped(false);
-          }
-        });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    } , [user]);
+  useEffect(() => {
+    if (user && user?.balls) {
+      user.balls.forEach((item: any) => {
+        if (item.color === infos.color + user?.id) {
+          setOwned(true);
+          if (item.enabled)
+            setEquipped(true);
+          else
+            setEquipped(false);
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  } , [user]);
 
   return (
     <motion.div

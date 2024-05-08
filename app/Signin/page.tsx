@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { set, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Boxes } from "@/components/ui/background-boxes";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -49,6 +49,46 @@ export default function SignupFormDemo() {
     }
   }, [is]);
 
+  // const onSubmit = (values: any) => {
+  //   const is = isValidValues(values);
+  //   setIs(is);
+  //   if (is !== 0) return;
+
+  //   fetchData(`/auth/login`, "POST", {
+  //     nickname: values.nickname,
+  //     password: values.password,
+  //   })
+  //   .then((response) => {
+  //     if (!response) return;
+  //     const data = response.data;
+  //     if (data.status === "error") {
+  //       setError_("* " + data.message);
+  //       setIs(5);
+  //       return;
+  //     }
+  //     const accessToken = data.access_token;
+
+  //     document.cookie = `access_token=${data.access_token}; path=/;`;
+
+  //     // Check if access_token is present
+  //     if (accessToken) {
+  //       fetchData(`/auth/protected`, "GET", null)
+  //       .then((response) => {
+  //         if (!response) return;
+  //         if (response.status === 200) router.push("/Dashboard");
+  //         else
+  //           console.log("Failed to authenticate with protected endpoint");
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error during protected endpoint request", error);
+  //       });
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error during signup request", error);
+  //   });
+  // };
+
   const onSubmit = (values: any) => {
     const is = isValidValues(values);
     setIs(is);
@@ -58,7 +98,7 @@ export default function SignupFormDemo() {
       .post(
         `http://${ipAdress}:8080/auth/login`,
         {
-          nickname: values.nickname,
+          username: values.nickname,
           password: values.password,
         },
         {
@@ -97,8 +137,10 @@ export default function SignupFormDemo() {
             });
         }
       })
-      .catch();
-  };
+      .catch((error) => {
+        console.log("Error during signup request", error);
+      })
+  }
 
   const handleGoogle = () => {
     router.push(`http://${ipAdress}:8080/auth/google`);

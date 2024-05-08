@@ -9,7 +9,7 @@ import { useGlobalState } from "../../Sign/GlobalState";
 import { io } from "socket.io-client";
 import { oswald } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 const image =
   "https://preview.redd.it/dwhdw8qeoyn91.png?width=640&crop=smart&auto=webp&s=65176fb065cf249155e065b4ab7041f708af29e4";
 
@@ -51,48 +51,30 @@ const Sidebar = () => {
     closed: { width: tablet ? "1px" : "95px" },
   };
 
-  const getCookie = (name: string) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-
-    if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(";").shift();
-      return cookieValue;
-    } else {
-      return undefined;
-    }
-  };
-
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
     if (dispatch === undefined || state === undefined) return;
 
-    // get the access token from the cookie
-    const accessToken = getCookie("access_token");
     let socket: any = null;
-    if (accessToken) {
-      fetch(`http://${ipAdress}:8080/auth/protected`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+
+    fetchData(`/auth/protected`, "GET", null)
+      .then((res: any) => {
+        if (!res) return;
+        const data = res?.data;
+        if (data || data?.message !== "Unauthorized") {
+          socket = io(`http://${ipAdress}:8080`, {
+            query: { userId: data?.id },
+          });
+
+          dispatch({ type: "UPDATE_SOCKET", payload: socket });
+          dispatch({ type: "UPDATE_USER", payload: data });
+        }
       })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          if (data || data.message !== "Unauthorized") {
-            socket = io(`http://${ipAdress}:8080`, {
-              query: { userId: data?.id },
-            });
-            dispatch({ type: "UPDATE_SOCKET", payload: socket });
-            dispatch({ type: "UPDATE_USER", payload: data });
-          }
-        })
-        .catch((error) => {});
-    }
+      .catch((error) => {
+        console.error("Error fetching user", error);
+      });
     return () => {
       socket?.disconnect();
     };
@@ -139,7 +121,7 @@ const Sidebar = () => {
         >
           <motion.div className=" flex gap-4 mt-[65px] items-center">
             <motion.img
-              src={user?.picture ? user?.picture : "/b.png"}
+              src={user && user?.picture ? user?.picture : "/b.png"}
               alt="image"
               className="object-cover h-[50px] w-[50px] rounded-full"
             />
@@ -176,39 +158,6 @@ const Sidebar = () => {
               <Option label={"Shop"} expanded={expanded} />
               <Option label={"Search"} expanded={expanded} />
             </motion.div>
-            {/* <div className="text-buttonGray mt-10 flex justify-between pl-4">
-              <motion.span
-                className="text-[12px]"
-                initial={{ marginLeft: "14px" }}
-                animate={{ marginLeft: expanded ? "14px" : "-24px" }}
-              >
-                MESSAGES
-              </motion.span>
-              <motion.div
-                initial={{ opacity: 1 }}
-                animate={{ opacity: expanded ? 1 : 0 }}
-                transition={{ duration: expanded ? 1.5 : 0.1 }}
-              >
-                <FaPlus />
-              </motion.div>
-            </div> */}
-            {/* <div className="pl-7">
-              <ProfileUser
-                image={image}
-                name="abdelmottalib"
-                expanded={expanded}
-              />
-              <ProfileUser
-                image={image}
-                name="abdelmottalib"
-                expanded={expanded}
-              />
-              <ProfileUser
-                image={image}
-                name="abdelmottalib"
-                expanded={expanded}
-              />
-            </div> */}
           </div>
         </motion.div>
       </motion.div>

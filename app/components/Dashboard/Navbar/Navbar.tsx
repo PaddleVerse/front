@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { useGlobalState } from "../../Sign/GlobalState";
 import NotificationCard from "./NotificationCard";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -47,46 +47,28 @@ const Navbar = () => {
     if (!socket || !user) return;
     socket?.on("notification", (data: any) => {
       if (data?.ok === 0) return;
-      axios
-        .get(`http://${ipAdress}:8080/user/${user?.id}`)
-        .then((res) => {
-          dispatch && dispatch({ type: "UPDATE_USER", payload: res.data });
+
+      fetchData(`/user/${user?.id}`, "GET", null)
+        .then((res:any) => {
+          if (!res) return;
+          dispatch && dispatch({ type: "UPDATE_USER", payload: res?.data });
         })
-        .catch(() => {});
+        .catch((err) => {
+          console.log("error", err);
+        });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
-  const getCookie = (name: string) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-
-    if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(";").shift();
-      return cookieValue;
-    } else {
-      return undefined;
-    }
-  };
-
-  const accessToken = getCookie("access_token");
-
   const handleLogout = async () => {
-    axios
-      .post(
-        `http://${ipAdress}:8080/auth/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((res) => {
+    fetchData(`/auth/logout`, "GET", null)
+      .then(() => {
         cleanCookie();
         router.push("/");
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -132,7 +114,7 @@ const Navbar = () => {
             </button>
             {open && (
               <ul
-                className="absolute w-[200%] #9c9c9c66 bg-gray-200 left-[-100%] rounded-xl mt-2"
+                className="absolute w-[150%] #9c9c9c66 bg-gray-200 left-[-60%] rounded-xl mt-2"
                 onBlur={() => setOpen(false)}
               >
                 {user && user?.notifications.length !== 0 ? (
@@ -143,8 +125,7 @@ const Navbar = () => {
                   ))
                 ) : (
                   <li className="py-4 text-center text-gray-500">
-                    {" "}
-                    There are no notifications{" "}
+                    {" "}There are no notifications{" "}
                   </li>
                 )}
               </ul>

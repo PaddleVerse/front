@@ -18,8 +18,9 @@ function ContentWrapper({ children }: Props) {
   
     const router = useRouter();
     useEffect(() => {
-    fetchData(`http://${ipAdress}:8080/auth/protected`, "GET", null)
+    fetchData(`/auth/protected`, "GET", null)
     .then((res : any) => {
+    
       if (!res)
         router.push('/');
       const data = res?.data;
@@ -28,7 +29,7 @@ function ContentWrapper({ children }: Props) {
       else
       {
         setId(data?.id);
-        setIsAuth(data.twoFa ? "2fa" : "true");
+        setIsAuth(data?.twoFa ? "2fa" : "true");
       }
     })
     .catch((error : any) => {

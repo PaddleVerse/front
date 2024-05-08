@@ -26,7 +26,7 @@ const accessToken = getCookie("access_token");
 const fetchParticipants = async (channel: channel, user: user) => {
   if (!accessToken) return;
   const participants = await fetchData(
-    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`,
+    `/channels/participants/${channel.id}?uid=${user.id}`,
     "GET",
     null
   );
@@ -34,7 +34,7 @@ const fetchParticipants = async (channel: channel, user: user) => {
   const ret = await Promise.all(
     participants.data.map(async (participant: participants) => {
       const user = await fetchData(
-        `http://${ipAdress}:8080/user/${participant.user_id}`,
+        `/user/${participant.user_id}`,
         "GET",
         null
       );
@@ -47,12 +47,12 @@ const fetchParticipants = async (channel: channel, user: user) => {
 
 const FetchPriviliged = async (channel: channel, user: user) => {
   if (!accessToken) return;
-  const participants = await axios.get(
-    `http://${ipAdress}:8080/channels/participants/${channel.id}?uid=${user.id}`,
-    { headers: {
-      'Authorization': `Bearer ${accessToken}`
-    }}
+  const participants = await fetchData(
+    `/channels/participants/${channel.id}?uid=${user.id}`,
+    "GET",
+    null
   );
+  if (!participants) return;
   return (
     participants.data.filter(
       (participant: participants) =>
@@ -120,19 +120,18 @@ const ChannelManagement = ({
   }, []);
 
   const handleLeave = () => {
-    if (!accessToken) return;
-    axios
-      .delete(
-        `http://${ipAdress}:8080/participants/leave?channel=${channel.id}&user=${user.id}`,
-        { headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }}
-      )
-      .then((res) => {
+    fetchData(
+      `/participants/leave?channel=${channel.id}&user=${user.id}`,
+      "DELETE",
+      null
+    )
+      .then(() => {
         socket.emit("leaveRoom", { user: user, roomName: channel.name });
         router.push("/Dashboard/Chat");
       })
-      .catch();
+      .catch((error) => {
+        console.log(error);
+      })
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -162,29 +161,22 @@ const ChannelManagement = ({
             return;
           }
         }
-        const res = await axios.put(
-          `http://${ipAdress}:8080/channels/${channel.id}`,
-          obj,
-          {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`
-            }
-          }
+
+        const res = await fetchData(
+          `/channels/${channel.id}`,
+          "PUT",
+          obj
         );
         if (picture) {
           try {
             const formData = new FormData();
             formData.append("image", picture);
-            const pic = await axios.post(
-              `http://${ipAdress}:8080/channels/image?channel=${channel.id}&user=${user.id}`,
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  'Authorization': `Bearer ${accessToken}`,
-                  },
-              }
+            const pic = await fetchData(
+              `/channels/image?channel=${channel.id}&user=${priviliged?.user_id}`,
+              "POST",
+              formData
             );
+
           } catch (error) {
             toast.error("error in uploading image, using the default image.");
           }

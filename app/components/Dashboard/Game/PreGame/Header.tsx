@@ -44,7 +44,6 @@ const Header = ({selected, setCanPlay}:{selected:string, setCanPlay:any}) => {
         )}
         onClick={
           () => {
-            console.log("i clicked")
             selected === "1" || selected === "2" ? setCanPlay(true) : setCanPlay(false)
           }
         

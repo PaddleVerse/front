@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import axios from "axios";
 import { set } from "lodash";
 
@@ -39,7 +39,9 @@ const OneGame_2 = ({
   const [enemyData, setEnemyData] = useState<any>(null);
   useEffect(() => {
     const userId = user?.id;
-    axios.get(`http://${ipAdress}:8080/user/${userId}`).then((res) => {
+    fetchData(`/user/${userId}`, "GET", null)
+    .then((res: any) => {
+      if (!res) return;
       setUserC(res.data);
     });
   }, [status]);
@@ -50,18 +52,15 @@ const OneGame_2 = ({
       item?.winner !== undefined
     ) {
       const enemyId = item.winner === user.id ? item.loser : item.winner;
-      axios.get(`http://${ipAdress}:8080/user/${enemyId}`).then((res) => {
+
+      fetchData(`/user/${enemyId}`, "GET", null).then
+      ((res: any) => {
+        if (!res) return;
         setEnemyData(res.data);
       });
     }
   }, [item]);
-  // useEffect(() => {
-  //     const userId = user?.id;
-  //     axios.get(`http://${ipAdress}:8080/user/${userId}`).then((res) => {
-  //       setUser(res.data);
-  //
-  //     });
-  // }, [status]);
+
   return (
     <motion.div
       className="rounded-md w-full md:h-[70px] py-1 bg-gradient-to-r bg-secondaryColor flex items-center justify-between sm:px-4"

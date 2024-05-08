@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { useGlobalState } from "../../Sign/GlobalState";
-import axios from "axios";
-import { ipAdress } from "@/app/utils"
+import { fetchData, ipAdress } from "@/app/utils"
 
 
 const GameStatus = () => {
@@ -15,8 +14,9 @@ const GameStatus = () => {
   const { GameStatus, user } = state;
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
-      const usr = response.data;
+      const response : any = await fetchData(`/user/${user?.id}`, "GET", null);
+      if (!response) return;
+      const usr = response?.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
       console.error('Error fetching user', error);

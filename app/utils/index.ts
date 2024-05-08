@@ -60,6 +60,7 @@ export const getShortDate = (date: Date | null) => {
 
 export const fetchData = async (url: string, method: string, body : any) => {
   const accessToken = getCookie("access_token");
+  url = `http://${ipAdress}:8080${url}`;
   if (!accessToken) return null;
   switch (method) {
     case "GET":
@@ -74,27 +75,42 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .catch((err) => {console.log(err)});
       return res;
     case "POST":
-      const resPost = await axios.post(url, body)
+      const resPost = await axios.post(url, body,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })
       .catch((err) => {console.log(err)});
       return resPost;
     case "PUT":
-      const resPut = await axios.put(url, body)
+      const resPut = await axios.put(url, body,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })
       .catch((err) => {console.log(err)});
       return resPut;
     case "DELETE":
-      const resDelete = await axios.delete(url)
+      const resDelete = await axios.delete(url,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })
       .catch((err) => {console.log(err)});
       return resDelete;
-  
+
     default:
       return null;
   }

@@ -5,7 +5,6 @@ import {
   channel,
   participants,
   participantWithUser,
-  user,
 } from "@/app/Dashboard/Chat/type";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -17,10 +16,9 @@ import { FaChessKing } from "react-icons/fa6";
 import { FaChessPawn } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { ipAdress, getCookie } from "@/app/utils";
+import { ipAdress, fetchData } from "@/app/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
-const accessToken = getCookie("access_token");
 
 const MemberList = ({
   participant,
@@ -32,22 +30,13 @@ const MemberList = ({
   channel: channel;
 }) => {
   const router = useRouter();
-  const { state, dispatch } = useGlobalState();
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:8080/user/${participant.user_id}`)
-  //     .then((res) => {
-  //       setUser(res.data);
-  //     });
-  // }, [participant]);
+  const { state } = useGlobalState();
 
   const handleClick = () => {
     router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
   };
 
   const handleBan = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!accessToken) return;
     e.preventDefault();
     if (!exec) {
       toast.error("You cannot take privilage from yourself");
@@ -61,14 +50,9 @@ const MemberList = ({
       cid: exec.channel_id,
       uid: participant.user_id,
     };
-    axios.post(`http://${ipAdress}:8080/ban/`, 
-    obj,
-    {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    }
-    ).then((res) => {
+
+    fetchData(`/ban`, "POST", obj)
+    .then((res) => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
         user: participant.user,
@@ -77,7 +61,6 @@ const MemberList = ({
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!accessToken) return;
     e.preventDefault();
     if (!exec) {
       toast.error("You do not have privilage to kick");
@@ -91,13 +74,8 @@ const MemberList = ({
       channel: exec.channel_id,
       executor: exec.user_id,
     };
-    axios
-      .delete(`http://${ipAdress}:8080/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      })
+   
+    fetchData(`/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`, "DELETE", null)
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel.name,
@@ -111,7 +89,6 @@ const MemberList = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
-    if (!accessToken) return;
     if (!exec) {
       toast.error("you do not have privilage to promote/demote");
       return;
@@ -127,13 +104,8 @@ const MemberList = ({
         role: participant.role === "MEMBER" ? "MOD" : "MEMBER",
       },
     };
-    axios
-      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj,
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      })
+   
+    fetchData(`/participants/${participant.user_id}`, "PUT", obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
@@ -147,7 +119,6 @@ const MemberList = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
-    if (!accessToken) return;
     if (!exec) {
       toast.error("You do not have privilage to mute/unmute");
       return;
@@ -163,13 +134,8 @@ const MemberList = ({
         mute: participant.mute ? false : true,
       },
     };
-    axios
-      .put(`http://${ipAdress}:8080/participants/${participant.user_id}`, obj,
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      })
+
+    fetchData(`/participants/${participant.user_id}`, "PUT", obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,

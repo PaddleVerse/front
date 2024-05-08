@@ -7,31 +7,27 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ipAdress, getCookie } from "@/app/utils";
+import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
 const accessToken = getCookie("access_token");
 
 const FetchMessages = async (p: any, userId: string) => {
-  if (!accessToken) return;
+
   if (p.subroute == "channel") {
-    const mes = await axios.get(
-      `http://${ipAdress}:8080/channels/messages/${p?.id!}?uid=${userId}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      }
+    const mes = await fetchData(
+      `/channels/messages?channel_id=${p?.id!}`,
+      "GET",
+      null
     );
+    if (!mes) return [];
     return mes.data;
   } else {
-    const mes = await axios.get(
-      `http://${ipAdress}:8080/conversations/messages?uid1=${p?.id!}&uid2=${userId}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      }
+    const mes = await fetchData(
+      `/messages?receiver_id=${p?.id!}`,
+      "GET",
+      null
     );
+    if (!mes) return [];
     return mes.data;
   }
 };

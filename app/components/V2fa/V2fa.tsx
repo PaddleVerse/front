@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import EnterCode from "../Dashboard/Settings/otp";
 import axios from "axios";
 import { useState } from "react";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 
 
 export default function V2fa({setIsAuth, userId} : any) {
@@ -27,20 +27,15 @@ export default function V2fa({setIsAuth, userId} : any) {
   };
 
  const onSubmit = (data:any) => {
-    if (userId === -1 || typeof window === "undefined") return;
+    if (userId === -1) return;
 
-    axios.post(`http://${ipAdress}:8080/auth/v2fa`, {
-      token : data?.code,
-      userId : userId
-    }, {
-      headers: {
-        'Authorization': `Bearer ${getCookie("access_token")}`
-      }
-    })
-    .then(res => {
-      if (res?.data?.ok) setIsAuth("true");
-      else setIs(true);
-    })
+  fetchData(`/auth/v2fa`, "POST", {
+    token : data?.code,
+    userId : userId
+  }).then((res:any) => {
+    if (res?.data?.ok) setIsAuth("true");
+    else setIs(true);
+  })
   .catch(err => console.log(err))
   reset();
  };

@@ -5,7 +5,6 @@ import { inter } from "@/app/utils/fontConfig";
 import Image from "next/image";
 import PaddleCoin from "../Stuff/PaddleCoin";
 import BallCoin from "../Stuff/BallCoin";
-import TableCoin from "../Stuff/TableCoin";
 import { motion } from "framer-motion";
 import { cn } from "@/components/cn";
 import { Infos } from "../types";
@@ -57,8 +56,6 @@ const BigCard = ({ infos, handleClick, selected }: BigCardProps) => {
               <PaddleCoin size={"small"} infos={infos} />
             ) : selected === "Ball" ? (
               <BallCoin size={"small"} infos={infos} />
-            ) : selected === "Table" ? (
-              <TableCoin size={"small"} infos={infos} />
             ) : null
           }
         </div>

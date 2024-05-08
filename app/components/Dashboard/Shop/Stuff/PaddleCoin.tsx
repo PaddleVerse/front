@@ -4,7 +4,7 @@ import Image from "next/image";
 import { inter } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
 import axios from "axios";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { Infos } from "../types";
 import toast from "react-hot-toast";
@@ -18,7 +18,8 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
 
   const refreshUser = async () => {
     try {
-      const response : any = await axios.get(`http://${ipAdress}:8080/user/${user?.id}`);
+      const response : any = await fetchData(`/user/${user?.id}`, "GET", null);
+      if (!response) return;
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
@@ -28,56 +29,60 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
 
   const handleClick = () => {
     if (owned && equipped) {
-      axios.post(`http://${ipAdress}:8080/shop/paddle/disable`, {
+      fetchData(`/shop/paddle/disable`, "POST", {
         user_id: user?.id,
         color: infos.color
       }).then(
-        (res) => {
-          if (res.data.status === "success")
+        (res:any) => {
+          if (!res) return;
+          if (res?.data?.status === "success")
           {
             setEquipped(false);
             refreshUser();
-            toast.success(res.data.message);
+            toast.success(res?.data?.message);
           }
-          else if (res.data.status === "error")
-            toast.error(res.data.message);
+          else if (res?.data.status === "error")
+            toast.error(res?.data.message);
         }
       )
     } else if (owned) {
-      axios.post(`http://${ipAdress}:8080/shop/paddle/enable`, {
+      fetchData(`/shop/paddle/enable`, "POST", {
         user_id: user?.id,
         color: infos.color
       }).then(
-        (res) => {
-          if (res.data.status === "success")
+        (res:any) => {
+          if (!res) return;
+          if (res?.data?.status === "success")
           {
             setEquipped(true);
             refreshUser();
-            toast.success(res.data.message);
+            toast.success(res?.data?.message);
           }
-          else if (res.data.status === "error")
-            toast.error(res.data.message);
+          else if (res?.data.status === "error")
+            toast.error(res?.data.message);
         }
       )
     } else {
-      axios.post(`http://${ipAdress}:8080/shop/paddle`, {
+      fetchData(`/shop/paddle`, "POST", {
         image: infos?.image,
         color: infos?.color,
         user_id: user?.id,
         price : infos?.price
       }).then(
-        (res) => {
-          if (res.data.status === "success")
+        (res:any) => {
+          if (!res) return;
+          if (res?.data?.status === "success")
           {
             setOwned(true);
             refreshUser();
-            toast.success(res.data.message);
+            toast.success(res?.data?.message);
           }
-          else if (res.data.status === "error")
-            toast.error(res.data.message);
+          else if (res?.data.status === "error")
+            toast.error(res?.data.message);
         }
-      )}
+      )
     }
+  }
 
     useEffect(() => {
       if (user?.paddles) {

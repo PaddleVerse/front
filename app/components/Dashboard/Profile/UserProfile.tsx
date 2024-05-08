@@ -10,7 +10,7 @@ import Userstatus from "./Userstatus";
 import { rajdhani } from "@/app/utils/fontConfig";
 import LinkedFriend from "./LinkedFriend";
 import { cn } from "@/components/cn";
-import { ipAdress } from "@/app/utils";
+import { fetchData, ipAdress } from "@/app/utils";
 
 const UserProfile = ({ target }: any) => {
   const { state } = useGlobalState();
@@ -49,44 +49,48 @@ const UserProfile = ({ target }: any) => {
   }, [socket]);
 
   useEffect(() => {
-    axios
-      .get(`http://${ipAdress}:8080/user/linked/${user?.id}/${target?.id}`)
-      .then((res) => {
+    fetchData(`/user/linked/${user?.id}/${target?.id}`, "GET", null)
+      .then((res: any) => {
+        if (!res) return;
         setLinkedFriends(res.data);
       })
       .catch((err) => {});
   }, [user, target]);
 
   useEffect(() => {
-    axios
-      .get(
-        `http://${ipAdress}:8080/friendship/status/${user?.id}/${target?.id}`
-      )
-      .then((res) => {
+    fetchData(`/friendship/status/${user?.id}/${target?.id}`, "GET", null)
+      .then((res: any) => {
+        if (!res) return;
         if (res.data?.status === "PENDING" && res.data?.request === "SEND")
           setStatus(res.data?.status);
         else if (res.data?.status === "ACCEPTED") setStatus(res.data?.status);
-        else if (res.data?.status === "BLOCKED" && res.data?.request === "SEND")
+        else if (
+          res.data?.status === "BLOCKED" &&
+          res.data?.request === "SEND"
+        )
           setStatus(res.data?.status);
         else setStatus("");
       })
-      .catch((err) => {});
-    axios
-      .get(
-        `http://${ipAdress}:8080/friendship/status/${target?.id}/${user?.id}`
-      )
-      .then((res) => {
-        if (res.data?.status === "PENDING" && res.data?.request !== "RECIVED")
+      .catch((err) => {
+        console.error("Error fetching user", err);
+      });
+
+    fetchData(`/friendship/status/${target?.id}/${user?.id}`, "GET", null)
+      .then((res: any) => {
+        if (!res) return;
+        if (res.data?.status === "PENDING" && res.data?.request === "RECIVED")
           setRecv(res.data?.status);
         else if (res.data?.status === "ACCEPTED") setRecv(res.data?.status);
         else if (
           res.data?.status === "BLOCKED" &&
-          res.data?.request !== "RECIVED"
+          res.data?.request === "RECIVED"
         )
           setRecv(res.data?.status);
         else setRecv("");
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.error("Error fetching user", err);
+      });
   }, [target?.id, user?.id, is]);
 
   const handleSender = () => {

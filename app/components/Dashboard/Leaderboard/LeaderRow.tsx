@@ -7,7 +7,7 @@ import { useGlobalState } from "../../Sign/GlobalState";
 import { cn } from '@/components/cn';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ipAdress } from '@/app/utils';
+import { fetchData, ipAdress } from '@/app/utils';
 interface Props {
   user: any;
   length: number;
@@ -26,18 +26,15 @@ const LeaderRow = ({ user, length, index }: Props) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://${ipAdress}:8080/match/history/wins/${user?.id}`)
-      .then((res) => {
-        setWins(res.data);
+    fetchData(`/match/history/wins/${user?.id}`, "GET", null)
+      .then((res:any) => {
+        if (!res) return;
+        setWins(res?.data);
       });
-      const history = axios.get(`http://${ipAdress}:8080/match/history/${user?.id}`).then((res) => {
-        console.log("history: ",res.data);
-    })
-    axios
-      .get(`http://${ipAdress}:8080/match/history/losses/${user?.id}`)
-      .then((res) => {
-        setLoses(res.data);
+    fetchData(`/match/history/losses/${user?.id}`, "GET", null)
+      .then((res:any) => {
+        if (!res) return;
+        setLoses(res?.data);
       });
   }, [state]);
   return (
