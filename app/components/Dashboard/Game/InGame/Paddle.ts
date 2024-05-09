@@ -15,13 +15,13 @@ class Paddle {
   velocity: THREE.Vector3;
   boundingBox: BoundingBox;
   rotationX: number;
-  color: string;
+  color: String;
 
   constructor(
     scene: THREE.Scene,
     position: Position,
     rotationX: number = Math.PI / 2,
-    color?: string
+    color?: String
   ) {
     this.scene = scene;
     this.position = position;
@@ -42,6 +42,8 @@ class Paddle {
     loadedData.scene.scale.set(0.1, 0.1, 0.1);
     const associationsMap = loadedData.parser.associations;
     const keysIterator = associationsMap.keys();
+
+    // @ts-ignore
     for (const key of keysIterator) {
       if (key.name === "Color_A06") {
         const c = this.getRGBColor(this.color);
@@ -110,7 +112,7 @@ class Paddle {
     return this.boundingBox.min.x;
   }
 
-  getRGBColor(color : string): {
+  getRGBColor(color : any): {
     r: number;
     g: number;
     b: number;

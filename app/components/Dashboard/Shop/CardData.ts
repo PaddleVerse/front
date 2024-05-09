@@ -6,7 +6,7 @@ const cardsData = {
         description:
           "Unlock the mysteries of the universe with the Galactic Spinner! This celestial paddle will have you serving stars and striking with the force of a comet",
         image:'https://res.cloudinary.com/dxxlqdwxb/image/upload/v1714404516/fobyb5dfitcaa9y6k1si.png',
-        color : 'black',
+        color : 'black',  
         price : 500
       },
       second: {
