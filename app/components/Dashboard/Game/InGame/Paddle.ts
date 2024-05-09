@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { BoundingBox } from "./Box";
+import { forEach } from "lodash";
 
 interface Position {
   x: number;
@@ -41,17 +42,18 @@ class Paddle {
     const loadedData = await loader.loadAsync("/Game/models/untitled.gltf");
     loadedData.scene.scale.set(0.1, 0.1, 0.1);
     const associationsMap = loadedData.parser.associations;
-    const keysIterator = associationsMap.keys();
+    const keysIterator : any= associationsMap.keys();
 
-    // @ts-ignore
-    for (const key of keysIterator) {
+
+    keysIterator?.forEach((key : any) => {
       if (key.name === "Color_A06") {
         const c = this.getRGBColor(this.color);
         key.color.r = c.r;
         key.color.g = c.g;
         key.color.b = c.b;
       }
-    }
+    })
+
     loadedData.scene.position.set(
       this.position.x,
       this.position.y,
