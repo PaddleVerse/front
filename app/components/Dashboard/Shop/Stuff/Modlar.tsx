@@ -73,9 +73,9 @@ const Modlar = ({
               {infos.description}
             </p>
           </div>
-          <div className="mt-[45px] self-end">
+          {/* <div className="mt-[45px] self-end">
             <Coin size="big" infos={infos} />
-          </div>
+          </div> */}
         </div>
         <div
           className="absolute top-2 right-2 cursor-pointer"
