@@ -134,7 +134,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     scene.add(new Lighting(0xffffff, 0.8, { x: -20, y: 20, z: 0 }));
     scene.add(new AmbientLighting(0xffffff, 0.1));
     let ball: Ball | null = null;
-    const res = fetchData(`/game/getUserBallSkin/${user?.id}`, "GET", null)
+    fetchData(`/game/getUserBallSkin/${user?.id}`, "GET", null)
       .then((res:any) => {
         if (!res)
         {
@@ -162,6 +162,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         }
         scene.add(ball);
         ballRef.current = ball;
+      })
+      .catch((err) => {
+        console.log(err);
       });
 
     const plane = new Plane(500, 500, { x: 0, y: 0, z: 0 }, -Math.PI / 2);
@@ -184,6 +187,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       }
       paddleRef.current = paddle;
       paddle2Ref.current = paddle2;
+    })
+    .catch((err) => {
+      console.log(err);
     });
 
     // Update the interval function

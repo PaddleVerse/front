@@ -52,11 +52,14 @@ const MemberList = ({
     };
 
     fetchData(`/ban`, "POST", obj)
-    .then((res) => {
+    .then(() => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
         user: participant.user,
       });
+    })
+    .catch((err) => {
+      console.log(err);
     });
   };
 
@@ -82,7 +85,9 @@ const MemberList = ({
           user: participant.user,
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handlePromoteDemote = (
@@ -112,7 +117,9 @@ const MemberList = ({
           user: participant.user,
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleMuteUnMute = (
@@ -142,7 +149,9 @@ const MemberList = ({
           user: participant.user,
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

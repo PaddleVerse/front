@@ -54,7 +54,9 @@ const UserProfile = ({ target }: any) => {
         if (!res) return;
         setLinkedFriends(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.error("Error fetching user", err);
+      });
   }, [user, target]);
 
   useEffect(() => {

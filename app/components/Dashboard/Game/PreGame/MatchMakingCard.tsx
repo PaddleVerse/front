@@ -29,7 +29,9 @@ const MatchMakingCard = ({
         if (!res) return;
         setOtherPlayer(res?.data);
       })
-      .catch(() => {});
+      .catch(() => {
+        console.log("error");
+      });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);

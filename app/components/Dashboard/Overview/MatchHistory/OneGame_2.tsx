@@ -43,6 +43,9 @@ const OneGame_2 = ({
     .then((res: any) => {
       if (!res) return;
       setUserC(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }, [status]);
   useEffect(() => {
@@ -53,10 +56,13 @@ const OneGame_2 = ({
     ) {
       const enemyId = item.winner === user.id ? item.loser : item.winner;
 
-      fetchData(`/user/${enemyId}`, "GET", null).then
-      ((res: any) => {
+      fetchData(`/user/${enemyId}`, "GET", null).then(
+      (res: any) => {
         if (!res) return;
         setEnemyData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
     }
   }, [item]);

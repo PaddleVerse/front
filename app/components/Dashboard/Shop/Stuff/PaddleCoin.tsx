@@ -45,6 +45,7 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res?.data.message);
         }
       )
+      .catch((err) => { console.log(err); });
     } else if (owned) {
       fetchData(`/shop/paddle/enable`, "POST", {
         user_id: user?.id,
@@ -62,6 +63,7 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res?.data.message);
         }
       )
+      .catch((err) => { console.log(err); });
     } else {
       fetchData(`/shop/paddle`, "POST", {
         image: infos?.image,
@@ -81,6 +83,7 @@ const PaddleCoin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res?.data.message);
         }
       )
+      .catch((err) => { console.log(err); });
     }
   }
 

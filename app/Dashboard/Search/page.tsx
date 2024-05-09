@@ -24,6 +24,7 @@ const Search = () => {
         const filteredUsers = res.data.filter((item:any) => item.id !== user.id);
         setUsers(filteredUsers);
       })
+      .catch((err) => { console.log(err); });
     }
   }, [user]);
 

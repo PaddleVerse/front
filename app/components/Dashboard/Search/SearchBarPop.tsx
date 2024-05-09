@@ -34,6 +34,7 @@ const SearchBarPop = () => {
           if (!res) return;
           setFilteredUsers(res.data);
         })
+        .catch((err) => console.log(err));
       }, 100);
     }
 
@@ -56,6 +57,7 @@ const SearchBarPop = () => {
         setSearchedUsers(res.data);
         setFilteredUsers(res.data);
       })
+      .catch((err) => console.log(err));
     }, [users, is])
 
     useEffect(() => {
@@ -64,6 +66,7 @@ const SearchBarPop = () => {
           if (!res) return;
           setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
         })
+        .catch((err) => console.log(err));
     } , [user?.id])
 
     const handleclick = (id : any) => {

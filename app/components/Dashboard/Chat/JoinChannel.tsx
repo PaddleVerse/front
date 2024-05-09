@@ -46,7 +46,7 @@ const JoinChannel = ({
     if (!accessToken) return;
     const fetchChannels = async () => {
 
-      const res = await fetchData(
+      await fetchData(
         `/channels`,
         "GET",
         null

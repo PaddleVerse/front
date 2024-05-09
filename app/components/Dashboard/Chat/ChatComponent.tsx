@@ -12,23 +12,26 @@ import { ipAdress, getCookie, fetchData } from "@/app/utils";
 const accessToken = getCookie("access_token");
 
 const FetchMessages = async (p: any, userId: string) => {
-
-  if (p.subroute == "channel") {
-    const mes = await fetchData(
-      `/channels/messages?channel_id=${p?.id!}`,
-      "GET",
-      null
-    );
-    if (!mes) return [];
-    return mes.data;
-  } else {
-    const mes = await fetchData(
-      `/messages?receiver_id=${p?.id!}`,
-      "GET",
-      null
-    );
-    if (!mes) return [];
-    return mes.data;
+  try {
+    if (p.subroute == "channel") {
+      const mes = await fetchData(
+        `/channels/messages?channel_id=${p?.id!}`,
+        "GET",
+        null
+      );
+      if (!mes) return [];
+      return mes.data;
+    } else {
+      const mes = await fetchData(
+        `/messages?receiver_id=${p?.id!}`,
+        "GET",
+        null
+      );
+      if (!mes) return [];
+      return mes.data;
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 

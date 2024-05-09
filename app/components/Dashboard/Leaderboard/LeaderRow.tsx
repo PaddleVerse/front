@@ -30,11 +30,18 @@ const LeaderRow = ({ user, length, index }: Props) => {
       .then((res:any) => {
         if (!res) return;
         setWins(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    fetchData(`/match/history/losses/${user?.id}`, "GET", null)
+    
+      fetchData(`/match/history/losses/${user?.id}`, "GET", null)
       .then((res:any) => {
         if (!res) return;
         setLoses(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, [state]);
   return (

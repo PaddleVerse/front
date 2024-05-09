@@ -18,21 +18,25 @@ const inter = Inter({ subsets: ["latin"] });
 import { fetchData, ipAdress } from "@/app/utils";
 
 const fetchChatList = async (userId: string) => {
-  const res : any = await fetchData(`/chat/chatlist/${userId}`, "GET", null);
-  const dataWithMessages = await Promise.all(
-    res.data.map(async (value: any) => {
-      if (value.user) {
-        const messageRes = await fetchData(`/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`, "GET", null);
-        if (!messageRes) return { ...value, msg: {} };
-        return { ...value, msg: messageRes?.data };
-      } else {
-        const channelRes = await fetchData(`/channels/messages/lastMessage/${value.id}?uid=${userId}`, "GET", null);
-        if (!channelRes) return { ...value, msg: {} };
-        return { ...value, msg: channelRes?.data };
-      }
-    })
-  );
-  return dataWithMessages;
+  try {
+    const res : any = await fetchData(`/chat/chatlist/${userId}`, "GET", null);
+    const dataWithMessages = await Promise.all(
+      res.data.map(async (value: any) => {
+        if (value.user) {
+          const messageRes = await fetchData(`/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`, "GET", null);
+          if (!messageRes) return { ...value, msg: {} };
+          return { ...value, msg: messageRes?.data };
+        } else {
+          const channelRes = await fetchData(`/channels/messages/lastMessage/${value.id}?uid=${userId}`, "GET", null);
+          if (!channelRes) return { ...value, msg: {} };
+          return { ...value, msg: channelRes?.data };
+        }
+      })
+    );
+    return dataWithMessages;
+  } catch (error) {
+    console.error("Error fetching chat list", error);
+  }
 };
 
 const Page = ({ children }: { children: React.ReactNode }) => {

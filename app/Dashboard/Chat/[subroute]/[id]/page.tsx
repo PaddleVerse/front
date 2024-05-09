@@ -81,20 +81,29 @@ import { fetchData, ipAdress } from "@/app/utils";
 import { cn } from "@/components/cn";
 
 const fetchTargetUser = async (parameters: any) => {
-  if (parameters.subroute === "dm") {
-    const user = await fetchData(`/user/${parameters!.id}`, "GET", null);
-    if (!user) return;
-    return user?.data;
+  try {
+    if (parameters.subroute === "dm") {
+      const user = await fetchData(`/user/${parameters!.id}`, "GET", null);
+      if (!user) return;
+      return user?.data;
+    }
+    return null;
+  } catch (error) {
+    console.log("error fetching user", error);
   }
-  return null;
 };
+
 const fetchTargetChannel = async (parameters: any) => {
-  if (parameters.subroute === "channel") {
-    const channel = await fetchData(`/channel/${parameters!.id}`, "GET", null);
-    if (!channel) return;
-    return channel.data;
+  try {
+    if (parameters.subroute === "channel") {
+      const channel = await fetchData(`/channel/${parameters!.id}`, "GET", null);
+      if (!channel) return;
+      return channel.data;
+    }
+    return null;
+  } catch (error) {
+    console.log("error fetching channel", error);
   }
-  return null;
 };
 
 const SendInvite = (self: user, target: user, socket: Socket) => {

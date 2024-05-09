@@ -58,7 +58,7 @@ export const getShortDate = (date: Date | null) => {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
-export const fetchData = async (url: string, method: string, body : any) => {
+export const fetchData = async (url: string, method: string, body : any) : Promise<any> => {
   const accessToken = getCookie("access_token");
   if (!accessToken) return null;
   url = `http://${ipAdress}:8080${url}`;
@@ -73,7 +73,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch(() => { return null; });
+      .catch((err) => { return Promise.reject(err) });
       return res;
     case "POST":
       const resPost = await axios.post(url, body,
@@ -85,7 +85,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch(() => { return null; });
+      .catch((err) => { return Promise.reject(err) });
       return resPost;
     case "PUT":
       const resPut = await axios.put(url, body,
@@ -97,7 +97,7 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch(() => { return null; });
+      .catch((err) => { return Promise.reject(err) });
       return resPut;
     case "DELETE":
       const resDelete = await axios.delete(url,
@@ -109,11 +109,11 @@ export const fetchData = async (url: string, method: string, body : any) => {
       .then((data) => {
         return data;
       })
-      .catch(() => { return null; });
+      .catch((err) => { return Promise.reject(err) });
       return resDelete;
 
     default:
-      return null;
+      return Promise.reject("Invalid method");
   }
 }
 

@@ -24,42 +24,48 @@ import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
 const accessToken = getCookie("access_token");
 const fetchParticipants = async (channel: channel, user: user) => {
-  if (!accessToken) return;
-  const participants = await fetchData(
-    `/channels/participants/${channel.id}?uid=${user.id}`,
-    "GET",
-    null
-  );
-  if (!participants) return;
-  const ret = await Promise.all(
-    participants.data.map(async (participant: participants) => {
-      const user = await fetchData(
-        `/user/${participant.user_id}`,
-        "GET",
-        null
-      );
-      if (!user) return;
-      return { ...participant, user: user.data };
-    })
-  );
-  return ret;
+  try {
+    const participants = await fetchData(
+      `/channels/participants/${channel.id}?uid=${user.id}`,
+      "GET",
+      null
+    );
+    if (!participants) return;
+    const ret = await Promise.all(
+      participants.data.map(async (participant: participants) => {
+        const user = await fetchData(
+          `/user/${participant.user_id}`,
+          "GET",
+          null
+        );
+        if (!user) return;
+        return { ...participant, user: user.data };
+      })
+    );
+    return ret;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const FetchPriviliged = async (channel: channel, user: user) => {
-  if (!accessToken) return;
-  const participants = await fetchData(
-    `/channels/participants/${channel.id}?uid=${user.id}`,
-    "GET",
-    null
-  );
-  if (!participants) return;
-  return (
-    participants.data.filter(
-      (participant: participants) =>
-        (participant.role === "ADMIN" || participant.role === "MOD") &&
-        participant.user_id === user.id
-    )[0] || null
-  );
+  try {
+    const participants = await fetchData(
+      `/channels/participants/${channel.id}?uid=${user.id}`,
+      "GET",
+      null
+    );
+    if (!participants) return;
+    return (
+      participants.data.filter(
+        (participant: participants) =>
+          (participant.role === "ADMIN" || participant.role === "MOD") &&
+          participant.user_id === user.id
+      )[0] || null
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const ChannelManagement = ({
@@ -163,7 +169,7 @@ const ChannelManagement = ({
           }
         }
 
-        const res = await fetchData(
+        await fetchData(
           `/channels/${channel.id}`,
           "PUT",
           obj
@@ -172,7 +178,7 @@ const ChannelManagement = ({
           try {
             const formData = new FormData();
             formData.append("image", picture);
-            const pic = await fetchData(
+            await fetchData(
               `/channels/image?channel=${channel.id}&user=${priviliged?.user_id}`,
               "POST",
               formData
