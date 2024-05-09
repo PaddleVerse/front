@@ -177,13 +177,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     let paddle2: Paddle;
     const res1 = fetchData(`/game/getUserPaddleSkin/${user?.id}`, "GET", null)
     .then((res) => {
-      console.log("color" + res?.data.color);
       if (!res?.data) {
         paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2);
         paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2);
       } else {
-        paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2, res.data.color);
-        paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2, res.data.color);
+        let color : String = res.data.color.replace(user.id, "");
+        // remove the user id from the color using something like remove
+        console.log("color: " + color);
+        paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2, color);
+        paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2, color);
       }
       paddleRef.current = paddle;
       paddle2Ref.current = paddle2;
