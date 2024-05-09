@@ -74,15 +74,15 @@ const MemberList = ({
       return;
     }
     const obj = {
-      channel: exec.channel_id,
-      executor: exec.user_id,
+      channel: exec?.channel_id,
+      executor: exec?.user_id,
     };
    
     fetchData(`/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`, "DELETE", null)
       .then((res) => {
         state?.socket?.emit("kick", {
-          roomName: channel.name,
-          user: participant.user,
+          roomName: channel?.name,
+          user: participant?.user,
         });
       })
       .catch((err) => {
@@ -103,8 +103,8 @@ const MemberList = ({
       return;
     }
     const obj = {
-      channel: exec.channel_id,
-      executor: exec.user_id,
+      channel: exec?.channel_id,
+      executor: exec?.user_id,
       participant: {
         role: participant.role === "MEMBER" ? "MOD" : "MEMBER",
       },

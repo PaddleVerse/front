@@ -93,7 +93,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         formData.append("image", file);
         try {
           const picture = await fetchData(
-            `/channels/${ret?.data?.name}/picture`,
+            `/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
             "POST",
             formData
           );
@@ -134,7 +134,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         </p>
         <div>
           <label
-            className="block mb-2 text-white text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-white text-sm font-medium dark:text-white"
             typeof="file_input"
           >
             Upload file

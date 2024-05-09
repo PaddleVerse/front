@@ -22,7 +22,6 @@ import { FaPlus, FaTimes } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { ipAdress, getCookie, fetchData } from "@/app/utils";
 
-const accessToken = getCookie("access_token");
 const fetchParticipants = async (channel: channel, user: user) => {
   try {
     const participants = await fetchData(
@@ -34,7 +33,7 @@ const fetchParticipants = async (channel: channel, user: user) => {
     const ret = await Promise.all(
       participants.data.map(async (participant: participants) => {
         const user = await fetchData(
-          `/user/${participant.user_id}`,
+          `/user/${participant?.user_id}`,
           "GET",
           null
         );

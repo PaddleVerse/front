@@ -23,11 +23,11 @@ const fetchChatList = async (userId: string) => {
     const dataWithMessages = await Promise.all(
       res.data.map(async (value: any) => {
         if (value.user) {
-          const messageRes = await fetchData(`/conversations/lastMessage?uid1=${userId}&uid2=${value.id}`, "GET", null);
+          const messageRes = await fetchData(`/conversations/lastMessage?uid1=${userId}&uid2=${value?.id}`, "GET", null);
           if (!messageRes) return { ...value, msg: {} };
           return { ...value, msg: messageRes?.data };
         } else {
-          const channelRes = await fetchData(`/channels/messages/lastMessage/${value.id}?uid=${userId}`, "GET", null);
+          const channelRes = await fetchData(`/channels/messages/lastMessage/${value?.id}?uid=${userId}`, "GET", null);
           if (!channelRes) return { ...value, msg: {} };
           return { ...value, msg: channelRes?.data };
         }

@@ -15,7 +15,7 @@ const FetchMessages = async (p: any, userId: string) => {
   try {
     if (p.subroute == "channel") {
       const mes = await fetchData(
-        `/channels/messages?channel_id=${p?.id!}`,
+        `/channels/messages/${p?.id!}?uid=${userId}`,
         "GET",
         null
       );
@@ -23,7 +23,7 @@ const FetchMessages = async (p: any, userId: string) => {
       return mes.data;
     } else {
       const mes = await fetchData(
-        `/messages?receiver_id=${p?.id!}`,
+        `/conversations/messages?uid1=${p?.id!}&uid2=${userId}`,
         "GET",
         null
       );

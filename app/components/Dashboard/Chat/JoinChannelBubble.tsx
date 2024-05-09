@@ -45,7 +45,7 @@ const JoinChannelBubble = ({
           "POST",
           obj
         );
-        if (!res) throw new Error("failed to join channel");
+        if (!res) return;
         toast.success(`you have joined ${channel.name}`);
         state?.socket?.emit("joinRoom", {
           user: user,
@@ -71,7 +71,7 @@ const JoinChannelBubble = ({
           "POST",
           obj
         );
-        if (!res) throw new Error("failed to join channel");
+        if (!res) return;
         toast.success(`you have joined ${channel.name}`);
         clt?.invalidateQueries({ queryKey: ["chatList"] });
         state?.socket?.emit("joinRoom", {

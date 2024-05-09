@@ -136,15 +136,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     let ball: Ball | null = null;
     fetchData(`/game/getUserBallSkin/${user?.id}`, "GET", null)
       .then((res:any) => {
-        if (!res)
-        {
-          ball = new Ball(
-            0.3,
-            { x: 0, y: 15, z: 0 },
-            { x: 0, y: 0, z: 0 },
-            "/Game/textures/balls/default.jpg"
-          );
-        }
+        if (!res) return;
         if (!res?.data) {
           ball = new Ball(
             0.3,

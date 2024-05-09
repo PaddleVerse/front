@@ -71,7 +71,7 @@ const SearchBarPop = () => {
 
     const handleclick = (id : any) => {
       
-      fetchData(`/search/${id}`, 'POST', { userId: id })
+      fetchData(`/search`, 'POST', { userId: id })
       .catch((err) => console.log(err));
       router.push(`/Dashboard/Profile?id=${id}`);
     }

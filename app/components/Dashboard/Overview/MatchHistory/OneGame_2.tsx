@@ -127,7 +127,7 @@ const OneGame_2 = ({
             Average Score
           </span>
         </div>
-        <div className="flex flex-col  sm:min-w-[100px] flex items-center min-w-[70px]">
+        <div className="flex flex-col  sm:min-w-[100px] items-center min-w-[70px]">
           <span
             className={cn(
               "text-white font-semibold xl:text-[20px] text-[12px] md:text-[17px] tracking-tight",

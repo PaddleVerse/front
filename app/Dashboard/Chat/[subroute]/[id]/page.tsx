@@ -40,13 +40,17 @@ const sendpicture = async (
     try {
       const formData = new FormData();
       formData.append("image", file);
-      const pic = await axios.post(
-        `http://localhost:8080/message/image?channel=${channel?.id}&sender=${user1.id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      // const pic = await axios.post(
+      //   `http://localhost:8080/message/image?channel=${channel?.id}&sender=${user1.id}`,
+      //   formData,
+      //   {
+      //     headers: { "Content-Type": "multipart/form-data" },
+      //   }
+      // );
+      fetchData(`/message/image?channel=${channel?.id}&sender=${user1.id}`, "POST", formData)
+      .catch(() => {
+        toast.error("error in uploading image.");
+      });
       Socket?.emit("channelmessage", {
         roomName: channel.name,
         user: user1,
@@ -60,13 +64,14 @@ const sendpicture = async (
     try {
       const formData = new FormData();
       formData.append("image", file);
-      const pic = await axios.post(
-        `http://localhost:8080/message/image?sender=${user1.id}&reciever=${user2.id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      // const pic = await axios.post(
+      //   `http://localhost:8080/message/image?sender=${user1.id}&reciever=${user2.id}`,
+      //   formData,
+      //   {
+      //     headers: { "Content-Type": "multipart/form-data" },
+      //   }
+      // );
+      fetchData(`/message/image?sender=${user1?.id}&reciever=${user2?.id}`, "POST", formData)
       Socket?.emit("dmmessage", {
         reciever: user2?.id!,
         sender: user1?.id!,
@@ -83,7 +88,7 @@ import { cn } from "@/components/cn";
 const fetchTargetUser = async (parameters: any) => {
   try {
     if (parameters.subroute === "dm") {
-      const user = await fetchData(`/user/${parameters!.id}`, "GET", null);
+      const user = await fetchData(`/user/${parameters?.id!}`, "GET", null);
       if (!user) return;
       return user?.data;
     }
@@ -96,7 +101,7 @@ const fetchTargetUser = async (parameters: any) => {
 const fetchTargetChannel = async (parameters: any) => {
   try {
     if (parameters.subroute === "channel") {
-      const channel = await fetchData(`/channel/${parameters!.id}`, "GET", null);
+      const channel = await fetchData(`/channel/${parameters?.id!}`, "GET", null);
       if (!channel) return;
       return channel.data;
     }

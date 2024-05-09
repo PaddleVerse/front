@@ -21,6 +21,9 @@ const UserProfile = ({ target }: any) => {
   const [recv, setRecv] = useState<string>("");
   const [is, setIs] = useState<boolean>(false);
   const [linkedFriends, setLinkedFriends] = useState<any[]>([]);
+  const { user, socket } = state;
+
+
   useEffect(() => {
     if (target) {
       if (target.xp !== 0 && target.xp !== undefined) {
@@ -35,8 +38,6 @@ const UserProfile = ({ target }: any) => {
     }
   }, [target]);
 
-  const user: any = state.user;
-  const socket: any = state.socket;
 
   useEffect(() => {
     socket?.on("refresh", () => {
@@ -61,15 +62,11 @@ const UserProfile = ({ target }: any) => {
 
   useEffect(() => {
     fetchData(`/friendship/status/${user?.id}/${target?.id}`, "GET", null)
-      .then((res: any) => {
-        if (!res) return;
+      .then((res) => {
         if (res.data?.status === "PENDING" && res.data?.request === "SEND")
           setStatus(res.data?.status);
         else if (res.data?.status === "ACCEPTED") setStatus(res.data?.status);
-        else if (
-          res.data?.status === "BLOCKED" &&
-          res.data?.request === "SEND"
-        )
+        else if (res.data?.status === "BLOCKED" && res.data?.request === "SEND")
           setStatus(res.data?.status);
         else setStatus("");
       })
@@ -78,14 +75,13 @@ const UserProfile = ({ target }: any) => {
       });
 
     fetchData(`/friendship/status/${target?.id}/${user?.id}`, "GET", null)
-      .then((res: any) => {
-        if (!res) return;
-        if (res.data?.status === "PENDING" && res.data?.request === "RECIVED")
+      .then((res) => {
+        if (res.data?.status === "PENDING" && res.data?.request !== "RECIVED")
           setRecv(res.data?.status);
         else if (res.data?.status === "ACCEPTED") setRecv(res.data?.status);
         else if (
           res.data?.status === "BLOCKED" &&
-          res.data?.request === "RECIVED"
+          res.data?.request !== "RECIVED"
         )
           setRecv(res.data?.status);
         else setRecv("");

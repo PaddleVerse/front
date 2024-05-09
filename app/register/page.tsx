@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { cn } from "../../components/cn";
 import { Input } from "../../components/ui/newinput";
 import { Label } from "../../components/ui/newlabel";
-import { fetchData, ipAdress } from "@/app/utils";
+import { ipAdress } from "@/app/utils";
 
 import BottomGradient from "@/components/ui/bottomGradiant";
 import {
