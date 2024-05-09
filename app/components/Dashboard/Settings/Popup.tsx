@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { set, useForm } from 'react-hook-form';
 import { Label } from "@/components/ui/newlabel";
 import { cn } from "@/components/cn";
@@ -14,12 +14,15 @@ const accessToken = getCookie("access_token");
 
 const Popup = ()  => {
 
+  const [is, setIs] = useState(0);
+  const [error, setError] = useState("");
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const {register, handleSubmit, reset} = useForm();
   const {state, dispatch} = useGlobalState();
   const {user} = state;
-  if (!user || (user && user?.first_time === false)) return null;
+
   
   const refreshUser = async () => {
     try {
@@ -52,7 +55,29 @@ const Popup = ()  => {
     setPreview(URL.createObjectURL(file));
   };
 
+  useEffect(() => {
+    if (is === 1)
+      setError("Name must be at least 3 characters long and at most 20 characters long.");
+    else if (is === 2)
+      setError("Middlename must be at least 3 characters long and at most 20 characters long.");
+    else
+      setError("");
+  }, [is]);
+
+  const isValidValues = (value: any) => {
+    if (value?.name.length < 3 || value?.name.length > 20)
+      return 1;
+    else if (value?.middlename.length < 3 || value?.middlename.length > 20)
+      return 2;
+    return 0;
+  };
+
   const onSubmit = (data: any) => {
+    if (isValidValues(data) !== 0)
+    {
+      setIs(isValidValues(data));
+      return;
+    }
     if (!accessToken) return;
     const formData = new FormData();
     if (selectedFile) {
@@ -76,11 +101,11 @@ const Popup = ()  => {
         ),
       ])
       .then(axios.spread((resImg, resUser) => {
-        if (!selectedFile || (resImg && resImg?.data !== '')) 
+        if (!selectedFile || (resImg && resImg?.data !== ''))
           if (selectedFile) setSelectedFile(null);
         if (resUser && resUser?.data !== '') {
-          refreshUser();
           reset();
+          refreshUser();
         }
         axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, {first_time: false},
           { headers: {'Authorization': `Bearer ${accessToken}` }})
@@ -95,7 +120,7 @@ const Popup = ()  => {
         toast.error('You need to fill all the fields');
       });
   };
-
+  if (!user || (user && user?.first_time === false)) return null;
   return (
     <div className="fixed inset-0 z-50  flex items-center justify-center">
       <div className="absolute  inset-0 bg-[#151e2b] bg-opacity-80"></div>
@@ -134,12 +159,14 @@ const Popup = ()  => {
                       <LabelInputContainer className="mb-4">
                         <Label htmlFor="name">Name</Label>
                         <Input id="name" placeholder="Enter your name" type="text" {...register('name')}/>
+                        {(is === 1) && <p className="text-red-500 text-[12px] my-4">{error}</p>}
                       </LabelInputContainer>
                     </div>
                     <div className='flex flex-col gap-2 w-full'>
                       <LabelInputContainer className="mb-4">
-                        <Label htmlFor="nickname">Nickname</Label>
-                        <Input id="nickname" placeholder="Enter your nickname" type="text" {...register('nickname')}/>
+                        <Label htmlFor="middlename">Middlename</Label>
+                        <Input id="middlename" placeholder="Enter your middlename" type="text" {...register('middlename')}/>
+                        {(is === 2) && <p className="text-red-500 text-[10px] my-4">{error}</p>}
                       </LabelInputContainer>
                     </div>
                   </div>

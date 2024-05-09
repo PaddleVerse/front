@@ -5,10 +5,10 @@ import { Input } from "../../components/ui/newinput";
 import { cn } from "../../components/cn";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Boxes } from "@/components/ui/background-boxes";
-import { ipAdress, getCookie } from "@/app/utils";
+import { ipAdress } from "@/app/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,8 +21,6 @@ const BgWrapper = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-
-const accessToken = getCookie("access_token");
 
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
@@ -52,7 +50,6 @@ export default function SignupFormDemo() {
   }, [is]);
 
   const onSubmit = (values: any) => {
-    if (!accessToken) return;
     const is = isValidValues(values);
     setIs(is);
     if (is !== 0) return;
@@ -67,7 +64,6 @@ export default function SignupFormDemo() {
         {
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${accessToken}`
           },
         }
       )

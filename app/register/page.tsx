@@ -24,26 +24,26 @@ export default function SignupFormDemo() {
   const router = useRouter();
 
   const isValidValues = (value: any) => {
-    if (value.name.length < 3)
+    if (value?.name.length < 3 || value?.name.length > 20)
       return 1;
-    else if (value.middlename.length < 3)
+    else if (value?.middlename.length < 3 || value?.middlename.length > 20)
       return 2;
-    else if (value.nickname.length < 3)
+    else if (value?.nickname.length < 3 || value?.nickname.length > 20)
       return 3;
-    else if (value.password.length < 6)
+    else if (value?.password.length < 6 || value?.password.length > 20)
       return 4;
     return 0;
   };
   
   useEffect(() => {
     if (is === 1)
-      setError("Name must be at least 3 characters long.");
+      setError("Name must be at least 3 characters long and at most 20 characters long.");
     else if (is === 2)
-      setError("middlename must be at least 3 characters long.");
+      setError("middlename must be at least 3 characters long and at most 20 characters long.");
     else if (is === 3)
-      setError("nickname must be at least 3 characters long.");
+      setError("nickname must be at least 3 characters long and at most 20 characters long.");
     else if (is === 4)
-      setError("Password must be at least 6 characters long.");
+      setError("Password must be at least 6 characters long and at most 20 characters long.");
     else if (is === 5)
       setError("nickname already exist.");
     else
@@ -56,13 +56,12 @@ export default function SignupFormDemo() {
       setIs(isValidValues(values));
       return;
     }
-    fetchData(`/auth/signup`, "POST", {
+    axios.post(`http://${ipAdress}:8080/auth/signup`, {
       name: values.name,
       middlename: values.middlename,
       nickname: values.nickname,
       password: values.password
     }).then((res) => {
-      if (!res) return;
       if (res?.data?.status === 'success')
       {
         form.reset();
@@ -70,8 +69,8 @@ export default function SignupFormDemo() {
       }else if (res?.data?.status === 'error_')
         setIs(5);
     })
-    .catch(err => {
-      console.error(err);
+    .catch((err) => {
+      console.log(err);
     });
   }
 
