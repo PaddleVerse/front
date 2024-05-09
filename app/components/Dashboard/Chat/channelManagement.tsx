@@ -92,6 +92,7 @@ const ChannelManagement = ({
   };
   const { data: participants } = useQuery<participantWithUser[]>({
     queryKey: ["participants"],
+    //@ts-ignore
     queryFn: async () => fetchParticipants(channel, user),
   });
   const { data: priviliged } = useQuery<participants>({
@@ -339,7 +340,8 @@ const ChannelManagement = ({
         <div className="mt-10 flex flex-col gap-4 items-center">
           {!modlar ? (
             participants &&
-            participants.map((participant, index) => {
+            //@ts-ignore
+            participants.map((participant:any, index:number) => {
               return (
                 <MemberList
                   key={index}

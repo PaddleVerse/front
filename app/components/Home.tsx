@@ -60,12 +60,10 @@ const Home = () => {
                 d="M9 1.09375H72L77.5 5.59375H308.5V70.5938L299 80.0938H9H1.5V69.5938L3.5 67.5938V49.5938L1.5 48.0938V1.09375H9Z"
                 fill="#181818"
                 onMouseOver={(e) => {
-                    //@ts-ignore
-                    e.target.style.fill = "#2a1515";
+                    (e.target as HTMLElement).style.fill = "#2a1515";
                 }}
                 onMouseOut={(e) => {
-                    //@ts-ignore
-                    e.target.style.fill = "#181818";
+                    (e.target as HTMLElement).style.fill = "#181818";
                 }}
                 />
                 <path

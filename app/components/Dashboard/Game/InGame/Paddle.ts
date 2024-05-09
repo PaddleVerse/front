@@ -42,7 +42,6 @@ class Paddle {
     loadedData.scene.scale.set(0.1, 0.1, 0.1);
     const associationsMap = loadedData.parser.associations;
     const keysIterator = associationsMap.keys();
-    //@ts-ignore
     for (const key of keysIterator) {
       if (key.name === "Color_A06") {
         const c = this.getRGBColor(this.color);
