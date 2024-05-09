@@ -42,17 +42,17 @@ class Paddle {
     const loadedData = await loader.loadAsync("/Game/models/untitled.gltf");
     loadedData.scene.scale.set(0.1, 0.1, 0.1);
     const associationsMap = loadedData.parser.associations;
-    const keysIterator : any= associationsMap.keys();
+    const keysIterator : any = associationsMap.keys();
 
 
-    keysIterator?.forEach((key : any) => {
+    for (let key of keysIterator) {
       if (key.name === "Color_A06") {
         const c = this.getRGBColor(this.color);
         key.color.r = c.r;
         key.color.g = c.g;
         key.color.b = c.b;
       }
-    })
+    }
 
     loadedData.scene.position.set(
       this.position.x,
