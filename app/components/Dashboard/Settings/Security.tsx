@@ -62,7 +62,7 @@ const Security = () => {
     fetchData(`/auth/v2fa`, "POST", {token : data?.code, userId : user?.id})
     .then((res:any) => {
       if (!res) return;
-      if (res?.ok) { 
+      if (res?.data?.ok) { 
         setIs(!is); setIsCodeCorrect(false); setIsReset(true);
         toast.success('2FA enabled successfully');
       }
@@ -73,7 +73,8 @@ const Security = () => {
 
   const disable = () => {
     fetchData(`/auth/disable2fa`, "POST", {userId : user?.id})
-    .then(() => {
+    .then((res) => {
+      if (!res) return;
       setIs(!is);
       toast.success('2FA disabled successfully');
     })

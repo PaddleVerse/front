@@ -9,9 +9,11 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Boxes } from "@/components/ui/background-boxes";
 import { ipAdress } from "@/app/utils";
-import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
+import V2fa from '../components/V2fa/V2fa';
+import { set } from "lodash";
 
 const BgWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -26,6 +28,8 @@ export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
   const [error, setError] = useState("");
   const [error_, setError_] = useState("");
+  const [isTwoFa, setIsTwoFa] = useState("false");
+  const [token, setToken] = useState("");
   const form = useForm();
   const router = useRouter();
 
@@ -75,7 +79,7 @@ export default function SignupFormDemo() {
           return;
         }
         const accessToken = data.access_token;
-
+        setToken(accessToken);
         document.cookie = `access_token=${data.access_token}; path=/;`;
 
         // Check if access_token is present
@@ -87,8 +91,17 @@ export default function SignupFormDemo() {
                 Authorization: `Bearer ${accessToken}`,
               },
             })
-            .then((response) => {
-              if (response.status === 200) router.push("/Dashboard");
+            .then((res) => {
+              if (res.status === 200) 
+              {
+                if (res?.data?.twoFa)
+                  setIsTwoFa("2fa");
+                else
+                {
+                  router.push("/Dashboard");
+                  document.cookie = `access_token=${token}; path=/;`;
+                }
+              }
               else
                 console.log("Failed to authenticate with protected endpoint");
             })
@@ -110,6 +123,17 @@ export default function SignupFormDemo() {
     router.push(`http://${ipAdress}:8080/auth/42`);
   };
 
+  useEffect(() => {
+    if (isTwoFa === "true")
+    {
+      document.cookie = `access_token=${token}; path=/;`;
+      router.push("/Dashboard");
+    }
+  }, [isTwoFa]);
+
+  if (isTwoFa === "2fa")
+    return <V2fa setIsTwoFa={setIsTwoFa} />;
+  
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-primaryColor ring-[0.2px] ring-red-500 z-10">
