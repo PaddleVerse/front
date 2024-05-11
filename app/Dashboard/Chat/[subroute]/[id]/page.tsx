@@ -19,6 +19,8 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { channel, user } from "../../type";
 import { Socket } from "socket.io-client";
+import { fetchData, ipAdress } from "@/app/utils";
+import { cn } from "@/components/cn";
 
 const sendpicture = async (
   file: File,
@@ -82,14 +84,12 @@ const sendpicture = async (
     return;
   }
 };
-import { fetchData, ipAdress } from "@/app/utils";
-import { cn } from "@/components/cn";
 
 const fetchTargetUser = async (parameters: any) => {
   try {
     if (parameters.subroute === "dm") {
       const user = await fetchData(`/user/${parameters?.id!}`, "GET", null);
-      if (!user) return;
+
       return user?.data;
     }
     return null;
@@ -97,12 +97,20 @@ const fetchTargetUser = async (parameters: any) => {
     console.log("error fetching user", error);
   }
 };
-
+// const fetchTargetChannel = async (parameters: any) => {
+//   if (parameters.subroute === "channel") {
+//     const channel = await axios.get(
+//       `http://${ipAdress}:8080/channels/${parameters!.id!}`
+//     );
+//     return channel.data;
+//   }
+//   return null;
+// };
 const fetchTargetChannel = async (parameters: any) => {
   try {
     if (parameters.subroute === "channel") {
-      const channel = await fetchData(`/channel/${parameters?.id!}`, "GET", null);
-      if (!channel) return;
+      const channel = await fetchData(`/channels/${parameters!.id!}`, "GET", null);
+
       return channel.data;
     }
     return null;

@@ -4,7 +4,6 @@ import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import axios from "axios";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import Image from "next/image";
@@ -12,10 +11,9 @@ import CreateChannel from "@/app/components/Dashboard/Chat/createChannel";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { set } from "react-hook-form";
-import { user } from "./type";
+
 const inter = Inter({ subsets: ["latin"] });
-import { fetchData, ipAdress } from "@/app/utils";
+import { fetchData } from "@/app/utils";
 
 const fetchChatList = async (userId: string) => {
   try {
