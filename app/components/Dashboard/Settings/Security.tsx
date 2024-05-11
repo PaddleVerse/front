@@ -5,10 +5,9 @@ import Image from 'next/image'
 import  toast from 'react-hot-toast'
 import { cn } from "@/components/cn";
 
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import EnterCode from './otp'
-import { fetchData, ipAdress } from '@/app/utils'
+import { fetchData } from '@/app/utils'
 
 const Security = () => {
   const [qrcode, setQrcode] = useState('');
@@ -22,27 +21,12 @@ const Security = () => {
   const {state, dispatch} = useGlobalState()
   const {user} = state;
 
-  const getCookie = (name: string) => {
-    if (typeof window === 'undefined') return;
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    
-    if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(';').shift();
-      return cookieValue;
-    } else {
-      return undefined;
-    }
-  };
-
-  const accessToken = getCookie("access_token");
-
   const enable = () => {
     fetchData(`/auth/2fa`, "POST", {userId : user?.id})
-    .then(res => { 
+    .then(res => {
       if (!res) return;
       setQrcode(res?.data?.Qr);
-      setIsBlurred(false); 
+      setIsBlurred(false);
     })
     .catch(err => console.log(err))
   }
@@ -57,16 +41,16 @@ const Security = () => {
 
 
   const onSubmit = (data : any) => {
-
+    console.log(data);
     if (isBlurred) return;
     fetchData(`/auth/v2fa`, "POST", {token : data?.code, userId : user?.id})
     .then((res:any) => {
       if (!res) return;
-      if (res?.data?.ok) { 
+      if (res?.data?.ok) {
         setIs(!is); setIsCodeCorrect(false); setIsReset(true);
         toast.success('2FA enabled successfully');
       }
-      else {setIsCodeCorrect(true); setIsReset(false);}
+      else {setIsCodeCorrect(true); setIsReset(false); reset();}
     })
     .catch(() => toast.error('Error enabling 2FA'))
   }

@@ -13,7 +13,6 @@ import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import V2fa from '../components/V2fa/V2fa';
-import { set } from "lodash";
 
 const BgWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -26,6 +25,7 @@ const BgWrapper = ({ children }: { children: React.ReactNode }) => {
 
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
+  const [userId, setUserId] = useState(-1);
   const [error, setError] = useState("");
   const [error_, setError_] = useState("");
   const [isTwoFa, setIsTwoFa] = useState("false");
@@ -79,27 +79,30 @@ export default function SignupFormDemo() {
           return;
         }
         const accessToken = data.access_token;
-        setToken(accessToken);
-        document.cookie = `access_token=${data.access_token}; path=/;`;
 
+        setToken(data.access_token);
+        
         // Check if access_token is present
         if (accessToken) {
           // Access token is present, make a request to the protected endpoint
           axios
-            .get(`http://${ipAdress}:8080/auth/protected`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            })
-            .then((res) => {
-              if (res.status === 200) 
+          .get(`http://${ipAdress}:8080/auth/protected`, {
+            headers: {
+              Authorization: `Bearer ${data.access_token}`,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) 
+            {
+              setUserId(res?.data?.id);
+              if (res?.data?.twoFa)
               {
-                if (res?.data?.twoFa)
-                  setIsTwoFa("2fa");
-                else
-                {
+                setIsTwoFa("2fa");
+              }
+              else
+              {
+                  document.cookie = `access_token=${data.access_token}; path=/;`;
                   router.push("/Dashboard");
-                  document.cookie = `access_token=${token}; path=/;`;
                 }
               }
               else
@@ -132,8 +135,11 @@ export default function SignupFormDemo() {
   }, [isTwoFa]);
 
   if (isTwoFa === "2fa")
-    return <V2fa setIsTwoFa={setIsTwoFa} />;
-  
+    return <V2fa setIsTwoFa={setIsTwoFa} userId={userId} />;
+  else if (isTwoFa === "true")
+    return <div className='w-full h-full flex justify-center items-center'> <div className="loader animate-loader"></div> </div>
+
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="max-w-md lg:w-full w-[80%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-primaryColor ring-[0.2px] ring-red-500 z-10">

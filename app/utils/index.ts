@@ -58,16 +58,6 @@ export const getShortDate = (date: Date | null) => {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
-axios.interceptors.request.use(
-  (config) => {
-    const accessToken = getCookie("access_token");
-    if (accessToken) {
-      config.headers
-      .Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  }
-);
 
 export const fetchData = async (url: string, method: string, body : any) : Promise<any> => {
   const accessToken = getCookie("access_token");
@@ -76,28 +66,47 @@ export const fetchData = async (url: string, method: string, body : any) : Promi
   
   switch (method) {
     case "GET":
-      const res = await axios.get(url)
+      const res = await axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })
       .catch((err) => { return Promise.reject(err) });
       return res;
     case "POST":
-      const resPost = await axios.post(url, body)
+      const resPost = await axios.post(url, body,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })
       .catch((err) => { return Promise.reject(err) });
       return resPost;
     case "PUT":
-      const resPut = await axios.put(url, body)
+      const resPut = await axios.put(url, body,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })
       .catch((err) => { return Promise.reject(err) });
       return resPut;
     case "DELETE":
-      const resDelete = await axios.delete(url)
+      const resDelete = await axios.delete(url,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       .then((data) => {
         return data;
       })

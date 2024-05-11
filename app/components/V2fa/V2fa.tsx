@@ -9,7 +9,7 @@ import { useState } from "react";
 import { fetchData, ipAdress } from "@/app/utils";
 
 
-export default function V2fa({setIsAuth, userId} : any) {
+export default function V2fa({setIsTwoFa, userId} : any) {
   
   const { register, handleSubmit , reset} = useForm();
   const [is , setIs] = useState(false);
@@ -27,13 +27,14 @@ export default function V2fa({setIsAuth, userId} : any) {
   };
 
  const onSubmit = (data:any) => {
-    if (userId === -1) return;
+  console.log(data);
+  if (userId === -1) return;
 
   fetchData(`/auth/v2fa`, "POST", {
     token : data?.code,
     userId : userId
   }).then((res:any) => {
-    if (res?.data?.ok) setIsAuth("true");
+    if (res?.data?.ok) setIsTwoFa("true");
     else setIs(true);
   })
   .catch(err => console.log(err))
@@ -42,7 +43,7 @@ export default function V2fa({setIsAuth, userId} : any) {
   
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="md:w-[480px] pb-[40px] sm:pb-[50px] bg-dashBack flex flex-col items-center rounded-2xl md:rounded-lg w-[310px] xm:w-[370px] select-none ring-[0.4px] ring-red-500">
+      <div className="md:w-[480px] pb-[40px] sm:pb-[50px] bg-primaryColor flex flex-col items-center rounded-2xl md:rounded-lg w-[310px] xm:w-[370px] select-none ring-[0.4px] ring-red-500">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col justify-center items-center pt-10">
             <motion.h1
