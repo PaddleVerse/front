@@ -39,7 +39,7 @@ const Userstatus = ({
                 <span
                   className={cn(
                     "relative inline-flex rounded-full h-3 w-3",
-                    target?.status === "ONLINE" ? "bg-green-500" : "bg-gray-500"
+                    target?.status === "ONLINE" ? "bg-green-500" : target?.status === "ON_GAME" ? "bg-sidebarRedColor" : "bg-gray-500"
                   )}
                 ></span>
               </span>
@@ -48,10 +48,12 @@ const Userstatus = ({
                   "2xl:text-xs xl:text-[12px] sm:text-[11px] text-[13px]",
                   target?.status === "ONLINE"
                     ? "text-green-500"
+                    : target?.status === "ON_GAME"
+                    ? "text-sidebarRedColor"
                     : "text-gray-500"
                 )}
               >
-                {target?.status === "ONLINE" ? "online" : "offline"}
+                {target?.status === "ONLINE" ? "online" : target?.status === "ON_GAME" ? "ON_GAME" :"offline"}
               </span>
             </div>
             <span className="text-buttonGray 2xl:text-[15px] xl:text-[8px] sm:text-[8px] text-[13px]">

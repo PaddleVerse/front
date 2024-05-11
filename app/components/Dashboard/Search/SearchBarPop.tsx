@@ -77,7 +77,7 @@ const SearchBarPop = () => {
     }
 
   return (
-    <div className=' flex justify-center items-center flex-col'>
+    <div className=' flex justify-center items-center flex-col '>
         <input
             className='w-[90%] z-40 h-14 p-6 text-sm border-none text-white rounded-xl mt-10 bg-[#263850] shadow-xl focus:outline-none focus:ring-[1px] focus:ring-red-400/[0.5] transition duration-300 ease-in-out placeholder:text-gray-400'
             type='text'
@@ -87,7 +87,7 @@ const SearchBarPop = () => {
             onChange={handleInputChange}
         />
         {isfocus && (
-            <div className="absolute top-0 w-[80%] xl:h-[35%] h-[50%] rounded-md z-40 mt-28 p-4 overflow-y-scroll" 
+            <div className="absolute top-0 w-[80%] xl:h-[35%] h-[50%] rounded-md z-40 mt-28 p-4 no-scrollbar overflow-y-scroll" 
             style={{
               backdropFilter: "blur(20px)",
               backgroundColor: "rgba(38, 56, 80, 0.7)",
