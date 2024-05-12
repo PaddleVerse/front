@@ -148,6 +148,11 @@ const Page = (props: any) => {
   });
 
   useEffect(() => {
+    // const fetchFriendShip = async () => {
+    //   const friendShip = await fetchData(`/status/${user!.id!}/${param.id}`, "GET", null);
+    //   // console.log(friendShip);
+    // }
+    // fetchFriendShip();
     socket?.on("ok", (data: any) => {
       if (data === null) return;
       clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
