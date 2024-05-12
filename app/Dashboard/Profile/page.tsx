@@ -26,6 +26,7 @@ const Profile = () => {
   } , [socket])
 
   useEffect(() => {
+    console.log(id)
     fetchData(`/user/${id}`, "GET", null).then((res) => {
       if (!res) return;
       setTargetUser(res.data)

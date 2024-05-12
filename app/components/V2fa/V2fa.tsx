@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import EnterCode from "../Dashboard/Settings/otp";
 import axios from "axios";
 import { useState } from "react";
-import { fetchData, ipAdress } from "@/app/utils";
+import { ipAdress } from "@/app/utils";
 
 
 export default function V2fa({setIsTwoFa, userId} : any) {
@@ -14,23 +14,11 @@ export default function V2fa({setIsTwoFa, userId} : any) {
   const { register, handleSubmit , reset} = useForm();
   const [is , setIs] = useState(false);
 
-  const getCookie = (name: string) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    
-    if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(';').shift();
-      return cookieValue;
-    } else {
-      return undefined;
-    }
-  };
-
  const onSubmit = (data:any) => {
-  console.log(data);
   if (userId === -1) return;
 
-  fetchData(`/auth/v2fa`, "POST", {
+
+  axios.post(`http://${ipAdress}:8080/auth/v2fa`, {
     token : data?.code,
     userId : userId
   }).then((res:any) => {

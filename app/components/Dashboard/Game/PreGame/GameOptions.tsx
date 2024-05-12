@@ -23,7 +23,10 @@ const GameOptions = () => {
   
   useEffect(() => {
     if (!socket) return ;
-    socket?.on  ('start', (data : any) => {
+    socket?.on('alreadyInGame', () => {
+      setCanPlay(false);
+    });
+    socket?.on('start', (data : any) => {
       setTimeout(() => {
         setStart(true)
         setRoomId(data.room)
@@ -38,6 +41,7 @@ const GameOptions = () => {
     return () => {
       socket?.off('start');
       socket?.off('leftRoom');
+      socket?.off('alreadyInGame');
     }
   } , [socket])
   

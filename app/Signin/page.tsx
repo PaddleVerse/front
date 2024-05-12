@@ -53,6 +53,39 @@ export default function SignupFormDemo() {
     }
   }, [is]);
 
+  useEffect(() => {
+    if (document.cookie.includes("access_token"))
+    {
+      const accessToken = document.cookie.split("access_token=")[1].split(";")[0];
+      setToken(accessToken);
+      if (accessToken) {
+        // Access token is present, make a request to the protected endpoint
+        axios
+        .get(`http://${ipAdress}:8080/auth/protected`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          document.cookie = `access_token=; path=/;`;
+          if (res.status === 200) 
+          {
+            setUserId(res?.data?.id);
+            if (res?.data?.twoFa)
+              setIsTwoFa("2fa");
+            else
+              router.push("/Dashboard");
+          }
+          else
+            console.log("Failed to authenticate with protected endpoint");
+        })
+        .catch((error) => {
+          console.log("Error during protected endpoint request", error);
+        });
+      }
+    }
+  }, []);
+
   const onSubmit = (values: any) => {
     const is = isValidValues(values);
     setIs(is);

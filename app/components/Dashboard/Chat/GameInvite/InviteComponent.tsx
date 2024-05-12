@@ -22,6 +22,12 @@ const InviteComponent = () => {
       setAccept(true);
       setRoomId(data.roomId);
     });
+    socket?.on("userInGame", () => {
+      setAccept(false);
+      setModlar(false);
+      setSender(null);
+      setRoomId("");
+    });
     socket?.on("invited", (data: any) => {
       setTimeout(() => {
         setModlar(false);
@@ -39,6 +45,7 @@ const InviteComponent = () => {
       socket?.off("invited");
       socket?.off("acceptedGameInvite");
       socket?.off("gameOver");
+      socket?.off("userInGame");
     };
   }, [socket]);
 
