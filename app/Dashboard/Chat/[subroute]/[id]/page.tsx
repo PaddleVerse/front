@@ -79,11 +79,22 @@ const sendpicture = async (
   }
 };
 import { ipAdress } from "@/app/utils";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-const fetchTargetUser = async (parameters: any) => {
+const fetchTargetUser = async (
+  parameters: any,
+  us: user,
+  router: AppRouterInstance
+) => {
   if (parameters.subroute === "dm") {
+    const friend = await axios.get(
+      `http://${ipAdress}:8080/friendship/status/${us!.id!}/${parameters!.id!}`
+    );
+    if (friend.data.status === "BLOCKED") {
+      router.push("/Dashboard/Chat");
+    }
     const user = await axios.get(
-      `http://${ipAdress}:8080/user/${parameters?.id!}`
+      `http://${ipAdress}:8080/user/${parameters!.id!}`
     );
     return user.data;
   }
@@ -124,10 +135,14 @@ const Page = (props: any) => {
   });
   const { data: targetUser } = useQuery<user | null>({
     queryKey: ["targetUser"],
-    queryFn: () => fetchTargetUser(param),
+    queryFn: () => fetchTargetUser(param, user!, router),
   });
 
   useEffect(() => {
+    // const fetchFriends = async () => {
+    //   const res = await axios.get(`http://${ipAdress}:8080/friends/${user.id}`);
+    //   // dispatch({ type: "UPDATE_FRIENDS", payload: res.data });
+    // }
     socket?.on("ok", (data: any) => {
       if (data === null) return;
       clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
