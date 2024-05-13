@@ -51,8 +51,10 @@ const InviteComponent = () => {
 
   useEffect(() => {
     if (accept) {
-      router.push(`/Dashboard/Game?room=${roomId}`);
+      dispatch({ type: "UPDATE_GAMEINVITEID", payload: roomId });
+      router.push(`/Dashboard/Game`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accept, roomId]);
   
   return (

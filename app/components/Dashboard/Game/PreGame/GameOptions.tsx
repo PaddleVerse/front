@@ -17,8 +17,8 @@ const GameOptions = () => {
   const search = useSearchParams()
 
   useEffect(() => {
-    setRoomId(search.get('room'))
-  }, [search])
+    setRoomId(state.GameInviteID);
+  }, [state.GameInviteID]);
 
   
   useEffect(() => {

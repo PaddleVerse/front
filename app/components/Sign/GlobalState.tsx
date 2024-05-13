@@ -8,6 +8,7 @@ interface GlobalState {
   socket: any;
   show: boolean;
   GameStatus: string | null;
+  GameInviteID: string | null;
 }
 
 // Define action types
@@ -15,7 +16,8 @@ type Action =
   | { type: 'UPDATE_USER'; payload: any }
   | { type: 'UPDATE_SOCKET'; payload: any }
   | { type: 'UPDATE_SHOW'; payload: boolean }
-  | { type: 'UPDATE_GAMESTATUS'; payload: string | null };
+  | { type: 'UPDATE_GAMESTATUS'; payload: string | null }
+  | { type: 'UPDATE_GAMEINVITEID'; payload: string | null }
 
 // Define initial state
 const initialState: GlobalState = {
@@ -23,6 +25,7 @@ const initialState: GlobalState = {
   socket: null,
   show: true,
   GameStatus: null,
+  GameInviteID: null,
 };
 
 // Create context
@@ -39,6 +42,8 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
       return { ...state, show: action.payload };
     case 'UPDATE_GAMESTATUS':
       return { ...state, GameStatus: action.payload };
+    case 'UPDATE_GAMEINVITEID':
+      return { ...state, GameInviteID: action.payload };
     default:
       return state;
   }
