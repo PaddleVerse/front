@@ -46,7 +46,7 @@ export const ChatCard = (props: any) => {
             {props.value.user &&
               (props.value.status === "ONLINE" ? (
                 <div className="bg-green-500 rounded-full w-2 h-2"></div>
-              ) : props.value.status === "ON_GAME" ?
+              ) : props.value.status === "IN_GAME" ?
               (
                 <div className="bg-red-500 rounded-full w-2 h-2"></div>
               ) :
