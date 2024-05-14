@@ -117,7 +117,7 @@ const Option = ({ label, expanded }: { label: string; expanded: boolean }) => {
                   }}
                 >
                   <Image
-                    src={"/Vector.svg"}
+                    src={"/vector.svg"}
                     width={13}
                     height={13}
                     alt="image"

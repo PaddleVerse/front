@@ -15,7 +15,7 @@ const Achievements = () => {
     <div className=" w-full  rounded-md p-3 h-auto bg-primaryColor">
       <div className="w-full text-white flex gap-2  items-center">
         <Image
-          src="/achievements.svg"
+          src="/Achievements.svg"
           width={20}
           height={20}
           alt={"image"}
