@@ -11,9 +11,7 @@ import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import { rajdhani } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
-import axios from "axios";
 import { fetchData, ipAdress } from "@/app/utils";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
@@ -249,11 +247,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       }
     };
     // if the key h is pressed, the ball will move
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "h") {
-        if (socket) socket.emit("resetBall", { room: roomId });
-      }
-    });
     mountRef.current?.addEventListener("mousemove", handleMouseMove);
     // add orbit controls
     // const controls = new OrbitControls(camera, renderer.domElement);
