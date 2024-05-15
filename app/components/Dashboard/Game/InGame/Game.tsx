@@ -36,7 +36,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const [winnerText, setWinnerText] = useState("");
   const router = useRouter();
   const [end, setEnd] = useState(false);
-  const [ballSkin, setBallSkin] = useState("/Game/textures/balls/default.jpg");
   useEffect(() => {
     let userID: string | null = null;
     let cameraPosition: { x: number; y: number; z: number };
@@ -246,10 +245,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         camera.position.z = -(mouseX * 2);
       }
     };
-    // if the key h is pressed, the ball will move
+  
     mountRef.current?.addEventListener("mousemove", handleMouseMove);
-    // add orbit controls
-    // const controls = new OrbitControls(camera, renderer.domElement);
 
     function animate() {
       paddle?.update();
