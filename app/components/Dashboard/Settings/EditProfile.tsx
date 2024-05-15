@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/newinput";
 import { fetchData, ipAdress, getCookie } from '@/app/utils';
 
 import axios from 'axios';
+import { set } from 'lodash';
 
 const accessToken = getCookie("access_token");
 
@@ -19,6 +20,10 @@ const EditProfile = () => {
 
   const { register, handleSubmit, reset } = useForm();
 
+  const [isErrorName, setIsErrorName] = useState(false);
+  const [isErrorMiddlename, setIsErrorMiddlename] = useState(false);
+  const [errorName, setErrorName] = useState('');
+  const [errorMiddlename, setErrorMiddlename] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +39,19 @@ const EditProfile = () => {
       toast.error('Error updating user');
     }
   }
+
+  const serverError = (err: any) => {
+    err.map((e: any) => {
+      if (e.startsWith('Name')) {
+        setIsErrorName(true);
+        setErrorName(e);
+      }
+      if (e.startsWith('Middlename')) {
+        setIsErrorMiddlename(true);
+        setErrorMiddlename(e);
+      }
+    });
+  }
   
   const onSubmit = (data : any) => { 
 
@@ -43,12 +61,14 @@ const EditProfile = () => {
       if (res?.data !== '')
       {
         toast.success('User updated successfully');
+        setIsErrorMiddlename(false);
+        setIsErrorName(false);
         refreshUser();
         reset();
       }
     })
-    .catch(() => {
-      toast.error('Error updating user');
+    .catch((err) => {
+      serverError(err.response.data.message);
     });
   };
 
@@ -81,13 +101,6 @@ const EditProfile = () => {
       setLoading(true);
       const formData = new FormData();
       formData.append('image', selectedFile);
-      
-      // await axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
-      //   headers: { 
-      //     'Content-Type': 'multipart/form-data',
-      //     'Authorization': `Bearer ${accessToken}`
-      //   },
-      // });
       await fetchData(`/user/img/${user?.id}`, 'PUT', formData);
       toast.success('Profile picture updated successfully');
       refreshUser();
@@ -172,12 +185,14 @@ const EditProfile = () => {
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" placeholder="Enter your name" type="text" {...register('name')}/>
+                {isErrorName && <p className='text-red-500 text-sm font-light'>{errorName}</p>}
               </LabelInputContainer>
             </div>
             <div className='flex flex-col gap-2 sm:w-1/3 w-full'>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="middlename">middlename</Label>
                 <Input id="middlename" placeholder="Enter your middlename" type="text" {...register('middlename')}/>
+                {isErrorMiddlename && <p className='text-red-500 text-sm font-light'>{errorMiddlename}</p>}
               </LabelInputContainer>
             </div>
           </div>

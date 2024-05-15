@@ -15,6 +15,7 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
+import { set } from "lodash";
 
 
 export default function SignupFormDemo() {
@@ -50,6 +51,11 @@ export default function SignupFormDemo() {
       setError("");
   }, [is]);
 
+  const serverError = (err: any) => {
+    setIs(6);
+    setError(err);
+  }
+
   function onSubmit(values : any) {
     if (isValidValues(values) !== 0)
     {
@@ -70,7 +76,9 @@ export default function SignupFormDemo() {
         setIs(5);
     })
     .catch((err) => {
-      console.log(err);
+      if (err.response)
+        serverError(err.response.data.message);
+      console.log(err.response.data);
     });
   }
 
@@ -115,6 +123,7 @@ export default function SignupFormDemo() {
               <Input id="password" placeholder="••••••••" type="password" {...form.register('password')}/>
               {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
             </LabelInputContainer>
+              {is === 6 && <p className="text-red-500 text-sm my-4">{error}</p>}
             <button
               className="bg-gradient-to-br relative group/btn bg-[#192536] bloc w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
               type="submit"
