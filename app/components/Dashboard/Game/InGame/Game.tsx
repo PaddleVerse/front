@@ -96,6 +96,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       socket.on("moveBall", (ball: any) => {
         if (!ballRef.current || !ball) return;
         if (ballRef.current) {
+          if (!ballRef.current.position || !ballRef.current.velocity) return;
           ballRef.current.position.set(
             ball.position.x,
             ball.position.y,
@@ -223,6 +224,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           mountRef.current.getBoundingClientRect();
         const mouseX = ((event.clientX - left) / width) * 2 - 1;
         const mouseY = -((event.clientY - top) / height) * 2 + 1;
+        if (!paddle || !paddle2 || !camera) return;
+        if (!paddle.position || !paddle2.position) return;
         if (userID === "player1") {
           paddle.position.z = -(mouseX * 10);
           paddle.position.y = mouseY * 10 + 10;
@@ -297,8 +300,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
   return (
     <>
-      {/* make a white text on top in the middle of the game that displays the score */}
-
       {!end && (
         <div
           ref={mountRef}
