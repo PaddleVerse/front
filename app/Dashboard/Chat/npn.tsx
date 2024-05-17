@@ -220,7 +220,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                         width={0}
                         height={0}
                         sizes="height:100vh width:100vw"
-                        src="/Chat/vector.svg"
+                        src="/Chat/Vector.svg"
                         alt="create svg"
                         className="w-[24px] cursor-pointer"
                       />
