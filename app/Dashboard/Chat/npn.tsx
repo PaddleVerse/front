@@ -143,7 +143,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     }, []);
     return size;
   }
-  const tablet = useWindowSize() < 769;
+  const tablet = useWindowSize() < 1024;
 
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
