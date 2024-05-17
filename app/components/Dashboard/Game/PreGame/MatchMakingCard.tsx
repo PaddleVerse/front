@@ -33,6 +33,19 @@ const MatchMakingCard = ({
         console.log("error");
       });
     });
+
+    const emitLeaveRoom = () => {
+      socket?.emit("cancelMatchMaking");
+    };
+
+    window.addEventListener("beforeunload", emitLeaveRoom);
+
+    return () => {
+      if (socket) {
+        socket?.off("start");
+        window.removeEventListener("beforeunload", emitLeaveRoom);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 

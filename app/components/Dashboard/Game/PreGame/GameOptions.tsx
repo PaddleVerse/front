@@ -25,14 +25,29 @@ const GameOptions = () => {
     socket?.on('alreadyInGame', () => {
       setCanPlay(false);
     });
+
     socket?.on('start', (data : any) => {
+      console.log(data?.room)
+      setRoomId(data?.room);
       setTimeout(() => {
         setStart(true)
-        setRoomId(data.room)
       } , 1500);
     })
-    
+    const emitLeaveRoom = () => {
+      console.log(roomId)
+      socket?.emit('leftRoom', { room : roomId });
+    }
+
+    window.addEventListener('beforeunload', emitLeaveRoom);
+
     socket?.on("leftRoom", () => {
+      setCanPlay(false)
+      setStart(false)
+      setRoomId(null)
+    });
+
+    socket?.on("otherUserLeft", () => {
+      console.log('left room')
       setCanPlay(false)
       setStart(false)
     });
@@ -41,13 +56,14 @@ const GameOptions = () => {
       socket?.off('start');
       socket?.off('leftRoom');
       socket?.off('alreadyInGame');
+      window.removeEventListener('beforeunload', emitLeaveRoom);
     }
   } , [socket])
   
-  useEffect(() => {
-    if (!roomId) return ;
-    setStart(true)
-  }, [roomId])
+  // useEffect(() => {
+  //   if (!roomId) return ;
+  //   setStart(true)
+  // }, [roomId])
 
   if (start) {
     return <Game roomId={roomId!} />;

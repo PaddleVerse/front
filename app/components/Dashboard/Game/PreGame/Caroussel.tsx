@@ -51,15 +51,15 @@ const Caroussel = ({ setSelected, canPlay, setCanPlay }: any) => {
           <div onClick={() => setSelected("1")}>
             <BigCard gameMode={"1"} />
           </div>
-          <div onClick={() => setSelected("2")}>
+          {/* <div onClick={() => setSelected("2")}>
             <BigCard gameMode={"2"} />
-          </div>
+          </div> */}
           {/* <BigCard gameMode={'3'}/>
           <BigCard gameMode={'2'}/> */}
         </Carousel>
       </div>
       {
-         canPlay && <MatchMakingCard gameMode={'2'} setCanPlay={setCanPlay} setSelected={setSelected}/>
+        canPlay && <MatchMakingCard gameMode={'2'} setCanPlay={setCanPlay} setSelected={setSelected}/>
       }
     </>
   );
