@@ -2,10 +2,8 @@
 import React, { useRef,useState, useEffect } from 'react';
 import UserCard from '../../components/Dashboard/Search/UserCard';
 import SearchBarPop from '../../components/Dashboard/Search/SearchBarPop';
-import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
-import axios from 'axios';
 import { useGlobalState } from '@/app/components/Sign/GlobalState';
-import { fetchData, ipAdress } from '@/app/utils';
+import { fetchData } from '@/app/utils';
 
 
 const Search = () => {
@@ -13,7 +11,7 @@ const Search = () => {
   const containerRef_2:any = useRef(null);
   const [users , setUsers] = useState([]);
   const {state} = useGlobalState();
-  const user : any= state.user;
+  const user : any= state?.user;
 
 
   useEffect(() => {
@@ -21,7 +19,7 @@ const Search = () => {
     {
       fetchData(`/user`, "GET", null).then((res) => {
         if (!res) return;
-        const filteredUsers = res.data.filter((item:any) => item.id !== user.id);
+        const filteredUsers = res.data.filter((item:any) => item.id !== user?.id);
         setUsers(filteredUsers);
       })
       .catch((err) => { console.log(err); });

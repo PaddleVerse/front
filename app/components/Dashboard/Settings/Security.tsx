@@ -41,7 +41,6 @@ const Security = () => {
 
 
   const onSubmit = (data : any) => {
-    console.log(data);
     if (isBlurred) return;
     fetchData(`/auth/v2fa`, "POST", {token : data?.code, userId : user?.id})
     .then((res:any) => {

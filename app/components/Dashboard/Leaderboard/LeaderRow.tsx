@@ -17,12 +17,12 @@ interface Props {
 const LeaderRow = ({ user, length, index }: Props) => {
   const router = useRouter();
   const { state } = useGlobalState();
-  const User: any = state.user;
+  const User: any = state?.user;
   const [wins, setWins] = useState(0);
   const [loses, setLoses] = useState(0);
 
   const handleClick = () => {
-    router.push(`/Dashboard/Profile?id=${user.id}`);
+    router.push(`/Dashboard/Profile?id=${user?.id}`);
   };
 
   useEffect(() => {
@@ -48,8 +48,8 @@ const LeaderRow = ({ user, length, index }: Props) => {
     <motion.tr
       className={cn(
         'text-white sm:text-[12px] text-[10px] cursor-pointer',
-        user.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]',
-        user.id === state?.user?.id ? 'bg-yellow-700' : ''
+        user?.id % 2 === 0 ? 'bg-[#101823]' : 'bg-[#161F2F]',
+        user?.id === state?.user?.id ? 'bg-yellow-700' : ''
       )}
       onClick={handleClick}
       initial={{ opacity: 0, y:-20 }}
@@ -94,15 +94,15 @@ const LeaderRow = ({ user, length, index }: Props) => {
         <Image
           width={100}
           height={100}
-          src={user.picture}
+          src={user?.picture}
           alt="image"
           className="w-6 h-7 rounded-full object-cover md:w-7 sm:mt-0 mt-[8px]"
         />
         <span className=" lg:hidden xl:inline sm:inline hidden text-[14px]">
-          {user.name}
+          {user?.name}
         </span>
       </td>
-      <td className=" sm:py-[7px] pl-2 text-[14px]">{Math.floor(user.xp / 100) + 1}</td>
+      <td className=" sm:py-[7px] pl-2 text-[14px]">{Math.floor(user?.xp / 100) + 1}</td>
       <td className=" sm:py-[7px] pl-2 text-[#15E5B4] text-[14px]">{wins}</td>
       <td className=" sm:py-[7px] pl-2 text-[14px]">{loses}</td>
       <td className="  sm:py-[7px] pl-4 text-[14px]">{(wins / length).toFixed(1)}</td>

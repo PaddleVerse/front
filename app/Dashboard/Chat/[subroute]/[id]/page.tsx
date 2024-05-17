@@ -199,11 +199,11 @@ const Page = (props: any) => {
           message: {
             content: inputMessage.current!.value,
             content_type: "string",
-            sender_id: state.user.id,
-            sender_picture: state.user.picture,
+            sender_id: state?.user?.id,
+            sender_picture: state?.user?.picture,
           },
           channel: { name: targetChannel.name },
-          user1: state.user.id,
+          user1: state?.user?.id,
         };
         await fetchData(`/message`, "POST", message);
         socket?.emit("channelmessage", {
@@ -222,7 +222,7 @@ const Page = (props: any) => {
             sender_id: state?.user?.id!,
             sender_picture: state?.user?.picture!,
           },
-          user2: state.user.id,
+          user2: state?.user?.id,
           user1: targetUser.id,
         });
         socket?.emit("dmmessage", {

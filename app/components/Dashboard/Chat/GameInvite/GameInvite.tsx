@@ -1,12 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Inter } from "next/font/google";
 import { motion } from "framer-motion";
-import { IoIosSearch } from "react-icons/io";
-import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
 import { user } from "@/app/Dashboard/Chat/type";
-import { useForm } from "react-hook-form";
-import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import Image from "next/image";
 import { Button } from "@/components/ui/moving-border";
 
@@ -39,10 +34,8 @@ const GameInvite = ({
   onDecline: () => void;
   onAccept: () => void;
 }) => {
-  const [modlar, setModlar] = useState(false);
-  const { state, dispatch } = useGlobalState();
+  const [modlar, setModlar] = useState(false);;
   const [count, setCount] = useState(10);
-  const { socket, user } = state;
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {

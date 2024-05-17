@@ -16,7 +16,7 @@ const LeaderTable = () => {
   const [allusers, setAllUsers] = useState([]);
   const [users, setUsers] = useState<any>([]);
   const { state } = useGlobalState();
-  const user: any = state.user;
+  const user: any = state?.user;
   useEffect(() => {
     if (user) {
       fetchData(`/user/range/${user.id}`, "GET", null)

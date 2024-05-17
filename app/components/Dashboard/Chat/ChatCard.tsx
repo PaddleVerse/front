@@ -3,25 +3,20 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { getShortDate, getTime } from "@/app/utils";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useGlobalState } from "../../Sign/GlobalState";
-import { channel, user } from "@/app/Dashboard/Chat/type";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ChatCard = (props: any) => {
   const router = useRouter();
-  const { state } = useGlobalState();
-  const { user, socket } = state;
   const clt = useQueryClient();
-
   return (
     <motion.div
       className="flex justify-between items-center lg:p-3 p-1 hover:bg-gray-800 rounded-lg relative sm:w-auto w-full cursor-pointer transition-all duration-300 ease-in-out hover:shadow-lg"
       onClick={(e) => {
         e.preventDefault();
-        if (props.value.user === false) {
+        if (props?.value?.user === false) {
           router.push(`/Dashboard/Chat/channel/${props?.value?.id}`);
         } else {
-          router.push(`/Dashboard/Chat/dm/${props.value.id}`);
+          router.push(`/Dashboard/Chat/dm/${props?.value?.id}`);
         }
         clt.invalidateQueries({ queryKey: ["targetChannel", "targetUser"] });
         props.handleClick();
@@ -43,10 +38,10 @@ export const ChatCard = (props: any) => {
             alt="picture"
           />
           <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
-            {props.value.user &&
-              (props.value.status === "ONLINE" ? (
+            {props?.value?.user &&
+              (props?.value?.status === "ONLINE" ? (
                 <div className="bg-green-500 rounded-full w-2 h-2"></div>
-              ) : props.value.status === "IN_GAME" ?
+              ) : props?.value?.status === "IN_GAME" ?
               (
                 <div className="bg-red-500 rounded-full w-2 h-2"></div>
               ) :
@@ -56,12 +51,12 @@ export const ChatCard = (props: any) => {
           </div>
         </div>
         <div className="flex flex-col justify-between w-full">
-          <p className="text-white max-w-[80%]">{props.value.name}</p>
+          <p className="text-white max-w-[80%]">{props?.value?.name}</p>
           <div className="flex-auto min-w-0 ml-4 mr-6  md:block group-hover:block">
             <div className="flex items-center text-sm text-gray-400">
               <div className="min-w-0 flex justify-between w-full">
                 {props.istyping ? (
-                  props.value.user ? (
+                  props?.value?.user ? (
                     <p className="text-white">is typing ...</p>
                   ) : (
                     <p className="text-white">someone is typing ...</p>

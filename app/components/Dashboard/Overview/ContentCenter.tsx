@@ -11,7 +11,7 @@ import GameStatus from "./GameStatus";
 
 const ContentCenter = () => {
   const { state } = useGlobalState();
-  const user: any = state.user;
+  const user: any = state?.user;
 
   return (
     <div className="w-[100%] mt-[50px] flex flex-col gap-10 items-center">

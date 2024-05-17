@@ -14,7 +14,6 @@ const GameOptions = () => {
   const [roomId, setRoomId] = useState<string| null>();
   const [canPlay, setCanPlay] = useState(false)
   const [selected, setSelected] = useState("");
-  const search = useSearchParams()
 
   useEffect(() => {
     setRoomId(state.GameInviteID);

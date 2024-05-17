@@ -41,8 +41,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     let cameraPosition: { x: number; y: number; z: number };
     if (socket && user) {
       // Use the dynamic roomId for joining the game
-      socket.emit("joinGame", { senderId: user.id, room: roomId });
-      socket.on("role", (id: string) => {
+      socket?.emit("joinGame", { senderId: user?.id, room: roomId });
+      socket?.on("role", (id: string) => {
         userID = id;
         if (id === "player1") {
           cameraPosition = { x: 24.11, y: 14, z: 0 };
@@ -57,13 +57,13 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           cameraPosition.z
         );
       });
-      socket.on("updateScore", (newScore: any) => {
+      socket?.on("updateScore", (newScore: any) => {
         setScore({
           player1: newScore.score[0].score,
           player2: newScore.score[1].score,
         });
       });
-      socket.on("endGame", (winner: any) => {
+      socket?.on("endGame", (winner: any) => {
         setEnd(true);
         setWinnerText(winner.winner === userID ? "win" : "lost");
         dispatch && dispatch({
@@ -72,7 +72,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         });
         router.push("/Dashboard");
       });
-      socket.on("paddlePositionUpdate", (paddlePosition: any) => {
+      socket?.on("paddlePositionUpdate", (paddlePosition: any) => {
         if (paddle2Ref.current && paddleRef.current && userID) {
           if (userID === "player1") {
             paddle2Ref.current.position = {
@@ -90,7 +90,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         }
       });
 
-      socket.on("moveBall", (ball: any) => {
+      socket?.on("moveBall", (ball: any) => {
         if (!ballRef.current || !ball) return;
         if (ballRef.current) {
           if (!ballRef.current.position || !ballRef.current.velocity) return;
@@ -171,7 +171,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2);
         paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2);
       } else {
-        let color : String = res.data.color.replace(user.id, "");
+        let color : String = res.data.color.replace(user?.id, "");
         // remove the user id from the color using something like remove
         console.log("color: " + color);
         paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2, color);
@@ -205,7 +205,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           };
 
           // If the position has changed, emit the new position and update the last emitted position
-          socket.emit("movePaddleGame", {
+          socket?.emit("movePaddleGame", {
             room: roomId,
             paddle: currentPosition,
             velocity: velocity, // optionally emit velocity if needed
@@ -260,7 +260,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
     const emitLeaveRoom = () => {
       if (socket) {
-        socket.emit("leftRoom", { room: roomId });
+        socket?.emit("leftRoom", { room: roomId });
       }
     };
 
@@ -271,11 +271,11 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     const currentMountRef = mountRef.current;
     return () => {
       if (socket) {
-        socket.emit("leftRoom", { id: user.id, room: roomId });
-        socket.off("paddlePositionUpdate");
-        socket.off("movePaddle");
-        socket.off("role");
-        socket.off("moveBall");
+        socket?.emit("leftRoom", { id: user?.id, room: roomId });
+        socket?.off("paddlePositionUpdate");
+        socket?.off("movePaddle");
+        socket?.off("role");
+        socket?.off("moveBall");
       }
       window.removeEventListener("beforeunload", emitLeaveRoom);
       if (currentMountRef) {

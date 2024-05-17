@@ -33,8 +33,8 @@ const JoinChannelBubble = ({
       channel.key = lockRef.current?.value as string;
       const obj = {
         participant: {
-          user_id: user.id,
-          channel_id: channel.id,
+          user_id: user?.id,
+          channel_id: channel?.id,
         },
         user: user,
         channel: channel,
@@ -59,8 +59,8 @@ const JoinChannelBubble = ({
     } else {
       const obj = {
         participant: {
-          user_id: user.id,
-          channel_id: channel.id,
+          user_id: user?.id,
+          channel_id: channel?.id,
         },
         user: user,
         channel: channel,

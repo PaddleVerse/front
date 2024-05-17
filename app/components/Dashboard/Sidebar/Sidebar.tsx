@@ -37,7 +37,7 @@ function useWindowSize() {
 }
 const Sidebar = () => {
   const { state, dispatch } = useGlobalState();
-  const user: any = state.user;
+  const user: any = state?.user;
   const [expanded, setExpanded] = useState(true);
   const sidebarRef = useRef(null);
   const handlers = useSwipeable({

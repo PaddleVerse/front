@@ -149,7 +149,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
         {modlar ? (
-          <JoinChannel handleClick={handleClick} user={state.user} />
+          <JoinChannel handleClick={handleClick} user={state?.user} />
         ) : createModlar ? (
           <CreateChannel handleClick={() => setCreateModlar(false)} />
         ) : null}
@@ -248,7 +248,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                           swipe={setShowMessage}
                           index={key}
                           value={value}
-                          self={state.user}
+                          self={state?.user}
                           handleClick={handleSwitching}
                           msg={value.msg}
                         ></ChatCard>

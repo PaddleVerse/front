@@ -38,7 +38,7 @@ const MatchMakingCard = ({
 
   const onClose = () => {
     if (socket) {
-      socket.emit("cancelMatchMaking");
+      socket?.emit("cancelMatchMaking");
     }
   }
   return (
