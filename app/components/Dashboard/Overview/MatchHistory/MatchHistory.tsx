@@ -6,6 +6,7 @@ import Image from "next/image";
 const rajdhani = Rajdhani({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  preload:false
 });
 const MatchHistory = () => {
   return (

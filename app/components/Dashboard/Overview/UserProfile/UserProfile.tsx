@@ -9,7 +9,7 @@ const image =
 
 const rubik = Rubik({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
-const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"] });
+const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["400", "500"], preload:false });
 const UserProfile = () => {
   return (
     <div
