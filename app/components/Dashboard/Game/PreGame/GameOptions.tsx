@@ -10,7 +10,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 const GameOptions = () => {
   const [start, setStart] = useState(false)
   const { state } = useGlobalState();
-  const { socket } = state;
+  const { socket, user } = state;
   const [roomId, setRoomId] = useState<string| null>();
   const [canPlay, setCanPlay] = useState(false)
   const [selected, setSelected] = useState("");
@@ -27,15 +27,15 @@ const GameOptions = () => {
     });
 
     socket?.on('start', (data : any) => {
-      console.log(data?.room)
+      console.log(data?.room);
       setRoomId(data?.room);
       setTimeout(() => {
         setStart(true)
       } , 1500);
     })
     const emitLeaveRoom = () => {
-      console.log(roomId)
-      socket?.emit('leftRoom', { room : roomId });
+
+      socket?.emit('gameOver', { userId : user?.id });
     }
 
     window.addEventListener('beforeunload', emitLeaveRoom);
