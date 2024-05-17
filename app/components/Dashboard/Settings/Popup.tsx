@@ -6,16 +6,17 @@ import { Label } from "@/components/ui/newlabel";
 import { cn } from "@/components/cn";
 import { Input } from "@/components/ui/newinput";
 import { useGlobalState } from '../../Sign/GlobalState';
-import axios from 'axios';
-import { fetchData, ipAdress, getCookie } from '@/app/utils';
-import { toast } from "react-hot-toast";
-
-const accessToken = getCookie("access_token");
+import { fetchData } from '@/app/utils';
 
 const Popup = ()  => {
 
   const [is, setIs] = useState(0);
   const [error, setError] = useState("");
+
+  const [isErrorName, setIsErrorName] = useState(false);
+  const [isErrorMiddlename, setIsErrorMiddlename] = useState(false);
+  const [errorName, setErrorName] = useState('');
+  const [errorMiddlename, setErrorMiddlename] = useState('');
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -24,6 +25,20 @@ const Popup = ()  => {
   const {user} = state;
 
   
+  const serverError = (err: any) => {
+    
+    err?.map((e: any) => {
+      if (e.startsWith('Name')) {
+        setIsErrorName(true);
+        setErrorName(e);
+      } 
+      if (e.startsWith('Middlename')) {
+        setIsErrorMiddlename(true);
+        setErrorMiddlename(e);
+      }
+    });
+  }
+
   const refreshUser = async () => {
     try {
       const response : any = await fetchData(`/user/${user?.id}`, 'GET', null);
@@ -72,55 +87,104 @@ const Popup = ()  => {
     return 0;
   };
 
-  const onSubmit = (data: any) => {
-    if (isValidValues(data) !== 0)
-    {
+  // const onSubmit = (data: any) => {
+  //   if (isValidValues(data) !== 0)
+  //   {
+  //     setIs(isValidValues(data));
+  //     return;
+  //   }
+  //   if (!accessToken) return;
+  //   const formData = new FormData();
+  //   if (selectedFile) {
+  //     formData.append('image', selectedFile);
+  //   }
+  
+  //   const imgUpdatePromise : Promise<any> = selectedFile
+  //     ? axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
+  //         headers: { 
+  //           'Content-Type': 'multipart/form-data',
+  //           'Authorization': `Bearer ${accessToken}`
+  //         },
+  //       })
+  //     : Promise.resolve();
+    
+  //   axios
+  //     .all([
+  //       imgUpdatePromise,
+  //       axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data,
+  //         { headers: {'Authorization': `Bearer ${accessToken}` }}
+  //       ),
+  //     ])
+  //     .then(axios.spread((resImg, resUser) => {
+  //       if (!selectedFile || (resImg && resImg?.data !== ''))
+  //         if (selectedFile) setSelectedFile(null);
+  //       if (resUser && resUser?.data !== '') {
+  //         reset();
+  //         refreshUser();
+  //       }
+  //       axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, { first_time: false },
+  //         { headers: {'Authorization': `Bearer ${accessToken}` }})
+  //       .then((res) => { if (res.data !== '') refreshUser(); reset();})
+  //       .catch((error) => {
+  //         serverError(error.response.data.message);
+  //         reset();
+  //       });
+  //     }))
+  //     .catch((error) => {
+  //       serverError(error.response.data.message);
+  //       reset();
+  //     });
+  // };
+
+  const onSubmit = async (data: any) => {
+    if (isValidValues(data) !== 0) {
       setIs(isValidValues(data));
       return;
     }
-    if (!accessToken) return;
+  
+  
     const formData = new FormData();
     if (selectedFile) {
       formData.append('image', selectedFile);
     }
   
-    const imgUpdatePromise : Promise<any> = selectedFile
-      ? axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
-          headers: { 
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${accessToken}`
-          },
-        })
-      : Promise.resolve();
+    try {
+      let imgUpdateResponse;
+      if (selectedFile) {
+        imgUpdateResponse = await fetchData(`/user/img/${user?.id}`, 'PUT', formData);
+      }
   
-    axios
-      .all([
-        imgUpdatePromise,
-        axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data,
-          { headers: {'Authorization': `Bearer ${accessToken}` }}
-        ),
-      ])
-      .then(axios.spread((resImg, resUser) => {
-        if (!selectedFile || (resImg && resImg?.data !== ''))
-          if (selectedFile) setSelectedFile(null);
-        if (resUser && resUser?.data !== '') {
-          reset();
-          refreshUser();
-        }
-        axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, {first_time: false},
-          { headers: {'Authorization': `Bearer ${accessToken}` }})
-        .then((res) => { if (res.data !== '') refreshUser();})
-        .catch((error) => {
-          console.log('Error updating user', error)
-          toast.error('You need to fill all the fields');
-        });
-      }))
-      .catch((error) => {
-        console.log('Error updating user', error)
-        toast.error('You need to fill all the fields');
-      });
+      const userUpdateResponse = await fetchData(`/user/${user?.id}`, 'PUT', data);
+      
+      if (!selectedFile || (imgUpdateResponse && imgUpdateResponse.data !== ''))
+        if (selectedFile) setSelectedFile(null);
+  
+      if (userUpdateResponse && userUpdateResponse.data !== '') {
+        reset();
+        refreshUser();
+      }
+  
+      const visibilityUpdateResponse = await fetchData(`/user/visible/${user?.id}`, 'PUT', { first_time: false });
+  
+      if (visibilityUpdateResponse.data !== '') {
+        refreshUser();
+        reset();
+      }
+    } catch (error:any) {
+      if (error.response.status === 400)
+      {
+          setIsErrorName(false); setIsErrorMiddlename(false);
+          serverError(error.response.data.message);
+      }
+      else
+        console.error('Error updating user', error);
+      // reset();
+    }
   };
+  
+
   if (!user || (user && user?.first_time === false)) return null;
+
   return (
     <div className="fixed inset-0 z-50  flex items-center justify-center">
       <div className="absolute  inset-0 bg-[#151e2b] bg-opacity-80"></div>
@@ -159,14 +223,16 @@ const Popup = ()  => {
                       <LabelInputContainer className="mb-4">
                         <Label htmlFor="name">Name</Label>
                         <Input id="name" placeholder="Enter your name" type="text" {...register('name')}/>
-                        {(is === 1) && <p className="text-red-500 text-[12px] my-4">{error}</p>}
+                        {/* {(is === 1) && <p className="text-red-500 text-[12px] my-4">{error}</p>} */}
+                        {(isErrorName) && <p className="text-red-500 text-[12px] my-4">{errorName}</p>}
                       </LabelInputContainer>
                     </div>
                     <div className='flex flex-col gap-2 w-full'>
                       <LabelInputContainer className="mb-4">
                         <Label htmlFor="middlename">Middlename</Label>
                         <Input id="middlename" placeholder="Enter your middlename" type="text" {...register('middlename')}/>
-                        {(is === 2) && <p className="text-red-500 text-[10px] my-4">{error}</p>}
+                        {/* {(is === 2) && <p className="text-red-500 text-[10px] my-4">{error}</p>} */}
+                        {(isErrorMiddlename) && <p className="text-red-500 text-[10px] my-4">{errorMiddlename}</p>}
                       </LabelInputContainer>
                     </div>
                   </div>
