@@ -49,8 +49,11 @@ const sendpicture = async (
       //     headers: { "Content-Type": "multipart/form-data" },
       //   }
       // );
-      fetchData(`/message/image?channel=${channel?.id}&sender=${user1.id}`, "POST", formData)
-      .catch(() => {
+      fetchData(
+        `/message/image?channel=${channel?.id}&sender=${user1.id}`,
+        "POST",
+        formData
+      ).catch(() => {
         toast.error("error in uploading image.");
       });
       Socket?.emit("channelmessage", {
@@ -73,7 +76,11 @@ const sendpicture = async (
       //     headers: { "Content-Type": "multipart/form-data" },
       //   }
       // );
-      fetchData(`/message/image?sender=${user1?.id}&reciever=${user2?.id}`, "POST", formData)
+      fetchData(
+        `/message/image?sender=${user1?.id}&reciever=${user2?.id}`,
+        "POST",
+        formData
+      );
       Socket?.emit("dmmessage", {
         reciever: user2?.id!,
         sender: user1?.id!,
@@ -109,7 +116,11 @@ const fetchTargetUser = async (parameters: any) => {
 const fetchTargetChannel = async (parameters: any) => {
   try {
     if (parameters.subroute === "channel") {
-      const channel = await fetchData(`/channels/${parameters!.id!}`, "GET", null);
+      const channel = await fetchData(
+        `/channels/${parameters!.id!}`,
+        "GET",
+        null
+      );
 
       return channel.data;
     }
@@ -120,6 +131,11 @@ const fetchTargetChannel = async (parameters: any) => {
 };
 
 const SendInvite = (self: user, target: user, socket: Socket) => {
+  if (target.status === "OFFLINE" || target.status === "IN_GAME") {
+    toast.error("user is offline or in game");
+    return;
+  }
+
   socket.emit("GameInvite", {
     sender: self,
     reciever: target,
@@ -148,11 +164,18 @@ const Page = (props: any) => {
   });
 
   useEffect(() => {
-    // const fetchFriendShip = async () => {
-    //   const friendShip = await fetchData(`/status/${user!.id!}/${param.id}`, "GET", null);
-    //   // console.log(friendShip);
-    // }
-    // fetchFriendShip();
+    const fetchFriendShip = async () => {
+      const friendShip = await fetchData(
+        `/status/${user!.id!}/${param.id}`,
+        "GET",
+        null
+      );
+      if (friendShip?.data === "BLOCKED") {
+        router.push("/Dashboard/Chat");
+      }
+      // console.log(friendShip);
+    };
+    fetchFriendShip();
     socket?.on("ok", (data: any) => {
       if (data === null) return;
       clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
@@ -273,10 +296,8 @@ const Page = (props: any) => {
                   setChannelManagement(!channelManagement);
                 }}
               >
-                <IoIosInformationCircleOutline className={cn(
-                  "w-full h-full text-white",
-
-                )}
+                <IoIosInformationCircleOutline
+                  className={cn("w-full h-full text-white")}
                 />
               </div>
             </div>
