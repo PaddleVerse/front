@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='w-full h-full flex justify-center overflow-y-scroll'>
+    <div className='w-full h-full flex justify-center overflow-y-scroll no-scrollbar'>
       <Shop />
     </div>
   )
