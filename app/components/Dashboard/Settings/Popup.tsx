@@ -124,14 +124,13 @@ const Popup = ()  => {
       }
     } catch (error:any) {
       console.log('Error updating user', error);
-      if (error.response.status === 400)
+      if (error?.response?.status === 400)
       {
           setIsErrorName(false); setIsErrorMiddlename(false);
           serverError(error.response.data.message);
       }
       else
         console.error('Error updating user', error);
-      // reset();
     }
   };
   
