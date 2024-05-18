@@ -20,15 +20,16 @@ const GameOptions = () => {
 
   
   useEffect(() => {
+
     if (!socket) return ;
     socket?.on('alreadyInGame', () => {
       setCanPlay(false);
     });
     socket?.on('start', (data : any) => {
-      console.log("--->",data)
+      // console.log("--->",data)
       setTimeout(() => {
-        setStart(true)
-        setRoomId(data.room)
+        setStart(true);
+        setRoomId(data.room);
       } , 1500);
     })
     
@@ -44,10 +45,10 @@ const GameOptions = () => {
     }
   } , [socket])
   
-  useEffect(() => {
-    if (!roomId) return ;
-    setStart(true)
-  }, [roomId])
+  // useEffect(() => {
+  //   if (!roomId) return ;
+  //   setStart(true)
+  // }, [roomId])
 
   if (start) {
     return <Game roomId={roomId!} />;

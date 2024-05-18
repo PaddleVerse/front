@@ -57,6 +57,9 @@ const Navbar = () => {
           console.log("error", err);
         });
     });
+    socket?.on("okk", (data:any) => {
+      // console.log("-------------xxxxxx", data);
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 

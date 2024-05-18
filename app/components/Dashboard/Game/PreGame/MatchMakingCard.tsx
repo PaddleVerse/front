@@ -42,7 +42,6 @@ const MatchMakingCard = ({
 
     return () => {
       if (socket) {
-        socket?.off("start");
         window.removeEventListener("beforeunload", emitLeaveRoom);
       }
     }
