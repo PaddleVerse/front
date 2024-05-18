@@ -25,18 +25,26 @@ const GameOptions = () => {
     socket?.on('alreadyInGame', () => {
       setCanPlay(false);
     });
-    socket?.on('start', (data : any) => {
-      // console.log("--->",data)
-      setTimeout(() => {
+    
+    let startTimeout : any;
+    socket?.on('start', (data: any) => {
+      startTimeout = setTimeout(() => {
         setStart(true);
         setRoomId(data.room);
-      } , 1500);
-    })
-    
-    socket?.on("leftRoom", () => {
-      setCanPlay(false)
-      setStart(false)
+      }, 1500);
     });
+
+    socket?.on("leftRoom", () => {
+      console.log("left room");
+      setCanPlay(false);
+      setStart(false);
+      
+      if (startTimeout) {
+        clearTimeout(startTimeout);
+        startTimeout = null;
+      }
+    });
+
     
     return () => {
       socket?.off('start');

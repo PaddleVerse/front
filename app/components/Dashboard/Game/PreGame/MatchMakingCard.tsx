@@ -35,7 +35,7 @@ const MatchMakingCard = ({
     });
 
     const emitLeaveRoom = () => {
-      socket?.emit("cancelMatchMaking");
+      socket?.emit("cancelMatchMaking",{ id: user?.id });
     };
 
     window.addEventListener("beforeunload", emitLeaveRoom);
