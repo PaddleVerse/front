@@ -19,11 +19,11 @@ const BigCard = ({ gameMode }: { gameMode: string}) => {
       <motion.img
         src={`${
           gameMode === "1"
-            ? "/game1.png"
-            : gameMode === "2"
             ? "/game2.png"
-            : gameMode === "3"
+            : gameMode === "2"
             ? "/game3.png"
+            : gameMode === "3"
+            ? "/game1.png"
             : "/game4.png"
         }`}
         className="w-full h-full object-cover "
@@ -42,7 +42,7 @@ const BigCard = ({ gameMode }: { gameMode: string}) => {
         <h1
           className={cn("font-[600] 2xl:text-2xl text-lg", rajdhani.className)}
         >
-          Gamemode
+          {gameMode === "1" ? "Online Multiplayer" : "Coming Soon"}
         </h1>
         <p
           className={cn(
@@ -50,8 +50,8 @@ const BigCard = ({ gameMode }: { gameMode: string}) => {
             inter.className
           )}
         >
-          Information about the game mode, explain what the user can expect when
-          they select this game mode
+          {gameMode === "1" ? "Play with someone online and test your skills against them, completly random." : "Game mode coming soon stay tuned"}
+          
         </p>
         <div className="flex items-center gap-4">
           <img

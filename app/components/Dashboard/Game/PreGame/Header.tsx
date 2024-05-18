@@ -3,7 +3,7 @@ import {motion} from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/components/cn";
 import { Inter, Rajdhani } from "next/font/google";
-
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
 const rajdhani = Rajdhani({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -16,6 +16,9 @@ const inter = Inter({
 
 
 const Header = ({selected, setCanPlay}:{selected:string, setCanPlay:any}) => {
+  // get username from global state
+  const { state } = useGlobalState();
+  const username = state?.user?.nickname;
   return (
     <div
       className={cn(
@@ -24,7 +27,7 @@ const Header = ({selected, setCanPlay}:{selected:string, setCanPlay:any}) => {
       )}
     >
       <div className="flex flex-col relative">
-        <h1 className="font-[600] text-[24px]">Hello Andrew</h1>
+        <h1 className="font-[600] text-[24px]">Hello {username}</h1>
         <p
           className={cn(
             "text-buttonGray",
