@@ -15,6 +15,7 @@ const GameOptions = () => {
   const [selected, setSelected] = useState("");
 
   useEffect(() => {
+    console.log('GameInviteID', state.GameInviteID)
     setRoomId(state.GameInviteID);
   }, [state.GameInviteID]);
 
@@ -53,12 +54,13 @@ const GameOptions = () => {
     }
   } , [socket])
   
-  // useEffect(() => {
-  //   if (!roomId) return ;
-  //   setStart(true)
-  // }, [roomId])
+  useEffect(() => {
+    if (!roomId) return ;
+    setStart(true)
+  }, [roomId])
 
   if (start) {
+
     return <Game roomId={roomId!} />;
   }
   return (

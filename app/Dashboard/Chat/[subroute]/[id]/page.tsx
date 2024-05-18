@@ -166,11 +166,11 @@ const Page = (props: any) => {
   useEffect(() => {
     const fetchFriendShip = async () => {
       const friendShip = await fetchData(
-        `/status/${user!.id!}/${param.id}`,
+        `/friendship/status/${user!.id!}/${param.id}`,
         "GET",
         null
       );
-      if (friendShip?.data === "BLOCKED") {
+      if (friendShip!.data!.status === "BLOCKED") {
         router.push("/Dashboard/Chat");
       }
       // console.log(friendShip);

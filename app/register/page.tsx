@@ -62,7 +62,7 @@ export default function SignupFormDemo() {
       setIs(isValidValues(values));
       return;
     }
-    axios.post(`http://${ipAdress}:8080/auth/signup`, {
+    axios.post(`http://${ipAdress}/auth/signup`, {
       name: values.name,
       middlename: values.middlename,
       nickname: values.nickname,
@@ -84,11 +84,11 @@ export default function SignupFormDemo() {
 
 
   const handleGoogle = () => {
-    router.push(`http://${ipAdress}:8080/auth/google`);
+    router.push(`http://${ipAdress}/auth/google`);
   }
 
   const handle42 = () => {
-      router.push(`http://${ipAdress}:8080/auth/42`);
+      router.push(`http://${ipAdress}/auth/42`);
   }
 
   return (

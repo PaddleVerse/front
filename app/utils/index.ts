@@ -62,7 +62,7 @@ export const getShortDate = (date: Date | null) => {
 export const fetchData = async (url: string, method: string, body : any) : Promise<any> => {
   const accessToken = getCookie("access_token");
   if (!accessToken) return null;
-  url = `http://${ipAdress}:8080${url}`;
+  url = `http://${ipAdress}${url}`;
   
   switch (method) {
     case "GET":
