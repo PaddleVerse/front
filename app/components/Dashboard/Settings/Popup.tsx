@@ -26,17 +26,18 @@ const Popup = ()  => {
 
   
   const serverError = (err: any) => {
-    
-    err?.map((e: any) => {
-      if (e.startsWith('Name')) {
-        setIsErrorName(true);
-        setErrorName(e);
-      } 
-      if (e.startsWith('Middlename')) {
-        setIsErrorMiddlename(true);
-        setErrorMiddlename(e);
-      }
-    });
+    try {
+      err?.map((e: any) => {
+        if (e.startsWith('Name')) {
+          setIsErrorName(true);
+          setErrorName(e);
+        } 
+        if (e.startsWith('Middlename')) {
+          setIsErrorMiddlename(true);
+          setErrorMiddlename(e);
+        }
+      });
+    } catch (error) {}
   }
 
   const refreshUser = async () => {
@@ -87,60 +88,11 @@ const Popup = ()  => {
     return 0;
   };
 
-  // const onSubmit = (data: any) => {
-  //   if (isValidValues(data) !== 0)
-  //   {
-  //     setIs(isValidValues(data));
-  //     return;
-  //   }
-  //   if (!accessToken) return;
-  //   const formData = new FormData();
-  //   if (selectedFile) {
-  //     formData.append('image', selectedFile);
-  //   }
-  
-  //   const imgUpdatePromise : Promise<any> = selectedFile
-  //     ? axios.put(`http://${ipAdress}:8080/user/img/${user?.id}`, formData, {
-  //         headers: { 
-  //           'Content-Type': 'multipart/form-data',
-  //           'Authorization': `Bearer ${accessToken}`
-  //         },
-  //       })
-  //     : Promise.resolve();
-    
-  //   axios
-  //     .all([
-  //       imgUpdatePromise,
-  //       axios.put(`http://${ipAdress}:8080/user/${user?.id}`, data,
-  //         { headers: {'Authorization': `Bearer ${accessToken}` }}
-  //       ),
-  //     ])
-  //     .then(axios.spread((resImg, resUser) => {
-  //       if (!selectedFile || (resImg && resImg?.data !== ''))
-  //         if (selectedFile) setSelectedFile(null);
-  //       if (resUser && resUser?.data !== '') {
-  //         reset();
-  //         refreshUser();
-  //       }
-  //       axios.put(`http://${ipAdress}:8080/user/visible/${user?.id}`, { first_time: false },
-  //         { headers: {'Authorization': `Bearer ${accessToken}` }})
-  //       .then((res) => { if (res.data !== '') refreshUser(); reset();})
-  //       .catch((error) => {
-  //         serverError(error.response.data.message);
-  //         reset();
-  //       });
-  //     }))
-  //     .catch((error) => {
-  //       serverError(error.response.data.message);
-  //       reset();
-  //     });
-  // };
-
   const onSubmit = async (data: any) => {
-    if (isValidValues(data) !== 0) {
-      setIs(isValidValues(data));
-      return;
-    }
+    // if (isValidValues(data) !== 0) {
+    //   setIs(isValidValues(data));
+    //   return;
+    // }
   
   
     const formData = new FormData();
@@ -171,6 +123,7 @@ const Popup = ()  => {
         reset();
       }
     } catch (error:any) {
+      console.log('Error updating user', error);
       if (error.response.status === 400)
       {
           setIsErrorName(false); setIsErrorMiddlename(false);

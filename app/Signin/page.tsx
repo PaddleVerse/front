@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Boxes } from "@/components/ui/background-boxes";
-import { ipAdress } from "@/app/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -61,7 +60,7 @@ export default function SignupFormDemo() {
       if (accessToken && isTwoFa === "2fa") {
         // Access token is present, make a request to the protected endpoint
         axios
-        .get(`http://${ipAdress}:8080/auth/protected`, {
+        .get(`http://${process.env.NEXT_PUBLIC_API_URL}:8080/auth/protected`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -93,7 +92,7 @@ export default function SignupFormDemo() {
 
     axios
       .post(
-        `http://${ipAdress}:8080/auth/login`,
+        `http://${process.env.NEXT_PUBLIC_API_URL}:8080/auth/login`,
         {
           username: values.nickname,
           password: values.password,
@@ -119,7 +118,7 @@ export default function SignupFormDemo() {
         if (accessToken) {
           // Access token is present, make a request to the protected endpoint
           axios
-          .get(`http://${ipAdress}:8080/auth/protected`, {
+          .get(`http://${process.env.NEXT_PUBLIC_API_URL}:8080/auth/protected`, {
             headers: {
               Authorization: `Bearer ${data.access_token}`,
             },
@@ -152,11 +151,11 @@ export default function SignupFormDemo() {
   }
 
   const handleGoogle = () => {
-    router.push(`http://${ipAdress}:8080/auth/google`);
+    router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:8080/auth/google`);
   };
 
   const handle42 = () => {
-    router.push(`http://${ipAdress}:8080/auth/42`);
+    router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:8080/auth/42`);
   };
 
   useEffect(() => {

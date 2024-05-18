@@ -4,13 +4,12 @@ import Caroussel from './Caroussel'
 import Header from './Header'
 import { useGlobalState } from '@/app/components/Sign/GlobalState'
 import Game from '@/app/components/Dashboard/Game/InGame/Game'
-import { useParams, useSearchParams } from 'next/navigation'
 
 
 const GameOptions = () => {
   const [start, setStart] = useState(false)
   const { state } = useGlobalState();
-  const { socket, user } = state;
+  const { socket } = state;
   const [roomId, setRoomId] = useState<string| null>();
   const [canPlay, setCanPlay] = useState(false)
   const [selected, setSelected] = useState("");
@@ -25,29 +24,15 @@ const GameOptions = () => {
     socket?.on('alreadyInGame', () => {
       setCanPlay(false);
     });
-
     socket?.on('start', (data : any) => {
-      console.log(data?.room);
-      setRoomId(data?.room);
+      console.log("--->",data)
       setTimeout(() => {
         setStart(true)
+        setRoomId(data.room)
       } , 1500);
     })
-    const emitLeaveRoom = () => {
-
-      socket?.emit('gameOver', { userId : user?.id });
-    }
-
-    window.addEventListener('beforeunload', emitLeaveRoom);
-
+    
     socket?.on("leftRoom", () => {
-      setCanPlay(false)
-      setStart(false)
-      setRoomId(null)
-    });
-
-    socket?.on("otherUserLeft", () => {
-      console.log('left room')
       setCanPlay(false)
       setStart(false)
     });
@@ -56,14 +41,13 @@ const GameOptions = () => {
       socket?.off('start');
       socket?.off('leftRoom');
       socket?.off('alreadyInGame');
-      window.removeEventListener('beforeunload', emitLeaveRoom);
     }
   } , [socket])
   
-  // useEffect(() => {
-  //   if (!roomId) return ;
-  //   setStart(true)
-  // }, [roomId])
+  useEffect(() => {
+    if (!roomId) return ;
+    setStart(true)
+  }, [roomId])
 
   if (start) {
     return <Game roomId={roomId!} />;
