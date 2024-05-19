@@ -79,7 +79,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     socket?.on("update", (data: any) => {
       if (data && data.type && data.type === "leave") {
-        toast.success("you have left the channel");
+        // toast.success("you have left the channel");
         clt.invalidateQueries({
           queryKey: ["chatList"],
         });

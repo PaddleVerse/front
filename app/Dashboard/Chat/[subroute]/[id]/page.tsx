@@ -90,15 +90,6 @@ const fetchTargetUser = async (parameters: any) => {
     console.log("error fetching user", error);
   }
 };
-// const fetchTargetChannel = async (parameters: any) => {
-//   if (parameters.subroute === "channel") {
-//     const channel = await axios.get(
-//       `http://${ipAdress}:8080/channels/${parameters!.id!}`
-//     );
-//     return channel.data;
-//   }
-//   return null;
-// };
 const fetchTargetChannel = async (parameters: any) => {
   try {
     if (parameters.subroute === "channel") {
@@ -165,6 +156,11 @@ const Page = (props: any) => {
     socket?.on("ok", (data: any) => {
       if (data === null) return;
       clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
+    });
+    socket?.on("update", (data: any) => {
+      if (data && data.type === "channel") {
+        clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
+      }
     });
     socket?.emit("refresh");
     return () => {
