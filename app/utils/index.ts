@@ -70,6 +70,7 @@ export const fetchData = async (url: string, method: string, body : any) : Promi
         headers: {
           'Authorization': `Bearer ${accessToken}`
           }
+        
         })
       .then((data) => {
         return data;

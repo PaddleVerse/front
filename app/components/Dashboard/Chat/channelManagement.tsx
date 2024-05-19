@@ -200,7 +200,7 @@ const ChannelManagement = ({
 
   return (
     <motion.div
-      className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll "
+      className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll no-scrollbar"
       initial={{ opacity: 0, y: -120 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -317,7 +317,7 @@ const ChannelManagement = ({
           leave channel
         </button>
       </div>
-      <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll">
+      <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll no-scrollbar">
         <div className="flex flex-row mt-5 items-center justify-around">
           <div>
             <p className="text-2xl font-bold">

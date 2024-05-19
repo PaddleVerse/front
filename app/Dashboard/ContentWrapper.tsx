@@ -35,7 +35,7 @@ function ContentWrapper({ children }: Props) {
       })
       .catch((error : any) => {
         console.log("Error during protected endpoint request", error);
-        router.push('/');
+        router.push('/'); 
       });
     }, [router]);
 
