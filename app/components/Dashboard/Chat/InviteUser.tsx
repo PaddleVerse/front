@@ -6,6 +6,7 @@ import { useGlobalState } from "../../Sign/GlobalState";
 import { Socket } from "socket.io-client";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { fetchData } from "@/app/utils";
 
 const KidnapUserToChannel = async (
   user: user,
@@ -23,7 +24,7 @@ const KidnapUserToChannel = async (
     channel: channel,
   };
   try {
-    const res = await axios.post(`http://localhost:8080/participants`, obj);
+    fetchData(`/participants`, "POST", obj);
     socket?.emit("joinRoom", {
       user: user,
       roomName: channel.name,
@@ -45,7 +46,7 @@ const InviteUser = ({ user, channel }: { user: user; channel: channel }) => {
         <Image
           src={
             user?.picture! ||
-            "http:localhost:8080/images/1709559281974-wallpaperflare.com_wallpaper.png"
+            "https://res.cloudinary.com/dxxlqdwxb/image/upload/v1713526102/zxwritc0rqvtjvcwbqiv.jpg"
           }
           width={40}
           height={40}

@@ -167,7 +167,7 @@ const MemberList = ({
           <Image
             src={
               participant.user?.picture! ||
-              "http:localhost:8080/images/1709559281974-wallpaperflare.com_wallpaper.png"
+              "https://res.cloudinary.com/dxxlqdwxb/image/upload/v1713526102/zxwritc0rqvtjvcwbqiv.jpg"
             }
             width={40}
             height={40}

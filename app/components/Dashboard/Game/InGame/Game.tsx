@@ -70,6 +70,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           type: "UPDATE_GAMESTATUS",
           payload: winner.winner === userID ? "win" : "lose",
         });
+        dispatch && dispatch({ type: "UPDATE_GAMEINVITEID", payload: null });
         router.push("/Dashboard");
       });
       socket?.on("paddlePositionUpdate", (paddlePosition: any) => {

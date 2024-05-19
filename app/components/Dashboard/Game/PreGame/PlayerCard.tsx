@@ -37,7 +37,7 @@ function PlayerCard({ name , img }: { name: string, img: any }) {
                     </div>
                 }
                 <h1 className='text-white text-xl font-mono'>
-                    {name || 'Loading...'} 
+                    {name || 'looking for player'}
                     <br/>
                 </h1>
             </div>

@@ -42,13 +42,6 @@ const sendpicture = async (
     try {
       const formData = new FormData();
       formData.append("image", file);
-      // const pic = await axios.post(
-      //   `http://localhost:8080/message/image?channel=${channel?.id}&sender=${user1.id}`,
-      //   formData,
-      //   {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //   }
-      // );
       fetchData(
         `/message/image?channel=${channel?.id}&sender=${user1.id}`,
         "POST",
@@ -69,13 +62,6 @@ const sendpicture = async (
     try {
       const formData = new FormData();
       formData.append("image", file);
-      // const pic = await axios.post(
-      //   `http://localhost:8080/message/image?sender=${user1.id}&reciever=${user2.id}`,
-      //   formData,
-      //   {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //   }
-      // );
       fetchData(
         `/message/image?sender=${user1?.id}&reciever=${user2?.id}`,
         "POST",

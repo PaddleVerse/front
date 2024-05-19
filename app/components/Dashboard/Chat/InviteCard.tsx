@@ -5,12 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import InviteUser from "./InviteUser";
+import { fetchData } from "@/app/utils";
 
 const GetUsers = async (param: any) => {
-  const users = await axios.get(
-    `http://localhost:8080/channels/inviteList/${param?.id}`
-  );
-  return users.data;
+  const users = await fetchData(`/channels/inviteList/${param?.id}`, "GET", null);
+  return users ? users.data : users;
 };
 
 const InviteCard = ({ channel, user }: { channel: channel; user: user }) => {
@@ -32,7 +31,7 @@ const InviteCard = ({ channel, user }: { channel: channel; user: user }) => {
         exit={{ opacity: 0, y: -20 }}
       >
         {users &&
-          users.map((u: user, key: any) => {
+          users?.map((u: user, key: any) => {
             return <InviteUser key={key} user={u} channel={channel} />;
           })}
       </motion.div>

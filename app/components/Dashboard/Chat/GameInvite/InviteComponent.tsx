@@ -20,7 +20,7 @@ const InviteComponent = () => {
   useEffect(() => {
     socket?.on("acceptedGameInvite", (data: any) => {
       setAccept(true);
-      setRoomId(data.roomId);
+      setRoomId(data?.roomId);
     });
     socket?.on("userInGame", () => {
       setAccept(false);
@@ -32,7 +32,7 @@ const InviteComponent = () => {
       setTimeout(() => {
         setModlar(false);
       }, 10000);
-      setSender(data.sender);
+      setSender(data?.sender);
       setModlar(true);
     });
     socket?.on("gameOver", () => {
