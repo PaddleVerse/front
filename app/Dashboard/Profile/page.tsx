@@ -26,13 +26,12 @@ const Profile = () => {
   } , [socket])
 
   useEffect(() => {
-    console.log(id)
     fetchData(`/user/${id}`, "GET", null).then((res) => {
       if (!res) return;
+      if (res?.data === "") router.push('/Dashboard');
       setTargetUser(res.data)
     })
     .catch((err) => {
-      console.log(err)
       router.push('/Dashboard')
     })
   } , [id, is])
