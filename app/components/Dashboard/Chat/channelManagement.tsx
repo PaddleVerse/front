@@ -12,61 +12,78 @@ import {
 } from "@/app/Dashboard/Chat/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import InviteCard from "./InviteCard";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { fetchData } from "@/app/utils";
+import { useQuery } from "@tanstack/react-query";
 
-const fetchParticipants = async (channel: channel, user: user, setParticipants: React.Dispatch<React.SetStateAction<participantWithUser[]>>) => {
-  try {
-    const participants = await fetchData(
-      `/channels/participants/${channel.id}?uid=${user.id}`,
-      "GET",
-      null
-    );
-    if (!participants || !participants.data) return [];
-    
-    const ret = await Promise.all(
-      participants.data.map(async (participant: participants) => {
-        const user = await fetchData(
-          `/user/${participant?.user_id}`,
-          "GET",
-          null
-        );
-        if (!user) return null;
-        return { ...participant, user: user.data };
-      })
-    );
-    const filteredParticipants = ret.filter(Boolean); // Filter out any null values
-    setParticipants(filteredParticipants);
-  } catch (error) {
-    console.log("Error fetching participants:", error);
-  }
+// const fetchParticipants = async (
+//   channel: channel,
+//   user: user,
+// ) => {
+//   try {
+//     const participants = await fetchData(
+//       `/channels/participants/${channel.id}?uid=${user.id}`,
+//       "GET",
+//       null
+//     );
+//     if (!participants || !participants.data) return [];
+
+//     const ret = await Promise.all(
+//       participants.data.map(async (participant: participants) => {
+//         const user = await fetchData(
+//           `/user/${participant?.user_id}`,
+//           "GET",
+//           null
+//         );
+//         if (!user) return null;
+//         return { ...participant, user: user.data };
+//       })
+//     );
+//     const filteredParticipants = ret.filter(Boolean); // Filter out any null values
+//     // setParticipants(filteredParticipants);
+//   } catch (error) {
+//     console.log("Error fetching participants:", error);
+//     return await [];
+//   }
+// };
+
+const fetchParticipants = async (channel: channel, user: user) => {
+  const participants = await fetchData(
+    `/channels/participants/${channel.id}?uid=${user.id}`,
+    "GET",
+    {}
+  );
+  const ret = await Promise.all(
+    participants.data.map(async (participant: participants) => {
+      const user = await fetchData(`/user/${participant.user_id}`, "GET", {});
+      return { ...participant, user: user.data };
+    })
+  );
+  console.log("ret", ret);
+  if (!ret) return null;
+  return ret;
 };
 
-const FetchPriviliged = async (channel: channel, user: user, setPriviliged: React.Dispatch<React.SetStateAction<participants | null>>) => {
-  try {
-    const participants = await fetchData(
-      `/channels/participants/${channel.id}?uid=${user.id}`,
-      "GET",
-      null
-    );
-    if (!participants || !participants.data) return null;
-    
-    const priviligedParticipant = participants.data.find(
-        (participant: participants) =>
-          (participant.role === "ADMIN" || participant.role === "MOD") &&
-          participant.user_id === user.id
-      ) || null;
-    setPriviliged(priviligedParticipant);
-  } catch (error) {
-    console.log("Error fetching privileged participants:", error);
-  }
+const FetchPriviliged = async (channel: channel, user: user) => {
+  const participants = await fetchData(
+    `/channels/participants/${channel.id}?uid=${user.id}`,
+    "GET",
+    {}
+  );
+  console.log("participants", participants);
+  return (
+    participants.data.filter(
+      (participant: participants) =>
+        (participant.role === "ADMIN" || participant.role === "MOD") &&
+        participant.user_id === user.id
+    )[0] || null
+  );
 };
-
 
 const ChannelManagement = ({
   channel,
@@ -88,8 +105,15 @@ const ChannelManagement = ({
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState(channel?.state);
   const [fetchEnabled, setFetchEnabled] = useState(true);
-  const [participants, setParticipants] = useState<participantWithUser[]>([]);
-  const [priviliged, setPriviliged] = useState<participants | null>(null);
+  const { data: participants } = useQuery<participantWithUser[] | null >({
+    queryKey: ["participants"],
+    queryFn: async () => fetchParticipants(channel, user),
+  });
+
+  const { data: priviliged } = useQuery<participants | null>({
+    queryKey: ["priviliged"],
+    queryFn: async () => FetchPriviliged(channel, user),
+  });
 
   const rotateVariants = {
     initial: {
@@ -99,21 +123,6 @@ const ChannelManagement = ({
       rotate: 90,
     },
   };
-  
-  useEffect(() => {
-    if (fetchEnabled) {
-      fetchParticipants(channel, user, setParticipants);
-      FetchPriviliged(channel, user, setPriviliged);
-    }
-  }, [fetchEnabled, channel, user]);
-
-  useEffect(() => {
-    socket?.on("updateChannleList", (data: any) => {
-      console.log("update channel list", data);
-      setFetchEnabled(true);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]);
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -134,14 +143,14 @@ const ChannelManagement = ({
       "DELETE",
       null
     )
-    .then(() => {
-      setFetchEnabled(false);
-      socket.emit("leaveRoom", { user: user, roomName: channel.name });
-      router.push("/Dashboard/Chat");
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+      .then(() => {
+        // setFetchEnabled(false);
+        socket.emit("leaveRoom", { user: user, roomName: channel.name });
+        router.push("/Dashboard/Chat");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -172,11 +181,7 @@ const ChannelManagement = ({
           }
         }
 
-        await fetchData(
-          `/channels/${channel.id}`,
-          "PUT",
-          obj
-        );
+        await fetchData(`/channels/${channel.id}`, "PUT", obj);
         if (picture) {
           try {
             const formData = new FormData();
@@ -186,7 +191,6 @@ const ChannelManagement = ({
               "POST",
               formData
             );
-
           } catch (error) {
             toast.error("error in uploading image, using the default image.");
           }
@@ -349,7 +353,7 @@ const ChannelManagement = ({
           {!modlar ? (
             participants &&
             //@ts-ignore
-            participants.map((participant:any, index:number) => {
+            participants.map((participant: any, index: number) => {
               return (
                 <MemberList
                   key={index}
