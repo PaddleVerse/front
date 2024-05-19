@@ -33,8 +33,8 @@ export default function SignupFormDemo() {
   const router = useRouter();
 
   const isValidValues = (value: any) => {
-    if (value.nickname.length < 3) return 3;
-    else if (value.password.length < 6) return 4;
+    if (value?.nickname.length < 3) return 3;
+    else if (value?.password.length < 6) return 4;
     return 0;
   };
 
@@ -57,7 +57,8 @@ export default function SignupFormDemo() {
     {
       const accessToken = document.cookie.split("access_token=")[1].split(";")[0];
       setToken(accessToken);
-      if (accessToken && isTwoFa === "2fa") {
+
+      if (accessToken) {
         // Access token is present, make a request to the protected endpoint
         axios
         .get(`http://${process.env.NEXT_PUBLIC_API_URL}/auth/protected`, {
@@ -67,7 +68,7 @@ export default function SignupFormDemo() {
         })
         .then((res) => {
           document.cookie = `access_token=; path=/;`;
-          if (res.status === 200)
+          if (res?.status === 200)
           {
             setUserId(res?.data?.id);
             if (res?.data?.twoFa)
