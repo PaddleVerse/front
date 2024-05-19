@@ -214,6 +214,7 @@ const Page = (props: any) => {
         socket?.emit("channelmessage", {
           roomName: targetChannel.name,
           user: state?.user,
+          message: message,
         });
       } catch (error) {
         toast.error("failed to send message to channel");

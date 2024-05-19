@@ -34,6 +34,10 @@ const MemberList = ({
   const { state } = useGlobalState();
 
   const handleClick = () => {
+    if (participant.user_id! === state.user.id) {
+      router.push(`/Dashboard/`);
+      return;
+    }
     router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
   };
 
