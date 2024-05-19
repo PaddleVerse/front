@@ -108,10 +108,14 @@ const ChannelManagement = ({
   }, [fetchEnabled, channel, user]);
 
   useEffect(() => {
-    socket?.on("updateChannleList", (data: any) => {
+    socket?.on("update", (data: any) => {
       console.log("update channel list", data);
       setFetchEnabled(true);
     });
+
+    return () => {
+      socket?.off("update");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
