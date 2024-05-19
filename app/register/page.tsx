@@ -76,9 +76,8 @@ export default function SignupFormDemo() {
         setIs(5);
     })
     .catch((err) => {
-      if (err.response)
-        serverError(err.response.data.message);
-      console.log(err.response.data);
+      if (err && err?.response)
+        serverError(err.response?.data?.message);
     });
   }
 

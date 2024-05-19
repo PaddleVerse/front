@@ -15,21 +15,20 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import JoinChannel from "./JoinChannel";
 import InviteCard from "./InviteCard";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import { ipAdress, getCookie, fetchData } from "@/app/utils";
+import { fetchData } from "@/app/utils";
 
-const fetchParticipants = async (channel: channel, user: user) => {
+const fetchParticipants = async (channel: channel, user: user, setParticipants: React.Dispatch<React.SetStateAction<participantWithUser[]>>) => {
   try {
     const participants = await fetchData(
       `/channels/participants/${channel.id}?uid=${user.id}`,
       "GET",
       null
     );
-    if (!participants) return;
+    if (!participants || !participants.data) return [];
+    
     const ret = await Promise.all(
       participants.data.map(async (participant: participants) => {
         const user = await fetchData(
@@ -37,35 +36,37 @@ const fetchParticipants = async (channel: channel, user: user) => {
           "GET",
           null
         );
-        if (!user) return;
+        if (!user) return null;
         return { ...participant, user: user.data };
       })
     );
-    return ret;
+    const filteredParticipants = ret.filter(Boolean); // Filter out any null values
+    setParticipants(filteredParticipants);
   } catch (error) {
-    console.log(error);
+    console.log("Error fetching participants:", error);
   }
 };
 
-const FetchPriviliged = async (channel: channel, user: user) => {
+const FetchPriviliged = async (channel: channel, user: user, setPriviliged: React.Dispatch<React.SetStateAction<participants | null>>) => {
   try {
     const participants = await fetchData(
       `/channels/participants/${channel.id}?uid=${user.id}`,
       "GET",
       null
     );
-    if (!participants) return;
-    return (
-      participants.data.filter(
+    if (!participants || !participants.data) return null;
+    
+    const priviligedParticipant = participants.data.find(
         (participant: participants) =>
           (participant.role === "ADMIN" || participant.role === "MOD") &&
           participant.user_id === user.id
-      )[0] || null
-    );
+      ) || null;
+    setPriviliged(priviligedParticipant);
   } catch (error) {
-    console.log(error);
+    console.log("Error fetching privileged participants:", error);
   }
 };
+
 
 const ChannelManagement = ({
   channel,
@@ -76,7 +77,6 @@ const ChannelManagement = ({
   user: user;
   update: (arg0: boolean) => void;
 }) => {
-  const clt = useQueryClient();
   const { state, dispatch } = useGlobalState();
   const [modlar, setModlar] = useState(false);
   const { user: u, socket } = state;
@@ -87,6 +87,10 @@ const ChannelManagement = ({
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState(channel?.state);
+  const [fetchEnabled, setFetchEnabled] = useState(true);
+  const [participants, setParticipants] = useState<participantWithUser[]>([]);
+  const [priviliged, setPriviliged] = useState<participants | null>(null);
+
   const rotateVariants = {
     initial: {
       rotate: 0,
@@ -95,23 +99,22 @@ const ChannelManagement = ({
       rotate: 90,
     },
   };
-  const { data: participants } = useQuery<participantWithUser[]>({
-    queryKey: ["participants"],
-    //@ts-ignore
-    queryFn: async () => fetchParticipants(channel, user),
-  });
-  const { data: priviliged } = useQuery<participants>({
-    queryKey: ["priviliged"],
-    queryFn: async () => FetchPriviliged(channel, user),
-  });
+  
+  useEffect(() => {
+    if (fetchEnabled) {
+      fetchParticipants(channel, user, setParticipants);
+      FetchPriviliged(channel, user, setPriviliged);
+    }
+  }, [fetchEnabled, channel, user]);
 
   useEffect(() => {
-    socket?.on("update", (data: any) => {
-      clt.invalidateQueries({ queryKey: ["participants"] });
-      clt.invalidateQueries({ queryKey: ["priviliged"] });
+    socket?.on("updateChannleList", (data: any) => {
+      console.log("update channel list", data);
+      setFetchEnabled(true);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
+
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
@@ -131,13 +134,14 @@ const ChannelManagement = ({
       "DELETE",
       null
     )
-      .then(() => {
-        socket.emit("leaveRoom", { user: user, roomName: channel.name });
-        router.push("/Dashboard/Chat");
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    .then(() => {
+      setFetchEnabled(false);
+      socket.emit("leaveRoom", { user: user, roomName: channel.name });
+      router.push("/Dashboard/Chat");
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -186,18 +190,17 @@ const ChannelManagement = ({
           } catch (error) {
             toast.error("error in uploading image, using the default image.");
           }
-          state?.socket?.emit("channelUpdate", {
-            roomName: channel.name,
-            user: user,
-          });
         }
+        state?.socket?.emit("channelUpdate", {
+          roomName: channel.name,
+          user: user,
+        });
       } catch (error) {
         toast.error("error in updating channel");
       }
     };
     updateChannel();
   };
-
   return (
     <motion.div
       className="w-full flex sm:h-[80%] h-auto sm:flex-row flex-col jutify-center items-center  sm:overflow-y-scroll no-scrollbar"

@@ -20,6 +20,7 @@ import { ipAdress, fetchData } from "@/app/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
 
+import { Dropdown } from "./DropDown";
 const MemberList = ({
   participant,
   exec,
@@ -73,10 +74,6 @@ const MemberList = ({
       toast.error("You cannot kick an admin");
       return;
     }
-    const obj = {
-      channel: exec?.channel_id,
-      executor: exec?.user_id,
-    };
    
     fetchData(`/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`, "DELETE", null)
       .then((res) => {
@@ -166,7 +163,7 @@ const MemberList = ({
         <div className="flex items-center gap-2">
           <Image
             src={
-              participant.user?.picture! ||
+              participant && participant?.user?.picture! ||
               "https://res.cloudinary.com/dxxlqdwxb/image/upload/v1713526102/zxwritc0rqvtjvcwbqiv.jpg"
             }
             width={40}
@@ -175,17 +172,28 @@ const MemberList = ({
             onClick={() => {
               handleClick();
             }}
-            className="rounded-full aspect-square"
+            className="rounded-full aspect-square object-cover"
           />
           <div className="flex flex-col 2xl:text-md text-xs">
-            <span>{participant.user?.name}</span>
+            <span>{participant && participant?.user?.name}</span>
             <span className="2xl:text-md text-[10px]">
-              @{participant.user?.middlename}
+              @{participant && participant?.user?.middlename}
             </span>
           </div>
         </div>
-        <span>{participant.role.toLowerCase()}</span>
-        <div className="flex gap-1 2xl:text-md text-xs">
+        <span>{participant && participant?.role.toLowerCase()}</span>
+            {
+              participant && participant?.role !== "ADMIN" ?
+              <Dropdown list={[
+                {name: "Mute/Unmute", action: handleMuteUnMute},
+                {name: "Ban", action: handleBan},
+                {name: "Kick", action: handleKick},
+                {name: "Promote/Demote", action: handlePromoteDemote}
+              ]} /> : <div></div>
+            }
+        
+
+        {/* <div className="flex gap-1 2xl:text-md text-xs">
           <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
             {participant.mute ? (
               <FaMicrophoneSlash className="w-[20px] h-[20px]" />
@@ -209,7 +217,7 @@ const MemberList = ({
               <FaChessKing className="w-[20px] h-[20px]" />
             )}
           </div>
-        </div>
+        </div> */}
       </motion.div>
     </AnimatePresence>
   );

@@ -156,7 +156,7 @@ const Page = (props: any) => {
         "GET",
         null
       );
-      if (friendShip!.data!.status === "BLOCKED") {
+      if (friendShip!.data!.status === "BLOCKED" && targetUser) {
         router.push("/Dashboard/Chat");
       }
       // console.log(friendShip);
