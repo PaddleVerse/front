@@ -64,7 +64,6 @@ const fetchParticipants = async (channel: channel, user: user) => {
       return { ...participant, user: user.data };
     })
   );
-  console.log("ret", ret);
   if (!ret) return null;
   return ret;
 };

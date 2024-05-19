@@ -54,6 +54,7 @@ const SearchBarPop = () => {
       fetchData(`/search/searchedUsers/${user?.id}`, 'GET', null)
       .then((res: any) => {
         if (!res) return;
+        console.log(res.data);
         setSearchedUsers(res.data);
         setFilteredUsers(res.data);
       })

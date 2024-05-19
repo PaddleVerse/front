@@ -7,20 +7,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { Boxes } from "@/components/ui/background-boxes";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import V2fa from '../components/V2fa/V2fa';
-
-const BgWrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="h-full relative w-full overflow-hidden bg-black flex flex-col items-center justify-center">
-      <Boxes />
-      {children}
-    </div>
-  );
-};
+import { ipAdress } from "@/app/utils";
 
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
@@ -61,7 +52,7 @@ export default function SignupFormDemo() {
       if (accessToken) {
         // Access token is present, make a request to the protected endpoint
         axios
-        .get(`http://${process.env.NEXT_PUBLIC_API_URL}/auth/protected`, {
+        .get(`http://${ipAdress}/auth/protected`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -74,7 +65,7 @@ export default function SignupFormDemo() {
             if (res?.data?.twoFa)
               setIsTwoFa("2fa");
             else
-              router.push("/Dashboard");
+              router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:3000/Dashboard`);
           }
           else
             console.log("Failed to authenticate with protected endpoint");
@@ -93,7 +84,7 @@ export default function SignupFormDemo() {
 
     axios
       .post(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        `http://${ipAdress}/auth/login`,
         {
           username: values.nickname,
           password: values.password,
@@ -119,7 +110,7 @@ export default function SignupFormDemo() {
         if (accessToken) {
           // Access token is present, make a request to the protected endpoint
           axios
-          .get(`http://${process.env.NEXT_PUBLIC_API_URL}/auth/protected`, {
+          .get(`http://${ipAdress}/auth/protected`, {
             headers: {
               Authorization: `Bearer ${data.access_token}`,
             },
@@ -135,7 +126,7 @@ export default function SignupFormDemo() {
               else
               {
                   document.cookie = `access_token=${data.access_token}; path=/;`;
-                  router.push("/Dashboard");
+                  router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:3000/Dashboard`);
                 }
               }
               else
@@ -152,11 +143,11 @@ export default function SignupFormDemo() {
   }
 
   const handleGoogle = () => {
-    router.push(`http://${process.env.NEXT_PUBLIC_API_URL}/auth/google`);
+    router.push(`http://${ipAdress}/auth/google`);
   };
 
   const handle42 = () => {
-    router.push(`http://${process.env.NEXT_PUBLIC_API_URL}/auth/42`);
+    router.push(`http://${ipAdress}/auth/42`);
   };
 
   useEffect(() => {
