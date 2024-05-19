@@ -22,7 +22,7 @@ const InviteCard = ({ channel, user }: { channel: channel; user: user }) => {
   return (
     <AnimatePresence>
       <motion.div
-        className="flex gap-2 items-center col-start text-inherit relative py-3 w-full justify-center border"
+        className="flex flex-col gap-3 items-center col-start text-inherit relative py-3 w-full justify-center"
         onClick={(e) => {
           e.preventDefault();
         }}

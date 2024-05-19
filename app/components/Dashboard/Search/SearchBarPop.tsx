@@ -51,9 +51,10 @@ const SearchBarPop = () => {
     } , [inputValue])
 
     useEffect(() => {
-      fetchData(`/search/searchedUsers`, 'GET', null)
+      fetchData(`/search/searchedUsers/${user?.id}`, 'GET', null)
       .then((res: any) => {
         if (!res) return;
+        console.log(res.data);
         setSearchedUsers(res.data);
         setFilteredUsers(res.data);
       })
@@ -71,7 +72,7 @@ const SearchBarPop = () => {
 
     const handleclick = (id : any) => {
       
-      fetchData(`/search`, 'POST', { userId: id })
+      fetchData(`/search`, 'POST', { userId: id, searchingUserId: user?.id })
       .catch((err) => console.log(err));
       router.push(`/Dashboard/Profile?id=${id}`);
     }
@@ -96,8 +97,8 @@ const SearchBarPop = () => {
                 <div>
                     <h1 className='text-white text-xl my-4 ml-2'>{title}</h1>
                     <div className='flex justify-start items-start flex-wrap'>
-                        { filteredUsers && filteredUsers?.map((user : any) => (
-                            <UserSearchCard user={user} key={user?.id} handleClick={handleclick}/>
+                        { filteredUsers && filteredUsers?.map((user : any, index : any) => (
+                            <UserSearchCard user={user} key={index} handleClick={handleclick}/>
                         ))
                         }
                     </div>

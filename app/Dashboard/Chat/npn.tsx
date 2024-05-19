@@ -78,7 +78,14 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
-      if (data.type === "banned") {
+      if (data && data.type && data.type === "leave") {
+        toast.success("you have left the channel");
+        clt.invalidateQueries({
+          queryKey: ["chatList"],
+        });
+        return;
+      }
+      if (data && data.type && data.type === "banned") {
         toast.error("You have been banned from this channel");
         clt.invalidateQueries({
           queryKey: ["chatList"],
@@ -86,7 +93,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
         router.push("/Dashboard/Chat");
         return;
       }
-      if (data.type === "kicked") {
+      if (data && data.type && data.type === "kicked") {
         toast.error("You have been kicked from this channel");
         clt.invalidateQueries({
           queryKey: ["chatList"],
@@ -94,7 +101,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
         router.push("/Dashboard/Chat");
         return;
       }
-      if (data.type === "typing") {
+      if (data && data.type && data.type === "typing") {
         setTypingObject(data);
         setTyping(true);
         setTimeout(() => {

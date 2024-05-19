@@ -19,7 +19,7 @@ import InviteCard from "./InviteCard";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { fetchData } from "@/app/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // const fetchParticipants = async (
 //   channel: channel,
@@ -64,7 +64,6 @@ const fetchParticipants = async (channel: channel, user: user) => {
       return { ...participant, user: user.data };
     })
   );
-  console.log("ret", ret);
   if (!ret) return null;
   return ret;
 };
@@ -105,7 +104,8 @@ const ChannelManagement = ({
   const keyInput = useRef<HTMLInputElement | null>(null);
   const [selectedOption, setSelectedOption] = useState(channel?.state);
   const [fetchEnabled, setFetchEnabled] = useState(true);
-  const { data: participants } = useQuery<participantWithUser[] | null >({
+  const clt = useQueryClient();
+  const { data: participants } = useQuery<participantWithUser[] | null>({
     queryKey: ["participants"],
     queryFn: async () => fetchParticipants(channel, user),
     enabled: fetchEnabled,
@@ -154,6 +154,17 @@ const ChannelManagement = ({
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    console.log("socket event");
+    state?.socket?.on("update", (data: any) => {
+      console.log("data", data);
+      if (data && data.type && data.type === "channel") {
+        clt.invalidateQueries({ queryKey: ["participants"] });
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.socket]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
