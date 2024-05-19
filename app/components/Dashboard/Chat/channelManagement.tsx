@@ -108,11 +108,13 @@ const ChannelManagement = ({
   const { data: participants } = useQuery<participantWithUser[] | null >({
     queryKey: ["participants"],
     queryFn: async () => fetchParticipants(channel, user),
+    enabled: fetchEnabled,
   });
 
   const { data: priviliged } = useQuery<participants | null>({
     queryKey: ["priviliged"],
     queryFn: async () => FetchPriviliged(channel, user),
+    enabled: fetchEnabled,
   });
 
   const rotateVariants = {
@@ -144,7 +146,7 @@ const ChannelManagement = ({
       null
     )
       .then(() => {
-        // setFetchEnabled(false);
+        setFetchEnabled(false);
         socket.emit("leaveRoom", { user: user, roomName: channel.name });
         router.push("/Dashboard/Chat");
       })
