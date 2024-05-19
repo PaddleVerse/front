@@ -207,7 +207,7 @@ const Page = (props: any) => {
             sender_id: state?.user?.id,
             sender_picture: state?.user?.picture,
           },
-          channel: { name: targetChannel.name },
+          channel: targetChannel?.id,
           user1: state?.user?.id,
         };
         await fetchData(`/message`, "POST", message);

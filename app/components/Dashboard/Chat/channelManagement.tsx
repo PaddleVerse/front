@@ -21,37 +21,6 @@ import { FaXmark } from "react-icons/fa6";
 import { fetchData } from "@/app/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-// const fetchParticipants = async (
-//   channel: channel,
-//   user: user,
-// ) => {
-//   try {
-//     const participants = await fetchData(
-//       `/channels/participants/${channel.id}?uid=${user.id}`,
-//       "GET",
-//       null
-//     );
-//     if (!participants || !participants.data) return [];
-
-//     const ret = await Promise.all(
-//       participants.data.map(async (participant: participants) => {
-//         const user = await fetchData(
-//           `/user/${participant?.user_id}`,
-//           "GET",
-//           null
-//         );
-//         if (!user) return null;
-//         return { ...participant, user: user.data };
-//       })
-//     );
-//     const filteredParticipants = ret.filter(Boolean); // Filter out any null values
-//     // setParticipants(filteredParticipants);
-//   } catch (error) {
-//     console.log("Error fetching participants:", error);
-//     return await [];
-//   }
-// };
-
 const fetchParticipants = async (channel: channel, user: user) => {
   const participants = await fetchData(
     `/channels/participants/${channel.id}?uid=${user.id}`,
@@ -156,7 +125,6 @@ const ChannelManagement = ({
   };
 
   useEffect(() => {
-    console.log("socket event");
     state?.socket?.on("update", (data: any) => {
       console.log("data", data);
       if (data && data.type && data.type === "channel") {
