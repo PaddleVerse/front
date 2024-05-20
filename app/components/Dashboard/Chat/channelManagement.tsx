@@ -191,7 +191,7 @@ const ChannelManagement = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
+       <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
         <form
           action=""
           onSubmit={handleSubmit}
@@ -303,7 +303,7 @@ const ChannelManagement = ({
           leave channel
         </button>
       </div>
-      <div className="sm:w-[45%] w-full h-full bg-transparent overflow-y-scroll no-scrollbar">
+      <div className={`"sm:w-[45%]" w-full h-full bg-transparent overflow-y-scroll no-scrollbar`}>
         <div className="flex flex-row mt-5 items-center justify-around">
           <div>
             <p className="text-2xl font-bold">

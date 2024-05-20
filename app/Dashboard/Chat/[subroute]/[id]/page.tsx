@@ -94,11 +94,11 @@ const fetchTargetUser = async (parameters: any, router: any) => {
     return null;
   }
 };
-const fetchTargetChannel = async (parameters: any, router: any) => {
+const fetchTargetChannel = async (parameters: any, router: any, user: user) => {
   try {
     if (parameters.subroute === "channel") {
       const channel = await fetchData(
-        `/channels/${parameters!.id!}`,
+        `/channels/${parameters!.id!}?uid=${user?.id}`,
         "GET",
         null
       );
@@ -141,7 +141,7 @@ const Page = (props: any) => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const { data: targetChannel } = useQuery<channel | null>({
     queryKey: ["targetChannel"],
-    queryFn: () => fetchTargetChannel(param, router),
+    queryFn: () => fetchTargetChannel(param, router, user),
   });
   const { data: targetUser } = useQuery<user | null>({
     queryKey: ["targetUser"],
@@ -220,7 +220,7 @@ const Page = (props: any) => {
         };
         await fetchData(`/message`, "POST", message);
         socket?.emit("channelmessage", {
-          roomName: targetChannel.name,
+          channel: targetChannel,
           user: state?.user,
           message: message,
         });

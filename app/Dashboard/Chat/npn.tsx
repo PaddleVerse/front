@@ -103,6 +103,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
       console.log("on npn socket event ", data);
       if (data && data.type && (data.type === "leave" || data.type === "join")) {
         // toast.success("you have left the channel");
+        console.log("here at leave join condition ", data);
         clt.invalidateQueries({
           queryKey: ["chatList"],
         });

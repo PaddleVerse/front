@@ -34,6 +34,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const { user, socket } = state;
   const [score, setScore] = useState({ player1: 0, player2: 0, uid1: -1, uid2: -1});
   const [winnerText, setWinnerText] = useState("");
+  const [opponent, setOpponent] = useState(0);
   const router = useRouter();
   const [end, setEnd] = useState(false);
   useEffect(() => {
@@ -66,13 +67,17 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           uid2: newScore?.score[1]?.uid,
         });
       });
+      socket?.on("gameOpponent", (opponent: number) => {
+        setOpponent(opponent);
+      });
       socket?.on("endGame", (winner: any) => {
         setEnd(true);
         setWinnerText(winner.winner === userID ? "win" : "lost");
-        dispatch && dispatch({
-          type: "UPDATE_GAMESTATUS",
-          payload: winner.winner === userID ? "win" : "lose",
-        });
+        dispatch &&
+          dispatch({
+            type: "UPDATE_GAMESTATUS",
+            payload: winner.winner === userID ? "win" : "lose",
+          });
         dispatch && dispatch({ type: "UPDATE_GAMEINVITEID", payload: null });
         router.push("/Dashboard");
       });
@@ -137,7 +142,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     scene.add(new AmbientLighting(0xffffff, 0.1));
     let ball: Ball | null = null;
     fetchData(`/game/getUserBallSkin/${user?.id}`, "GET", null)
-      .then((res:any) => {
+      .then((res: any) => {
         if (!res) return;
         if (!res?.data) {
           ball = new Ball(
@@ -170,23 +175,41 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
     let paddle: Paddle;
     let paddle2: Paddle;
     const res1 = fetchData(`/game/getUserPaddleSkin/${user?.id}`, "GET", null)
-    .then((res) => {
-      if (!res?.data) {
-        paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2);
-        paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2);
-      } else {
-        let color : String = res.data.color.replace(user?.id, "");
-        // remove the user id from the color using something like remove
-        console.log("color: " + color);
-        paddle = new Paddle(scene, { x: 16.0, y: 10.0, z: 0.0 }, (3 * Math.PI) / 2, color);
-        paddle2 = new Paddle(scene, { x: -16.0, y: 10.0, z: 0.0 }, Math.PI / 2, color);
-      }
-      paddleRef.current = paddle;
-      paddle2Ref.current = paddle2;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((res) => {
+        if (!res?.data) {
+          paddle = new Paddle(
+            scene,
+            { x: 16.0, y: 10.0, z: 0.0 },
+            (3 * Math.PI) / 2
+          );
+          paddle2 = new Paddle(
+            scene,
+            { x: -16.0, y: 10.0, z: 0.0 },
+            Math.PI / 2
+          );
+        } else {
+          let color: String = res.data.color.replace(user?.id, "");
+          // remove the user id from the color using something like remove
+          console.log("color: " + color);
+          paddle = new Paddle(
+            scene,
+            { x: 16.0, y: 10.0, z: 0.0 },
+            (3 * Math.PI) / 2,
+            color
+          );
+          paddle2 = new Paddle(
+            scene,
+            { x: -16.0, y: 10.0, z: 0.0 },
+            Math.PI / 2,
+            color
+          );
+        }
+        paddleRef.current = paddle;
+        paddle2Ref.current = paddle2;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     // Update the interval function
     const intervalId = setInterval(() => {
@@ -249,7 +272,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         camera.position.z = -(mouseX * 2);
       }
     };
-  
+
     mountRef.current?.addEventListener("mousemove", handleMouseMove);
 
     function animate() {
