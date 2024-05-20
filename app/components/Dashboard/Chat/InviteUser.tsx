@@ -24,12 +24,12 @@ const KidnapUserToChannel = async (
     channel: channel,
   };
   try {
-    fetchData(`/participants`, "POST", obj);
+    await fetchData(`/participants`, "POST", obj);
     socket?.emit("joinRoom", {
       user: user,
       roomName: channel.name,
       type: "other",
-    });
+    })
   } catch (error) {
     toast.error("failed to join channel");
   }
