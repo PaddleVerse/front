@@ -22,6 +22,10 @@ const LeaderRow = ({ user, length, index }: Props) => {
   const [loses, setLoses] = useState(0);
 
   const handleClick = () => {
+    if (user?.id === User?.id) {
+      router.push(`/Dashboard`);
+      return;
+    }
     router.push(`/Dashboard/Profile?id=${user?.id}`);
   };
 

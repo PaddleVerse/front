@@ -7,15 +7,22 @@ import {
   CardItem,
 } from "../../../../components/ui/3d-card";
 import Image from "next/image";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 interface Props {
   user: any;
 }
 
 const UserCard = ({ user }: Props) => {
+  const {state} = useGlobalState(); 
   const [LoadingImg, setLoadingImg] = useState(false);
   const router = useRouter();
+
   const handleClick = () => {
+    if (user.id === state?.user?.id) {
+      router.push(`/Dashboard`);
+      return;
+    }
     router.push(`/Dashboard/Profile?id=${user.id}`);
   };
   return (

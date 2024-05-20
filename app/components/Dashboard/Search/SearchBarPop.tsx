@@ -70,9 +70,12 @@ const SearchBarPop = () => {
     } , [user?.id])
 
     const handleclick = (id : any) => {
-      
       fetchData(`/search`, 'POST', { userId: id, searchingUserId: user?.id })
       .catch((err) => console.log(err));
+      if (id === user?.id) {
+        router.push(`/Dashboard`);
+        return;
+      }
       router.push(`/Dashboard/Profile?id=${id}`);
     }
 
