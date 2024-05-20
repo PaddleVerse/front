@@ -63,7 +63,7 @@ const JoinChannelBubble = ({
           channel_id: channel?.id,
         },
         user: user,
-        channel: channel,
+        channel: channel?.id,
       };
       try {
         const res = await fetchData(
