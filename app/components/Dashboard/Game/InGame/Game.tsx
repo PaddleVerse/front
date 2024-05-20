@@ -9,9 +9,9 @@ import { Ball } from "./Ball";
 import { TableModule } from "./Table";
 import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { rajdhani } from "@/app/utils/fontConfig";
-import { cn } from "@/components/cn";
 import { fetchData, ipAdress } from "@/app/utils";
+import ScoreBar from "./ScoreBar";
+
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
@@ -60,8 +60,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       });
       socket?.on("updateScore", (newScore: any) => {
         setScore({
-          player1: newScore.score[0].score,
-          player2: newScore.score[1].score,
+          player1: newScore?.score[0]?.score,
+          player2: newScore?.score[1]?.score,
         });
       });
       socket?.on("gameOpponent", (opponent: number) => {
@@ -79,18 +79,18 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         router.push("/Dashboard");
       });
       socket?.on("paddlePositionUpdate", (paddlePosition: any) => {
-        if (paddle2Ref.current && paddleRef.current && userID) {
+        if (paddle2Ref?.current && paddleRef?.current && userID) {
           if (userID === "player1") {
             paddle2Ref.current.position = {
-              x: paddlePosition.paddle.x,
-              y: paddlePosition.paddle.y,
-              z: paddlePosition.paddle.z,
+              x: paddlePosition?.paddle?.x,
+              y: paddlePosition?.paddle?.y,
+              z: paddlePosition?.paddle?.z,
             };
           } else if (userID === "player2") {
             paddleRef.current.position = {
-              x: paddlePosition.paddle.x,
-              y: paddlePosition.paddle.y,
-              z: paddlePosition.paddle.z,
+              x: paddlePosition?.paddle?.x,
+              y: paddlePosition?.paddle?.y,
+              z: paddlePosition?.paddle?.z,
             };
           }
         }
@@ -100,15 +100,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         if (!ballRef.current || !ball) return;
         if (ballRef.current) {
           if (!ballRef.current.position || !ballRef.current.velocity) return;
-          ballRef.current.position.set(
-            ball.position.x,
-            ball.position.y,
-            ball.position.z
+          ballRef?.current?.position.set(
+            ball?.position?.x,
+            ball?.position?.y,
+            ball?.position?.z
           );
-          ballRef.current.velocity.set(
-            ball.velocity.x,
-            ball.velocity.y,
-            ball.velocity.z
+          ballRef?.current?.velocity.set(
+            ball?.velocity?.x,
+            ball?.velocity?.y,
+            ball?.velocity?.z
           );
         }
       });
@@ -327,19 +327,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           }}
           className="flex "
         >
-          <div
-            style={{
-              transform: "translateX(-50%)",
-            }}
-            className={cn(
-              "bg-red-600 px-4 py-2 rounded-br-lg rounded-bl-lg absolute text-white text-xl mx-auto top-[55px] ml-[118px] font-[500]",
-              rajdhani.className
-            )}
-          >
-            {/* give each id their score */}
-            
-            {user.id}: {score.player1} - {opponent}: {score.player2}
-          </div>
+          <ScoreBar user1={user} user2={user} score={score} />
         </div>
       )}
     </>
