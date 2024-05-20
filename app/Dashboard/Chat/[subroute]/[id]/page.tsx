@@ -78,11 +78,14 @@ const sendpicture = async (
   }
 };
 
-const fetchTargetUser = async (parameters: any) => {
+const fetchTargetUser = async (parameters: any, router: any) => {
   try {
     if (parameters.subroute === "dm") {
       const user = await fetchData(`/user/${parameters?.id!}`, "GET", null);
-
+      if (!user?.data || user?.data === "") {
+        router?.push("/Dashboard/Chat");
+        return null;
+      }
       return user?.data;
     }
     return null;
@@ -90,7 +93,7 @@ const fetchTargetUser = async (parameters: any) => {
     console.log("error fetching user", error);
   }
 };
-const fetchTargetChannel = async (parameters: any) => {
+const fetchTargetChannel = async (parameters: any, router: any) => {
   try {
     if (parameters.subroute === "channel") {
       const channel = await fetchData(
@@ -98,7 +101,10 @@ const fetchTargetChannel = async (parameters: any) => {
         "GET",
         null
       );
-
+      if (!channel?.data || channel?.data === "") {
+        router?.push("/Dashboard/Chat");
+        return null;
+      }
       return channel.data;
     }
     return null;
@@ -133,11 +139,11 @@ const Page = (props: any) => {
   const inputMessage = useRef<HTMLInputElement | null>(null);
   const { data: targetChannel } = useQuery<channel | null>({
     queryKey: ["targetChannel"],
-    queryFn: () => fetchTargetChannel(param),
+    queryFn: () => fetchTargetChannel(param, router),
   });
   const { data: targetUser } = useQuery<user | null>({
     queryKey: ["targetUser"],
-    queryFn: () => fetchTargetUser(param),
+    queryFn: () => fetchTargetUser(param, router),
   });
 
   useEffect(() => {
@@ -150,7 +156,6 @@ const Page = (props: any) => {
       if (friendShip!.data!.status === "BLOCKED" && targetUser) {
         router.push("/Dashboard/Chat");
       }
-      // console.log(friendShip);
     };
     fetchFriendShip();
     socket?.on("ok", (data: any) => {
