@@ -9,9 +9,9 @@ import { Ball } from "./Ball";
 import { TableModule } from "./Table";
 import { Paddle } from "./Paddle";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
-import { rajdhani } from "@/app/utils/fontConfig";
-import { cn } from "@/components/cn";
 import { fetchData, ipAdress } from "@/app/utils";
+import ScoreBar from "./ScoreBar";
+
 
 interface GameCanvasProps {
   roomId: string; // Adding a roomId prop
@@ -304,17 +304,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           }}
           className="flex "
         >
-          <div
-            style={{
-              transform: "translateX(-50%)",
-            }}
-            className={cn(
-              "bg-red-600 px-4 py-2 rounded-br-lg rounded-bl-lg absolute text-white text-xl mx-auto top-[55px] ml-[118px] font-[500]",
-              rajdhani.className
-            )}
-          >
-            {score.player1} - {score.player2}
-          </div>
+          <ScoreBar user1={user} user2={user} score={score} />
         </div>
       )}
     </>
