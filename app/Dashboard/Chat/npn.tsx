@@ -3,7 +3,15 @@ import { motion } from "framer-motion";
 import { ChatCard } from "@/app/components/Dashboard/Chat/ChatCard";
 import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useGlobalState } from "@/app/components/Sign/GlobalState";
 import JoinChannel from "@/app/components/Dashboard/Chat/JoinChannel";
 import Image from "next/image";
@@ -15,22 +23,34 @@ import { useRouter } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 import { fetchData } from "@/app/utils";
 
-const fetchChatList = async (userId: string) => {
+const fetchChatList = async (
+  userId: string,
+  setFilteredChatList: Dispatch<SetStateAction<any[]>>
+) => {
   try {
-    const res : any = await fetchData(`/chat/chatlist/${userId}`, "GET", null);
+    const res: any = await fetchData(`/chat/chatlist/${userId}`, "GET", null);
     const dataWithMessages = await Promise.all(
       res.data.map(async (value: any) => {
         if (value.user) {
-          const messageRes = await fetchData(`/conversations/lastMessage?uid1=${userId}&uid2=${value?.id}`, "GET", null);
+          const messageRes = await fetchData(
+            `/conversations/lastMessage?uid1=${userId}&uid2=${value?.id}`,
+            "GET",
+            null
+          );
           if (!messageRes) return { ...value, msg: {} };
           return { ...value, msg: messageRes?.data };
         } else {
-          const channelRes = await fetchData(`/channels/messages/lastMessage/${value?.id}?uid=${userId}`, "GET", null);
+          const channelRes = await fetchData(
+            `/channels/messages/lastMessage/${value?.id}?uid=${userId}`,
+            "GET",
+            null
+          );
           if (!channelRes) return { ...value, msg: {} };
           return { ...value, msg: channelRes?.data };
         }
       })
     );
+    setFilteredChatList(dataWithMessages);
     return dataWithMessages;
   } catch (error) {
     console.error("Error fetching chat list", error);
@@ -47,12 +67,14 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   const [modlar, setModlar] = useState(false);
   const [createModlar, setCreateModlar] = useState(false);
   const router = useRouter();
+  const messagesFilter = useRef<HTMLInputElement>(null);
+  const [FilteredChatList, setFilteredChatList] = useState<any[]>([]);
   const {
     data: chatList,
     isLoading: listLoading,
     isError: listError,
   } = useQuery({
-    queryFn: () => fetchChatList(user?.id),
+    queryFn: () => fetchChatList(user?.id, setFilteredChatList),
     queryKey: ["chatList"],
   });
   const clt = useQueryClient();
@@ -78,7 +100,8 @@ const Page = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     socket?.on("update", (data: any) => {
-      if (data && data.type && data.type === "leave") {
+      console.log("on npn socket event ", data);
+      if (data && data.type && (data.type === "leave" || data.type === "join")) {
         // toast.success("you have left the channel");
         clt.invalidateQueries({
           queryKey: ["chatList"],
@@ -152,6 +175,16 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   }
   const tablet = useWindowSize() < 1024;
 
+  const filterMessages = () => {
+    if (!messagesFilter.current) return;
+    const value = messagesFilter.current.value;
+
+    const filtered = FilteredChatList?.filter((chat: any) => {
+      return chat.name.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredChatList(filtered);
+  };
+
   return (
     <div className="w-[91%] mx-auto lg:h-full md:h-[92%] relative h-[80%] flex justify-center mt-5 overflow-hidden">
       <AnimatePresence>
@@ -189,13 +222,17 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                   >
                     Messages
                   </p>
-                  <form onSubmit={(e) => e.preventDefault()}>
+                  <form
+                    onSubmit={(e) => e.preventDefault()}
+                    onChange={filterMessages}
+                  >
                     <div className="relative sm:block hidden">
                       <label>
                         <input
                           className="rounded-lg py-2 pr-6 pl-10 w-full bg-white focus:outline-none text-black focus:shadow-md transition duration-300 ease-in"
                           type="text"
                           placeholder="Search Messenger"
+                          ref={messagesFilter}
                         />
                         <span className="absolute top-[4px] left-0 mt-2 ml-3 inline-block">
                           <svg viewBox="0 0 24 24" className="w-4 h-4">
@@ -221,7 +258,9 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                     Group Chat
                   </p>
                   <div>
-                    <motion.span className="" onClick={() => setCreateModlar(true)}
+                    <motion.span
+                      className=""
+                      onClick={() => setCreateModlar(true)}
                     >
                       <Image
                         width={0}
@@ -249,7 +288,8 @@ const Page = ({ children }: { children: React.ReactNode }) => {
                             typing
                               ? typingobject.target === "dm" && value.user
                                 ? value.id === typingobject.sender.id
-                                : value.id === typingobject.id && typingobject.sender.id !== user.id
+                                : value.id === typingobject.id &&
+                                  typingobject.sender.id !== user.id
                               : false
                           }
                           swipe={setShowMessage}

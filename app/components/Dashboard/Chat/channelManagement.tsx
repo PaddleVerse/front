@@ -116,7 +116,7 @@ const ChannelManagement = ({
     )
       .then(() => {
         setFetchEnabled(false);
-        socket.emit("leaveRoom", { user: user, roomName: channel.name });
+        socket?.emit("leaveRoom", { user: user, roomName: channel.name });
         router.push("/Dashboard/Chat");
       })
       .catch((error) => {

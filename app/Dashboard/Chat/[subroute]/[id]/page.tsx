@@ -320,7 +320,7 @@ const Page = (props: any) => {
                   className="w-6 h-6 overflow-hidden  opacity-0 z-30"
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
-                      if (e.target.files[0].size > 25000) {
+                      if (e.target.files[0].size > 250000) {
                         toast.error("file size too large");
                         return;
                       }

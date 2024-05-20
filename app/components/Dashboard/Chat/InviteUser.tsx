@@ -38,7 +38,7 @@ const KidnapUserToChannel = async (
 
 const InviteUser = ({ user, channel }: { user: user; channel: channel }) => {
   const { state } = useGlobalState();
-  const { socket } = state;
+  const { socket } = state!;
 
   return (
     <div className="text-white w-[70%] flex items-center justify-between">
