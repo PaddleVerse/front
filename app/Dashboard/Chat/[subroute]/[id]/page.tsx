@@ -218,14 +218,28 @@ const Page = (props: any) => {
           channel: targetChannel?.id,
           user1: state?.user?.id,
         };
-        await fetchData(`/message`, "POST", message);
+        const ms = await fetchData(`/message`, "POST", message);
+        if (ms.status === 403 && ms.message === "User is muted")  {
+          toast.error("you are muted");
+          return;
+        }
+        console.log(ms);
         socket?.emit("channelmessage", {
           channel: targetChannel,
           user: state?.user,
           message: message,
         });
-      } catch (error) {
-        toast.error("failed to send message to channel");
+      } catch (error: any) {
+        // console.log(error);
+        // toast.error(error.response);
+        if (
+          error.response.data.statusCode === 403 &&
+          error.response.data.message === "User is muted"
+        ) {
+          toast.error("you are muted");
+          return;
+        }
+        // toast.error("failed to send message to channel");
       }
     } else if (targetUser) {
       try {
