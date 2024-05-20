@@ -98,9 +98,9 @@ const JoinChannelBubble = ({
       }}
     >
       <Image
-        src="/badge1.png"
+        src={channel?.picture}
         alt="image"
-        className="lg:w-[95px] lg:h-[95px] md:w-[80px] md:h-[80px]"
+        className="lg:w-[70px] lg:h-[70px] md:w-[65px] md:h-[65px] object-fill rounded-full"
         width={100}
         height={100}
       />
