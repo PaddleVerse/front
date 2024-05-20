@@ -32,7 +32,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const ballRef = useRef<Ball | null>(null);
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
-  const [score, setScore] = useState({ player1: 0, player2: 0 });
+  const [score, setScore] = useState({ player1: 0, player2: 0, uid1: -1, uid2: -1});
   const [winnerText, setWinnerText] = useState("");
   const router = useRouter();
   const [end, setEnd] = useState(false);
@@ -58,9 +58,12 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         );
       });
       socket?.on("updateScore", (newScore: any) => {
+        console.log(newScore);
         setScore({
           player1: newScore?.score[0]?.score,
           player2: newScore?.score[1]?.score,
+          uid1: newScore?.score[0]?.uid,
+          uid2: newScore?.score[1]?.uid,
         });
       });
       socket?.on("endGame", (winner: any) => {
@@ -304,7 +307,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
           }}
           className="flex "
         >
-          <ScoreBar user1={user} user2={user} score={score} />
+          <ScoreBar user1={user} score={score} />
         </div>
       )}
     </>
