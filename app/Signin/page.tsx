@@ -12,6 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 import V2fa from '../components/V2fa/V2fa';
 import { ipAdress } from "@/app/utils";
+import { set } from "lodash";
 
 export default function SignupFormDemo() {
   const [is, setIs] = useState(0);
@@ -20,6 +21,7 @@ export default function SignupFormDemo() {
   const [error_, setError_] = useState("");
   const [isTwoFa, setIsTwoFa] = useState("false");
   const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(true);
   const form = useForm();
   const router = useRouter();
 
@@ -68,13 +70,20 @@ export default function SignupFormDemo() {
               router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:3000/Dashboard`);
           }
           else
+          {
+            setLoading(false);
             console.log("Failed to authenticate with protected endpoint");
+          }
         })
         .catch((error) => {
-          console.log("Error during protected endpoint request", error);
-        });
-      }
+            setLoading(false);
+            console.log("Error during protected endpoint request", error);
+        })
+      } else
+        setLoading(false);
     }
+    else
+      setLoading(false);
   }, []);
 
   const onSubmit = (values: any) => {
@@ -158,8 +167,11 @@ export default function SignupFormDemo() {
     }
   }, [isTwoFa]);
 
+  if (loading)
+    return <div className='w-full h-full flex justify-center items-center'> <div className="loader animate-loader"></div></div>
+
   if (isTwoFa === "2fa")
-    return <V2fa setIsTwoFa={setIsTwoFa} userId={userId} />;
+    return <V2fa setIsTwoFa={setIsTwoFa} userId={userId}/>;
   else if (isTwoFa === "true")
     return <div className='w-full h-full flex justify-center items-center'> <div className="loader animate-loader"></div> </div>
 

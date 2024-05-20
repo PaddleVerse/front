@@ -68,6 +68,7 @@ const EditProfile = () => {
       }
     })
     .catch((err) => {
+      setIsErrorName(false); setIsErrorMiddlename(false);
       serverError(err.response.data.message);
     });
   };
