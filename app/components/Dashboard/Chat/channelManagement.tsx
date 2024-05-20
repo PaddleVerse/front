@@ -23,14 +23,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const fetchParticipants = async (channel: channel, user: user) => {
   const participants = await fetchData(
-    `/channels/participants/${channel.id}?uid=${user.id}`,
+    `/channels/participants/${channel?.id}?uid=${user?.id}`,
     "GET",
     {}
   );
   const ret = await Promise.all(
-    participants.data.map(async (participant: participants) => {
+    participants.data?.map(async (participant: participants) => {
       const user = await fetchData(`/user/${participant.user_id}`, "GET", {});
-      return { ...participant, user: user.data };
+      return { ...participant, user: user?.data };
     })
   );
   if (!ret) return null;
@@ -39,16 +39,15 @@ const fetchParticipants = async (channel: channel, user: user) => {
 
 const FetchPriviliged = async (channel: channel, user: user) => {
   const participants = await fetchData(
-    `/channels/participants/${channel.id}?uid=${user.id}`,
+    `/channels/participants/${channel?.id}?uid=${user?.id}`,
     "GET",
     {}
   );
-  console.log("participants", participants);
   return (
-    participants.data.filter(
+    participants.data?.filter(
       (participant: participants) =>
         (participant.role === "ADMIN" || participant.role === "MOD") &&
-        participant.user_id === user.id
+        participant.user_id === user?.id
     )[0] || null
   );
 };
@@ -62,7 +61,7 @@ const ChannelManagement = ({
   user: user;
   update: (arg0: boolean) => void;
 }) => {
-  const { state, dispatch } = useGlobalState();
+  const { state } = useGlobalState();
   const [modlar, setModlar] = useState(false);
   const { user: u, socket } = state;
   const router = useRouter();
@@ -96,12 +95,12 @@ const ChannelManagement = ({
   };
 
   const handleOptionChange = (event: any) => {
-    setSelectedOption(event.target.value);
+    setSelectedOption(event?.target?.value);
   };
 
   useEffect(() => {
     addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
+      if (e?.key === "Escape") {
         setModlar(false);
       }
     });
@@ -110,7 +109,7 @@ const ChannelManagement = ({
 
   const handleLeave = () => {
     fetchData(
-      `/participants/leave?channel=${channel.id}&user=${user.id}`,
+      `/participants/leave?channel=${channel?.id}&user=${user?.id}`,
       "DELETE",
       null
     )
@@ -126,8 +125,7 @@ const ChannelManagement = ({
 
   useEffect(() => {
     state?.socket?.on("update", (data: any) => {
-      console.log("data", data);
-      if (data && data.type && data.type === "channel") {
+      if (data && data?.type && data?.type === "channel") {
         clt.invalidateQueries({ queryKey: ["participants"] });
       }
     });
@@ -146,29 +144,29 @@ const ChannelManagement = ({
     }
     const obj = {
       channel: {
-        name: channelNameInput.current?.value! || channel.name,
-        key: keyInput.current?.value! || channel.key,
-        topic: topicInput.current?.value! || channel.topic,
-        state: selectedOption === "" ? channel.state : selectedOption,
+        name: channelNameInput?.current?.value! || channel?.name,
+        key: keyInput?.current?.value! || channel?.key,
+        topic: topicInput?.current?.value! || channel?.topic,
+        state: selectedOption === "" ? channel?.state : selectedOption,
       },
       user: { id: priviliged?.user_id! },
     };
     const updateChannel = async () => {
       try {
         if (picture) {
-          if (!picture.type.startsWith("image/")) {
+          if (!picture?.type?.startsWith("image/")) {
             alert("Please select an image picture.");
             return;
           }
         }
 
-        await fetchData(`/channels/${channel.id}`, "PUT", obj);
+        await fetchData(`/channels/${channel?.id}`, "PUT", obj);
         if (picture) {
           try {
             const formData = new FormData();
-            formData.append("image", picture);
+            formData?.append("image", picture);
             await fetchData(
-              `/channels/image?channel=${channel.id}&user=${priviliged?.user_id}`,
+              `/channels/image?channel=${channel?.id}&user=${priviliged?.user_id}`,
               "POST",
               formData
             );
@@ -177,7 +175,7 @@ const ChannelManagement = ({
           }
         }
         state?.socket?.emit("channelUpdate", {
-          roomName: channel.name,
+          roomName: channel?.name,
           user: user,
         });
       } catch (error) {
@@ -203,15 +201,15 @@ const ChannelManagement = ({
             <input
               type="file"
               onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  setPicture(e.target.files[0]);
+                if (e?.target?.files && e?.target?.files[0]) {
+                  setPicture(e?.target?.files[0]);
                 }
               }}
               className="absolute opacity-0 z-30 w-full h-full cursor-pointer"
               disabled={priviliged ? false : true}
             />
             <Image
-              src={channel.picture || "/a.png"}
+              src={channel?.picture || "/a.png"}
               width={200}
               height={200}
               alt="channel picture"

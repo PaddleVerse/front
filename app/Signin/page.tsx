@@ -58,7 +58,7 @@ export default function SignupFormDemo() {
           },
         })
         .then((res) => {
-          document.cookie = `access_token=; path=/;`;
+          // document.cookie = `access_token=; path=/;`;
           if (res?.status === 200)
           {
             setUserId(res?.data?.id);
@@ -154,7 +154,7 @@ export default function SignupFormDemo() {
     if (isTwoFa === "true")
     {
       document.cookie = `access_token=${token}; path=/;`;
-      router.push("/Dashboard");
+      router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:3000/Dashboard`);
     }
   }, [isTwoFa]);
 

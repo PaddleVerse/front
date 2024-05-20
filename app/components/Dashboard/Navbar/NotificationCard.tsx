@@ -1,11 +1,17 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useGlobalState } from '../../Sign/GlobalState';
 
 const NotificationCard = (props : any) => {
+  const {state} = useGlobalState();
   const router = useRouter();
 
   const hanndleClick = () => {
     if (props.not?.type === "REQUEST") {
+      if (props.not?.sender_id === state?.user?.id) {
+        router.push(`/Dashboard`);
+        return;
+      }
       router.push(`/Dashboard/Profile?id=${props.not?.sender_id}`);
     }
     props.setOpen(false);

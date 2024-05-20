@@ -6,11 +6,13 @@ import { fetchData, ipAdress } from "@/app/utils";
 
 import React,{useState,useEffect} from "react";
 import axios from "axios";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const plusjakarta = Plus_Jakarta_Sans({subsets:["latin"], weight:["300","400","500","700"]})
 
 const PlacingElement = () => {
   const [users, setUsers] = useState<any>([]);
+  const {state} = useGlobalState();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,6 +27,10 @@ const PlacingElement = () => {
   } ,[]);
 
   const handleClick = (id: number) => {
+    if (id === state?.user?.id) {
+      router.push(`/Dashboard`);
+      return;
+    }
     router.push(`/Dashboard/Profile?id=${id}`);
   }
 

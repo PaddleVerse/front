@@ -3,9 +3,16 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { inter, rubik } from "@/app/utils/fontConfig";
 import { cn } from "@/components/cn";
+import { useGlobalState } from "../../Sign/GlobalState";
 const LinkedFriend = (props: any) => {
+  const {state} = useGlobalState();
   const router = useRouter();
+
   const handleClick = (id: any) => {
+    if (id === state?.user?.id) {
+      router.push(`/Dashboard`);
+      return;
+    }
     router.push(`/Dashboard/Profile?id=${id}`);
   };
   return (

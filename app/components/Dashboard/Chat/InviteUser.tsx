@@ -51,7 +51,7 @@ const InviteUser = ({ user, channel }: { user: user; channel: channel }) => {
           width={40}
           height={40}
           alt="user image"
-          className="rounded-full aspect-square"
+          className="rounded-full aspect-square w-auto h-auto"
         />
         <div className="flex flex-col 2xl:text-md text-xs">
           <span>{user?.name}</span>
