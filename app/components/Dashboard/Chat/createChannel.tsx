@@ -67,13 +67,14 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
       channel: {
         name: name.current!.value,
         key: password.current!.value ? password.current!.value : null,
+        topic: topic.current!.value ? topic.current!.value : null,
         state: channelAppearence
           ? "private"
           : password.current!.value
           ? "protected"
           : "public",
       },
-      user: state?.user,
+      user: state?.user!,
     };
     try {
       if (file) {
@@ -93,7 +94,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         formData.append("image", file);
         try {
           const picture = await fetchData(
-            `/channels/image?channel=${ret.data.id}&user=${state?.user.id}`,
+            `/channels/image?channel=${ret.data.id}&user=${state?.user?.id}`,
             "POST",
             formData
           );
@@ -103,7 +104,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
       }
       state?.socket.emit("joinRoom", {
         roomName: ret?.data?.name,
-        user: state?.user,
+        user: state?.user!,
         type: "self",
       });
     } catch (error) {

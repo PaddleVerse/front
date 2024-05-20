@@ -10,6 +10,7 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
+import { useGlobalState } from "@/app/components/Sign/GlobalState";
 
 export const AnimatedTooltip = ({
   items,
@@ -39,9 +40,14 @@ export const AnimatedTooltip = ({
     const halfWidth = event.target.offsetWidth / 2;
     x.set(event.nativeEvent.offsetX - halfWidth); // set the x value, which is then used in transform and rotate
   };
-  
+  const { state } = useGlobalState();
   const router = useRouter();
+  
   const handleClick = (id : any) => {
+    if (id === state?.user?.id) {
+      router.push(`/Dashboard`);
+      return;
+    }
     router.push(`/Dashboard/Profile?id=${id}`);
   }
   return (

@@ -47,7 +47,7 @@ const JoinChannel = ({
     const fetchChannels = async () => {
 
       await fetchData(
-        `/channels`,
+        `/channels/all/${user?.id}`,
         "GET",
         null
       )
@@ -84,7 +84,6 @@ const JoinChannel = ({
         variants={modalVariants}
         style={{
           backdropFilter: "blur(20px)",
-          // backgroundColor: "rgba(13, 9, 10, 0.4)",
         }}
       >
         <h1 className="text-3xl">Expand your horizon</h1>

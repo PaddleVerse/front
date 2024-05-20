@@ -1,23 +1,40 @@
 import { channel, user } from "@/app/Dashboard/Chat/type";
 import axios from "axios";
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import InviteUser from "./InviteUser";
 import { fetchData } from "@/app/utils";
+import { useGlobalState } from "../../Sign/GlobalState";
 
 const GetUsers = async (param: any) => {
-  const users = await fetchData(`/channels/inviteList/${param?.id}`, "GET", null);
+  const users = await fetchData(
+    `/channels/inviteList/${param?.id}`,
+    "GET",
+    null
+  );
   return users ? users.data : users;
 };
 
 const InviteCard = ({ channel, user }: { channel: channel; user: user }) => {
   const param = useParams();
+  const { state } = useGlobalState();
+  const { socket } = state;
+  const clt = useQueryClient();
   const { data: users } = useQuery<user[]>({
     queryKey: ["inviteList"],
     queryFn: async () => GetUsers(param),
   });
+
+  useEffect(() => {
+    socket?.on("update", (data: any) => {
+      if (data && data.type && (data.type === "join" || data.type === "leave")) {
+        clt.invalidateQueries({ queryKey: ["inviteList"] });
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket!]);
 
   return (
     <AnimatePresence>

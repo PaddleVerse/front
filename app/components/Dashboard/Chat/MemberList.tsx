@@ -34,11 +34,11 @@ const MemberList = ({
   const { state } = useGlobalState();
 
   const handleClick = () => {
-    if (participant.user_id! === state.user.id) {
-      router.push(`/Dashboard/`);
+    if (participant?.user_id! === state?.user?.id) {
+      router.push(`/Dashboard`);
       return;
     }
-    router.push(`/Dashboard/Profile?id=${participant.user?.id}`);
+    router.push(`/Dashboard/Profile?id=${participant?.user?.id}`);
   };
 
   const handleBan = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -47,20 +47,20 @@ const MemberList = ({
       toast.error("You cannot take privilage from yourself");
       return;
     }
-    if (participant.role === "ADMIN") {
+    if (participant?.role === "ADMIN") {
       toast.error("You cannot ban an admin");
       return;
     }
     const obj = {
-      cid: exec.channel_id,
-      uid: participant.user_id,
+      cid: exec?.channel_id,
+      uid: participant?.user_id,
     };
 
     fetchData(`/ban`, "POST", obj)
     .then(() => {
       state?.socket?.emit("ban", {
         roomName: channel.name,
-        user: participant.user,
+        user: participant?.user,
       });
     })
     .catch((err) => {
@@ -74,12 +74,12 @@ const MemberList = ({
       toast.error("You do not have privilage to kick");
       return;
     }
-    if (participant.role === "ADMIN") {
+    if (participant?.role === "ADMIN") {
       toast.error("You cannot kick an admin");
       return;
     }
    
-    fetchData(`/participants/kick?target=${participant.user_id}&user=${exec.user_id}&channel=${channel!.id}`, "DELETE", null)
+    fetchData(`/participants/kick?target=${participant?.user_id}&user=${exec?.user_id}&channel=${channel!.id}`, "DELETE", null)
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel?.name,
@@ -99,7 +99,7 @@ const MemberList = ({
       toast.error("you do not have privilage to promote/demote");
       return;
     }
-    if (participant.role === "ADMIN") {
+    if (participant?.role === "ADMIN") {
       toast.error("You cannot take privilage from admin");
       return;
     }
@@ -107,15 +107,15 @@ const MemberList = ({
       channel: exec?.channel_id,
       executor: exec?.user_id,
       participant: {
-        role: participant.role === "MEMBER" ? "MOD" : "MEMBER",
+        role: participant?.role === "MEMBER" ? "MOD" : "MEMBER",
       },
     };
    
-    fetchData(`/participants/${participant.user_id}`, "PUT", obj)
+    fetchData(`/participants/${participant?.user_id}`, "PUT", obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
-          user: participant.user,
+          user: participant?.user,
         });
       })
       .catch((err) => {
@@ -131,23 +131,23 @@ const MemberList = ({
       toast.error("You do not have privilage to mute/unmute");
       return;
     }
-    if (participant.role === "ADMIN") {
+    if (participant?.role === "ADMIN") {
       toast.error("You cannot mute an admin");
       return;
     }
     const obj = {
-      channel: exec.channel_id,
-      executor: exec.user_id,
+      channel: exec?.channel_id,
+      executor: exec?.user_id,
       participant: {
-        mute: participant.mute ? false : true,
+        mute: participant?.mute ? false : true,
       },
     };
 
-    fetchData(`/participants/${participant.user_id}`, "PUT", obj)
+    fetchData(`/participants/${participant?.user_id}`, "PUT", obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
           roomName: channel.name,
-          user: participant.user,
+          user: participant?.user,
         });
       })
       .catch((err) => {
@@ -199,7 +199,7 @@ const MemberList = ({
 
         {/* <div className="flex gap-1 2xl:text-md text-xs">
           <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
-            {participant.mute ? (
+            {participant?.mute ? (
               <FaMicrophoneSlash className="w-[20px] h-[20px]" />
             ) : (
               <FaMicrophone className="w-[20px] h-[20px]" />
@@ -215,7 +215,7 @@ const MemberList = ({
             onClick={handlePromoteDemote}
             aria-disabled={exec ? false : true}
           >
-            {participant.role === "ADMIN" || participant.role === "MOD" ? (
+            {participant?.role === "ADMIN" || participant?.role === "MOD" ? (
               <FaChessPawn className="w-[20px] h-[20px]" />
             ) : (
               <FaChessKing className="w-[20px] h-[20px]" />
