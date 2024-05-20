@@ -59,8 +59,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
       });
       socket?.on("updateScore", (newScore: any) => {
         setScore({
-          player1: newScore.score[0].score,
-          player2: newScore.score[1].score,
+          player1: newScore?.score[0]?.score,
+          player2: newScore?.score[1]?.score,
         });
       });
       socket?.on("endGame", (winner: any) => {
@@ -74,18 +74,18 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         router.push("/Dashboard");
       });
       socket?.on("paddlePositionUpdate", (paddlePosition: any) => {
-        if (paddle2Ref.current && paddleRef.current && userID) {
+        if (paddle2Ref?.current && paddleRef?.current && userID) {
           if (userID === "player1") {
             paddle2Ref.current.position = {
-              x: paddlePosition.paddle.x,
-              y: paddlePosition.paddle.y,
-              z: paddlePosition.paddle.z,
+              x: paddlePosition?.paddle?.x,
+              y: paddlePosition?.paddle?.y,
+              z: paddlePosition?.paddle?.z,
             };
           } else if (userID === "player2") {
             paddleRef.current.position = {
-              x: paddlePosition.paddle.x,
-              y: paddlePosition.paddle.y,
-              z: paddlePosition.paddle.z,
+              x: paddlePosition?.paddle?.x,
+              y: paddlePosition?.paddle?.y,
+              z: paddlePosition?.paddle?.z,
             };
           }
         }
@@ -95,15 +95,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         if (!ballRef.current || !ball) return;
         if (ballRef.current) {
           if (!ballRef.current.position || !ballRef.current.velocity) return;
-          ballRef.current.position.set(
-            ball.position.x,
-            ball.position.y,
-            ball.position.z
+          ballRef?.current?.position.set(
+            ball?.position?.x,
+            ball?.position?.y,
+            ball?.position?.z
           );
-          ballRef.current.velocity.set(
-            ball.velocity.x,
-            ball.velocity.y,
-            ball.velocity.z
+          ballRef?.current?.velocity.set(
+            ball?.velocity?.x,
+            ball?.velocity?.y,
+            ball?.velocity?.z
           );
         }
       });
