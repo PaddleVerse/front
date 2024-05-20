@@ -80,7 +80,7 @@ const sendpicture = async (
 
 const fetchTargetUser = async (parameters: any, router: any) => {
   try {
-    if (parameters.subroute === "dm") {
+    if (parameters?.subroute === "dm") {
       const user = await fetchData(`/user/${parameters?.id!}`, "GET", null);
       if (!user?.data || user?.data === "") {
         router?.push("/Dashboard/Chat");
@@ -90,7 +90,8 @@ const fetchTargetUser = async (parameters: any, router: any) => {
     }
     return null;
   } catch (error) {
-    console.log("error fetching user", error);
+    router.push("/Dashboard/Chat");
+    return null;
   }
 };
 const fetchTargetChannel = async (parameters: any, router: any) => {
@@ -109,7 +110,8 @@ const fetchTargetChannel = async (parameters: any, router: any) => {
     }
     return null;
   } catch (error) {
-    console.log("error fetching channel", error);
+    router.push("/Dashboard/Chat");
+    return null;
   }
 };
 
@@ -147,13 +149,14 @@ const Page = (props: any) => {
   });
 
   useEffect(() => {
+
     const fetchFriendShip = async () => {
       const friendShip = await fetchData(
-        `/friendship/status/${user!.id!}/${param.id}`,
+        `/friendship/status/${user!.id!}/${param?.id}`,
         "GET",
         null
       );
-      if (friendShip!.data!.status === "BLOCKED" && targetUser) {
+      if (friendShip!.data!.status === "BLOCKED") {
         router.push("/Dashboard/Chat");
       }
     };
