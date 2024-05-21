@@ -22,6 +22,7 @@ import { fetchData } from "@/app/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const fetchParticipants = async (channel: channel, user: user) => {
+  console.log("here at fetch participants");
   const participants = await fetchData(
     `/channels/participants/${channel?.id}?uid=${user?.id}`,
     "GET",
@@ -101,7 +102,7 @@ const ChannelManagement = ({
     name: false,
     topic: false,
   });
-  
+
   const [error, setError] = useState({
     key: "",
     state: "",
@@ -109,47 +110,47 @@ const ChannelManagement = ({
     name: "",
     topic: "",
   });
-  
-  const updateIs = (key:string, value:boolean) => {
-    setIs(prevState => ({
+
+  const updateIs = (key: string, value: boolean) => {
+    setIs((prevState) => ({
       ...prevState,
       [key]: value,
     }));
   };
-  
-  const updateError = (key:string, value:string) => {
-    setError(prevState => ({
+
+  const updateError = (key: string, value: string) => {
+    setError((prevState) => ({
       ...prevState,
       [key]: value,
     }));
-  }
+  };
 
   const serverError = (err: any) => {
     try {
       err?.map((e: any) => {
-        if (e.startsWith('Name')) {
-          updateIs('name', true);
-          updateError('name', e);
-        } 
-        if (e.startsWith('Topic')) {
-          updateIs('topic', true);
-          updateError('topic', e);
+        if (e.startsWith("Name")) {
+          updateIs("name", true);
+          updateError("name", e);
         }
-        if (e.startsWith('Key')) {
-          updateIs('key', true);
-          updateError('key', e);
+        if (e.startsWith("Topic")) {
+          updateIs("topic", true);
+          updateError("topic", e);
         }
-        if (e.startsWith('State')) {
-          updateIs('state', true);
-          updateError('state', e);
+        if (e.startsWith("Key")) {
+          updateIs("key", true);
+          updateError("key", e);
         }
-        if (e.startsWith('Picture')) {
-          updateIs('picture', true);
-          updateError('picture', e);
+        if (e.startsWith("State")) {
+          updateIs("state", true);
+          updateError("state", e);
+        }
+        if (e.startsWith("Picture")) {
+          updateIs("picture", true);
+          updateError("picture", e);
         }
       });
     } catch (error) {}
-  }
+  };
   //////////////////////////////
 
   const handleOptionChange = (event: any) => {
@@ -183,7 +184,14 @@ const ChannelManagement = ({
 
   useEffect(() => {
     state?.socket?.on("update", (data: any) => {
-      if (data && data?.type && data?.type === "channel") {
+      if (
+        data &&
+        data?.type &&
+        (data?.type === "channelupdate" ||
+          data?.type === "join" ||
+          data?.type === "leave")
+      ) {
+        console.log("here at the socket event in channel management");
         clt.invalidateQueries({ queryKey: ["participants"] });
       }
     });
@@ -219,8 +227,14 @@ const ChannelManagement = ({
         }
         console.log(obj);
         await fetchData(`/channels/${channel?.id}`, "PUT", obj);
-        setIs({key: false, state: false, picture: false, name: false, topic: false});
-        setError({key: "", state: "", picture: "", name: "", topic: ""});
+        setIs({
+          key: false,
+          state: false,
+          picture: false,
+          name: false,
+          topic: false,
+        });
+        setError({ key: "", state: "", picture: "", name: "", topic: "" });
         toast.success("channel updated successfully.");
         reset();
         if (picture) {
@@ -241,9 +255,15 @@ const ChannelManagement = ({
           user: user,
         });
       } catch (err: any) {
-        if (err && err?.response){
-          setIs({key: false, state: false, picture: false, name: false, topic: false});
-          setError({key: "", state: "", picture: "", name: "", topic: ""});
+        if (err && err?.response) {
+          setIs({
+            key: false,
+            state: false,
+            picture: false,
+            name: false,
+            topic: false,
+          });
+          setError({ key: "", state: "", picture: "", name: "", topic: "" });
           serverError(err.response.data?.message);
         }
       }
@@ -257,7 +277,7 @@ const ChannelManagement = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-       <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
+      <div className="sm:w-[45%] w-[100%] h-full bg-transparent flex flex-col items-center justify-start pt-[120px] gap-10 sm:border-r-2">
         <form
           action=""
           onSubmit={handleSubmit}
@@ -289,7 +309,9 @@ const ChannelManagement = ({
               alt="channel picture"
               className="absolute top-[35%] left-[30%] z-20"
             />
-            {is?.picture && <p className="text-red-500 text-sm my-4">{error?.picture}</p>}
+            {is?.picture && (
+              <p className="text-red-500 text-sm my-4">{error?.picture}</p>
+            )}
           </div>
           <Input
             type="text"
@@ -299,7 +321,9 @@ const ChannelManagement = ({
             className="rounded-lg "
             disabled={priviliged ? false : true}
           />
-          {is?.name && <p className="text-red-500 text-sm my-4">{error?.name}</p>}
+          {is?.name && (
+            <p className="text-red-500 text-sm my-4">{error?.name}</p>
+          )}
           <Input
             type="text"
             placeholder="change password"
@@ -357,7 +381,9 @@ const ChannelManagement = ({
             className="rounded-lg "
             disabled={priviliged ? false : true}
           />
-          {is?.topic && <p className="text-red-500 text-sm my-4">{error?.topic}</p>}
+          {is?.topic && (
+            <p className="text-red-500 text-sm my-4">{error?.topic}</p>
+          )}
           <button
             type="submit"
             className="py-2 px-5 bg-red-500 rounded-md mt-4"
@@ -373,7 +399,9 @@ const ChannelManagement = ({
           leave channel
         </button>
       </div>
-      <div className={`"sm:w-[45%]" w-full h-full bg-transparent overflow-y-scroll no-scrollbar`}>
+      <div
+        className={`"sm:w-[45%]" w-full h-full bg-transparent overflow-y-scroll no-scrollbar`}
+      >
         <div className="flex flex-row mt-5 items-center justify-around">
           <div>
             <p className="text-2xl font-bold">

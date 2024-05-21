@@ -19,7 +19,6 @@ import { useGlobalState } from "../../Sign/GlobalState";
 import { ipAdress, fetchData } from "@/app/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
-
 import { Dropdown } from "./DropDown";
 const MemberList = ({
   participant,
@@ -57,15 +56,15 @@ const MemberList = ({
     };
 
     fetchData(`/ban`, "POST", obj)
-    .then(() => {
-      state?.socket?.emit("ban", {
-        roomName: channel.name,
-        user: participant?.user,
+      .then(() => {
+        state?.socket?.emit("ban", {
+          roomName: channel.name,
+          user: participant?.user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   };
 
   const handleKick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -78,8 +77,14 @@ const MemberList = ({
       toast.error("You cannot kick an admin");
       return;
     }
-   
-    fetchData(`/participants/kick?target=${participant?.user_id}&user=${exec?.user_id}&channel=${channel!.id}`, "DELETE", null)
+
+    fetchData(
+      `/participants/kick?target=${participant?.user_id}&user=${
+        exec?.user_id
+      }&channel=${channel!.id}`,
+      "DELETE",
+      null
+    )
       .then((res) => {
         state?.socket?.emit("kick", {
           roomName: channel?.name,
@@ -110,7 +115,7 @@ const MemberList = ({
         role: participant?.role === "MEMBER" ? "MOD" : "MEMBER",
       },
     };
-   
+
     fetchData(`/participants/${participant?.user_id}`, "PUT", obj)
       .then((res) => {
         state?.socket?.emit("channelUpdate", {
@@ -167,7 +172,7 @@ const MemberList = ({
         <div className="flex items-center gap-2">
           <Image
             src={
-              participant && participant?.user?.picture! ||
+              (participant && participant?.user?.picture!) ||
               "https://res.cloudinary.com/dxxlqdwxb/image/upload/v1713526102/zxwritc0rqvtjvcwbqiv.jpg"
             }
             width={40}
@@ -186,16 +191,24 @@ const MemberList = ({
           </div>
         </div>
         <span>{participant && participant?.role.toLowerCase()}</span>
-            {
-              participant && participant?.role !== "ADMIN" ?
-              <Dropdown list={[
-                {name: "Mute/Unmute", action: handleMuteUnMute},
-                {name: "Ban", action: handleBan},
-                {name: "Kick", action: handleKick},
-                {name: "Promote/Demote", action: handlePromoteDemote}
-              ]} /> : <div></div>
-            }
-        
+        {participant && participant?.role !== "ADMIN" ? (
+          <Dropdown
+            list={[
+              {
+                name: participant.mute ? "Unmute" : "Mute",
+                action: handleMuteUnMute,
+              },
+              { name: "Ban", action: handleBan },
+              { name: "Kick", action: handleKick },
+              {
+                name: participant.role === "MOD" ? "Demote" : "Promote",
+                action: handlePromoteDemote,
+              },
+            ]}
+          />
+        ) : (
+          <div></div>
+        )}
 
         {/* <div className="flex gap-1 2xl:text-md text-xs">
           <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
