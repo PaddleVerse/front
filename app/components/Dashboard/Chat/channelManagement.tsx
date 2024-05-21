@@ -93,6 +93,64 @@ const ChannelManagement = ({
       rotate: 90,
     },
   };
+  //////////////////////////////
+  const [is, setIs] = useState({
+    key: false,
+    state: false,
+    picture: false,
+    name: false,
+    topic: false,
+  });
+  
+  const [error, setError] = useState({
+    key: "",
+    state: "",
+    picture: "",
+    name: "",
+    topic: "",
+  });
+  
+  const updateIs = (key:string, value:boolean) => {
+    setIs(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+  
+  const updateError = (key:string, value:string) => {
+    setError(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  }
+
+  const serverError = (err: any) => {
+    try {
+      err?.map((e: any) => {
+        if (e.startsWith('Name')) {
+          updateIs('name', true);
+          updateError('name', e);
+        } 
+        if (e.startsWith('Topic')) {
+          updateIs('topic', true);
+          updateError('topic', e);
+        }
+        if (e.startsWith('Key')) {
+          updateIs('key', true);
+          updateError('key', e);
+        }
+        if (e.startsWith('State')) {
+          updateIs('state', true);
+          updateError('state', e);
+        }
+        if (e.startsWith('Picture')) {
+          updateIs('picture', true);
+          updateError('picture', e);
+        }
+      });
+    } catch (error) {}
+  }
+  //////////////////////////////
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event?.target?.value);
@@ -138,13 +196,13 @@ const ChannelManagement = ({
       toast.error("you are not priviliged to change the channel info!!!");
       return;
     }
-    if (selectedOption === "public" && keyInput.current?.value) {
+    if (selectedOption === "public" && keyInput?.current?.value) {
       toast.error("you need to select the protected option to set a password.");
       return;
     }
     const obj = {
       channel: {
-        name: channelNameInput?.current?.value! || channel?.name,
+        name: channelNameInput?.current?.value! || "",
         key: keyInput?.current?.value! || channel?.key,
         topic: topicInput?.current?.value! || channel?.topic,
         state: selectedOption === "" ? channel?.state : selectedOption,
@@ -155,12 +213,15 @@ const ChannelManagement = ({
       try {
         if (picture) {
           if (!picture?.type?.startsWith("image/")) {
-            alert("Please select an image picture.");
+            toast.error("Please select an image picture.");
             return;
           }
         }
-
+        console.log(obj);
         await fetchData(`/channels/${channel?.id}`, "PUT", obj);
+        setIs({key: false, state: false, picture: false, name: false, topic: false});
+        setError({key: "", state: "", picture: "", name: "", topic: ""});
+        toast.success("channel updated successfully.");
         if (picture) {
           try {
             const formData = new FormData();
@@ -178,8 +239,12 @@ const ChannelManagement = ({
           roomName: channel?.name,
           user: user,
         });
-      } catch (error) {
-        toast.error("error in updating channel");
+      } catch (err: any) {
+        if (err && err?.response){
+          setIs({key: false, state: false, picture: false, name: false, topic: false});
+          setError({key: "", state: "", picture: "", name: "", topic: ""});
+          serverError(err.response.data?.message);
+        }
       }
     };
     updateChannel();
@@ -223,6 +288,7 @@ const ChannelManagement = ({
               alt="channel picture"
               className="absolute top-[35%] left-[30%] z-20"
             />
+            {is?.picture && <p className="text-red-500 text-sm my-4">{error?.picture}</p>}
           </div>
           <Input
             type="text"
@@ -232,6 +298,7 @@ const ChannelManagement = ({
             className="rounded-lg "
             disabled={priviliged ? false : true}
           />
+          {is?.name && <p className="text-red-500 text-sm my-4">{error?.name}</p>}
           <Input
             type="text"
             placeholder="change password"
@@ -242,6 +309,7 @@ const ChannelManagement = ({
             className="rounded-lg "
             disabled={priviliged ? false : true}
           />
+          {is?.key && <p className="text-red-500 text-sm my-4">{error?.key}</p>}
           <fieldset
             className="flex gap-2 items-center flex-wrap"
             disabled={priviliged ? false : true}
@@ -288,6 +356,7 @@ const ChannelManagement = ({
             className="rounded-lg "
             disabled={priviliged ? false : true}
           />
+          {is?.topic && <p className="text-red-500 text-sm my-4">{error?.topic}</p>}
           <button
             type="submit"
             className="py-2 px-5 bg-red-500 rounded-md mt-4"

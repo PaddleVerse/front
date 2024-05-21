@@ -223,7 +223,6 @@ const Page = (props: any) => {
           toast.error("you are muted");
           return;
         }
-        console.log(ms);
         socket?.emit("channelmessage", {
           channel: targetChannel,
           user: state?.user,

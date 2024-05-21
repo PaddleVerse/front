@@ -4,7 +4,6 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { useGlobalState } from "../../Sign/GlobalState";
 import { Socket } from "socket.io-client";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { fetchData } from "@/app/utils";
 

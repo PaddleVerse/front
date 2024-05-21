@@ -1,20 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Inter } from "next/font/google";
 import { motion } from "framer-motion";
-import JoinChannelBubble from "./JoinChannelBubble";
-import { IoIosSearch } from "react-icons/io";
-import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
-import { user } from "@/app/Dashboard/Chat/type";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/newinput";
-import { Button } from "@/components/ui/moving-border";
 import toast from "react-hot-toast";
 import { useGlobalState } from "../../Sign/GlobalState";
 import BottomGradient from "@/components/ui/bottomGradiant";
-import { ipAdress, getCookie, fetchData } from "@/app/utils";
-
-const accessToken = getCookie("access_token");
+import { fetchData } from "@/app/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 const modalVariants = {
@@ -37,32 +29,72 @@ const modalVariants = {
 };
 
 const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
-  const { state, dispatch } = useGlobalState();
+  const { state } = useGlobalState();
   const password = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const topic = useRef<HTMLInputElement>(null);
   const name = useRef<HTMLInputElement>(null);
   const [channelAppearence, setChannelAppearence] = useState(false);
   const { register } = useForm();
+  const [is, setIs] = useState({
+    key: false,
+    state: false,
+    picture: false,
+    name: false,
+    topic: false,
+  });
+  
+  const [error, setError] = useState({
+    key: "",
+    state: "",
+    picture: "",
+    name: "",
+    topic: "",
+  });
 
-  const validateForm = () => {
-    if (name.current!.value!.trim().length < 3) {
-      toast.error("Name must be at least 3 characters long.");
-      return false;
-    }
-    if (
-      password.current!.value!.match(/(["'><])/) ||
-      name.current!.value!.match(/(['"><])/)
-    ) {
-      toast.error("you sneaky bastard");
-      return false;
-    }
-    return true;
+  const updateIs = (key:string, value:boolean) => {
+    setIs(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
   };
+
+  const updateError = (key:string, value:string) => {
+    setError(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  }
+
+  const serverError = (err: any) => {
+    try {
+      err?.map((e: any) => {
+        if (e.startsWith('Name')) {
+          updateIs('name', true);
+          updateError('name', e);
+        } 
+        if (e.startsWith('Topic')) {
+          updateIs('topic', true);
+          updateError('topic', e);
+        }
+        if (e.startsWith('Key')) {
+          updateIs('key', true);
+          updateError('key', e);
+        }
+        if (e.startsWith('State')) {
+          updateIs('state', true);
+          updateError('state', e);
+        }
+        if (e.startsWith('Picture')) {
+          updateIs('picture', true);
+          updateError('picture', e);
+        }
+      });
+    } catch (error) {}
+  }
 
   const handleCreateChannel = async () => {
 
-    if (!validateForm() || !accessToken) return;
     const channelObject = {
       channel: {
         name: name.current!.value,
@@ -93,7 +125,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         const formData = new FormData();
         formData.append("image", file);
         try {
-          const picture = await fetchData(
+          await fetchData(
             `/channels/image?channel=${ret.data.id}&user=${state?.user?.id}`,
             "POST",
             formData
@@ -107,8 +139,13 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
         user: state?.user!,
         type: "self",
       });
-    } catch (error) {
-      toast.error("error in creating channel");
+
+    } catch (err:any) {
+      if (err && err?.response){
+        setIs({key: false, state: false, picture: false, name: false, topic: false});
+        setError({key: "", state: "", picture: "", name: "", topic: ""});
+        serverError(err.response.data?.message);
+      }
       return;
     }
     handleClick();
@@ -134,22 +171,18 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
           you can have three types of channels, Public, private, and Protected.
         </p>
         <div>
-          <label
-            className="block mb-2 text-white text-sm font-medium dark:text-white"
-            typeof="file_input"
-          >
-            Upload file
-          </label>
-          <input
-            className="w-full text-sm text-white outline-none p-1 rounded-md bg-slate-800
-            file:mr-5 file:py-1 file:px-3 file:border-[1px]
-            file:text-xs file:font-medium
-            file:bg-white file:text-stone-700
-            file:rounded-sm
-            hover:file:cursor-pointer hover:file:bg-blue-50
-            hover:file:text-blue-700"
-            type="file"
-            accept="image/*"
+        <label htmlFor="uploadFile1"
+            className="bg-white hover:bg-gray-200 text-[#000000] text-sm px-4 py-2.5 outline-none rounded w-full cursor-pointer mx-auto flex justify-center items-center font-[sans-serif]">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 mr-2 fill-[#000000] inline" viewBox="0 0 32 32">
+              <path
+                d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z"
+                data-original="#000000" />
+              <path
+                d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z"
+                data-original="#000000" />
+            </svg>
+              Upload an image
+            <input type="file" accept="image/*" id='uploadFile1' className="hidden" 
             onChange={(e) => {
               if (e.target.files && e.target.files[0]) {
                 if (!e.target.files[0].type.startsWith("image/")) {
@@ -158,8 +191,9 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
                 }
                 setFile(e.target.files[0]);
               }
-            }}
-          />
+            }}/>
+          </label>
+          {is?.picture && <p className="text-red-500 text-sm my-4">{error?.picture}</p>}
         </div>
         <div className="inline-flex items-center cursor-pointer">
           <input type="checkbox" value="" className="sr-only" />
@@ -192,6 +226,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
           >
             {!channelAppearence ? "Public" : "Private"}
           </motion.span>
+          {is?.state && <p className="text-red-500 text-sm my-4">{error?.state}</p>}
         </div>
 
         <form
@@ -208,6 +243,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
             ref={name}
             className="rounded-lg"
           />
+          {(is?.name) && <p className="text-red-500 text-sm my-4">{error?.name}</p>}
           <label htmlFor="Password" className="mt-5">
             Password (optional)
           </label>
@@ -218,6 +254,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
             ref={password}
             className="rounded-lg"
           />
+          {(is?.key) && <p className="text-red-500 text-sm my-4">{error?.key}</p>}
           <label htmlFor="Password" className="mt-5">
             topic (optional)
           </label>
@@ -228,6 +265,7 @@ const CreateChannel = ({ handleClick }: { handleClick: () => void }) => {
             ref={topic}
             className="rounded-lg"
           />
+          {(is?.topic) && <p className="text-red-500 text-sm my-4">{error?.topic}</p>}
           <div className="flex flex-row justify-around mt-5">
             <button
               className="w-[45%] bg-gradient-to-br relative group/btn from-zinc-900 to-zinc-900 block bg-zinc-800  text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"

@@ -2,7 +2,7 @@
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { cn } from "../../components/cn";
 import { Input } from "../../components/ui/newinput";
@@ -15,53 +15,63 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
-import { set } from "lodash";
 
 
 export default function SignupFormDemo() {
-  const [is, setIs] = useState(0);
-  const [error, setError] = useState("");
+  const [is, setIs] = useState({
+    name: false,
+    middlename: false,
+    nickname: false,
+    password: false,
+  });
+  
+  const [error, setError] = useState({
+    name: "",
+    middlename: "",
+    nickname: "",
+    password: "",
+  });
   const form = useForm();
   const router = useRouter();
 
-  const isValidValues = (value: any) => {
-    if (value?.name.length < 3 || value?.name.length > 20)
-      return 1;
-    else if (value?.middlename.length < 3 || value?.middlename.length > 20)
-      return 2;
-    else if (value?.nickname.length < 3 || value?.nickname.length > 20)
-      return 3;
-    else if (value?.password.length < 6 || value?.password.length > 20)
-      return 4;
-    return 0;
+  const updateIs = (key:string, value:boolean) => {
+    setIs(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
   };
-  
-  useEffect(() => {
-    if (is === 1)
-      setError("Name must be at least 3 characters long and at most 20 characters long.");
-    else if (is === 2)
-      setError("middlename must be at least 3 characters long and at most 20 characters long.");
-    else if (is === 3)
-      setError("nickname must be at least 3 characters long and at most 20 characters long.");
-    else if (is === 4)
-      setError("Password must be at least 6 characters long and at most 20 characters long.");
-    else if (is === 5)
-      setError("nickname already exist.");
-    else
-      setError("");
-  }, [is]);
+
+  const updateError = (key:string, value:string) => {
+    setError(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  }
 
   const serverError = (err: any) => {
-    setIs(6);
-    setError(err);
+    try {
+      err?.map((e: any) => {
+        if (e.startsWith('Name')) {
+          updateIs('name', true);
+          updateError('name', e);
+        } 
+        if (e.startsWith('Middlename')) {
+          updateIs('middlename', true);
+          updateError('middlename', e);
+        }
+        if (e.startsWith('Nickname')) {
+          updateIs('nickname', true);
+          updateError('nickname', e);
+        }
+        if (e.startsWith('Password')) {
+          updateIs('password', true);
+          updateError('password', e);
+        }
+      });
+    } catch (error) {}
   }
 
   function onSubmit(values : any) {
-    if (isValidValues(values) !== 0)
-    {
-      setIs(isValidValues(values));
-      return;
-    }
     axios.post(`http://${ipAdress}/auth/signup`, {
       name: values.name,
       middlename: values.middlename,
@@ -72,12 +82,18 @@ export default function SignupFormDemo() {
       {
         form.reset();
         router.push("/Signin");
-      }else if (res?.data?.status === 'error_')
-        setIs(5);
+      }else if (res?.data?.status === 'error_'){
+        setIs({name: false, middlename: false, nickname: false, password: false})
+        setError({name: "", middlename: "", nickname: "", password: ""});
+        serverError(["Nickname already exist."]);
+      }
     })
     .catch((err) => {
-      if (err && err?.response)
+      if (err && err?.response){
+        setIs({name: false, middlename: false, nickname: false, password: false})
+        setError({name: "", middlename: "", nickname: "", password: ""});
         serverError(err.response?.data?.message);
+      }
     });
   }
 
@@ -104,25 +120,24 @@ export default function SignupFormDemo() {
               <LabelInputContainer>
                 <Label htmlFor="firstname">Name</Label>
                 <Input id="firstname" placeholder="Tyler" type="text" {...form.register('name')}/>
+                {(is.name) && <p className="text-red-500 text-sm my-4">{error.name}</p>}
               </LabelInputContainer>
               <LabelInputContainer>
                 <Label htmlFor="lastname">middlename</Label>
                 <Input id="lastname" placeholder="Durden" type="text" {...form.register('middlename')}/>
+                {(is.middlename) && <p className="text-red-500 text-sm my-4">{error.middlename}</p>}
               </LabelInputContainer>
             </div>
-              {(is === 1 || is === 2) && <p className="text-red-500 text-sm my-4">{error}</p>}
             <LabelInputContainer className="mb-4">
               <Label htmlFor="nickname">nickname</Label>
               <Input id="nickname" placeholder="Tyler_durden" type="text" {...form.register('nickname')}/>
-              {is === 3 && <p className="text-red-500 text-sm my-4">{error}</p>}
-              {is === 5 && <p className="text-red-500 text-sm my-4">{error}</p>}
+              {is.nickname && <p className="text-red-500 text-sm my-4">{error.nickname}</p>}
             </LabelInputContainer>
             <LabelInputContainer className="mb-4">
               <Label htmlFor="password">Password</Label>
               <Input id="password" placeholder="••••••••" type="password" {...form.register('password')}/>
-              {is === 4 && <p className="text-red-500 text-sm my-4">{error}</p>}
+              {is.password && <p className="text-red-500 text-sm my-4">{error.password}</p>}
             </LabelInputContainer>
-              {is === 6 && <p className="text-red-500 text-sm my-4">{error}</p>}
             <button
               className="bg-gradient-to-br relative group/btn bg-[#192536] bloc w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
               type="submit"

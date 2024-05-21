@@ -30,7 +30,6 @@ const InviteCard = ({ channel, user }: { channel: channel; user: user }) => {
   useEffect(() => {
     socket?.on("update", (data: any) => {
       if (data && data.type && (data.type === "join" || data.type === "leave")) {
-        console.log("update here at invite card");
         clt.invalidateQueries({ queryKey: ["inviteList"] });
       }
     })
