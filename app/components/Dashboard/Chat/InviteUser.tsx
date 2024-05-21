@@ -20,7 +20,7 @@ const KidnapUserToChannel = async (
       channel_id: channel.id,
     },
     user: user,
-    channel: channel,
+    channel: channel?.key,
   };
   try {
     await fetchData(`/participants`, "POST", obj);
