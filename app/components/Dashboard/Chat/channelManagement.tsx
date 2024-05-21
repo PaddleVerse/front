@@ -66,7 +66,7 @@ const ChannelManagement = ({
   const { user: u, socket } = state;
   const router = useRouter();
   const [picture, setPicture] = useState<File>();
-  const { register } = useForm();
+  const { register, reset } = useForm();
   const topicInput = useRef<HTMLInputElement | null>(null);
   const channelNameInput = useRef<HTMLInputElement | null>(null);
   const keyInput = useRef<HTMLInputElement | null>(null);
@@ -222,6 +222,7 @@ const ChannelManagement = ({
         setIs({key: false, state: false, picture: false, name: false, topic: false});
         setError({key: "", state: "", picture: "", name: "", topic: ""});
         toast.success("channel updated successfully.");
+        reset();
         if (picture) {
           try {
             const formData = new FormData();
@@ -236,7 +237,7 @@ const ChannelManagement = ({
           }
         }
         state?.socket?.emit("channelUpdate", {
-          roomName: channel?.name,
+          roomName: obj?.channel?.name!,
           user: user,
         });
       } catch (err: any) {

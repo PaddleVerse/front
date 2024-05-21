@@ -26,8 +26,8 @@ const JoinChannelBubble = ({
   const [unlock, setUnlock] = useState(false);
   const { state, dispatch } = useGlobalState();
   const clt = useQueryClient();
-  const handleSubmit = async (e: any) => {
 
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (lock) {
       channel.key = lockRef.current?.value as string;
@@ -37,7 +37,7 @@ const JoinChannelBubble = ({
           channel_id: channel?.id,
         },
         user: user,
-        channel: channel,
+        channel: channel?.id,
       };
       try {
         const res = await fetchData(
@@ -46,10 +46,10 @@ const JoinChannelBubble = ({
           obj
         );
         if (!res) return;
-        toast.success(`you have joined ${channel.name}`);
+        toast.success(`you have joined ${channel?.name}`);
         state?.socket?.emit("joinRoom", {
           user: user,
-          roomName: channel.name,
+          roomName: channel?.name,
           type: "self",
         });
         clt?.invalidateQueries({ queryKey: ["chatList"] });
@@ -72,11 +72,11 @@ const JoinChannelBubble = ({
           obj
         );
         if (!res) return;
-        toast.success(`you have joined ${channel.name}`);
+        toast.success(`you have joined ${channel?.name}`);
         clt?.invalidateQueries({ queryKey: ["chatList"] });
         state?.socket?.emit("joinRoom", {
           user: user,
-          roomName: channel.name,
+          roomName: channel?.name,
           type: "self",
         });
       } catch (error) {
@@ -106,7 +106,7 @@ const JoinChannelBubble = ({
       />
       <div className="flex flex-col gap-1">
         <h2 className="2xl:text-md xl:text-[15px] md:text-[14px]">
-          {channel.name}
+          {channel?.name}
         </h2>
         {unlock && lock ? (
           <form onSubmit={(e) => handleSubmit(e)}>
@@ -119,8 +119,8 @@ const JoinChannelBubble = ({
           </form>
         ) : (
           <p className="text-gray-400 xl:text-sm truncate md:tex  text-xs lg:max-w-full md:max-w-[120px] ">
-            {channel.topic?.substring(0, 30) +
-              (channel.topic?.length > 30 ? " ..." : "")}
+            {channel?.topic && channel?.topic?.substring(0, 30) +
+              (channel?.topic?.length > 30 ? " ..." : "")}
           </p>
         )}
       </div>

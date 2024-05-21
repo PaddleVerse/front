@@ -156,7 +156,7 @@ const Page = (props: any) => {
         "GET",
         null
       );
-      if (friendShip!.data!.status === "BLOCKED") {
+      if (friendShip!.data!.status === "BLOCKED" && param?.subroute === "dm") {
         router.push("/Dashboard/Chat");
       }
     };
@@ -166,6 +166,7 @@ const Page = (props: any) => {
       clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
     });
     socket?.on("update", (data: any) => {
+      console.log("the update values", data);
       if (data && data.type === "channel") {
         clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
       }
@@ -173,6 +174,7 @@ const Page = (props: any) => {
     socket?.emit("refresh");
     return () => {
       socket?.off("ok");
+      socket?.off("update");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.socket]);
@@ -275,12 +277,17 @@ const Page = (props: any) => {
             <div className="flex">
               <div className="w-11 h-11 mr-4 relative flex flex-shrink-0">
                 <Image
-                  className="shadow-md rounded-full w-full h-full object-cover"
+                  className="shadow-md rounded-full w-full h-full object-cover cursor-pointer"
                   height={100}
                   width={100}
                   src={
                     targetUser?.picture! || targetChannel?.picture! || "/a.png"
                   }
+                  onClick={() => {
+                    if (targetUser){
+                      router.push(`/Dashboard/Profile?id=${targetUser?.id}`);
+                    }
+                  }}
                   alt="user or channel picture"
                 />
               </div>

@@ -20,13 +20,13 @@ const KidnapUserToChannel = async (
       channel_id: channel.id,
     },
     user: user,
-    channel: channel?.key,
+    channel: channel?.id,
   };
   try {
     await fetchData(`/participants`, "POST", obj);
     socket?.emit("joinRoom", {
       user: user,
-      roomName: channel.name,
+      roomName: channel?.name,
       type: "other",
     })
   } catch (error) {
