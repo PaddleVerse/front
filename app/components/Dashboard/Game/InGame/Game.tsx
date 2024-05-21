@@ -297,6 +297,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
 
     const currentMountRef = mountRef.current;
     return () => {
+      dispatch && dispatch({ type: "UPDATE_GAMEINVITEID", payload: null });
       if (socket) {
         socket?.emit("leftRoom", { id: user?.id, room: roomId });
         socket?.off("paddlePositionUpdate");

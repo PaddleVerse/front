@@ -63,6 +63,7 @@ export default function SignupFormDemo() {
           // document.cookie = `access_token=; path=/;`;
           if (res?.status === 200)
           {
+            setLoading(false);
             setUserId(res?.data?.id);
             if (res?.data?.twoFa)
               setIsTwoFa("2fa");

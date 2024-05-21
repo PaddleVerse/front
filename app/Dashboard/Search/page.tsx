@@ -65,21 +65,6 @@ const Search = () => {
           </div>
         </div>
       </div>
-      <div className='mt-10'>
-        <h1 className='text-3xl text-white font-mono'>RECENTLY PLAYED WITH</h1>
-        <div className="flex flex-col bg-inherit relative">
-          <div className="flex overflow-x-scroll py-10 no-scrollbar w-full" ref={containerRef_2} style={{ scrollBehavior: 'smooth' }}>
-            <div className="flex flex-nowrap gap-3">
-              {users?.map((item, index) => (
-                <div key={index} className="flex-none">
-                  <UserCard user={item} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
   );
 };
