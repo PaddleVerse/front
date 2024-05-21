@@ -1,5 +1,5 @@
 # Use Node.js 20 with Alpine Linux as the base image
-FROM node:20-alpine
+FROM node:20.6.1-slim
 
 # Set the working directory in the container
 WORKDIR /app
