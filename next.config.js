@@ -6,7 +6,7 @@ const nextConfig = {
         'lh3.googleusercontent.com',
         'cdn.intra.42.fr',
         'i.postimg.cc',
-        'localhost',
+        'e3r3p18.1337.ma',
         'images.unsplash.com',
         'cdn.builder.io',
         'preview.redd.it',

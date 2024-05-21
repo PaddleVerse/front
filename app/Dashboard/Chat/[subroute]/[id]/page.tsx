@@ -338,7 +338,7 @@ const Page = (props: any) => {
             }`}
           >
             <div className="flex flex-row items-center p-4">
-              <div className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6 relative ">
+              {/* <div className="flex flex-shrink-0 focus:outline-none mx-2  text-white w-6 h-6 relative ">
                 <input
                   type="file"
                   className="w-6 h-6 overflow-hidden  opacity-0 z-30"
@@ -360,7 +360,7 @@ const Page = (props: any) => {
                   }}
                 />
                 <CiCirclePlus className="w-full h-full absolute z-20" />
-              </div>
+              </div> */}
               {targetUser && (
                 <button
                   type="button"
