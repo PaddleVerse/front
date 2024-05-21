@@ -191,7 +191,7 @@ const MemberList = ({
           </div>
         </div>
         <span>{participant && participant?.role.toLowerCase()}</span>
-        {participant && participant?.role !== "ADMIN" ? (
+        {participant && participant?.role !== "ADMIN" && participant?.user_id !== state?.user?.id ? (
           <Dropdown
             list={[
               {
@@ -209,32 +209,6 @@ const MemberList = ({
         ) : (
           <div></div>
         )}
-
-        {/* <div className="flex gap-1 2xl:text-md text-xs">
-          <div onClick={handleMuteUnMute} aria-disabled={exec ? false : true}>
-            {participant?.mute ? (
-              <FaMicrophoneSlash className="w-[20px] h-[20px]" />
-            ) : (
-              <FaMicrophone className="w-[20px] h-[20px]" />
-            )}
-          </div>
-          <div onClick={handleBan} aria-disabled={exec ? false : true}>
-            <Image src={"/Chat/ban.svg"} width={20} height={20} alt={"ban"} />
-          </div>
-          <div onClick={handleKick} aria-disabled={exec ? false : true}>
-            <Image src={"/Chat/kick.svg"} width={20} height={20} alt={"kick"} />
-          </div>
-          <div
-            onClick={handlePromoteDemote}
-            aria-disabled={exec ? false : true}
-          >
-            {participant?.role === "ADMIN" || participant?.role === "MOD" ? (
-              <FaChessPawn className="w-[20px] h-[20px]" />
-            ) : (
-              <FaChessKing className="w-[20px] h-[20px]" />
-            )}
-          </div>
-        </div> */}
       </motion.div>
     </AnimatePresence>
   );
