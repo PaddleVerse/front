@@ -63,7 +63,6 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -92,7 +91,6 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -124,7 +122,6 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -156,7 +153,6 @@ const MemberList = ({
         });
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 

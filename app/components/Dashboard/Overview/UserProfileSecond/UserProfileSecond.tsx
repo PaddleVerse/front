@@ -56,7 +56,6 @@ const UserProfileSecond = ({ user }: any) => {
       setTopTopFriends(res.data);
     })
     .catch((err) => {
-      console.log(err);
     });
   }, [user]);
 
@@ -67,7 +66,6 @@ const UserProfileSecond = ({ user }: any) => {
       setData(res.data);
     })
     .catch((err) => {
-      console.log(err);
     });
   }, [state]);
   

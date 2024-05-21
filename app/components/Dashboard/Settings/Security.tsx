@@ -28,7 +28,7 @@ const Security = () => {
       setQrcode(res?.data?.Qr);
       setIsBlurred(false);
     })
-    .catch(err => console.log(err))
+    .catch(err => {})
   }
   
   useEffect(() => {
@@ -61,7 +61,7 @@ const Security = () => {
       setIs(!is);
       toast.success('2FA disabled successfully');
     })
-    .catch(err => console.log(err))
+    .catch(err => {})
   }
 
   
@@ -72,7 +72,6 @@ const Security = () => {
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
-      console.error('Error fetching user', error);
     }
   }
 

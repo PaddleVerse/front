@@ -18,9 +18,7 @@ const GameStatus = () => {
       if (!response) return;
       const usr = response?.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
-    } catch (error) {
-      console.error('Error fetching user', error);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {

@@ -17,9 +17,7 @@ const MatchHistory_2 = () => {
         if (!res) return;
         setData(res?.data?.reverse());
       })
-      .catch((error) => {
-        console.error("Error fetching user", error);
-      });
+      .catch((error) => {});
   }, [state]);
   
   // Calculate winner and loser streaks

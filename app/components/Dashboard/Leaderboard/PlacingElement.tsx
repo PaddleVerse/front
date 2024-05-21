@@ -22,7 +22,6 @@ const PlacingElement = () => {
         setUsers(res.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   } ,[]);
 

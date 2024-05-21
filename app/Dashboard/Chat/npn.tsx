@@ -53,7 +53,6 @@ const fetchChatList = async (
     setFilteredChatList(dataWithMessages);
     return dataWithMessages;
   } catch (error) {
-    console.error("Error fetching chat list", error);
   }
 };
 
@@ -101,7 +100,6 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     socket?.on("update", (data: any) => {
       if (data && data.type && (data.type === "leave" || data.type === "join")) {
-        console.log("here at the join or leave event");
         clt.invalidateQueries({
           queryKey: ["chatList"],
         });

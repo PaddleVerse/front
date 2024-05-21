@@ -32,7 +32,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
   const ballRef = useRef<Ball | null>(null);
   const { state, dispatch } = useGlobalState();
   const { user, socket } = state;
-  const [score, setScore] = useState({ player1: 0, player2: 0, uid1: -1, uid2: -1});
+  const [score, setScore] = useState({ player1: 0, player2: 0});
   const [winnerText, setWinnerText] = useState("");
   const [opponent, setOpponent] = useState(0);
   const router = useRouter();
@@ -59,12 +59,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         );
       });
       socket?.on("updateScore", (newScore: any) => {
-        console.log(newScore);
         setScore({
           player1: newScore?.score[0]?.score,
-          player2: newScore?.score[1]?.score,
-          uid1: newScore?.score[0]?.uid,
-          uid2: newScore?.score[1]?.uid,
+          player2: newScore?.score[1]?.score
         });
       });
       socket?.on("gameOpponent", (opponent: number) => {
@@ -163,7 +160,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         ballRef.current = ball;
       })
       .catch((err) => {
-        console.log(err);
       });
 
     const plane = new Plane(500, 500, { x: 0, y: 0, z: 0 }, -Math.PI / 2);
@@ -190,7 +186,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         } else {
           let color: String = res.data.color.replace(user?.id, "");
           // remove the user id from the color using something like remove
-          console.log("color: " + color);
           paddle = new Paddle(
             scene,
             { x: 16.0, y: 10.0, z: 0.0 },
@@ -208,7 +203,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ roomId }) => {
         paddle2Ref.current = paddle2;
       })
       .catch((err) => {
-        console.log(err);
       });
 
     // Update the interval function

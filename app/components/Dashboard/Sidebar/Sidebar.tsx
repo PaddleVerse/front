@@ -73,7 +73,6 @@ const Sidebar = () => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching user", error);
       });
     return () => {
       socket?.disconnect();

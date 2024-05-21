@@ -45,9 +45,7 @@ const LineChart = () => {
       .then((res:any) => {
         if (!res) return;
         setData(res.data?.reverse());
-      }).catch((error) => {
-        console.error('Error fetching user', error);
-      });
+      }).catch((error) => {});
   }, [state]);
 
   useEffect(() => {

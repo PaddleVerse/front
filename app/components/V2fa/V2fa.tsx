@@ -25,7 +25,7 @@ export default function V2fa({setIsTwoFa, userId} : any) {
     if (res?.data?.ok) setIsTwoFa("true");
     else setIs(true);
   })
-  .catch(err => console.log(err))
+  .catch(err => {})
   reset();
  };
   

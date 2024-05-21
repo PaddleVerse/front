@@ -71,14 +71,11 @@ export default function SignupFormDemo() {
               router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:3000/Dashboard`);
           }
           else
-          {
             setLoading(false);
-            console.log("Failed to authenticate with protected endpoint");
-          }
+
         })
         .catch((error) => {
             setLoading(false);
-            console.log("Error during protected endpoint request", error);
         })
       } else
         setLoading(false);
@@ -137,19 +134,13 @@ export default function SignupFormDemo() {
               {
                   document.cookie = `access_token=${data.access_token}; path=/;`;
                   router.push(`http://${process.env.NEXT_PUBLIC_API_URL}:3000/Dashboard`);
-                }
               }
-              else
-                console.log("Failed to authenticate with protected endpoint");
-            })
-            .catch((error) => {
-              console.log("Error during protected endpoint request", error);
-            });
+            }
+          })
+          .catch((error) => {});
         }
       })
-      .catch((error) => {
-        console.log("Error during signup request", error);
-      })
+      .catch((error) => {})
   }
 
   const handleGoogle = () => {

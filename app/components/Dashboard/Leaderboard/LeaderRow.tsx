@@ -36,7 +36,6 @@ const LeaderRow = ({ user, length, index }: Props) => {
         setWins(res?.data);
       })
       .catch((err) => {
-        console.log(err);
       });
     
       fetchData(`/match/history/losses/${user?.id}`, "GET", null)
@@ -45,7 +44,6 @@ const LeaderRow = ({ user, length, index }: Props) => {
         setLoses(res?.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   }, [state]);
   return (

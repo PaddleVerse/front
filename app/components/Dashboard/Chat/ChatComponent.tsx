@@ -31,7 +31,6 @@ const FetchMessages = async (p: any, userId: string) => {
       return mes.data;
     }
   } catch (error) {
-    console.log(error);
   }
 };
 

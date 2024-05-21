@@ -23,7 +23,6 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
-      console.error('Error fetching user', error);
     }
   }
 
@@ -45,7 +44,7 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res?.data.message);
         }
       )
-      .catch((err) => { console.log(err); });
+      .catch((err) => {});
     } else if (owned) {
       fetchData(`/shop/ball/enable`, "POST", {
         user_id: user?.id,
@@ -63,7 +62,7 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res?.data.message);
         }
       )
-      .catch((err) => { console.log(err); });
+      .catch((err) => {});
     } else {
       fetchData(`/shop/ball`, "POST", {
         image: infos?.image,
@@ -84,7 +83,7 @@ const BallCoin = ({ size , infos}: { size: string , infos: Infos}) => {
             toast.error(res?.data.message);
         }
       )
-      .catch((err) => { console.log(err); });
+      .catch((err) => {});
     }
   }
 

@@ -47,7 +47,6 @@ const Popup = ()  => {
       const usr = response.data;
       dispatch({type: 'UPDATE_USER', payload: usr});
     } catch (error) {
-      console.error('Error fetching user', error);
     }
   }
 
@@ -123,14 +122,11 @@ const Popup = ()  => {
         reset();
       }
     } catch (error:any) {
-      console.log('Error updating user', error);
       if (error?.response?.status === 400)
       {
           setIsErrorName(false); setIsErrorMiddlename(false);
           serverError(error.response.data.message);
       }
-      else
-        console.error('Error updating user', error);
     }
   };
   

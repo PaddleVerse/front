@@ -55,9 +55,7 @@ const UserProfile = ({ target }: any) => {
         if (!res) return;
         setLinkedFriends(res.data);
       })
-      .catch((err) => {
-        console.error("Error fetching user", err);
-      });
+      .catch((err) => {});
   }, [user, target]);
 
   useEffect(() => {
@@ -70,9 +68,7 @@ const UserProfile = ({ target }: any) => {
           setStatus(res.data?.status);
         else setStatus("");
       })
-      .catch((err) => {
-        console.error("Error fetching user", err);
-      });
+      .catch((err) => {});
 
     fetchData(`/friendship/status/${target?.id}/${user?.id}`, "GET", null)
       .then((res) => {
@@ -86,9 +82,7 @@ const UserProfile = ({ target }: any) => {
           setRecv(res.data?.status);
         else setRecv("");
       })
-      .catch((err) => {
-        console.error("Error fetching user", err);
-      });
+      .catch((err) => {});
   }, [target?.id, user?.id, is]);
 
   const handleSender = () => {

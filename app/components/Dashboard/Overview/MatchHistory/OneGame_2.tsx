@@ -45,7 +45,6 @@ const OneGame_2 = ({
       setUserC(res.data);
     })
     .catch((err) => {
-      console.log(err);
     });
   }, [status]);
   useEffect(() => {
@@ -62,7 +61,6 @@ const OneGame_2 = ({
         setEnemyData(res.data);
       })
       .catch((err) => {
-        console.log(err);
       });
     }
   }, [item]);

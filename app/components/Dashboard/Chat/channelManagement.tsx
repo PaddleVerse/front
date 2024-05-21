@@ -22,7 +22,6 @@ import { fetchData } from "@/app/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const fetchParticipants = async (channel: channel, user: user) => {
-  console.log("here at fetch participants");
   const participants = await fetchData(
     `/channels/participants/${channel?.id}?uid=${user?.id}`,
     "GET",
@@ -178,7 +177,6 @@ const ChannelManagement = ({
         router.push("/Dashboard/Chat");
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 
@@ -191,7 +189,6 @@ const ChannelManagement = ({
           data?.type === "join" ||
           data?.type === "leave")
       ) {
-        console.log("here at the socket event in channel management");
         clt.invalidateQueries({ queryKey: ["participants"] });
       }
     });
@@ -225,7 +222,6 @@ const ChannelManagement = ({
             return;
           }
         }
-        console.log(obj);
         await fetchData(`/channels/${channel?.id}`, "PUT", obj);
         setIs({
           key: false,

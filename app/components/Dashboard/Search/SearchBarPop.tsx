@@ -34,7 +34,7 @@ const SearchBarPop = () => {
           if (!res) return;
           setFilteredUsers(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {});
       }, 100);
     }
 
@@ -57,7 +57,7 @@ const SearchBarPop = () => {
         setSearchedUsers(res.data);
         setFilteredUsers(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
     }, [users, is])
 
     useEffect(() => {
@@ -66,12 +66,12 @@ const SearchBarPop = () => {
           if (!res) return;
           setUsers(res.data?.filter((u : any) => u?.id !== user?.id));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {});
     } , [user?.id])
 
     const handleclick = (id : any) => {
       fetchData(`/search`, 'POST', { userId: id, searchingUserId: user?.id })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
       if (id === user?.id) {
         router.push(`/Dashboard`);
         return;

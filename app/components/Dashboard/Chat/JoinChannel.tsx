@@ -57,7 +57,6 @@ const JoinChannel = ({
         setFilteredChannels(data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
     };
     fetchChannels();

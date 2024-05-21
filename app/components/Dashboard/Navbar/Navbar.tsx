@@ -54,7 +54,6 @@ const Navbar = () => {
           dispatch && dispatch({ type: "UPDATE_USER", payload: res?.data });
         })
         .catch((err) => {
-          console.log("error", err);
         });
     });
     socket?.on("okk", (data:any) => {
@@ -69,7 +68,6 @@ const Navbar = () => {
         router.push("/");
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 

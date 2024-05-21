@@ -166,7 +166,6 @@ const Page = (props: any) => {
       clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
     });
     socket?.on("update", (data: any) => {
-      console.log("the update values", data);
       if (data && data.type === "channel") {
         clt.invalidateQueries({ queryKey: ["targetUser", "targetChannel"] });
       }
@@ -231,8 +230,6 @@ const Page = (props: any) => {
           message: message,
         });
       } catch (error: any) {
-        // console.log(error);
-        // toast.error(error.response);
         if (
           error.response.data.statusCode === 403 &&
           error.response.data.message === "User is muted"
@@ -240,7 +237,6 @@ const Page = (props: any) => {
           toast.error("you are muted");
           return;
         }
-        // toast.error("failed to send message to channel");
       }
     } else if (targetUser) {
       try {

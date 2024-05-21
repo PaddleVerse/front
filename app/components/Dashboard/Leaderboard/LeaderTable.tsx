@@ -24,9 +24,7 @@ const LeaderTable = () => {
         if (!res) return;
         setUsers(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     }
   }, [user]);
 

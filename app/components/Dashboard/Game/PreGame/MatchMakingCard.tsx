@@ -30,7 +30,6 @@ const MatchMakingCard = ({
         setOtherPlayer(res?.data);
       })
       .catch(() => {
-        console.log("error");
       });
     });
 
