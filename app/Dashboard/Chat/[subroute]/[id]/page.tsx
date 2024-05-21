@@ -174,7 +174,7 @@ const Page = (props: any) => {
     socket?.emit("refresh");
     return () => {
       socket?.off("ok");
-      socket?.off("update");
+      // socket?.off("update");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.socket]);

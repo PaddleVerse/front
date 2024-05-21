@@ -101,7 +101,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     socket?.on("update", (data: any) => {
       if (data && data.type && (data.type === "leave" || data.type === "join")) {
-        // toast.success("you have left the channel");
+        console.log("here at the join or leave event");
         clt.invalidateQueries({
           queryKey: ["chatList"],
         });
@@ -147,7 +147,7 @@ const Page = ({ children }: { children: React.ReactNode }) => {
     socket?.emit("refresh");
     return () => {
       socket?.off("ok");
-      socket?.off("update");
+      // socket?.off("update");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, clt]);
